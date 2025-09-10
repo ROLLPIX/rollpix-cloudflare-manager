@@ -56,7 +56,7 @@ Una aplicación web moderna para gestionar visualmente el estado de proxy DNS de
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/rollpix-cloudflare-manager.git
+git clone https://github.com/ROLLPIX/rollpix-cloudflare-manager.git
 cd rollpix-cloudflare-manager
 ```
 
