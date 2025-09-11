@@ -1,0 +1,56 @@
+{
+  "templates": [
+    {
+      "id": "61c1c478-ade4-44d4-bb7f-d9758dfb8cd1",
+      "friendlyId": "R01",
+      "name": "01-Desafio PAIS Y AMENAZA",
+      "description": "Muestra Desafio si no es de ARG USA o CAN",
+      "enabled": true,
+      "priority": 1,
+      "expression": "((cf.threat_score gt 10) or not (ip.geoip.country in { \"AR\" \"US\" \"CA\" }) )  and not (ip.src in $whitelist_ip) and not (http.user_agent contains \"letsencrypt\")",
+      "action": "block",
+      "actionParameters": {},
+      "tags": [],
+      "applicableTags": [],
+      "excludedDomains": [],
+      "createdAt": "2025-09-11T04:40:31.668Z",
+      "updatedAt": "2025-09-11T13:21:28.475Z",
+      "version": "1.0.0"
+    },
+    {
+      "id": "d3175fd0-b93c-4624-895e-afb9da6bc9e1",
+      "friendlyId": "R02",
+      "name": "02-Bloqueo Control de Crawlers",
+      "description": "No permite a los Bots acceder a paginas o carpetas privadas",
+      "enabled": true,
+      "priority": 2,
+      "expression": "(\n (cf.client.bot and \n  (http.request.uri.query contains \"p=\" or\n   http.request.uri.query contains \"dir=\" or\n   http.request.uri.query contains \"order=\" or\n   http.request.uri.query contains \"mode=\" or\n   http.request.uri.query contains \"limit=\" or\n   http.request.uri.query contains \"cat=\" or\n   http.request.uri.query contains \"SID=\" or\n   http.request.uri.query contains \"criterion=\" or\n   http.request.uri.query contains \"color=\" or\n   http.request.uri.query contains \"size=\" or\n   http.request.uri.query contains \"price=\" or\n   http.request.uri.query contains \"brand=\"))\n)\nor\n(\n  http.user_agent contains \"Scrapy\" or\n  http.user_agent contains \"seranking\" or\n  http.user_agent contains \"Bytespider\" or\n  http.user_agent contains \"GeedoProductSearch\" or\n  http.user_agent contains \"opensiteexplorer\" or\n  http.user_agent contains \"BLEXBot\" or\n  http.user_agent contains \"Barkrowler\" or\n  http.user_agent contains \"GPTBot\" or\n  http.user_agent contains \"Amazonbot\" or\n  http.user_agent contains \"Yandex\" or\n  http.user_agent contains \"Semrush\" or\n  http.user_agent contains \"AhrefsBot\" or\n  http.user_agent contains \"claude\" or\n  http.user_agent contains \"CCBot\" or\n  http.user_agent contains \"ChatGPT-User\" or\n  http.user_agent contains \"YouBot\" or\n  http.user_agent contains \"Google-Extended\" or\n  http.user_agent contains \"Applebot-Extended\" or\n  http.user_agent contains \"anthropic-ai\" or\n  http.user_agent contains \"ClaudeBot\" or\n  http.user_agent contains \"Omgilibot\" or\n  http.user_agent contains \"Omgili\" or\n  http.user_agent contains \"FacebookBot\" or\n  http.user_agent contains \"Diffbot\" or\n  http.user_agent contains \"ImagesiftBot\" or\n  http.user_agent contains \"PerplexityBot\" or\n  http.user_agent contains \"cohere-ai\" or\n  http.user_agent contains \"Meta-ExternalAgent\" or\n  http.user_agent contains \"Meta-ExternalFetcher\" or\n  http.user_agent contains \"Timpibot\" or\n  http.user_agent contains \"Webzio-Extended\"\n)",
+      "action": "block",
+      "actionParameters": {},
+      "tags": [],
+      "applicableTags": [],
+      "excludedDomains": [],
+      "createdAt": "2025-09-11T04:41:44.189Z",
+      "updatedAt": "2025-09-11T04:41:44.189Z",
+      "version": "1.0.0"
+    },
+    {
+      "id": "a9bdca94-4440-4444-a886-b35473a895a3",
+      "friendlyId": "R03",
+      "name": "03-Bloqueo por Pais y Agente",
+      "description": "Bloque si no es de America o Europa Occidental o si es Agente sospechoso",
+      "enabled": true,
+      "priority": 3,
+      "expression": "(\n   (\n      (http.user_agent contains \"Scrapy\")\n      or (http.user_agent contains \"seranking\")\n      or (http.user_agent contains \"Bytespider\")\n      or (http.user_agent contains \"GeedoProductSearch\")\n      or (http.user_agent contains \"opensiteexplorer\")\n      or (http.user_agent contains \"BLEXBot\")\n      or (http.user_agent contains \"Barkrowler\")\n      or (http.user_agent contains \"GPTBot\")\n      or (http.user_agent contains \"Amazonbot\")\n      or (http.user_agent contains \"Yandex\")\n      or (http.user_agent contains \"Semrush\")\n      or (http.user_agent contains \"AhrefsBot\")\n      or (http.user_agent contains \"claude\")\n      or (http.user_agent contains \"CCBot\")\n      or (http.user_agent contains \"ChatGPT-User\")\n      or (http.user_agent contains \"YouBot\")\n      or (http.user_agent contains \"Google-Extended\")\n      or (http.user_agent contains \"Applebot-Extended\")\n      or (http.user_agent contains \"anthropic-ai\")\n      or (http.user_agent contains \"ClaudeBot\")\n      or (http.user_agent contains \"Omgilibot\")\n      or (http.user_agent contains \"Omgili\")\n      or (http.user_agent contains \"FacebookBot\")\n      or (http.user_agent contains \"Diffbot\")\n      or (http.user_agent contains \"ImagesiftBot\")\n      or (http.user_agent contains \"PerplexityBot\")\n      or (http.user_agent contains \"cohere-ai\")\n      or (http.user_agent contains \"Meta-ExternalAgent\")\n      or (http.user_agent contains \"Meta-ExternalFetcher\")\n      or (http.user_agent contains \"Timpibot\")\n      or (http.user_agent contains \"Webzio-Extended\")\n      or not (\n         ip.geoip.country in {\n            \"AR\" \"BO\" \"BR\" \"CL\" \"CO\" \"CR\" \"CU\" \"DO\" \"EC\" \"GT\" \"GY\" \"HN\" \"HT\" \"JM\" \"MX\" \"NI\" \"PA\" \"PE\" \"PY\" \"SR\" \"SV\" \"TT\" \"UY\" \"VE\"\n            \"CA\" \"US\" \"AD\" \"AT\" \"BE\" \"CH\" \"DE\" \"DK\" \"ES\" \"FI\" \"FR\" \"GB\" \"GI\" \"GR\" \"IE\" \"IS\" \"IT\" \"LI\" \"LU\" \"MC\" \"MT\" \"NL\" \"NO\" \"PT\" \"SE\" \"UK\" \"BR\"\n         }\n      )\n   )\n   and not (ip.src in $whitelist_ip)\n   and not (http.user_agent contains \"letsencrypt\")\n)",
+      "action": "block",
+      "actionParameters": {},
+      "tags": [],
+      "applicableTags": [],
+      "excludedDomains": [],
+      "createdAt": "2025-09-11T04:42:56.740Z",
+      "updatedAt": "2025-09-11T04:42:56.740Z",
+      "version": "1.0.0"
+    }
+  ],
+  "lastUpdated": "2025-09-11T13:21:28.475Z"
+}

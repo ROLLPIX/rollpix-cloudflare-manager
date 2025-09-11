@@ -9,11 +9,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { RefreshCw, Shield, ShieldOff, Loader2, Search, Filter, ArrowUpDown, ChevronDown, Globe } from 'lucide-react';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import { SecurityRulesIndicator } from './SecurityRulesIndicator';
+import { RulesActionBar } from './RulesActionBar';
 
 interface DomainTableProps {
   apiToken: string;
@@ -32,6 +35,13 @@ export function DomainTable({ apiToken }: DomainTableProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<FilterType>('all');
   const [sortBy, setSortBy] = useState<SortType>('name');
+  
+  // Update options state
+  const [updateOptions, setUpdateOptions] = useState({
+    dns: true,
+    firewall: false,
+    reglas: true
+  });
   const [preferencesLoaded, setPreferencesLoaded] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
@@ -41,6 +51,7 @@ export function DomainTable({ apiToken }: DomainTableProps) {
     currentDomain: string;
     isActive: boolean;
   }>({ current: 0, total: 0, currentDomain: '', isActive: false });
+  const [analyzingSecurityRules, setAnalyzingSecurityRules] = useState(false);
 
   // Sort, filter and search domains
   const processedDomains = useMemo(() => {
@@ -386,6 +397,16 @@ export function DomainTable({ apiToken }: DomainTableProps) {
     }
   };
 
+  const clearDomainSelection = () => {
+    setSelectedDomains(new Set());
+  };
+
+  const getSelectedZoneIds = () => {
+    return allDomains
+      .filter(domain => selectedDomains.has(domain.domain))
+      .map(domain => domain.zoneId);
+  };
+
   const bulkToggleProxy = async (enable: boolean) => {
     const selectedDomainData = allDomains.filter(d => selectedDomains.has(d.domain));
     const operations: Array<{ domain: string; zoneId: string; recordId: string; currentProxied: boolean }> = [];
@@ -487,6 +508,100 @@ export function DomainTable({ apiToken }: DomainTableProps) {
     fetchFromCloudflareAndCache();
   };
 
+  const handleUnifiedUpdate = async () => {
+    const enabledTasks = [];
+    
+    if (updateOptions.dns) enabledTasks.push('DNS');
+    if (updateOptions.reglas) enabledTasks.push('Reglas');
+    if (updateOptions.firewall) enabledTasks.push('Firewall');
+    
+    if (enabledTasks.length === 0) {
+      toast.error('Selecciona al menos una opción para actualizar');
+      return;
+    }
+
+    // Show progress for multiple operations
+    const totalTasks = enabledTasks.length;
+    let completedTasks = 0;
+    
+    const updateProgress = (taskName: string, completed: boolean) => {
+      if (completed) completedTasks++;
+      setBulkProgress(prev => ({
+        ...prev,
+        current: completedTasks,
+        total: totalTasks,
+        currentDomain: `Actualizando ${taskName}...`
+      }));
+    };
+
+    try {
+      setBulkProgress({ current: 0, total: totalTasks, currentDomain: 'Iniciando actualización...' });
+      
+      if (updateOptions.dns) {
+        updateProgress('DNS', false);
+        await handleRefresh();
+        updateProgress('DNS', true);
+      }
+      
+      if (updateOptions.reglas) {
+        updateProgress('Reglas', false);
+        await analyzeSecurityRules();
+        updateProgress('Reglas', true);
+      }
+      
+      if (updateOptions.firewall) {
+        updateProgress('Firewall', false);
+        // TODO: Implementar funcionalidad de firewall
+        toast('Funcionalidad de Firewall pendiente de implementación', { 
+          description: 'Esta opción estará disponible próximamente' 
+        });
+        updateProgress('Firewall', true);
+      }
+
+      toast.success(`Actualización completada: ${enabledTasks.join(', ')}`);
+    } catch (error) {
+      toast.error('Error durante la actualización');
+    } finally {
+      setBulkProgress(prev => ({ ...prev, current: 0, total: 0, currentDomain: '' }));
+    }
+  };
+
+  const analyzeSecurityRules = useCallback(async () => {
+    try {
+      setAnalyzingSecurityRules(true);
+      
+      // First, analyze rules
+      const analyzeResponse = await fetch('/api/security-rules/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiToken, forceRefresh: true })
+      });
+      
+      if (analyzeResponse.ok) {
+        // Then enrich domains with security data
+        const enrichResponse = await fetch('/api/domains/enrich', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (enrichResponse.ok) {
+          const enrichResult = await enrichResponse.json();
+          if (enrichResult.success) {
+            setAllDomains(enrichResult.data.domains);
+            toast.success('Análisis de reglas de seguridad completado');
+          }
+        }
+      } else {
+        toast.error('Error al analizar reglas de seguridad');
+      }
+    } catch (error) {
+      console.error('Error analyzing security rules:', error);
+      toast.error('Error al analizar reglas de seguridad');
+    } finally {
+      setAnalyzingSecurityRules(false);
+    }
+  }, [apiToken]);
+
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
     setCurrentPage(1);
@@ -546,10 +661,63 @@ export function DomainTable({ apiToken }: DomainTableProps) {
               </span>
             </CardTitle>
             <div className="flex flex-col items-end gap-1">
-              <Button onClick={handleRefresh} disabled={loading} variant="outline" size="sm">
-                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                {loading ? 'Actualizando...' : 'Actualizar desde Cloudflare'}
-              </Button>
+              <div className="flex gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" size="sm" disabled={loading || analyzingSecurityRules}>
+                      <RefreshCw className={`h-4 w-4 mr-2 ${(loading || analyzingSecurityRules) ? 'animate-spin' : ''}`} />
+                      {loading || analyzingSecurityRules ? 'Actualizando...' : 'Actualizar'}
+                      <ChevronDown className="h-4 w-4 ml-2" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-56" align="end">
+                    <div className="space-y-3">
+                      <h4 className="font-medium leading-none">Opciones de Actualización</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="dns"
+                            checked={updateOptions.dns}
+                            onCheckedChange={(checked) => 
+                              setUpdateOptions(prev => ({ ...prev, dns: checked as boolean }))
+                            }
+                          />
+                          <label htmlFor="dns" className="text-sm">DNS</label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="firewall"
+                            checked={updateOptions.firewall}
+                            onCheckedChange={(checked) => 
+                              setUpdateOptions(prev => ({ ...prev, firewall: checked as boolean }))
+                            }
+                          />
+                          <label htmlFor="firewall" className="text-sm">Firewall</label>
+                          <Badge variant="secondary" className="text-xs">Próximamente</Badge>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="reglas"
+                            checked={updateOptions.reglas}
+                            onCheckedChange={(checked) => 
+                              setUpdateOptions(prev => ({ ...prev, reglas: checked as boolean }))
+                            }
+                          />
+                          <label htmlFor="reglas" className="text-sm">Reglas</label>
+                        </div>
+                      </div>
+                      <Button 
+                        onClick={handleUnifiedUpdate} 
+                        size="sm" 
+                        className="w-full"
+                        disabled={loading || analyzingSecurityRules}
+                      >
+                        Actualizar Seleccionados
+                      </Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
               {lastUpdate && (
                 <span className="text-xs text-muted-foreground">
                   Últ. actualización: {formatLastUpdate(lastUpdate)}
@@ -641,6 +809,17 @@ export function DomainTable({ apiToken }: DomainTableProps) {
             </Button>
           </div>
 
+          {/* Rules Action Bar */}
+          <RulesActionBar
+            selectedDomains={getSelectedZoneIds()}
+            onClearSelection={clearDomainSelection}
+            apiToken={apiToken}
+            onRefresh={async () => {
+              await analyzeSecurityRules();
+              handleRefresh(); // Refrescar dominios también
+            }}
+          />
+
           {loading && allDomains.length === 0 ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 className="h-6 w-6 animate-spin mr-2" />
@@ -663,6 +842,7 @@ export function DomainTable({ apiToken }: DomainTableProps) {
                   <TableHead>Dominio</TableHead>
                   <TableHead>Raíz (@)</TableHead>
                   <TableHead>WWW</TableHead>
+                  <TableHead>Reglas de Seguridad</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -689,9 +869,9 @@ export function DomainTable({ apiToken }: DomainTableProps) {
                             {updatingRecords.has(`${domain.zoneId}-${domain.rootRecord.id}`) ? (
                               <Loader2 className="h-4 w-4 animate-spin" />
                             ) : domain.rootProxied ? (
-                              <ShieldOff className="h-4 w-4" />
-                            ) : (
                               <Shield className="h-4 w-4" />
+                            ) : (
+                              <ShieldOff className="h-4 w-4" />
                             )}
                           </Button>
                           <Badge
@@ -723,9 +903,9 @@ export function DomainTable({ apiToken }: DomainTableProps) {
                             {updatingRecords.has(`${domain.zoneId}-${domain.wwwRecord.id}`) ? (
                               <Loader2 className="h-4 w-4 animate-spin" />
                             ) : domain.wwwProxied ? (
-                              <ShieldOff className="h-4 w-4" />
-                            ) : (
                               <Shield className="h-4 w-4" />
+                            ) : (
+                              <ShieldOff className="h-4 w-4" />
                             )}
                           </Button>
                           <Badge
@@ -742,6 +922,9 @@ export function DomainTable({ apiToken }: DomainTableProps) {
                           <Badge variant="outline">Sin Registro</Badge>
                         </div>
                       )}
+                    </TableCell>
+                    <TableCell>
+                      <SecurityRulesIndicator domain={domain} compact apiToken={apiToken} />
                     </TableCell>
                   </TableRow>
                 ))}

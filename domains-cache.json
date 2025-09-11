@@ -38,7 +38,14 @@
         "modified_on": "2025-09-10T08:23:54.721607Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 4,
+        "corporateRules": 2,
+        "customRules": 2,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-11T13:34:37.903Z"
+      }
     },
     {
       "domain": "alpineskate.com",
@@ -78,7 +85,104 @@
         "modified_on": "2025-09-10T08:23:56.664535Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:39.298Z"
+      }
+    },
+    {
+      "domain": "baby-party.com.ar",
+      "zoneId": "193dc6e1f7caab0eb9fcd59a67ef183a",
+      "rootRecord": {
+        "id": "b834832c89a0db255c5518bbb9fac2c0",
+        "name": "baby-party.com.ar",
+        "type": "A",
+        "content": "54.36.178.172",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2019-06-11T03:00:34.813299Z",
+        "modified_on": "2025-02-07T21:05:44.173221Z"
+      },
+      "wwwRecord": {
+        "id": "e8776910dde8f447a620e472ea9362ae",
+        "name": "www.baby-party.com.ar",
+        "type": "CNAME",
+        "content": "baby-party.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2019-06-11T03:00:35.852652Z",
+        "modified_on": "2025-02-07T21:05:50.56726Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T12:56:43.901Z"
+      }
+    },
+    {
+      "domain": "babyparty.com.ar",
+      "zoneId": "efbdbc447602fae76016f260c8c1f500",
+      "rootRecord": {
+        "id": "6e7fdbbe1cf4e4594399dc2af981ccb0",
+        "name": "babyparty.com.ar",
+        "type": "A",
+        "content": "54.36.178.172",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2018-05-02T15:11:22.666079Z",
+        "modified_on": "2025-02-07T21:04:35.534173Z"
+      },
+      "wwwRecord": {
+        "id": "ee7840cb4c11b08f6a16e95c3758d5c2",
+        "name": "www.babyparty.com.ar",
+        "type": "CNAME",
+        "content": "babyparty.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2018-05-02T15:11:37.411228Z",
+        "modified_on": "2025-02-07T21:04:39.857971Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T12:56:45.113Z"
+      }
     },
     {
       "domain": "bazarycia.com.ar",
@@ -116,7 +220,104 @@
         "modified_on": "2025-09-10T08:23:58.515489Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:40.863Z"
+      }
+    },
+    {
+      "domain": "beweb.com.ar",
+      "zoneId": "d448d35d7f288cc512efa3cd45f55569",
+      "rootRecord": {
+        "id": "172a30ca2e93479014c112022103f370",
+        "name": "beweb.com.ar",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2018-07-17T02:43:04.831688Z",
+        "modified_on": "2024-11-30T03:39:04.058184Z"
+      },
+      "wwwRecord": {
+        "id": "296a7e2bfc21848163faa70d9858051e",
+        "name": "www.beweb.com.ar",
+        "type": "CNAME",
+        "content": "beweb.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2018-07-17T02:43:02.5912Z",
+        "modified_on": "2024-11-30T03:39:09.800145Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T12:56:47.245Z"
+      }
+    },
+    {
+      "domain": "bibar.com.ar",
+      "zoneId": "1037f04179efd9522d01534463670e82",
+      "rootRecord": {
+        "id": "80074f3baa15c0efe7fa9d4465d35c48",
+        "name": "bibar.com.ar",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2020-07-14T15:44:37.48377Z",
+        "modified_on": "2024-12-02T03:45:04.257136Z"
+      },
+      "wwwRecord": {
+        "id": "ae3284b3f749b86699fbe5be591932e5",
+        "name": "www.bibar.com.ar",
+        "type": "CNAME",
+        "content": "bibar.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2020-07-14T15:44:42.347342Z",
+        "modified_on": "2024-12-02T03:45:10.838591Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T12:56:47.970Z"
+      }
     },
     {
       "domain": "bodypel.com.ar",
@@ -156,7 +357,104 @@
         "modified_on": "2025-09-10T08:24:00.335875Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:42.466Z"
+      }
+    },
+    {
+      "domain": "bordatex.com.ar",
+      "zoneId": "aec71a95294bc3b0ed026793ce2703e6",
+      "rootRecord": {
+        "id": "f6253e5236cdb1db7751271c2fc6b354",
+        "name": "bordatex.com.ar",
+        "type": "A",
+        "content": "54.36.178.172",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2017-10-23T18:44:20.643067Z",
+        "modified_on": "2025-09-09T03:10:31.379779Z"
+      },
+      "wwwRecord": {
+        "id": "b319fb6b643f0f9a5ea388c03c8609c5",
+        "name": "www.bordatex.com.ar",
+        "type": "CNAME",
+        "content": "bordatex.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2017-10-23T18:44:21.667555Z",
+        "modified_on": "2025-09-09T03:10:37.337009Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T12:56:50.743Z"
+      }
+    },
+    {
+      "domain": "bordatexsa.com.ar",
+      "zoneId": "8ada5ebe0a45ffac9bae6bab3b2a05d1",
+      "rootRecord": {
+        "id": "ef529e66029c2fab54725a58b5e62596",
+        "name": "bordatexsa.com.ar",
+        "type": "A",
+        "content": "167.114.118.145",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2017-10-30T13:57:24.762743Z",
+        "modified_on": "2025-09-11T04:02:57.434408Z"
+      },
+      "wwwRecord": {
+        "id": "fee8301acbfd2deaac8e928cf7de3beb",
+        "name": "www.bordatexsa.com.ar",
+        "type": "CNAME",
+        "content": "bordatexsa.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2017-10-30T13:57:20.688633Z",
+        "modified_on": "2025-09-11T04:02:58.395562Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T12:56:51.586Z"
+      }
     },
     {
       "domain": "bordoli.com.ar",
@@ -177,7 +475,14 @@
         "modified_on": "2025-09-10T22:49:46.320629Z"
       },
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:43.380Z"
+      }
     },
     {
       "domain": "bpack.com.ar",
@@ -217,7 +522,14 @@
         "modified_on": "2025-09-10T23:26:25.174854Z"
       },
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:44.845Z"
+      }
     },
     {
       "domain": "bpackurbano.com",
@@ -257,7 +569,14 @@
         "modified_on": "2025-09-10T23:26:28.083625Z"
       },
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:46.384Z"
+      }
     },
     {
       "domain": "buttman.com.ar",
@@ -295,7 +614,14 @@
         "modified_on": "2025-09-10T08:24:07.559412Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 3,
+        "corporateRules": 1,
+        "customRules": 2,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-11T13:34:47.895Z"
+      }
     },
     {
       "domain": "buttman.com.uy",
@@ -316,7 +642,14 @@
         "modified_on": "2025-09-10T08:24:09.531106Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:49.179Z"
+      }
     },
     {
       "domain": "buttman.uy",
@@ -337,7 +670,14 @@
         "modified_on": "2025-09-10T08:24:11.384384Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:50.638Z"
+      }
     },
     {
       "domain": "camoga.ar",
@@ -375,7 +715,14 @@
         "modified_on": "2025-09-10T08:24:13.491716Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:52.777Z"
+      }
     },
     {
       "domain": "camoga.com.ar",
@@ -413,7 +760,14 @@
         "modified_on": "2025-09-10T08:24:15.481016Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:54.063Z"
+      }
     },
     {
       "domain": "catalogo.plus",
@@ -451,7 +805,57 @@
         "modified_on": "2025-09-10T08:24:17.299499Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:34:55.355Z"
+      }
+    },
+    {
+      "domain": "cestel.com.ar",
+      "zoneId": "fd3a7c11246a768298d58439e1122bee",
+      "rootRecord": {
+        "id": "fd33bbf7003091991c2547a7488ea3d2",
+        "name": "cestel.com.ar",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2020-08-26T04:23:46.623665Z",
+        "modified_on": "2024-12-01T22:24:52.894429Z"
+      },
+      "wwwRecord": {
+        "id": "0ab72b45e28a697d85fc7fc1295f3fb6",
+        "name": "www.cestel.com.ar",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2020-08-26T04:23:49.547255Z",
+        "modified_on": "2024-12-01T22:24:58.834062Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T12:57:05.614Z"
+      }
     },
     {
       "domain": "ciardi.com.ar",
@@ -487,7 +891,14 @@
         "modified_on": "2025-09-10T08:24:19.191955Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 1,
+        "customRules": 1,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-11T13:34:56.891Z"
+      }
     },
     {
       "domain": "cloetas.com.ar",
@@ -525,7 +936,14 @@
         "modified_on": "2025-09-10T08:24:21.456545Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 3,
+        "corporateRules": 1,
+        "customRules": 2,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-11T13:34:58.382Z"
+      }
     },
     {
       "domain": "cocotonline.com.ar",
@@ -565,7 +983,14 @@
         "modified_on": "2025-09-10T11:55:20.224011Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 3,
+        "corporateRules": 1,
+        "customRules": 2,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-11T13:34:59.745Z"
+      }
     },
     {
       "domain": "cocotonlinemayorista.com.ar",
@@ -601,7 +1026,14 @@
         "modified_on": "2025-09-10T08:24:25.354403Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:03.717Z"
+      }
     },
     {
       "domain": "comex-sileo.com.ar",
@@ -639,7 +1071,59 @@
         "modified_on": "2025-09-10T08:24:27.268136Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 5,
+        "corporateRules": 2,
+        "customRules": 3,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-11T13:35:05.798Z"
+      }
+    },
+    {
+      "domain": "cuidalabocha.org.ar",
+      "zoneId": "7b58275dcd7559feb839b9b6bff63cc7",
+      "rootRecord": {
+        "id": "5b420880f6b498eec265be7fc8efe886",
+        "name": "cuidalabocha.org.ar",
+        "type": "A",
+        "content": "185.230.63.171",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2024-07-05T00:38:34.218452Z",
+        "modified_on": "2024-07-05T00:38:34.218452Z"
+      },
+      "wwwRecord": {
+        "id": "ecae363a3c73b4b77f85736f82593c4d",
+        "name": "www.cuidalabocha.org.ar",
+        "type": "CNAME",
+        "content": "cuidalabocha.org",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2024-07-05T00:39:07.320214Z",
+        "modified_on": "2024-07-05T00:39:07.320214Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T12:57:13.974Z"
+      }
     },
     {
       "domain": "dcshoes.com.ar",
@@ -679,7 +1163,14 @@
         "modified_on": "2025-09-10T08:24:29.185601Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 4,
+        "corporateRules": 2,
+        "customRules": 2,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-11T13:35:07.396Z"
+      }
     },
     {
       "domain": "delcerropatagonia.com",
@@ -717,7 +1208,14 @@
         "modified_on": "2025-09-10T08:24:31.43974Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 3,
+        "corporateRules": 0,
+        "customRules": 3,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:08.825Z"
+      }
     },
     {
       "domain": "dibsa.com.ar",
@@ -757,7 +1255,14 @@
         "modified_on": "2025-09-09T08:22:44.228747Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:10.336Z"
+      }
     },
     {
       "domain": "distribuidorajade.com",
@@ -797,7 +1302,14 @@
         "modified_on": "2025-09-10T08:24:33.529428Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:11.905Z"
+      }
     },
     {
       "domain": "distrionline.com.ar",
@@ -837,7 +1349,14 @@
         "modified_on": "2025-09-10T08:24:35.539933Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:13.586Z"
+      }
     },
     {
       "domain": "dxvida.com.ar",
@@ -877,7 +1396,14 @@
         "modified_on": "2025-09-10T08:24:37.845344Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:14.913Z"
+      }
     },
     {
       "domain": "ecsagalvanizado.com",
@@ -915,7 +1441,14 @@
         "modified_on": "2025-09-10T08:24:40.25197Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:16.168Z"
+      }
     },
     {
       "domain": "ecsagalvanizado.com.ar",
@@ -953,7 +1486,14 @@
         "modified_on": "2025-09-10T08:24:42.156635Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:18.355Z"
+      }
     },
     {
       "domain": "ecsalaser.com.ar",
@@ -974,7 +1514,14 @@
         "modified_on": "2024-11-04T04:11:05.799312Z"
       },
       "rootProxied": true,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:19.890Z"
+      }
     },
     {
       "domain": "eggerimcofue.com.ar",
@@ -1014,7 +1561,14 @@
         "modified_on": "2025-09-10T08:24:45.343046Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 1,
+        "corporateRules": 0,
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:21.458Z"
+      }
     },
     {
       "domain": "elpalaciodelalimpieza.com.ar",
@@ -1052,7 +1606,14 @@
         "modified_on": "2025-09-10T08:24:47.14908Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:22.875Z"
+      }
     },
     {
       "domain": "el-vasquito.com.ar",
@@ -1092,7 +1653,14 @@
         "modified_on": "2025-09-10T08:24:49.132203Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:24.307Z"
+      }
     },
     {
       "domain": "envacenter.ar",
@@ -1130,7 +1698,14 @@
         "modified_on": "2025-09-10T08:24:51.20884Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:25.685Z"
+      }
     },
     {
       "domain": "envacenter.com.ar",
@@ -1168,7 +1743,14 @@
         "modified_on": "2025-09-10T08:24:53.017723Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:27.074Z"
+      }
     },
     {
       "domain": "etxehogar.com.ar",
@@ -1206,7 +1788,61 @@
         "modified_on": "2025-09-10T08:24:55.015599Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 3,
+        "corporateRules": 0,
+        "customRules": 3,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:28.417Z"
+      }
+    },
+    {
+      "domain": "exactian.com",
+      "zoneId": "dac3a59faa916b0ce22b221c482967d9",
+      "rootRecord": {
+        "id": "61e1bab3949b6c8d1947c3b738f0dd64",
+        "name": "exactian.com",
+        "type": "CNAME",
+        "content": "vps1.beweb.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2025-08-27T20:51:02.204819Z",
+        "modified_on": "2025-09-01T02:20:29.857702Z"
+      },
+      "wwwRecord": {
+        "id": "272040038f5cacdaca2de183c5455e95",
+        "name": "www.exactian.com",
+        "type": "CNAME",
+        "content": "exactian.com",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2025-08-27T20:51:02.219304Z",
+        "modified_on": "2025-09-01T02:20:37.175483Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T12:57:37.524Z"
+      }
     },
     {
       "domain": "fava.com.ar",
@@ -1246,7 +1882,14 @@
         "modified_on": "2025-09-10T08:24:56.902586Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 3,
+        "corporateRules": 0,
+        "customRules": 3,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:29.950Z"
+      }
     },
     {
       "domain": "fourwitch.com.ar",
@@ -1284,7 +1927,14 @@
         "modified_on": "2025-09-10T08:24:58.824213Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:31.345Z"
+      }
     },
     {
       "domain": "fraymocho.com.ar",
@@ -1324,7 +1974,14 @@
         "modified_on": "2025-09-10T08:25:01.426196Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:32.879Z"
+      }
     },
     {
       "domain": "giantoys.com.ar",
@@ -1362,7 +2019,14 @@
         "modified_on": "2025-09-10T08:25:07.439804Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:34.343Z"
+      }
     },
     {
       "domain": "grupoplastigas.com.ar",
@@ -1402,13 +2066,72 @@
         "modified_on": "2025-09-10T08:25:09.571451Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:35.822Z"
+      }
     },
     {
       "domain": "hausonline.com.ar",
       "zoneId": "06a6b49ecef27a8263eebf4cd52a460a",
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:37.518Z"
+      }
+    },
+    {
+      "domain": "hitcreativo.com",
+      "zoneId": "23b7d0a9e5b34aa2ce56760d26ec9758",
+      "rootRecord": {
+        "id": "a27c34e532a11d242b55ab0e6b0d600d",
+        "name": "hitcreativo.com",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2019-04-24T16:38:18.779625Z",
+        "modified_on": "2024-11-30T19:32:47.371088Z"
+      },
+      "wwwRecord": {
+        "id": "e38feca0ea0cf98c1b6510427626fdcb",
+        "name": "www.hitcreativo.com",
+        "type": "CNAME",
+        "content": "hitcreativo.com",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2019-04-24T16:38:19.612887Z",
+        "modified_on": "2024-11-30T19:32:52.822558Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T12:57:48.500Z"
+      }
     },
     {
       "domain": "imagenpintureria.com.ar",
@@ -1431,7 +2154,14 @@
         "modified_on": "2025-05-05T15:27:27.887727Z"
       },
       "rootProxied": true,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:38.914Z"
+      }
     },
     {
       "domain": "imagenpinturerias.com.ar",
@@ -1471,7 +2201,14 @@
         "modified_on": "2025-09-10T08:25:14.153936Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:40.796Z"
+      }
     },
     {
       "domain": "imcofue.com",
@@ -1509,7 +2246,14 @@
         "modified_on": "2025-09-10T08:25:16.046312Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:42.488Z"
+      }
     },
     {
       "domain": "imcofue.com.ar",
@@ -1547,7 +2291,14 @@
         "modified_on": "2025-09-10T08:25:17.873749Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:44.140Z"
+      }
     },
     {
       "domain": "incofue.com.ar",
@@ -1585,7 +2336,14 @@
         "modified_on": "2025-09-10T08:25:19.975315Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:45.613Z"
+      }
     },
     {
       "domain": "ishop-prod.com",
@@ -1623,7 +2381,14 @@
         "modified_on": "2025-09-10T08:25:21.978667Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:46.955Z"
+      }
     },
     {
       "domain": "iturrarte.com.ar",
@@ -1661,7 +2426,14 @@
         "modified_on": "2025-09-08T15:31:28.318404Z"
       },
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:47.746Z"
+      }
     },
     {
       "domain": "jadecositaslindas.com.ar",
@@ -1701,7 +2473,144 @@
         "modified_on": "2025-09-10T08:25:23.926689Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:49.245Z"
+      }
+    },
+    {
+      "domain": "laplantadecafe.ar",
+      "zoneId": "2e1b4318ebec74e7e77445e506e787a0",
+      "rootRecord": {
+        "id": "95adf9a52b5a835017fb5bc03d42b699",
+        "name": "laplantadecafe.ar",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2022-08-11T13:39:02.88054Z",
+        "modified_on": "2024-11-30T15:05:23.453071Z"
+      },
+      "wwwRecord": {
+        "id": "1e5cd97754509628bef8e643ca3e29a0",
+        "name": "www.laplantadecafe.ar",
+        "type": "CNAME",
+        "content": "laplantadecafe.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2022-08-11T13:39:21.42571Z",
+        "modified_on": "2024-11-30T15:05:27.977831Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "laplantadecafe.com",
+      "zoneId": "dd7bf54c1315803b661786e6523037ea",
+      "rootRecord": {
+        "id": "7fb99ba1bc140c505fb142f805546013",
+        "name": "laplantadecafe.com",
+        "type": "A",
+        "content": "51.222.248.70",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2022-08-11T14:21:04.26647Z",
+        "modified_on": "2022-08-17T20:58:30.001806Z"
+      },
+      "wwwRecord": {
+        "id": "7319603df8a6b27b7fcd4f26c0e8a5dd",
+        "name": "www.laplantadecafe.com",
+        "type": "A",
+        "content": "51.222.248.70",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2022-08-11T14:21:04.280561Z",
+        "modified_on": "2022-08-17T20:58:40.173541Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "laplantadecafe.com.ar",
+      "zoneId": "b309b7b796b7a262293f974e24448fca",
+      "rootRecord": {
+        "id": "2fcbecbf4f12921c82173caa1012f76d",
+        "name": "laplantadecafe.com.ar",
+        "type": "A",
+        "content": "51.222.248.70",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2022-08-11T14:19:40.459747Z",
+        "modified_on": "2022-08-17T21:06:54.766753Z"
+      },
+      "wwwRecord": {
+        "id": "50da69b7a963f5856df669a05bedd410",
+        "name": "www.laplantadecafe.com.ar",
+        "type": "CNAME",
+        "content": "laplantadecafe.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2022-08-11T14:20:07.560763Z",
+        "modified_on": "2022-08-17T21:07:00.414764Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "librerialuro.com.ar",
@@ -1739,7 +2648,14 @@
         "modified_on": "2025-09-10T08:25:25.925319Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:50.752Z"
+      }
     },
     {
       "domain": "libreriapalito.com.ar",
@@ -1777,7 +2693,14 @@
         "modified_on": "2025-09-10T08:25:27.904039Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:52.127Z"
+      }
     },
     {
       "domain": "libreriasdolfi.com.ar",
@@ -1815,7 +2738,14 @@
         "modified_on": "2025-09-10T08:25:30.310349Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 3,
+        "corporateRules": 0,
+        "customRules": 3,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-11T13:35:53.523Z"
+      }
     },
     {
       "domain": "librosdelaarena.com.ar",
@@ -1855,7 +2785,13 @@
         "modified_on": "2025-09-10T08:25:32.345388Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "limpasa.com.ar",
@@ -1893,7 +2829,57 @@
         "modified_on": "2025-09-10T08:25:34.424875Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "liv.com.ar",
+      "zoneId": "ac4ab9b8263b3834a61f0b9ff03bb0a6",
+      "rootRecord": {
+        "id": "6e201110f4b386880bffe5e10a524d6f",
+        "name": "liv.com.ar",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2023-04-12T14:44:12.40465Z",
+        "modified_on": "2024-11-30T18:24:53.346999Z"
+      },
+      "wwwRecord": {
+        "id": "4cfcdf0c734e29b14f06ed6e8b314489",
+        "name": "www.liv.com.ar",
+        "type": "CNAME",
+        "content": "liv.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2023-04-12T14:45:06.203622Z",
+        "modified_on": "2024-11-30T18:24:58.044602Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "macrofer.com.ar",
@@ -1933,7 +2919,57 @@
         "modified_on": "2025-09-10T08:25:36.369353Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "marquevich.com",
+      "zoneId": "b0dd8db1843b5b383dde9c05f7d31be0",
+      "rootRecord": {
+        "id": "63ddd2b3f981ff45e2699b774c60ce43",
+        "name": "marquevich.com",
+        "type": "A",
+        "content": "184.168.221.41",
+        "proxiable": true,
+        "proxied": false,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2019-02-17T22:27:08.342879Z",
+        "modified_on": "2019-02-17T22:27:08.342879Z"
+      },
+      "wwwRecord": {
+        "id": "79d82d78fe1a288917b0909fa98244e0",
+        "name": "www.marquevich.com",
+        "type": "CNAME",
+        "content": "marquevich.com",
+        "proxiable": true,
+        "proxied": false,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2019-02-17T22:27:10.601241Z",
+        "modified_on": "2019-02-17T22:27:10.601241Z"
+      },
+      "rootProxied": false,
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "mayoristaelgauchito.com",
@@ -1971,7 +3007,13 @@
         "modified_on": "2025-09-10T08:25:38.227221Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "megamixdistribuidor.com.ar",
@@ -2011,7 +3053,13 @@
         "modified_on": "2025-09-10T08:25:40.088398Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "menorcoste.com.ar",
@@ -2051,7 +3099,13 @@
         "modified_on": "2025-09-10T08:25:41.916477Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "meyersacif.com",
@@ -2089,7 +3143,13 @@
         "modified_on": "2025-09-10T08:25:43.852887Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "mhod.com.ar",
@@ -2127,7 +3187,13 @@
         "modified_on": "2025-09-10T08:25:45.653221Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "multienvasesonline.com.ar",
@@ -2167,7 +3233,13 @@
         "modified_on": "2025-09-10T08:25:48.55297Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "mundofigus.com",
@@ -2207,7 +3279,13 @@
         "modified_on": "2025-09-10T08:25:50.659705Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "mundofigus.com.ar",
@@ -2247,7 +3325,13 @@
         "modified_on": "2025-09-10T08:25:52.533477Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "nitrobikes.com.ar",
@@ -2285,7 +3369,55 @@
         "modified_on": "2025-09-10T08:25:54.548789Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "ovcestel.com.ar",
+      "zoneId": "ce290cf35be04b80e2dfc4bd6f5a262e",
+      "rootRecord": {
+        "id": "94dc441481c6ee10ed6ffdbc279cabd9",
+        "name": "ovcestel.com.ar",
+        "type": "A",
+        "content": "131.108.0.130",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2022-02-10T17:08:50.147527Z",
+        "modified_on": "2022-02-10T17:08:50.147527Z"
+      },
+      "wwwRecord": {
+        "id": "a1df22db4539ae5858bd0e2abbec7fdd",
+        "name": "www.ovcestel.com.ar",
+        "type": "A",
+        "content": "131.108.0.130",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2022-02-10T17:08:50.153868Z",
+        "modified_on": "2022-02-10T17:08:50.153868Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "oxfordlibreria.com.ar",
@@ -2323,7 +3455,13 @@
         "modified_on": "2025-09-10T08:25:56.648475Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pampahogar.com.ar",
@@ -2363,7 +3501,13 @@
         "modified_on": "2025-09-10T08:25:58.938526Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pandatoys.com.ar",
@@ -2401,7 +3545,101 @@
         "modified_on": "2025-09-10T08:26:01.083191Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "patentarg.ar",
+      "zoneId": "975fe76ab3e734a37cd5a3fded5d4848",
+      "rootRecord": {
+        "id": "3830734a3e67321c6c946d47d976bfd9",
+        "name": "patentarg.ar",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": false,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2023-07-25T03:45:05.104647Z",
+        "modified_on": "2025-04-30T18:21:01.353539Z"
+      },
+      "wwwRecord": {
+        "id": "74fff6541c4e4a93df9b78a9fa602709",
+        "name": "www.patentarg.ar",
+        "type": "CNAME",
+        "content": "patentarg.ar",
+        "proxiable": true,
+        "proxied": false,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2023-07-25T03:45:18.938222Z",
+        "modified_on": "2025-04-30T18:21:10.716191Z"
+      },
+      "rootProxied": false,
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "patentarg.com.ar",
+      "zoneId": "4d5e909c8ec2a37973f1998497a44ba1",
+      "rootRecord": {
+        "id": "a9ac24c46c614f7ec22bd6e2a2d74b9d",
+        "name": "patentarg.com.ar",
+        "type": "A",
+        "content": "51.222.248.70",
+        "proxiable": true,
+        "proxied": false,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2023-07-25T03:45:57.515476Z",
+        "modified_on": "2024-09-26T01:09:00.51506Z"
+      },
+      "wwwRecord": {
+        "id": "b9b00743d5a1895d8e9fd2d417be225d",
+        "name": "www.patentarg.com.ar",
+        "type": "CNAME",
+        "content": "patentarg.com.ar",
+        "proxiable": true,
+        "proxied": false,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2023-07-25T03:46:07.506518Z",
+        "modified_on": "2024-09-26T01:09:05.072969Z"
+      },
+      "rootProxied": false,
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "peluches-yanitoys.com.ar",
@@ -2439,7 +3677,13 @@
         "modified_on": "2025-09-10T08:26:03.20203Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "perrosygatos.com.ar",
@@ -2477,7 +3721,13 @@
         "modified_on": "2025-09-10T08:26:05.036266Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pharmamerican.com.ar",
@@ -2515,7 +3765,13 @@
         "modified_on": "2025-09-10T08:26:06.900831Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "piccinhnos.com",
@@ -2555,7 +3811,13 @@
         "modified_on": "2025-09-10T08:26:08.839123Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "piccinhnos.com.ar",
@@ -2595,7 +3857,13 @@
         "modified_on": "2025-09-10T08:26:10.819058Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "piedravlanca.com.ar",
@@ -2616,7 +3884,13 @@
         "modified_on": "2025-06-25T14:37:18.428908Z"
       },
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pintureriadelfondo.com",
@@ -2656,7 +3930,13 @@
         "modified_on": "2025-09-10T08:26:13.929001Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pintureriagiannoni.com",
@@ -2696,7 +3976,13 @@
         "modified_on": "2025-09-10T08:26:15.724342Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pintureriagiannoni.com.ar",
@@ -2736,7 +4022,13 @@
         "modified_on": "2025-09-10T08:26:17.505864Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pintureriaimagen.com.ar",
@@ -2759,13 +4051,25 @@
         "modified_on": "2025-05-05T15:31:09.195691Z"
       },
       "rootProxied": true,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pintureriaimagensa.com.ar",
       "zoneId": "16117843ff12ecd430bf15d13ec961e7",
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pintureriasambito.com",
@@ -2805,7 +4109,13 @@
         "modified_on": "2025-09-10T08:26:22.425475Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pintureriascaporaso.com",
@@ -2845,7 +4155,13 @@
         "modified_on": "2025-09-10T08:26:24.303362Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pintureriasimagen.com.ar",
@@ -2883,7 +4199,13 @@
         "modified_on": "2025-09-10T08:26:26.273843Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pintureriasimagensa.com.ar",
@@ -2906,7 +4228,13 @@
         "modified_on": "2025-05-05T15:32:02.243983Z"
       },
       "rootProxied": true,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pintureriatomas.com.ar",
@@ -2946,19 +4274,37 @@
         "modified_on": "2025-09-10T08:26:29.61638Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pixdelsur.ar",
       "zoneId": "778330789b4e721f9eb72d837c5065aa",
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "pixdelsur.com.ar",
       "zoneId": "385bba83422bc6c84ae4ea3051d3ef20",
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "plastigas.com.ar",
@@ -2998,7 +4344,13 @@
         "modified_on": "2025-09-10T08:26:34.192038Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "popper-store.com",
@@ -3036,7 +4388,13 @@
         "modified_on": "2025-09-10T08:26:36.078672Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "prointecweb.com.ar",
@@ -3074,7 +4432,13 @@
         "modified_on": "2025-09-10T08:26:37.917489Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "puntopintura.com",
@@ -3112,7 +4476,13 @@
         "modified_on": "2025-09-10T08:26:39.96918Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "puntopintura.com.ar",
@@ -3150,7 +4520,13 @@
         "modified_on": "2025-09-10T08:26:41.930749Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "quiksilver.com.ar",
@@ -3190,7 +4566,57 @@
         "modified_on": "2025-09-10T08:26:43.911302Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "realstep.com.ar",
+      "zoneId": "2c92d5c35795bfc1adcfc5257203d166",
+      "rootRecord": {
+        "id": "b81dd10db84672a970bd0620d2fb4687",
+        "name": "realstep.com.ar",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2025-02-08T02:49:33.909646Z",
+        "modified_on": "2025-02-10T22:06:15.752045Z"
+      },
+      "wwwRecord": {
+        "id": "113f61f00c156f99aadfa266fd24c4bd",
+        "name": "www.realstep.com.ar",
+        "type": "CNAME",
+        "content": "realstep.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2025-02-08T02:50:01.588594Z",
+        "modified_on": "2025-02-10T22:06:19.592837Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "rollpix.com",
@@ -3230,13 +4656,25 @@
         "modified_on": "2025-09-10T08:26:45.784Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "rollpix.com.ar",
       "zoneId": "f68a4c98471b85b736ebca25dda61088",
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "roxy.com.ar",
@@ -3276,7 +4714,13 @@
         "modified_on": "2025-09-10T08:26:49.142332Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "rvca.com.ar",
@@ -3316,7 +4760,13 @@
         "modified_on": "2025-09-10T08:26:51.549379Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "saintgottard.com",
@@ -3356,7 +4806,101 @@
         "modified_on": "2025-07-16T16:38:25.645906Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "sexto-sentido.com.ar",
+      "zoneId": "10b115e983b445b2824406c92abe31e9",
+      "rootRecord": {
+        "id": "0443557a691b498b6521c43e4e77de3d",
+        "name": "sexto-sentido.com.ar",
+        "type": "A",
+        "content": "185.133.35.13",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2021-07-04T22:27:59.720566Z",
+        "modified_on": "2024-06-25T21:13:18.529106Z"
+      },
+      "wwwRecord": {
+        "id": "ce35d605bbbfc7abbdb098396f5017e3",
+        "name": "www.sexto-sentido.com.ar",
+        "type": "CNAME",
+        "content": "sextosentido13.mitiendanube.com",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2021-07-04T22:15:20.453753Z",
+        "modified_on": "2024-06-25T21:13:25.250106Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "sinergiq.com",
+      "zoneId": "54598f437cd8ca8114de9a15f7d013e5",
+      "rootRecord": {
+        "id": "fd3fb261c290926aff5905ea62bdce21",
+        "name": "sinergiq.com",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2016-06-29T15:01:49.887404Z",
+        "modified_on": "2024-11-30T22:49:32.149011Z"
+      },
+      "wwwRecord": {
+        "id": "17f54072e701d2ee880be794a6fd430f",
+        "name": "www.sinergiq.com",
+        "type": "CNAME",
+        "content": "sinergiq.com",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2021-11-10T05:37:06.160441Z",
+        "modified_on": "2024-11-30T22:49:38.927894Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "somoswapp.com.ar",
@@ -3394,7 +4938,13 @@
         "modified_on": "2025-09-10T08:26:53.548955Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "sportsman.com.ar",
@@ -3432,7 +4982,13 @@
         "modified_on": "2025-09-10T08:26:55.401056Z"
       },
       "rootProxied": false,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "tiendaforeva.com.ar",
@@ -3470,7 +5026,13 @@
         "modified_on": "2025-09-10T08:26:58.295223Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "tiendaimco.com.ar",
@@ -3508,7 +5070,57 @@
         "modified_on": "2025-09-10T08:27:00.134099Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "tiendasexclusivas.com",
+      "zoneId": "6ac73adf770a1a2b2e43b6713959096b",
+      "rootRecord": {
+        "id": "820ac609b4a151bf3425a294d79748f1",
+        "name": "tiendasexclusivas.com",
+        "type": "A",
+        "content": "1.1.1.1",
+        "proxiable": false,
+        "proxied": false,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2018-07-17T02:43:50.51878Z",
+        "modified_on": "2024-06-25T21:19:33.358444Z"
+      },
+      "wwwRecord": {
+        "id": "9bdbdab1c4563a11f2c524f3517d12fe",
+        "name": "www.tiendasexclusivas.com",
+        "type": "CNAME",
+        "content": "tiendasexclusivas.com",
+        "proxiable": true,
+        "proxied": false,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2018-07-17T02:43:51.287504Z",
+        "modified_on": "2024-06-25T21:19:39.086254Z"
+      },
+      "rootProxied": false,
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "tiribellihogar.com.ar",
@@ -3546,7 +5158,57 @@
         "modified_on": "2025-09-10T08:27:01.994298Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
+    },
+    {
+      "domain": "torreondelmonje.com.ar",
+      "zoneId": "9128053a94d316f95efdf34d02474b26",
+      "rootRecord": {
+        "id": "d3dab3c8a09c22a9b394006cf4d130b8",
+        "name": "torreondelmonje.com.ar",
+        "type": "A",
+        "content": "195.35.17.168",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2021-06-07T02:55:31.389906Z",
+        "modified_on": "2024-12-01T02:07:34.735166Z"
+      },
+      "wwwRecord": {
+        "id": "66c5348c2091d3f842fd498c4f7e1f26",
+        "name": "www.torreondelmonje.com.ar",
+        "type": "CNAME",
+        "content": "torreondelmonje.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2021-06-07T02:55:40.50133Z",
+        "modified_on": "2024-12-01T02:07:39.212263Z"
+      },
+      "rootProxied": true,
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "tout.ar",
@@ -3584,7 +5246,13 @@
         "modified_on": "2025-09-10T08:27:03.928609Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "tout.com.ar",
@@ -3624,7 +5292,13 @@
         "modified_on": "2025-09-10T08:27:05.787423Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "trialum.com.ar",
@@ -3645,7 +5319,13 @@
         "modified_on": "2024-11-04T04:12:54.220573Z"
       },
       "rootProxied": true,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "undercar.com.ar",
@@ -3683,7 +5363,13 @@
         "modified_on": "2025-09-10T08:27:09.180156Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "urbaniasa.com",
@@ -3721,7 +5407,13 @@
         "modified_on": "2025-09-10T08:27:11.075605Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "vantergroup.com.ar",
@@ -3742,7 +5434,13 @@
         "modified_on": "2025-06-24T19:34:58.467695Z"
       },
       "rootProxied": false,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "vassallo.com.ar",
@@ -3780,7 +5478,13 @@
         "modified_on": "2025-05-10T21:01:41.601721Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "vialmaq.com.ar",
@@ -3820,7 +5524,13 @@
         "modified_on": "2025-09-10T08:27:14.759058Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "victorgullo.com",
@@ -3860,7 +5570,13 @@
         "modified_on": "2025-09-10T08:27:16.760158Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "victorgullo.com.ar",
@@ -3883,7 +5599,13 @@
         "modified_on": "2024-11-04T04:13:00.703908Z"
       },
       "rootProxied": true,
-      "wwwProxied": false
+      "wwwProxied": false,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     },
     {
       "domain": "vitamin-way.com",
@@ -3923,9 +5645,15 @@
         "modified_on": "2025-07-16T16:37:35.004604Z"
       },
       "rootProxied": true,
-      "wwwProxied": true
+      "wwwProxied": true,
+      "securityRules": {
+        "totalRules": 0,
+        "corporateRules": 0,
+        "customRules": 0,
+        "hasConflicts": false
+      }
     }
   ],
-  "lastUpdate": "2025-09-10T23:27:11.244Z",
-  "totalCount": 110
+  "lastUpdate": "2025-09-11T13:36:15.309Z",
+  "totalCount": 133
 }
