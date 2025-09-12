@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { toast } from 'sonner';
 import { Shield, Plus, Trash2, Edit2, RefreshCw } from 'lucide-react';
 import { RuleTemplate } from '@/types/cloudflare';
+import { CollapsibleExpression } from './CollapsibleExpression';
 
 interface SecurityRulesManagerProps {
   apiToken: string;
@@ -334,10 +335,7 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
                   <CardDescription>{template.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="bg-muted p-3 rounded-md">
-                    <Label className="text-sm font-medium">Expresión:</Label>
-                    <code className="block text-sm mt-1 break-all">{template.expression}</code>
-                  </div>
+                  <CollapsibleExpression expression={template.expression} />
                   <div className="flex items-center gap-4">
                     <Badge>{template.action}</Badge>
                     <div className="text-sm text-muted-foreground">

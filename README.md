@@ -2,90 +2,203 @@
 
 ![Rollpix Logo](public/logo-rollpix.png)
 
-Una aplicación web moderna para gestionar visualmente el estado de proxy DNS de dominios en Cloudflare. Desarrollada con Next.js 14 y diseñada específicamente para equipos que necesitan monitorear y controlar múltiples dominios de forma eficiente.
+Una aplicación web moderna para gestionar visualmente dominios en Cloudflare con **sistema completo de reglas de seguridad**. Desarrollada con Next.js 15 y diseñada específicamente para equipos que necesitan monitorear y controlar múltiples dominios de forma eficiente, incluyendo gestión avanzada de reglas de firewall.
 
 ## 🚀 Características Principales
 
 ### Gestión Visual de Dominios
-- **Indicadores visuales intuitivos**: Iconos de escudo verde (proxied) y rojo (not proxied) para identificar rápidamente el estado
+- **Indicadores visuales intuitivos**: Iconos de escudo corregidos (Shield para proxy activo, ShieldOff para DNS-only)
 - **Vista de tabla optimizada**: Información clara con dominio, tipo de registro, estado actual y acciones
-- **Conteo inteligente**: Progreso basado en dominios únicos, no en registros individuales
+- **Columna de reglas avanzada**: Pills con IDs de reglas de plantilla + contador de reglas personalizadas
+
+### Sistema de Reglas de Seguridad 🔥 **NUEVO**
+- **Gestión de plantillas**: Crear, editar y versionar reglas de firewall corporativas
+- **Aplicación masiva**: Aplicar/remover reglas en múltiples dominios simultáneamente
+- **Detección de conflictos**: Análisis automático de reglas obsoletas o conflictivas
+- **Modal de reglas por dominio**: Ver y gestionar reglas individualmente con detalle completo
+- **Actualización inteligente**: Botón para actualizar reglas a nuevas versiones en todos los dominios
 
 ### Control de Proxy Avanzado
 - **Toggle individual**: Habilitar/deshabilitar proxy para dominios específicos con un clic
-- **Acciones masivas**: Selección múltiple para operaciones en lote
-- **Actualización selectiva**: Refresh automático solo de dominios modificados para optimizar rendimiento
+- **Acciones masivas**: Selección múltiple para operaciones en lote con progreso visual
+- **Actualización unificada**: Botón único con checkboxes para DNS, Firewall y Reglas
+- **Confirmaciones**: Modal de confirmación para cambio de token API con botón cancelar
 
 ### Sistema de Persistencia Inteligente
 - **Cache JSON local**: Evita límites de rate limiting de la API de Cloudflare
 - **Preferencias de usuario**: Persistencia de configuraciones (items por página, ordenamiento, filtros)
-- **Token API seguro**: Almacenamiento automático en variables de entorno
+- **Token API seguro**: Almacenamiento automático en variables de entorno con validación completa
 
 ### Funcionalidades de Productividad
 - **Ordenamiento inteligente**: Por nombre o estado con priorización automática
 - **Filtrado avanzado**: Ver todos, solo proxied, o solo not-proxied
 - **Búsqueda en tiempo real**: Filtrado instantáneo por nombre de dominio
 - **Paginación configurable**: 12, 24, 48 o 96 dominios por página
+- **Progreso visual**: Indicadores de progreso para operaciones largas
 
 ## 🛠 Tecnologías Utilizadas
 
 ### Frontend
-- **Next.js 14** - App Router con Turbopack para desarrollo rápido
-- **TypeScript** - Tipado fuerte para mayor seguridad y productividad
-- **shadcn/ui** - Componentes UI modernos y accesibles
-- **Tailwind CSS** - Estilizado utilitario y responsive
-- **Lucide React** - Iconografía consistente y profesional
+- **Next.js 15.5.3** - App Router con Turbopack para desarrollo rápido
+- **React 19.1.0** - React Server Components y Concurrent Features
+- **TypeScript 5.x** - Tipado fuerte para mayor seguridad y productividad
+- **shadcn/ui** - Componentes UI modernos y accesibles basados en Radix UI
+- **Tailwind CSS 4.x** - Estilizado utilitario y responsive con nueva arquitectura
+- **Lucide React 0.543.0** - Iconografía consistente y profesional
 
 ### Backend y APIs
 - **Next.js API Routes** - Endpoints serverless para manejo de datos
-- **Cloudflare API v4** - Integración completa con servicios de Cloudflare
+- **Cloudflare API v4** - Integración completa con servicios de Cloudflare (DNS + Rulesets)
 - **JSON File System** - Persistencia local para cache y preferencias
 
+### Dependencias Principales
+```json
+{
+  "next": "15.5.3",
+  "react": "19.1.0",
+  "react-dom": "19.1.0",
+  "typescript": "^5",
+  "tailwindcss": "^4",
+  "lucide-react": "^0.543.0",
+  "sonner": "^2.0.7",
+  "uuid": "^13.0.0"
+}
+```
+
+### Radix UI Components
+```json
+{
+  "@radix-ui/react-checkbox": "^1.3.3",
+  "@radix-ui/react-dialog": "^1.1.15",
+  "@radix-ui/react-dropdown-menu": "^2.1.16",
+  "@radix-ui/react-label": "^2.1.7",
+  "@radix-ui/react-popover": "^1.1.15",
+  "@radix-ui/react-select": "^2.2.6",
+  "@radix-ui/react-separator": "^1.1.7",
+  "@radix-ui/react-tabs": "^1.1.13",
+  "@radix-ui/react-tooltip": "^1.2.8"
+}
+```
+
 ### Herramientas de Desarrollo
-- **Playwright** - Testing end-to-end automatizado
-- **ESLint** - Linting y calidad de código
+- **Playwright 1.55.0** - Testing end-to-end automatizado
+- **ESLint 9.x** - Linting y calidad de código
 - **Sonner** - Notificaciones toast elegantes
 
-## 📋 Requisitos Previos
+## 📋 Requisitos del Sistema
 
-- Node.js 18.17 o superior
-- Token API de Cloudflare con permisos de lectura y escritura para zonas DNS
-- npm o yarn como gestor de paquetes
+### Versiones Específicas Requeridas ⚠️
+- **Node.js**: `20.15.1` (recomendado) o superior a `20.x`
+- **npm**: `10.7.0` o superior
+- **Token API de Cloudflare**: Con permisos específicos (ver configuración)
+
+### Permisos de Token API Cloudflare
+```
+Zone Settings: Read
+DNS: Edit  
+Zone: Read
+Zone Firewall Access Rules: Edit  
+Account Firewall Access Rules: Read
+Zone WAF: Edit
+```
+
+### Compatibilidad de Sistema Operativo
+- **Windows**: ✅ Probado en Windows 10/11
+- **macOS**: ✅ Compatible 
+- **Linux**: ✅ Compatible
 
 ## 🔧 Instalación y Configuración
 
-### 1. Clonar el repositorio
+### Pasos de Instalación Completos
+
+#### 1. Verificar Requisitos del Sistema
+```bash
+# Verificar versión de Node.js
+node --version  # Debe ser >= 20.15.1
+
+# Verificar versión de npm
+npm --version   # Debe ser >= 10.7.0
+```
+
+#### 2. Clonar el repositorio
 ```bash
 git clone https://github.com/ROLLPIX/rollpix-cloudflare-manager.git
 cd rollpix-cloudflare-manager
 ```
 
-### 2. Instalar dependencias
+#### 3. Instalar dependencias exactas
 ```bash
+# Usar npm ci para instalación exacta desde package-lock.json
+npm ci
+
+# O instalar con npm install si prefieres actualizar dependencias
 npm install
 ```
 
-### 3. Configurar variables de entorno
+#### 4. Configurar variables de entorno (Opcional)
 ```bash
-cp .env.example .env.local
+# Crear archivo de entorno si quieres token predeterminado
+echo "CLOUDFLARE_API_TOKEN=tu_token_aqui" > .env.local
 ```
 
-### 4. Ejecutar en desarrollo
+#### 5. Ejecutar en desarrollo
 ```bash
+# Modo desarrollo con Turbopack
 npm run dev
+
+# O modo desarrollo estándar (si Turbopack da problemas)
+next dev
 ```
 
-La aplicación estará disponible en `http://localhost:3000`
+#### 6. Verificar instalación
+- Navega a `http://localhost:3001` (o el puerto que se muestre)
+- Deberías ver la pantalla de configuración de token API
+- Ingresa tu token de Cloudflare para empezar
+
+### ⚠️ Solución de Problemas de Instalación
+
+#### Error de incompatibilidad de dependencias
+```bash
+# Limpiar cache de npm y reinstalar
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install
+```
+
+#### Problemas con React 19/Next.js 15
+```bash
+# Si tienes conflictos, usa estas versiones específicas
+npm install react@19.1.0 react-dom@19.1.0 next@15.5.3
+```
+
+#### Problemas con Tailwind CSS 4
+```bash
+# Si Tailwind CSS 4 causa problemas, usa la v3
+npm install tailwindcss@^3.4.0 @tailwindcss/postcss@^3
+```
+
+#### Error con shadcn/ui components
+```bash
+# Reinstalar componentes UI si es necesario
+npx shadcn@latest add dialog
+npx shadcn@latest add popover
+npx shadcn@latest add tabs
+# ... otros componentes según sea necesario
+```
 
 ## 🔑 Configuración del Token API
 
 ### Obtener Token de Cloudflare
 1. Accede a [Cloudflare Dashboard](https://dash.cloudflare.com/profile/api-tokens)
 2. Crea un token personalizado con los siguientes permisos:
-   - **Zone Settings:Read**
-   - **DNS:Edit**
-   - **Zone:Read**
+   - **Zone Settings: Read**
+   - **DNS: Edit**  
+   - **Zone: Read**
+   - **Zone Firewall Access Rules: Edit**  
+   - **Account Firewall Access Rules: Read**
+   - **Zone WAF: Edit**
 3. Incluye todas las zonas que deseas gestionar
+4. Guarda el token de forma segura (solo se muestra una vez)
 
 ### Configuración en la Aplicación
 - Al iniciar la aplicación por primera vez, ingresa tu token API
@@ -119,27 +232,60 @@ rollpix-cloudflare-manager/
 ├── src/
 │   ├── app/
 │   │   ├── api/
-│   │   │   ├── cache/route.ts          # Gestión de cache JSON
-│   │   │   ├── domains/route.ts        # Fetch de dominios con paginación
-│   │   │   ├── preferences/route.ts    # Persistencia de preferencias
-│   │   │   ├── proxy-toggle/route.ts   # Toggle de estado proxy
-│   │   │   └── token/route.ts          # Gestión de tokens API
-│   │   ├── globals.css                 # Estilos globales
-│   │   ├── layout.tsx                  # Layout principal
-│   │   └── page.tsx                    # Página principal
+│   │   │   ├── cache/route.ts                    # Gestión de cache JSON
+│   │   │   ├── domains/
+│   │   │   │   ├── route.ts                     # Fetch de dominios con paginación
+│   │   │   │   ├── enrich/route.ts              # Enriquecimiento con reglas de seguridad
+│   │   │   │   └── rules/
+│   │   │   │       ├── [zoneId]/route.ts        # Reglas específicas por zona
+│   │   │   │       ├── bulk-action/route.ts     # Acciones masivas de reglas
+│   │   │   │       ├── clean/route.ts           # Limpieza de reglas
+│   │   │   │       └── custom/[ruleId]/route.ts # Gestión reglas personalizadas
+│   │   │   ├── preferences/route.ts             # Persistencia de preferencias
+│   │   │   ├── proxy-toggle/route.ts            # Toggle de estado proxy
+│   │   │   ├── security-rules/
+│   │   │   │   ├── route.ts                     # CRUD plantillas de reglas
+│   │   │   │   ├── [id]/route.ts                # Gestión individual de plantillas
+│   │   │   │   ├── analyze/route.ts             # Análisis de reglas por dominio
+│   │   │   │   ├── apply/route.ts               # Aplicación de reglas
+│   │   │   │   └── init-examples/route.ts       # Inicialización con ejemplos
+│   │   │   ├── test-token/route.ts              # Validación completa de token
+│   │   │   └── token/route.ts                   # Gestión de tokens API
+│   │   ├── test-token/page.tsx                  # Página de prueba de token
+│   │   ├── globals.css                          # Estilos globales
+│   │   ├── layout.tsx                           # Layout principal
+│   │   └── page.tsx                             # Página principal
 │   ├── components/
-│   │   ├── ui/                         # Componentes shadcn/ui
-│   │   └── domain-table.tsx            # Componente principal
+│   │   ├── ui/                                  # Componentes shadcn/ui
+│   │   │   ├── alert.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── label.tsx
+│   │   │   ├── popover.tsx
+│   │   │   ├── separator.tsx
+│   │   │   ├── tabs.tsx
+│   │   │   ├── textarea.tsx
+│   │   │   └── tooltip.tsx
+│   │   ├── domain-table.tsx                     # Componente principal de dominios
+│   │   ├── DomainRulesModal.tsx                 # Modal de gestión de reglas por dominio
+│   │   ├── RulesActionBar.tsx                   # Barra de acciones masivas de reglas
+│   │   ├── SecurityRulesIndicator.tsx           # Indicador de reglas de seguridad
+│   │   └── SecurityRulesManager.tsx             # Gestión de plantillas de reglas
 │   ├── lib/
-│   │   ├── cloudflare.ts              # Cliente API Cloudflare
-│   │   └── utils.ts                   # Utilidades compartidas
+│   │   ├── cloudflare.ts                        # Cliente API Cloudflare extendido
+│   │   ├── ruleUtils.ts                         # Utilidades para reglas de seguridad
+│   │   └── utils.ts                             # Utilidades compartidas
 │   └── types/
-│       └── cloudflare.ts              # Tipos TypeScript
+│       └── cloudflare.ts                        # Tipos TypeScript extendidos
 ├── public/
-│   └── logo-rollpix.png              # Logo de la aplicación
-├── domains-cache.json                # Cache de dominios (generado)
-├── user-preferences.json             # Preferencias usuario (generado)
-└── .env.local                        # Variables de entorno (generado)
+│   └── logo-rollpix.png                         # Logo de la aplicación
+├── .claude/
+│   └── settings.local.json                      # Configuración Claude Code (local)
+├── domains-cache.json                           # Cache de dominios (generado)
+├── security-rules-templates.json                # Plantillas de reglas (generado)
+├── domain-rules-status.json                     # Estado de reglas por dominio (generado)
+├── user-preferences.json                        # Preferencias usuario (generado)
+├── .nvmrc                                        # Versión de Node.js específica
+└── .env.local                                    # Variables de entorno (generado)
 ```
 
 ## 🔄 Flujo de Funcionamiento

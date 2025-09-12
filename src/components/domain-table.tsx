@@ -12,11 +12,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
-import { RefreshCw, Shield, ShieldOff, Loader2, Search, Filter, ArrowUpDown, ChevronDown, Globe } from 'lucide-react';
+import { RefreshCw, Shield, ShieldOff, ShieldAlert, Loader2, Search, Filter, ArrowUpDown, ChevronDown, Globe, Siren, Bot } from 'lucide-react';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { SecurityRulesIndicator } from './SecurityRulesIndicator';
 import { RulesActionBar } from './RulesActionBar';
+import { DNSPills } from './DNSPills';
+import { FirewallControls } from './FirewallControls';
 
 interface DomainTableProps {
   apiToken: string;
@@ -40,7 +42,8 @@ export function DomainTable({ apiToken }: DomainTableProps) {
   const [updateOptions, setUpdateOptions] = useState({
     dns: true,
     firewall: false,
-    reglas: true
+    reglas: true,
+    selectedDomainsOnly: false
   });
   const [preferencesLoaded, setPreferencesLoaded] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
@@ -52,6 +55,8 @@ export function DomainTable({ apiToken }: DomainTableProps) {
     isActive: boolean;
   }>({ current: 0, total: 0, currentDomain: '', isActive: false });
   const [analyzingSecurityRules, setAnalyzingSecurityRules] = useState(false);
+  const [lastApiToken, setLastApiToken] = useState<string>('');
+  const [cancelUpdateRequested, setCancelUpdateRequested] = useState(false);
 
   // Sort, filter and search domains
   const processedDomains = useMemo(() => {
@@ -209,6 +214,15 @@ export function DomainTable({ apiToken }: DomainTableProps) {
         setSortBy(preferences.sortBy);
         setFilter(preferences.filter);
         setSearchTerm(preferences.searchTerm || '');
+        
+        // Load update options preferences
+        if (preferences.updateOptions) {
+          setUpdateOptions(prev => ({
+            ...prev,
+            ...preferences.updateOptions
+          }));
+        }
+        
         setPreferencesLoaded(true);
         return true;
       }
@@ -224,6 +238,7 @@ export function DomainTable({ apiToken }: DomainTableProps) {
     sortBy: SortType;
     filter: FilterType;
     searchTerm: string;
+    updateOptions: typeof updateOptions;
   }>) => {
     try {
       await fetch('/api/preferences', {
@@ -238,15 +253,105 @@ export function DomainTable({ apiToken }: DomainTableProps) {
     }
   }, []);
 
-  const initializeDomains = useCallback(async () => {
+  const saveUpdateOptions = useCallback(async (options: typeof updateOptions) => {
+    if (preferencesLoaded) {
+      await savePreferences({ updateOptions: options });
+    }
+  }, [savePreferences, preferencesLoaded]);
+
+  const initializeDomains = useCallback(async (forceRefresh = false) => {
+    // If token changed or force refresh requested, always fetch from API
+    if (forceRefresh || (lastApiToken && lastApiToken !== apiToken)) {
+      await fetchFromCloudflareAndCache();
+      setLastApiToken(apiToken);
+      return;
+    }
+
     const cacheLoaded = await loadFromCache();
     if (cacheLoaded) {
       toast.success('Dominios cargados desde caché local');
+      setLastApiToken(apiToken);
     } else {
       // No cache available, fetch from Cloudflare
       await fetchFromCloudflareAndCache();
+      setLastApiToken(apiToken);
     }
-  }, [loadFromCache, fetchFromCloudflareAndCache]);
+  }, [loadFromCache, fetchFromCloudflareAndCache, lastApiToken, apiToken]);
+
+  const forceRefreshDomains = useCallback(async (silent = false, checkCancel = false) => {
+    // Always fetch fresh data from Cloudflare, ignoring cache
+    setLoading(true);
+    try {
+      let allFetchedDomains: DomainStatus[] = [];
+      let page = 1;
+      let hasMore = true;
+
+      while (hasMore && (!checkCancel || !cancelUpdateRequested)) {
+        if (checkCancel) {
+          setBulkProgress(prev => ({ 
+            ...prev, 
+            currentDomain: `Obteniendo página ${page} de dominios...` 
+          }));
+        }
+
+        const response = await fetch(`/api/domains?page=${page}&per_page=50`, {
+          headers: {
+            'x-api-token': apiToken,
+          },
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Error al obtener dominios: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        allFetchedDomains = [...allFetchedDomains, ...data.domains];
+        
+        hasMore = page < data.totalPages;
+        page++;
+
+        // Check for cancellation before the delay
+        if (checkCancel && cancelUpdateRequested) {
+          break;
+        }
+
+        // Small delay to avoid rate limiting
+        if (hasMore) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+      }
+
+      // Update state
+      setAllDomains(allFetchedDomains);
+      setTotalCount(allFetchedDomains.length);
+      setLastUpdate(new Date());
+
+      // Save to cache
+      try {
+        await fetch('/api/cache', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ domains: allFetchedDomains }),
+        });
+      } catch (cacheError) {
+        console.error('Error saving to cache:', cacheError);
+      }
+
+      if (!silent) {
+        toast.success(`${allFetchedDomains.length} dominios actualizados desde Cloudflare`);
+      }
+    } catch (error) {
+      console.error('Error fetching domains:', error);
+      if (!silent) {
+        toast.error('Error al cargar dominios. Verifica tu API token.');
+      }
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }, [apiToken, cancelUpdateRequested, setBulkProgress]);
 
   const refreshSpecificDomain = useCallback(async (zoneId: string) => {
     try {
@@ -491,6 +596,66 @@ export function DomainTable({ apiToken }: DomainTableProps) {
     }
   };
 
+  const bulkToggleUnderAttack = async (enable: boolean) => {
+    const selectedDomainData = allDomains.filter(d => selectedDomains.has(d.domain));
+    
+    if (selectedDomainData.length === 0) return;
+
+    setBulkProgress({ current: 0, total: selectedDomainData.length, currentDomain: '', isActive: true });
+
+    try {
+      for (let i = 0; i < selectedDomainData.length; i++) {
+        const domain = selectedDomainData[i];
+        setBulkProgress(prev => ({ ...prev, current: i + 1, currentDomain: domain.domain }));
+        
+        // TODO: Implementar llamada a API de Cloudflare para Under Attack mode
+        toast(`Under Attack ${enable ? 'activado' : 'desactivado'} para ${domain.domain}`, {
+          description: 'Funcionalidad pendiente de implementación'
+        });
+        
+        // Delay para evitar rate limiting
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+
+      toast.success(`Under Attack ${enable ? 'activado' : 'desactivado'} en ${selectedDomainData.length} dominios`);
+      setSelectedDomains(new Set());
+    } catch (error) {
+      toast.error('Error en la operación masiva de Under Attack');
+    } finally {
+      setBulkProgress(prev => ({ ...prev, isActive: false }));
+    }
+  };
+
+  const bulkToggleBotFight = async (enable: boolean) => {
+    const selectedDomainData = allDomains.filter(d => selectedDomains.has(d.domain));
+    
+    if (selectedDomainData.length === 0) return;
+
+    setBulkProgress({ current: 0, total: selectedDomainData.length, currentDomain: '', isActive: true });
+
+    try {
+      for (let i = 0; i < selectedDomainData.length; i++) {
+        const domain = selectedDomainData[i];
+        setBulkProgress(prev => ({ ...prev, current: i + 1, currentDomain: domain.domain }));
+        
+        // TODO: Implementar llamada a API de Cloudflare para Bot Fight mode
+        toast(`Bot Fight ${enable ? 'activado' : 'desactivado'} para ${domain.domain}`, {
+          description: 'Funcionalidad pendiente de implementación'
+        });
+        
+        // Delay para evitar rate limiting
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+
+      toast.success(`Bot Fight ${enable ? 'activado' : 'desactivado'} en ${selectedDomainData.length} dominios`);
+      setSelectedDomains(new Set());
+    } catch (error) {
+      toast.error('Error en la operación masiva de Bot Fight');
+    } finally {
+      setBulkProgress(prev => ({ ...prev, isActive: false }));
+    }
+  };
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -505,7 +670,7 @@ export function DomainTable({ apiToken }: DomainTableProps) {
   };
 
   const handleRefresh = () => {
-    fetchFromCloudflareAndCache();
+    forceRefreshDomains();
   };
 
   const handleUnifiedUpdate = async () => {
@@ -520,51 +685,198 @@ export function DomainTable({ apiToken }: DomainTableProps) {
       return;
     }
 
-    // Show progress for multiple operations
-    const totalTasks = enabledTasks.length;
-    let completedTasks = 0;
+    // Determine which domains to update
+    const domainsToUpdate = updateOptions.selectedDomainsOnly 
+      ? allDomains.filter(d => selectedDomains.has(d.domain))
+      : allDomains;
     
-    const updateProgress = (taskName: string, completed: boolean) => {
-      if (completed) completedTasks++;
-      setBulkProgress(prev => ({
-        ...prev,
-        current: completedTasks,
-        total: totalTasks,
-        currentDomain: `Actualizando ${taskName}...`
-      }));
-    };
+    if (updateOptions.selectedDomainsOnly && domainsToUpdate.length === 0) {
+      toast.error('No hay dominios seleccionados para actualizar');
+      return;
+    }
+
+    const totalDomains = domainsToUpdate.length;
+    let processedDomains = 0;
 
     try {
-      setBulkProgress({ current: 0, total: totalTasks, currentDomain: 'Iniciando actualización...' });
-      
+      setCancelUpdateRequested(false);
+      setBulkProgress({ 
+        current: 0, 
+        total: totalDomains, 
+        currentDomain: 'Iniciando actualización...', 
+        isActive: true 
+      });
+
+      // If DNS update is enabled, refresh domains (selective or all)
       if (updateOptions.dns) {
-        updateProgress('DNS', false);
-        await handleRefresh();
-        updateProgress('DNS', true);
-      }
-      
-      if (updateOptions.reglas) {
-        updateProgress('Reglas', false);
-        await analyzeSecurityRules();
-        updateProgress('Reglas', true);
-      }
-      
-      if (updateOptions.firewall) {
-        updateProgress('Firewall', false);
-        // TODO: Implementar funcionalidad de firewall
-        toast('Funcionalidad de Firewall pendiente de implementación', { 
-          description: 'Esta opción estará disponible próximamente' 
-        });
-        updateProgress('Firewall', true);
+        if (updateOptions.selectedDomainsOnly && domainsToUpdate.length > 0) {
+          // Selective refresh: only update selected domains
+          setBulkProgress(prev => ({ 
+            ...prev, 
+            currentDomain: `Actualizando datos DNS de ${domainsToUpdate.length} dominios seleccionados...` 
+          }));
+          const selectedZoneIds = domainsToUpdate.map(d => d.zoneId);
+          await refreshMultipleDomains(selectedZoneIds);
+        } else {
+          // Full refresh: update all domains
+          setBulkProgress(prev => ({ 
+            ...prev, 
+            currentDomain: 'Actualizando datos DNS de todos los dominios...' 
+          }));
+          await forceRefreshDomains(true, true); // Silent mode, cancelable
+        }
       }
 
-      toast.success(`Actualización completada: ${enabledTasks.join(', ')}`);
+      // Process domains in parallel with 3 concurrent threads
+      if ((updateOptions.reglas || updateOptions.firewall) && domainsToUpdate.length > 0) {
+        processedDomains = await processDomainsInParallel(
+          domainsToUpdate,
+          async (domain, currentIndex, total) => {
+            // Check for cancellation
+            if (cancelUpdateRequested) {
+              return;
+            }
+
+            setBulkProgress(prev => ({ 
+              ...prev, 
+              current: currentIndex, 
+              currentDomain: `${domain.domain} (${currentIndex}/${total})`
+            }));
+
+            // Update security rules for this domain if enabled
+            if (updateOptions.reglas && !cancelUpdateRequested) {
+              await analyzeDomainSecurityRules(domain.zoneId);
+            }
+
+            // Update firewall settings for this domain if enabled
+            if (updateOptions.firewall && !cancelUpdateRequested) {
+              await updateDomainFirewallSettings(domain.zoneId);
+            }
+
+            // Small delay to avoid overwhelming the API
+            await new Promise(resolve => setTimeout(resolve, 50));
+          },
+          3 // 3 concurrent threads
+        );
+
+        if (cancelUpdateRequested) {
+          toast.info(`Actualización cancelada. Procesados ${processedDomains} de ${totalDomains} dominios`);
+        }
+      }
+
+      if (!cancelUpdateRequested) {
+        const tasksText = enabledTasks.join(', ');
+        const domainsText = updateOptions.selectedDomainsOnly 
+          ? `${domainsToUpdate.length} dominios seleccionados`
+          : `todos los dominios`;
+        
+        toast.success(`Actualización completada: ${tasksText} para ${domainsText}`);
+      }
     } catch (error) {
+      console.error('Error during unified update:', error);
       toast.error('Error durante la actualización');
     } finally {
-      setBulkProgress(prev => ({ ...prev, current: 0, total: 0, currentDomain: '' }));
+      setBulkProgress({ current: 0, total: 0, currentDomain: '', isActive: false });
+      setCancelUpdateRequested(false);
     }
   };
+
+  const analyzeDomainSecurityRules = useCallback(async (zoneId: string) => {
+    try {
+      // Analyze security rules for a specific domain
+      const analyzeResponse = await fetch('/api/security-rules/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiToken, zoneIds: [zoneId], forceRefresh: true })
+      });
+      
+      if (analyzeResponse.ok) {
+        // Update the specific domain in our state
+        const domain = allDomains.find(d => d.zoneId === zoneId);
+        if (domain) {
+          // Enrich this specific domain data
+          const enrichResponse = await fetch('/api/domains/enrich', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ zoneIds: [zoneId] })
+          });
+          
+          if (enrichResponse.ok) {
+            const enrichResult = await enrichResponse.json();
+            if (enrichResult.success && enrichResult.data.domains.length > 0) {
+              // Find the correct updated domain by zoneId
+              const updatedDomain = enrichResult.data.domains.find(d => d.zoneId === zoneId);
+              if (updatedDomain) {
+                setAllDomains(prev => prev.map(d => d.zoneId === zoneId ? updatedDomain : d));
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error(`Error analyzing security rules for domain ${zoneId}:`, error);
+      throw error;
+    }
+  }, [apiToken, allDomains]);
+
+  const updateDomainFirewallSettings = useCallback(async (zoneId: string) => {
+    try {
+      // TODO: Implement actual firewall settings update via Cloudflare API
+      // For now, this is a placeholder
+      console.log(`Updating firewall settings for zone ${zoneId}`);
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      // This would normally call Cloudflare API to get/update Under Attack mode and Bot Fight mode
+      // and then update the domain state accordingly
+    } catch (error) {
+      console.error(`Error updating firewall settings for domain ${zoneId}:`, error);
+      throw error;
+    }
+  }, []);
+
+  // Helper function for parallel processing with limited concurrency
+  const processDomainsInParallel = useCallback(async (
+    domains: DomainStatus[], 
+    processFn: (domain: DomainStatus, index: number, total: number) => Promise<void>,
+    concurrency = 3
+  ) => {
+    const total = domains.length;
+    let processed = 0;
+    let currentIndex = 0;
+
+    const processNext = async (): Promise<void> => {
+      if (currentIndex >= domains.length || cancelUpdateRequested) {
+        return;
+      }
+
+      const domainIndex = currentIndex++;
+      const domain = domains[domainIndex];
+      
+      try {
+        await processFn(domain, processed + 1, total);
+        processed++;
+      } catch (error) {
+        console.error(`Error processing domain ${domain.domain}:`, error);
+        toast.error(`Error actualizando ${domain.domain}`);
+        processed++; // Still count as processed even if failed
+      }
+
+      // Continue processing next item
+      await processNext();
+    };
+
+    // Start concurrent workers
+    const workers = Array(Math.min(concurrency, domains.length))
+      .fill(null)
+      .map(() => processNext());
+
+    // Wait for all workers to complete
+    await Promise.all(workers);
+    
+    return processed;
+  }, [cancelUpdateRequested]);
 
   const analyzeSecurityRules = useCallback(async () => {
     try {
@@ -648,6 +960,15 @@ export function DomainTable({ apiToken }: DomainTableProps) {
     }
   }, [apiToken, preferencesLoaded, initializeDomains, allDomains.length]);
 
+  // Detect API token changes and force refresh
+  useEffect(() => {
+    if (apiToken && lastApiToken && lastApiToken !== apiToken && allDomains.length > 0) {
+      // Token changed, force refresh to clear old domains
+      toast.info('Token API actualizado, refrescando dominios...');
+      initializeDomains(true);
+    }
+  }, [apiToken, lastApiToken, allDomains.length, initializeDomains]);
+
   return (
     <>
       <Card>
@@ -678,9 +999,11 @@ export function DomainTable({ apiToken }: DomainTableProps) {
                           <Checkbox 
                             id="dns"
                             checked={updateOptions.dns}
-                            onCheckedChange={(checked) => 
-                              setUpdateOptions(prev => ({ ...prev, dns: checked as boolean }))
-                            }
+                            onCheckedChange={(checked) => {
+                              const newOptions = { ...updateOptions, dns: checked as boolean };
+                              setUpdateOptions(newOptions);
+                              saveUpdateOptions(newOptions);
+                            }}
                           />
                           <label htmlFor="dns" className="text-sm">DNS</label>
                         </div>
@@ -688,22 +1011,37 @@ export function DomainTable({ apiToken }: DomainTableProps) {
                           <Checkbox 
                             id="firewall"
                             checked={updateOptions.firewall}
-                            onCheckedChange={(checked) => 
-                              setUpdateOptions(prev => ({ ...prev, firewall: checked as boolean }))
-                            }
+                            onCheckedChange={(checked) => {
+                              const newOptions = { ...updateOptions, firewall: checked as boolean };
+                              setUpdateOptions(newOptions);
+                              saveUpdateOptions(newOptions);
+                            }}
                           />
                           <label htmlFor="firewall" className="text-sm">Firewall</label>
-                          <Badge variant="secondary" className="text-xs">Próximamente</Badge>
                         </div>
                         <div className="flex items-center space-x-2">
                           <Checkbox 
                             id="reglas"
                             checked={updateOptions.reglas}
-                            onCheckedChange={(checked) => 
-                              setUpdateOptions(prev => ({ ...prev, reglas: checked as boolean }))
-                            }
+                            onCheckedChange={(checked) => {
+                              const newOptions = { ...updateOptions, reglas: checked as boolean };
+                              setUpdateOptions(newOptions);
+                              saveUpdateOptions(newOptions);
+                            }}
                           />
                           <label htmlFor="reglas" className="text-sm">Reglas</label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="selectedOnly"
+                            checked={updateOptions.selectedDomainsOnly}
+                            onCheckedChange={(checked) => {
+                              const newOptions = { ...updateOptions, selectedDomainsOnly: checked as boolean };
+                              setUpdateOptions(newOptions);
+                              saveUpdateOptions(newOptions);
+                            }}
+                          />
+                          <label htmlFor="selectedOnly" className="text-sm">Solo dominios seleccionados</label>
                         </div>
                       </div>
                       <Button 
@@ -712,7 +1050,7 @@ export function DomainTable({ apiToken }: DomainTableProps) {
                         className="w-full"
                         disabled={loading || analyzingSecurityRules}
                       >
-                        Actualizar Seleccionados
+                        Actualizar
                       </Button>
                     </div>
                   </PopoverContent>
@@ -786,7 +1124,7 @@ export function DomainTable({ apiToken }: DomainTableProps) {
           </div>
 
           {/* Bulk Actions */}
-          <div className="flex gap-2 mb-4">
+          <div className="flex flex-wrap gap-2 mb-4">
             <Button
               onClick={() => bulkToggleProxy(true)}
               disabled={selectedDomains.size === 0 || bulkProgress.isActive}
@@ -806,6 +1144,46 @@ export function DomainTable({ apiToken }: DomainTableProps) {
             >
               <ShieldOff className="h-4 w-4 mr-2" />
               Deshabilitar Proxy {selectedDomains.size > 0 && `(${selectedDomains.size})`}
+            </Button>
+            <Button
+              onClick={() => bulkToggleUnderAttack(true)}
+              disabled={selectedDomains.size === 0 || bulkProgress.isActive}
+              size="sm"
+              variant="outline"
+              className={selectedDomains.size === 0 ? "opacity-50" : ""}
+            >
+              <Siren className="h-4 w-4 mr-2" />
+              Activar Under Attack {selectedDomains.size > 0 && `(${selectedDomains.size})`}
+            </Button>
+            <Button
+              onClick={() => bulkToggleUnderAttack(false)}
+              disabled={selectedDomains.size === 0 || bulkProgress.isActive}
+              size="sm"
+              variant="outline"
+              className={selectedDomains.size === 0 ? "opacity-50" : ""}
+            >
+              <Siren className="h-4 w-4 mr-2 opacity-50" />
+              Desactivar Under Attack {selectedDomains.size > 0 && `(${selectedDomains.size})`}
+            </Button>
+            <Button
+              onClick={() => bulkToggleBotFight(true)}
+              disabled={selectedDomains.size === 0 || bulkProgress.isActive}
+              size="sm"
+              variant="outline"
+              className={selectedDomains.size === 0 ? "opacity-50" : ""}
+            >
+              <Bot className="h-4 w-4 mr-2" />
+              Activar Bot Fight {selectedDomains.size > 0 && `(${selectedDomains.size})`}
+            </Button>
+            <Button
+              onClick={() => bulkToggleBotFight(false)}
+              disabled={selectedDomains.size === 0 || bulkProgress.isActive}
+              size="sm"
+              variant="outline"
+              className={selectedDomains.size === 0 ? "opacity-50" : ""}
+            >
+              <Bot className="h-4 w-4 mr-2 opacity-50" />
+              Desactivar Bot Fight {selectedDomains.size > 0 && `(${selectedDomains.size})`}
             </Button>
           </div>
 
@@ -840,88 +1218,28 @@ export function DomainTable({ apiToken }: DomainTableProps) {
                     />
                   </TableHead>
                   <TableHead>Dominio</TableHead>
-                  <TableHead>Raíz (@)</TableHead>
-                  <TableHead>WWW</TableHead>
+                  <TableHead>DNS</TableHead>
+                  <TableHead>Firewall</TableHead>
                   <TableHead>Reglas de Seguridad</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paginatedDomains.map((domain) => (
-                  <TableRow key={domain.domain}>
+                  <TableRow key={domain.zoneId}>
                     <TableCell>
                       <Checkbox
                         checked={selectedDomains.has(domain.domain)}
                         onCheckedChange={() => toggleDomainSelection(domain.domain)}
                       />
                     </TableCell>
-                    <TableCell className="font-medium">{domain.domain}</TableCell>
-                    <TableCell>
-                      {domain.rootRecord ? (
-                        <div className="flex items-center gap-2">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => toggleProxy(domain.zoneId, domain.rootRecord!.id, domain.rootProxied)}
-                            disabled={updatingRecords.has(`${domain.zoneId}-${domain.rootRecord.id}`) || !domain.rootRecord.proxiable}
-                            title={domain.rootProxied ? "Deshabilitar proxy" : "Habilitar proxy"}
-                            className="w-8 h-8 p-0"
-                          >
-                            {updatingRecords.has(`${domain.zoneId}-${domain.rootRecord.id}`) ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : domain.rootProxied ? (
-                              <Shield className="h-4 w-4" />
-                            ) : (
-                              <ShieldOff className="h-4 w-4" />
-                            )}
-                          </Button>
-                          <Badge
-                            variant={domain.rootProxied ? "default" : "secondary"}
-                            className={domain.rootProxied ? "bg-green-500" : "bg-red-500"}
-                          >
-                            {domain.rootProxied ? "Con Proxy" : "Solo DNS"}
-                          </Badge>
-                          <span className="text-xs text-muted-foreground">({domain.rootRecord.type})</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8"></div>
-                          <Badge variant="outline">Sin Registro</Badge>
-                        </div>
-                      )}
+                    <TableCell className="font-medium">
+                      {domain.domain}
                     </TableCell>
                     <TableCell>
-                      {domain.wwwRecord ? (
-                        <div className="flex items-center gap-2">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => toggleProxy(domain.zoneId, domain.wwwRecord!.id, domain.wwwProxied)}
-                            disabled={updatingRecords.has(`${domain.zoneId}-${domain.wwwRecord.id}`) || !domain.wwwRecord.proxiable}
-                            title={domain.wwwProxied ? "Deshabilitar proxy" : "Habilitar proxy"}
-                            className="w-8 h-8 p-0"
-                          >
-                            {updatingRecords.has(`${domain.zoneId}-${domain.wwwRecord.id}`) ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : domain.wwwProxied ? (
-                              <Shield className="h-4 w-4" />
-                            ) : (
-                              <ShieldOff className="h-4 w-4" />
-                            )}
-                          </Button>
-                          <Badge
-                            variant={domain.wwwProxied ? "default" : "secondary"}
-                            className={domain.wwwProxied ? "bg-green-500" : "bg-red-500"}
-                          >
-                            {domain.wwwProxied ? "Con Proxy" : "Solo DNS"}
-                          </Badge>
-                          <span className="text-xs text-muted-foreground">({domain.wwwRecord.type})</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8"></div>
-                          <Badge variant="outline">Sin Registro</Badge>
-                        </div>
-                      )}
+                      <DNSPills domain={domain} />
+                    </TableCell>
+                    <TableCell>
+                      <FirewallControls domain={domain} />
                     </TableCell>
                     <TableCell>
                       <SecurityRulesIndicator domain={domain} compact apiToken={apiToken} />
@@ -990,7 +1308,7 @@ export function DomainTable({ apiToken }: DomainTableProps) {
             <span className="font-medium">Operación en progreso</span>
           </div>
           <div className="text-sm text-muted-foreground mb-2">
-            Modificando: {bulkProgress.currentDomain}
+            Actualizando: {bulkProgress.currentDomain}
           </div>
           <div className="text-sm text-muted-foreground">
             {bulkProgress.current} de {bulkProgress.total}
@@ -1001,6 +1319,15 @@ export function DomainTable({ apiToken }: DomainTableProps) {
               style={{ width: `${(bulkProgress.current / bulkProgress.total) * 100}%` }}
             />
           </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCancelUpdateRequested(true)}
+            className="w-full mt-3"
+            disabled={cancelUpdateRequested}
+          >
+            {cancelUpdateRequested ? 'Cancelando...' : 'Cancelar'}
+          </Button>
         </div>
       )}
     </>

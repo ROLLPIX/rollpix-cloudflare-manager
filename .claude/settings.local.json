@@ -10,7 +10,10 @@
       "Bash(claude mcp add:*)",
       "Bash(npx shadcn@latest add:*)",
       "Bash(find:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)"
     ],
     "deny": [],
     "ask": []

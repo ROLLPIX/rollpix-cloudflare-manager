@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Loader2, Shield, Settings, AlertTriangle, Trash2, Info, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { RuleTemplate } from '@/types/cloudflare';
+import { CollapsibleExpression } from './CollapsibleExpression';
 
 interface TemplateRule {
   friendlyId: string;
@@ -431,9 +432,7 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
                           </Button>
                         </div>
                       </div>
-                      <div className="text-sm text-muted-foreground bg-muted p-2 rounded font-mono">
-                        {rule.expression}
-                      </div>
+                      <CollapsibleExpression expression={rule.expression} />
                     </div>
                   ))
                 )}
@@ -485,9 +484,7 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
                           </Button>
                         </div>
                       </div>
-                      <div className="text-sm text-muted-foreground bg-muted p-2 rounded font-mono">
-                        {rule.expression}
-                      </div>
+                      <CollapsibleExpression expression={rule.expression} />
                     </div>
                   ))
                 )}
