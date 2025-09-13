@@ -28,9 +28,9 @@ async function saveRulesCache(cache: RulesCache): Promise<void> {
 }
 
 // PUT - Actualizar plantilla específica
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { name, description, expression, action, actionParameters, tags, applicableTags, excludedDomains, enabled } = body;
 
@@ -101,9 +101,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // DELETE - Eliminar plantilla específica
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const cache = await loadRulesCache();
     const templateIndex = cache.templates.findIndex(template => template.id === id);

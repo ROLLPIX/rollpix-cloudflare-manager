@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CloudflareAPI } from '@/lib/cloudflare';
 
-interface RouteParams {
-  params: {
-    zoneId: string;
-  };
-}
-
 // GET - Get categorized rules for a specific domain
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(
+  request: NextRequest, 
+  { params }: { params: Promise<{ zoneId: string }> }
+) {
   try {
     const apiToken = request.headers.get('x-api-token');
     if (!apiToken) {
@@ -18,7 +15,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       }, { status: 401 });
     }
 
-    const { zoneId } = params;
+    const { zoneId } = await params;
     const cloudflareAPI = new CloudflareAPI(apiToken);
 
     // Get categorized rules

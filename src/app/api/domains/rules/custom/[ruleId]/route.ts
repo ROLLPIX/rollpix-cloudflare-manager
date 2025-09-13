@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { CloudflareAPI } from '@/lib/cloudflare';
 
 // DELETE - Delete individual custom rule
-export async function DELETE(request: NextRequest, { params }: { params: { ruleId: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ ruleId: string }> }) {
   try {
     const apiToken = request.headers.get('x-api-token');
     const zoneId = request.headers.get('x-zone-id');
-    const { ruleId } = params;
+    const { ruleId } = await params;
 
     if (!apiToken) {
       return NextResponse.json({
