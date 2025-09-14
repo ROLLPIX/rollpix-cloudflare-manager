@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
 import { CloudflareAPI } from '@/lib/cloudflare';
 import { RuleTemplate } from '@/types/cloudflare';
+import { safeReadJsonFile } from '@/lib/fileSystem';
 
-const RULES_TEMPLATES_FILE = path.join(process.cwd(), 'security-rules-templates.json');
+const RULES_TEMPLATES_FILE = 'security-rules-templates.json';
 
 interface RulesTemplatesCache {
   templates: RuleTemplate[];
@@ -13,8 +12,7 @@ interface RulesTemplatesCache {
 
 async function loadRulesTemplates(): Promise<RulesTemplatesCache> {
   try {
-    const data = await fs.readFile(RULES_TEMPLATES_FILE, 'utf-8');
-    return JSON.parse(data);
+    return await safeReadJsonFile<RulesTemplatesCache>(RULES_TEMPLATES_FILE);
   } catch {
     return {
       templates: [],
@@ -180,7 +178,7 @@ export async function POST(request: NextRequest) {
           result.success = true;
           result.message = preview 
             ? `Will remove ${removedCount} rules` 
-            : `Removed: ${removedCount} rules`;
+            : `Removed: ${removedCount}`;
         }
 
       } catch (error) {

@@ -13,7 +13,17 @@
       "Bash(git add:*)",
       "Bash(git push:*)",
       "Bash(node:*)",
-      "Bash(npm:*)"
+      "Bash(npm:*)",
+      "Bash(git pull:*)",
+      "Bash(npx next:*)",
+      "Bash(vercel:*)",
+      "Bash(git commit:*)",
+      "Read(//c/Users/nicol/**)",
+      "mcp__ide__getDiagnostics",
+      "WebFetch(domain:docs.mcp.cloudflare.com)",
+      "WebFetch(domain:api.cloudflare.com)",
+      "Bash(curl:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

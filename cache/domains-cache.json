@@ -44,7 +44,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T14:21:03.265Z"
+        "lastAnalyzed": "2025-09-14T21:11:31.127Z"
       }
     },
     {
@@ -91,7 +91,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:56:43.648Z"
+        "lastAnalyzed": "2025-09-14T21:11:34.510Z"
       }
     },
     {
@@ -136,7 +136,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:56:48.104Z"
+        "lastAnalyzed": "2025-09-14T21:11:37.858Z"
       }
     },
     {
@@ -183,7 +183,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:43:52.944Z"
+        "lastAnalyzed": "2025-09-14T21:11:41.466Z"
       }
     },
     {
@@ -211,7 +211,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T14:21:06.266Z"
+        "lastAnalyzed": "2025-09-14T21:11:44.821Z"
       }
     },
     {
@@ -254,11 +254,11 @@
       "rootProxied": false,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 1,
+        "totalRules": 0,
         "corporateRules": 0,
-        "customRules": 1,
+        "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:58:45.023Z"
+        "lastAnalyzed": "2025-09-14T21:11:48.313Z"
       }
     },
     {
@@ -305,7 +305,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:06.416Z"
+        "lastAnalyzed": "2025-09-14T21:11:51.880Z"
       }
     },
     {
@@ -350,7 +350,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:10.524Z"
+        "lastAnalyzed": "2025-09-14T21:11:55.179Z"
       }
     },
     {
@@ -369,16 +369,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-18T22:12:22.88951Z",
-        "modified_on": "2025-09-12T08:24:12.138044Z"
+        "modified_on": "2025-09-14T17:09:46.37727Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": true,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 1,
+        "totalRules": 0,
         "corporateRules": 0,
-        "customRules": 1,
+        "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:14.786Z"
+        "lastAnalyzed": "2025-09-14T21:11:58.457Z"
       }
     },
     {
@@ -402,11 +404,11 @@
       "rootProxied": false,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 1,
+        "totalRules": 0,
         "corporateRules": 0,
-        "customRules": 1,
+        "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:18.971Z"
+        "lastAnalyzed": "2025-09-14T21:12:01.740Z"
       }
     },
     {
@@ -451,7 +453,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:23.341Z"
+        "lastAnalyzed": "2025-09-14T21:12:05.105Z"
       }
     },
     {
@@ -496,7 +498,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:27.645Z"
+        "lastAnalyzed": "2025-09-14T21:12:08.278Z"
       }
     },
     {
@@ -541,7 +543,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:31.881Z"
+        "lastAnalyzed": "2025-09-14T21:12:11.786Z"
       }
     },
     {
@@ -584,7 +586,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:36.844Z"
+        "lastAnalyzed": "2025-09-14T21:12:15.087Z"
       }
     },
     {
@@ -629,7 +631,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:40.913Z"
+        "lastAnalyzed": "2025-09-14T21:12:19.048Z"
       }
     },
     {
@@ -676,7 +678,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:45.174Z"
+        "lastAnalyzed": "2025-09-14T21:12:22.451Z"
       }
     },
     {
@@ -719,7 +721,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:49.381Z"
+        "lastAnalyzed": "2025-09-14T21:12:25.612Z"
       }
     },
     {
@@ -764,7 +766,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:53.558Z"
+        "lastAnalyzed": "2025-09-14T21:12:28.887Z"
       }
     },
     {
@@ -811,7 +813,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:44:58.177Z"
+        "lastAnalyzed": "2025-09-14T21:12:32.880Z"
       }
     },
     {
@@ -856,7 +858,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:06.809Z"
+        "lastAnalyzed": "2025-09-14T21:12:36.127Z"
       }
     },
     {
@@ -903,7 +905,7 @@
         "corporateRules": 0,
         "customRules": 2,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:11.857Z"
+        "lastAnalyzed": "2025-09-14T21:12:39.324Z"
       }
     },
     {
@@ -950,7 +952,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:16.133Z"
+        "lastAnalyzed": "2025-09-14T21:12:42.697Z"
       }
     },
     {
@@ -997,7 +999,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:20.570Z"
+        "lastAnalyzed": "2025-09-14T21:12:46.173Z"
       }
     },
     {
@@ -1044,7 +1046,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:24.856Z"
+        "lastAnalyzed": "2025-09-14T21:12:49.644Z"
       }
     },
     {
@@ -1089,7 +1091,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:29.208Z"
+        "lastAnalyzed": "2025-09-14T21:12:53.184Z"
       }
     },
     {
@@ -1134,7 +1136,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:33.566Z"
+        "lastAnalyzed": "2025-09-14T21:12:56.607Z"
       }
     },
     {
@@ -1162,7 +1164,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:38.036Z"
+        "lastAnalyzed": "2025-09-14T21:12:59.885Z"
       }
     },
     {
@@ -1209,7 +1211,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:42.224Z"
+        "lastAnalyzed": "2025-09-14T21:13:03.247Z"
       }
     },
     {
@@ -1254,7 +1256,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:46.393Z"
+        "lastAnalyzed": "2025-09-14T21:13:06.778Z"
       }
     },
     {
@@ -1301,7 +1303,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:50.509Z"
+        "lastAnalyzed": "2025-09-14T21:13:10.119Z"
       }
     },
     {
@@ -1346,7 +1348,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:54.869Z"
+        "lastAnalyzed": "2025-09-14T21:13:13.314Z"
       }
     },
     {
@@ -1391,7 +1393,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:45:59.219Z"
+        "lastAnalyzed": "2025-09-14T21:13:16.525Z"
       }
     },
     {
@@ -1436,7 +1438,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:03.785Z"
+        "lastAnalyzed": "2025-09-14T21:13:20.145Z"
       }
     },
     {
@@ -1483,7 +1485,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:07.875Z"
+        "lastAnalyzed": "2025-09-14T21:13:23.464Z"
       }
     },
     {
@@ -1528,7 +1530,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:12.353Z"
+        "lastAnalyzed": "2025-09-14T21:13:26.553Z"
       }
     },
     {
@@ -1575,7 +1577,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:17.155Z"
+        "lastAnalyzed": "2025-09-14T21:13:30.263Z"
       }
     },
     {
@@ -1620,7 +1622,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:21.386Z"
+        "lastAnalyzed": "2025-09-14T21:13:33.554Z"
       }
     },
     {
@@ -1667,7 +1669,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:25.770Z"
+        "lastAnalyzed": "2025-09-14T21:13:36.826Z"
       }
     },
     {
@@ -1680,7 +1682,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:30.025Z"
+        "lastAnalyzed": "2025-09-14T21:13:40.105Z"
       }
     },
     {
@@ -1710,7 +1712,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:34.379Z"
+        "lastAnalyzed": "2025-09-14T21:13:43.595Z"
       }
     },
     {
@@ -1757,7 +1759,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:38.676Z"
+        "lastAnalyzed": "2025-09-14T21:13:47.028Z"
       }
     },
     {
@@ -1802,7 +1804,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:43.183Z"
+        "lastAnalyzed": "2025-09-14T21:13:50.302Z"
       }
     },
     {
@@ -1847,7 +1849,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:47.668Z"
+        "lastAnalyzed": "2025-09-14T21:13:53.571Z"
       }
     },
     {
@@ -1892,7 +1894,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:52.608Z"
+        "lastAnalyzed": "2025-09-14T21:13:56.771Z"
       }
     },
     {
@@ -1937,7 +1939,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:46:57.844Z"
+        "lastAnalyzed": "2025-09-14T21:14:00.034Z"
       }
     },
     {
@@ -1982,7 +1984,7 @@
         "corporateRules": 0,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:47:01.805Z"
+        "lastAnalyzed": "2025-09-14T21:14:02.295Z"
       }
     },
     {
@@ -2029,7 +2031,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:47:06.052Z"
+        "lastAnalyzed": "2025-09-14T21:14:05.922Z"
       }
     },
     {
@@ -2074,7 +2076,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:47:10.390Z"
+        "lastAnalyzed": "2025-09-14T21:14:09.466Z"
       }
     },
     {
@@ -2119,7 +2121,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:47:14.531Z"
+        "lastAnalyzed": "2025-09-14T21:14:12.646Z"
       }
     },
     {
@@ -2164,7 +2166,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-12T13:47:18.932Z"
+        "lastAnalyzed": "2025-09-14T21:14:15.914Z"
       }
     },
     {
@@ -4636,6 +4638,6 @@
       }
     }
   ],
-  "lastUpdate": "2025-09-12T14:21:06.616Z",
+  "lastUpdate": "2025-09-14T21:15:30.362Z",
   "totalCount": 110
 }

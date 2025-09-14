@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
 import { CloudflareAPI } from '@/lib/cloudflare';
 import { DomainRuleStatus, RuleConflict, RuleTemplate, ConflictResolution } from '@/types/cloudflare';
+import { safeReadJsonFile, safeWriteJsonFile } from '@/lib/fileSystem';
 
-const DOMAIN_RULES_CACHE_FILE = path.join(process.cwd(), 'domain-rules-status.json');
-const RULES_TEMPLATES_FILE = path.join(process.cwd(), 'security-rules-templates.json');
+const DOMAIN_RULES_CACHE_FILE = 'domain-rules-status.json';
+const RULES_TEMPLATES_FILE = 'security-rules-templates.json';
 
 interface DomainRulesCache {
   domainStatuses: DomainRuleStatus[];
@@ -19,8 +18,7 @@ interface RulesTemplatesCache {
 
 async function loadDomainRulesCache(): Promise<DomainRulesCache> {
   try {
-    const data = await fs.readFile(DOMAIN_RULES_CACHE_FILE, 'utf-8');
-    return JSON.parse(data);
+    return await safeReadJsonFile<DomainRulesCache>(DOMAIN_RULES_CACHE_FILE);
   } catch {
     return {
       domainStatuses: [],
@@ -31,13 +29,12 @@ async function loadDomainRulesCache(): Promise<DomainRulesCache> {
 
 async function saveDomainRulesCache(cache: DomainRulesCache): Promise<void> {
   cache.lastUpdated = new Date().toISOString();
-  await fs.writeFile(DOMAIN_RULES_CACHE_FILE, JSON.stringify(cache, null, 2));
+  await safeWriteJsonFile(DOMAIN_RULES_CACHE_FILE, cache);
 }
 
 async function loadRulesTemplates(): Promise<RulesTemplatesCache> {
   try {
-    const data = await fs.readFile(RULES_TEMPLATES_FILE, 'utf-8');
-    return JSON.parse(data);
+    return await safeReadJsonFile<RulesTemplatesCache>(RULES_TEMPLATES_FILE);
   } catch {
     return {
       templates: [],
@@ -156,6 +153,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { apiToken, zoneIds, forceRefresh = false } = body;
 
+    console.log('[Analyze API] Token received:', apiToken ? `${apiToken.substring(0, 8)}...` : 'null');
     if (!apiToken) {
       return NextResponse.json({
         success: false,

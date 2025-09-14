@@ -10,17 +10,17 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Plus, Minus, Trash2, AlertTriangle, Play } from 'lucide-react';
 import { toast } from 'sonner';
 import { RuleTemplate } from '@/types/cloudflare';
+import { tokenStorage } from '@/lib/tokenStorage';
 
 interface RulesActionBarProps {
   selectedDomains: string[];
   onClearSelection: () => void;
-  apiToken: string;
   onRefresh: () => void;
 }
 
 type ActionType = 'add' | 'remove' | 'clean';
 
-export function RulesActionBar({ selectedDomains, onClearSelection, apiToken, onRefresh }: RulesActionBarProps) {
+export function RulesActionBar({ selectedDomains, onClearSelection, onRefresh }: RulesActionBarProps) {
   const [action, setAction] = useState<ActionType>('add');
   const [selectedRules, setSelectedRules] = useState<string[]>([]);
   const [templates, setTemplates] = useState<RuleTemplate[]>([]);
@@ -28,7 +28,6 @@ export function RulesActionBar({ selectedDomains, onClearSelection, apiToken, on
   const [showPreview, setShowPreview] = useState(false);
   const [previewResults, setPreviewResults] = useState<any>(null);
 
-  // Load templates
   useEffect(() => {
     loadTemplates();
   }, []);
@@ -59,11 +58,15 @@ export function RulesActionBar({ selectedDomains, onClearSelection, apiToken, on
   };
 
   const handlePreview = async () => {
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) {
+      toast.error('API Token no encontrado.');
+      return;
+    }
     if (selectedDomains.length === 0) {
       toast.error('Selecciona al menos un dominio');
       return;
     }
-
     if (action !== 'clean' && selectedRules.length === 0) {
       toast.error('Selecciona al menos una regla');
       return;
@@ -103,8 +106,13 @@ export function RulesActionBar({ selectedDomains, onClearSelection, apiToken, on
 
   const handleExecute = async (confirmed = false) => {
     if (!confirmed) {
-      // Show preview first
       await handlePreview();
+      return;
+    }
+
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) {
+      toast.error('API Token no encontrado.');
       return;
     }
 
@@ -203,7 +211,6 @@ export function RulesActionBar({ selectedDomains, onClearSelection, apiToken, on
           {action !== 'clean' && (
             <div className="flex items-center gap-1 flex-wrap">
               {templates.map((template) => {
-                // Extract friendlyId from name (e.g. "01-..." -> "R01") or use fallback
                 const friendlyId = template.friendlyId || template.name.match(/^(\d+)-/)?.[1]?.padStart(2, '0').replace(/^/, 'R') || `R${templates.indexOf(template) + 1}`.padStart(3, '0');
                 return (
                   <Badge
@@ -234,7 +241,6 @@ export function RulesActionBar({ selectedDomains, onClearSelection, apiToken, on
         </div>
       </div>
 
-      {/* Preview Dialog */}
       <Dialog open={showPreview} onOpenChange={setShowPreview}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>

@@ -1,13 +1,7 @@
 {
-  "perPage": 24,
+  "perPage": 25,
   "sortBy": "name",
   "filter": "all",
   "searchTerm": "",
-  "lastUpdated": "2025-09-12T14:05:49.812Z",
-  "updateOptions": {
-    "dns": true,
-    "firewall": true,
-    "reglas": true,
-    "selectedDomainsOnly": true
-  }
+  "lastUpdated": "2025-09-14T21:04:01.097Z"
 }

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import { join } from 'path';
+import { z } from 'zod';
 import { DomainStatus } from '@/types/cloudflare';
+import { safeReadJsonFile, safeWriteJsonFile } from '@/lib/fileSystem';
+import { DomainCacheSchema, validateApiRequest, createValidationErrorResponse } from '@/lib/validation';
 
-const CACHE_FILE_PATH = join(process.cwd(), 'domains-cache.json');
+const CACHE_FILE_NAME = 'domains-cache.json';
 
 interface CacheData {
   domains: DomainStatus[];
@@ -12,31 +13,42 @@ interface CacheData {
 }
 
 export async function GET() {
+  const startTime = Date.now();
+  console.log('[Cache API] Starting cache read...');
+
   try {
-    const cacheContent = await fs.readFile(CACHE_FILE_PATH, 'utf-8');
-    const cacheData: CacheData = JSON.parse(cacheContent);
-    
+    const cacheData = await safeReadJsonFile<CacheData>(CACHE_FILE_NAME);
+    const readTime = Date.now() - startTime;
+    console.log(`[Cache API] Cache read completed in ${readTime}ms with ${cacheData.domains?.length || 0} domains`);
     return NextResponse.json(cacheData);
   } catch (error) {
-    // File doesn't exist or can't be read
-    return NextResponse.json({ 
-      domains: [], 
-      lastUpdate: null, 
-      totalCount: 0 
+    const readTime = Date.now() - startTime;
+    console.log(`[Cache API] Cache read failed after ${readTime}ms:`, error);
+    // File doesn't exist or is invalid
+    return NextResponse.json({
+      domains: [],
+      lastUpdate: null,
+      totalCount: 0
     });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { domains }: { domains: DomainStatus[] } = await request.json();
-    
-    if (!Array.isArray(domains)) {
-      return NextResponse.json(
-        { error: 'Domains must be an array' },
-        { status: 400 }
-      );
+    const body = await request.json();
+
+    // Validate request body
+    let validatedData;
+    try {
+      validatedData = validateApiRequest(DomainCacheSchema, body);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return NextResponse.json(createValidationErrorResponse(error), { status: 400 });
+      }
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
+
+    const { domains } = validatedData;
 
     const cacheData: CacheData = {
       domains,
@@ -44,13 +56,13 @@ export async function POST(request: NextRequest) {
       totalCount: domains.length
     };
 
-    await fs.writeFile(CACHE_FILE_PATH, JSON.stringify(cacheData, null, 2));
+    await safeWriteJsonFile(CACHE_FILE_NAME, cacheData);
 
     return NextResponse.json({ success: true, ...cacheData });
   } catch (error) {
-    console.error('Error saving cache:', error);
+    console.error('Error al guardar en caché:', error);
     return NextResponse.json(
-      { error: 'Failed to save cache' },
+      { error: 'No se pudo guardar en caché' },
       { status: 500 }
     );
   }
