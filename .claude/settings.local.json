@@ -16,7 +16,9 @@
       "Bash(npx next:*)",
       "Bash(curl:*)",
       "Bash(killall:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
