@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
 import { CloudflareAPI } from '@/lib/cloudflare';
 import { RuleTemplate } from '@/types/cloudflare';
+import { safeReadJsonFile } from '@/lib/fileSystem';
 
-const RULES_TEMPLATES_FILE = path.join(process.cwd(), 'security-rules-templates.json');
+const RULES_TEMPLATES_FILE = 'security-rules-templates.json';
 
 interface RulesTemplatesCache {
   templates: RuleTemplate[];
@@ -13,8 +12,7 @@ interface RulesTemplatesCache {
 
 async function loadRulesTemplates(): Promise<RulesTemplatesCache> {
   try {
-    const data = await fs.readFile(RULES_TEMPLATES_FILE, 'utf-8');
-    return JSON.parse(data);
+    return await safeReadJsonFile<RulesTemplatesCache>(RULES_TEMPLATES_FILE);
   } catch {
     return {
       templates: [],
@@ -101,6 +99,7 @@ export async function POST(request: NextRequest) {
           }
         } else if (action === 'add') {
           // Add selected rules
+          console.log(`[Bulk Action] Adding rules for zone ${zoneId}:`, selectedRules);
           let addedCount = 0;
           let skippedCount = 0;
           const messages: string[] = [];
@@ -108,20 +107,31 @@ export async function POST(request: NextRequest) {
           for (const friendlyId of selectedRules) {
             const template = templatesCache.templates.find(t => t.friendlyId === friendlyId);
             if (!template) {
+              console.log(`[Bulk Action] Template ${friendlyId} not found in cache`);
               messages.push(`Template ${friendlyId} not found`);
               continue;
             }
 
+            console.log(`[Bulk Action] Found template for ${friendlyId}:`, template);
+
             if (!preview) {
+              console.log(`[Bulk Action] Applying template ${friendlyId} to zone ${zoneId}`);
               const applyResult = await cloudflareAPI.applyTemplateRule(zoneId, template);
+              console.log(`[Bulk Action] Apply result for ${friendlyId}:`, applyResult);
+
               if (applyResult.success) {
+                console.log(`[Bulk Action] applyResult.action: "${applyResult.action}"`);
+
                 if (applyResult.action === 'added' || applyResult.action === 'updated') {
                   addedCount++;
+                  console.log(`[Bulk Action] Incremented addedCount to ${addedCount} for action: ${applyResult.action}`);
                 } else {
                   skippedCount++;
+                  console.log(`[Bulk Action] Incremented skippedCount to ${skippedCount} for action: ${applyResult.action}`);
                 }
                 messages.push(applyResult.message);
               } else {
+                console.log(`[Bulk Action] Apply failed:`, applyResult);
                 messages.push(`Failed to apply ${friendlyId}: ${applyResult.message}`);
               }
             } else {
@@ -145,9 +155,17 @@ export async function POST(request: NextRequest) {
           }
 
           result.success = true;
-          result.message = preview 
-            ? `Will process ${selectedRules.length} rules` 
+          result.message = preview
+            ? `Will process ${selectedRules.length} rules`
             : `Added: ${addedCount}, Skipped: ${skippedCount}`;
+
+          console.log(`[Bulk Action] Final result for zone ${zoneId}:`, {
+            success: result.success,
+            message: result.message,
+            addedCount,
+            skippedCount,
+            messages
+          });
 
         } else if (action === 'remove') {
           // Remove selected rules
@@ -180,7 +198,7 @@ export async function POST(request: NextRequest) {
           result.success = true;
           result.message = preview 
             ? `Will remove ${removedCount} rules` 
-            : `Removed: ${removedCount} rules`;
+            : `Removed: ${removedCount}`;
         }
 
       } catch (error) {

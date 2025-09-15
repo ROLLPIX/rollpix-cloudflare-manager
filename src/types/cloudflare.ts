@@ -55,6 +55,8 @@ export interface DomainStatus {
   wwwRecord?: CloudflareDNSRecord;
   rootProxied: boolean;
   wwwProxied: boolean;
+  underAttackMode?: boolean;
+  botFightMode?: boolean;
   securityRules?: {
     totalRules: number;
     corporateRules: number;

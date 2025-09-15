@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
 import { DomainStatus, DomainRuleStatus } from '@/types/cloudflare';
+import { safeReadJsonFile, safeWriteJsonFile } from '@/lib/fileSystem';
 
-const DOMAIN_CACHE_FILE = path.join(process.cwd(), 'domains-cache.json');
-const DOMAIN_RULES_CACHE_FILE = path.join(process.cwd(), 'domain-rules-status.json');
+const DOMAIN_CACHE_FILE = 'domains-cache.json';
+const DOMAIN_RULES_CACHE_FILE = 'domain-rules-status.json';
 
 interface DomainsCache {
   domains: DomainStatus[];
@@ -19,8 +18,7 @@ interface DomainRulesCache {
 
 async function loadDomainsCache(): Promise<DomainsCache | null> {
   try {
-    const data = await fs.readFile(DOMAIN_CACHE_FILE, 'utf-8');
-    return JSON.parse(data);
+    return await safeReadJsonFile<DomainsCache>(DOMAIN_CACHE_FILE);
   } catch {
     return null;
   }
@@ -28,8 +26,7 @@ async function loadDomainsCache(): Promise<DomainsCache | null> {
 
 async function loadDomainRulesCache(): Promise<DomainRulesCache> {
   try {
-    const data = await fs.readFile(DOMAIN_RULES_CACHE_FILE, 'utf-8');
-    return JSON.parse(data);
+    return await safeReadJsonFile<DomainRulesCache>(DOMAIN_RULES_CACHE_FILE);
   } catch {
     return {
       domainStatuses: [],
@@ -39,13 +36,16 @@ async function loadDomainRulesCache(): Promise<DomainRulesCache> {
 }
 
 async function saveDomainsCache(cache: DomainsCache): Promise<void> {
-  await fs.writeFile(DOMAIN_CACHE_FILE, JSON.stringify(cache, null, 2));
+  await safeWriteJsonFile(DOMAIN_CACHE_FILE, cache);
 }
 
 // POST - Enrich domains with security rules information
 export async function POST(request: NextRequest) {
+  console.log('[Enrich API] POST request received');
   try {
+    console.log('[Enrich API] Loading domains cache...');
     const domainsCache = await loadDomainsCache();
+    console.log('[Enrich API] Domains cache loaded:', domainsCache ? 'success' : 'null');
     if (!domainsCache) {
       return NextResponse.json({
         success: false,

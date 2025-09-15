@@ -48,10 +48,17 @@ export async function GET(request: NextRequest) {
         
         for (const zone of zonesToCheck) {
           try {
-            const rulesets = await cloudflareAPI.getZoneRulesets(zone.id);
-            const customRulesets = rulesets.filter(r => r.phase === 'http_request_firewall_custom');
+            // Get all rulesets and filter for only custom firewall rulesets
+            const allZoneRulesets = await cloudflareAPI.getZoneRulesets(zone.id);
+            const customRulesets = allZoneRulesets.filter(ruleset =>
+              ruleset.phase === 'http_request_firewall_custom'
+            );
+
+            // Only use custom rulesets since we don't need others (DDoS, Rate Limiting, etc.)
+            // and they may not be accessible with our token scope
+            const allRulesets = customRulesets;
             
-            totalRulesets += rulesets.length;
+            totalRulesets += allRulesets.length;
             totalCustomRulesets += customRulesets.length;
             
             let zoneRulesCount = 0;
@@ -62,23 +69,27 @@ export async function GET(request: NextRequest) {
                 const detailedRuleset = await cloudflareAPI.getZoneRuleset(zone.id, ruleset.id);
                 const rulesCount = detailedRuleset.rules?.length || 0;
                 zoneRulesCount += rulesCount;
-                
+
                 customRulesetsWithCounts.push({
                   id: ruleset.id,
                   name: ruleset.name,
                   phase: ruleset.phase,
                   rulesCount: rulesCount,
                   zoneName: zone.name,
-                  zoneId: zone.id
+                  zoneId: zone.id,
+                  accessible: true
                 });
               } catch (error) {
+                const is403 = error instanceof Error && error.message.includes('403');
                 customRulesetsWithCounts.push({
                   id: ruleset.id,
                   name: ruleset.name,
                   phase: ruleset.phase,
                   rulesCount: 0,
                   zoneName: zone.name,
-                  zoneId: zone.id
+                  zoneId: zone.id,
+                  accessible: false,
+                  error: is403 ? 'Permission denied (403) - Token needs Zone WAF: Edit permission' : (error instanceof Error ? error.message : 'Unknown error')
                 });
               }
             }
@@ -88,7 +99,7 @@ export async function GET(request: NextRequest) {
             zoneDetails.push({
               id: zone.id,
               name: zone.name,
-              rulesetsCount: rulesets.length,
+              rulesetsCount: allRulesets.length,
               customRulesetsCount: customRulesets.length,
               rulesCount: zoneRulesCount
             });
@@ -103,6 +114,11 @@ export async function GET(request: NextRequest) {
           }
         }
         
+        // Analyze permission issues
+        const inaccessibleRulesets = customRulesetsWithCounts.filter(r => !r.accessible);
+        const accessibleRulesets = customRulesetsWithCounts.filter(r => r.accessible);
+        const permissionIssues = inaccessibleRulesets.filter(r => r.error && r.error.includes('403'));
+
         results.rulesets = {
           success: true,
           totalZonesAnalyzed: zonesToCheck.length,
@@ -110,11 +126,17 @@ export async function GET(request: NextRequest) {
           count: totalRulesets,
           customRulesetsCount: totalCustomRulesets,
           totalRules: totalRules,
-          types: customRulesetsWithCounts.length > 0 
-            ? customRulesetsWithCounts[0] 
-              ? [{ id: 'sample', name: 'http_request_firewall_custom', phase: 'http_request_firewall_custom' }]
-              : []
-            : [],
+          accessibility: {
+            accessible: accessibleRulesets.length,
+            inaccessible: inaccessibleRulesets.length,
+            permissionDenied: permissionIssues.length,
+            hasPermissionIssues: permissionIssues.length > 0
+          },
+          permissionStatus: permissionIssues.length > 0
+            ? `⚠️ Token lacks Zone WAF: Edit permission. ${permissionIssues.length} rulesets inaccessible.`
+            : accessibleRulesets.length > 0
+              ? '✅ Token has sufficient WAF permissions.'
+              : 'ℹ️ No custom rulesets found to test permissions.',
           customRulesets: customRulesetsWithCounts,
           zoneDetails: zoneDetails
         };

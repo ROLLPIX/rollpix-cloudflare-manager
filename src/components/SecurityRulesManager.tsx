@@ -12,12 +12,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { toast } from 'sonner';
 import { Shield, Plus, Trash2, Edit2, RefreshCw } from 'lucide-react';
 import { RuleTemplate } from '@/types/cloudflare';
+import { CollapsibleExpression } from './CollapsibleExpression';
+import { tokenStorage } from '@/lib/tokenStorage';
 
-interface SecurityRulesManagerProps {
-  apiToken: string;
-}
-
-export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerProps) {
+export default function SecurityRulesManager() {
   const [templates, setTemplates] = useState<RuleTemplate[]>([]);
   const [loading, setLoading] = useState(false);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -25,12 +23,11 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
   const [editingTemplate, setEditingTemplate] = useState<RuleTemplate | null>(null);
   const [updatingTemplate, setUpdatingTemplate] = useState<string | null>(null);
 
-  // Form state for creating/editing templates
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     expression: '',
-    action: 'block' as const,
+    action: 'block' as RuleTemplate['action'],
     tags: [] as string[],
     applicableTags: [] as string[],
     excludedDomains: [] as string[]
@@ -162,26 +159,25 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
   }, []);
 
   const handleUpdateAllDomains = useCallback(async (template: RuleTemplate) => {
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) {
+      toast.error('API Token no encontrado.');
+      return;
+    }
     try {
       setUpdatingTemplate(template.id);
       
-      // First, get all domains that currently have this rule but with older versions
       const analyzeResponse = await fetch('/api/security-rules/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ apiToken, forceRefresh: false })
       });
       
-      if (!analyzeResponse.ok) {
-        throw new Error('Failed to analyze domains');
-      }
+      if (!analyzeResponse.ok) throw new Error('Failed to analyze domains');
       
       const analyzeResult = await analyzeResponse.json();
-      if (!analyzeResult.success) {
-        throw new Error(analyzeResult.error);
-      }
+      if (!analyzeResult.success) throw new Error(analyzeResult.error);
       
-      // Find domains that have this rule with older versions
       const domainsToUpdate: string[] = [];
       
       for (const domainStatus of analyzeResult.data.domains) {
@@ -203,7 +199,6 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
         return;
       }
       
-      // Update all domains with the latest version
       const updateResponse = await fetch('/api/domains/rules/bulk-action', {
         method: 'POST',
         headers: {
@@ -211,7 +206,7 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
           'x-api-token': apiToken
         },
         body: JSON.stringify({
-          action: 'add', // This will update existing rules to new version
+          action: 'add',
           selectedRules: [template.friendlyId],
           targetZoneIds: domainsToUpdate,
           preview: false
@@ -232,7 +227,7 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
     } finally {
       setUpdatingTemplate(null);
     }
-  }, [apiToken]);
+  }, []);
 
   useEffect(() => {
     loadTemplates();
@@ -334,10 +329,7 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
                   <CardDescription>{template.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="bg-muted p-3 rounded-md">
-                    <Label className="text-sm font-medium">Expresión:</Label>
-                    <code className="block text-sm mt-1 break-all">{template.expression}</code>
-                  </div>
+                  <CollapsibleExpression expression={template.expression} />
                   <div className="flex items-center gap-4">
                     <Badge>{template.action}</Badge>
                     <div className="text-sm text-muted-foreground">
@@ -353,7 +345,6 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
         )}
       </div>
 
-      {/* Create Template Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -408,8 +399,8 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
                 id="rule-expression"
                 value={formData.expression}
                 onChange={(e) => setFormData(prev => ({ ...prev, expression: e.target.value }))}
-                placeholder="(ip.geoip.country in {&quot;CN&quot; &quot;RU&quot;}) or (http.user_agent contains &quot;bot&quot;)"
-                className="font-mono text-sm"
+                placeholder='(ip.geoip.country in {"CN" "RU"}) or (http.user_agent contains "bot")'
+                className="font-mono text-sm min-h-[100px] max-h-[300px] overflow-y-auto resize-y"
               />
             </div>
           </div>
@@ -425,7 +416,6 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
         </DialogContent>
       </Dialog>
 
-      {/* Edit Template Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -480,8 +470,8 @@ export default function SecurityRulesManager({ apiToken }: SecurityRulesManagerP
                 id="edit-rule-expression"
                 value={formData.expression}
                 onChange={(e) => setFormData(prev => ({ ...prev, expression: e.target.value }))}
-                placeholder="(ip.geoip.country in {&quot;CN&quot; &quot;RU&quot;}) or (http.user_agent contains &quot;bot&quot;)"
-                className="font-mono text-sm"
+                placeholder='(ip.geoip.country in {"CN" "RU"}) or (http.user_agent contains "bot")'
+                className="font-mono text-sm min-h-[100px] max-h-[300px] overflow-y-auto resize-y"
               />
             </div>
           </div>

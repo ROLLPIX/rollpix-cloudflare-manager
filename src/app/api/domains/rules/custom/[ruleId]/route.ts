@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { CloudflareAPI } from '@/lib/cloudflare';
 
 // DELETE - Delete individual custom rule
-export async function DELETE(request: NextRequest, { params }: { params: { ruleId: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ ruleId: string }> }) {
   try {
     const apiToken = request.headers.get('x-api-token');
     const zoneId = request.headers.get('x-zone-id');
-    const { ruleId } = params;
+    const { ruleId } = await params;
 
     if (!apiToken) {
       return NextResponse.json({
@@ -24,8 +24,9 @@ export async function DELETE(request: NextRequest, { params }: { params: { ruleI
 
     const cloudflareAPI = new CloudflareAPI(apiToken);
 
-    // Get all rulesets for the zone to find which one contains this rule
-    const rulesets = await cloudflareAPI.getZoneRulesets(zoneId);
+    // Get all rulesets and filter for custom firewall rulesets to find which one contains this rule
+    const allRulesets = await cloudflareAPI.getZoneRulesets(zoneId);
+    const rulesets = allRulesets.filter(ruleset => ruleset.phase === 'http_request_firewall_custom');
     
     let rulesetId = null;
     let rulesetToUpdate = null;

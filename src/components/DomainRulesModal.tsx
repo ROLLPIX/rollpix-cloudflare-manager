@@ -11,6 +11,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Loader2, Shield, Settings, AlertTriangle, Trash2, Info, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { RuleTemplate } from '@/types/cloudflare';
+import { CollapsibleExpression } from './CollapsibleExpression';
+import { tokenStorage } from '@/lib/tokenStorage';
+import { useDomainStore } from '@/store/domainStore';
 
 interface TemplateRule {
   friendlyId: string;
@@ -41,26 +44,26 @@ interface DomainRulesModalProps {
   onClose: () => void;
   zoneId: string | null;
   domainName: string;
-  apiToken: string;
 }
 
-export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken }: DomainRulesModalProps) {
+export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: DomainRulesModalProps) {
   const [loading, setLoading] = useState(false);
   const [rulesData, setRulesData] = useState<DomainRulesData | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [availableTemplates, setAvailableTemplates] = useState<RuleTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
+  const { refreshSingleDomain } = useDomainStore();
 
-  const loadDomainRules = async () => {
+  const loadDomainRules = useCallback(async () => {
     if (!zoneId) return;
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) return;
 
     try {
       setLoading(true);
       
       const response = await fetch(`/api/domains/rules/${zoneId}`, {
-        headers: {
-          'x-api-token': apiToken
-        }
+        headers: { 'x-api-token': apiToken }
       });
 
       const result = await response.json();
@@ -68,9 +71,11 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
       if (response.ok && result.success) {
         setRulesData(result.data);
       } else {
-        // Handle specific error types
+        console.error('[DomainRulesModal] Error response:', result);
         if (result.errorType === 'INSUFFICIENT_PERMISSIONS') {
-          toast.error('Token sin permisos para reglas de seguridad. Se requieren permisos de Zone:Zone:Read y acceso a Rulesets.');
+          toast.error('Token sin permisos para reglas de seguridad.');
+        } else if (result.errorType === 'JSON_PARSE_ERROR') {
+          toast.error('Error de comunicación con Cloudflare. Intenta de nuevo.');
         } else {
           toast.error(result.error || 'Error al cargar reglas del dominio');
         }
@@ -81,50 +86,96 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
     } finally {
       setLoading(false);
     }
-  };
+  }, [zoneId]);
 
   const loadAvailableTemplates = async () => {
     try {
+      console.log('[DomainRulesModal] Loading available templates...');
       const response = await fetch('/api/security-rules');
       const result = await response.json();
+      console.log('[DomainRulesModal] Templates response:', result);
+
       if (result.success) {
-        setAvailableTemplates(result.data.templates.filter((t: RuleTemplate) => t.enabled));
+        const enabledTemplates = result.data.templates.filter((t: RuleTemplate) => t.enabled);
+        console.log('[DomainRulesModal] Enabled templates:', enabledTemplates);
+        setAvailableTemplates(enabledTemplates);
+      } else {
+        console.error('[DomainRulesModal] Failed to load templates:', result);
       }
     } catch (error) {
-      console.error('Error loading templates:', error);
+      console.error('[DomainRulesModal] Error loading templates:', error);
     }
   };
 
   const handleApplyTemplate = async () => {
-    if (!selectedTemplate || !zoneId) return;
+    console.log('[DomainRulesModal] Starting template application...');
+    console.log('[DomainRulesModal] Selected template:', selectedTemplate);
+    console.log('[DomainRulesModal] Zone ID:', zoneId);
+    console.log('[DomainRulesModal] Available templates:', availableTemplates);
+
+    if (!selectedTemplate || !zoneId) {
+      console.log('[DomainRulesModal] Missing required data - aborting');
+      return;
+    }
+
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) {
+      console.log('[DomainRulesModal] No API token - aborting');
+      return;
+    }
 
     const template = availableTemplates.find(t => t.friendlyId === selectedTemplate);
-    if (!template) return;
+    console.log('[DomainRulesModal] Found template object:', template);
+
+    if (!template) {
+      console.log('[DomainRulesModal] Template not found in available templates - aborting');
+      return;
+    }
 
     try {
       setActionLoading('apply');
-      
+
+      const requestBody = {
+        action: 'add',
+        selectedRules: [selectedTemplate],
+        targetZoneIds: [zoneId],
+        preview: false
+      };
+
+      console.log('[DomainRulesModal] Sending request body:', requestBody);
+
       const response = await fetch(`/api/domains/rules/bulk-action`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-api-token': apiToken
         },
-        body: JSON.stringify({
-          action: 'add',
-          selectedRules: [selectedTemplate],
-          targetZoneIds: [zoneId],
-          preview: false
-        })
+        body: JSON.stringify(requestBody)
       });
 
       const result = await response.json();
+      console.log('[DomainRulesModal] Apply template result:', result);
+
       if (result.success) {
-        toast.success(`Regla ${selectedTemplate} aplicada exitosamente`);
+        const addedCount = result.data?.results?.[0]?.message?.match(/Added: (\d+)/)?.[1] || '0';
+        console.log('[DomainRulesModal] Rule application successful. Extracted added count:', addedCount);
+
+        toast.success(`Regla ${selectedTemplate} aplicada exitosamente (${addedCount} regla${addedCount !== '1' ? 's' : ''} agregada${addedCount !== '1' ? 's' : ''})`);
         setSelectedTemplate('');
-        await loadDomainRules(); // Reload
+
+        console.log('[DomainRulesModal] Reloading domain rules...');
+        await loadDomainRules();
+        console.log('[DomainRulesModal] Domain rules reloaded');
+
+        // Also refresh the domain in the main store to update the table
+        if (zoneId) {
+          console.log('[DomainRulesModal] Refreshing domain in store after rule application');
+          await refreshSingleDomain(zoneId);
+          console.log('[DomainRulesModal] Domain store refreshed');
+        }
       } else {
-        toast.error('Error al aplicar la regla');
+        console.error('[DomainRulesModal] Error applying template:', result);
+        toast.error(`Error al aplicar la regla: ${result.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error applying template:', error);
@@ -136,12 +187,13 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
 
   const handleDeleteIndividualRule = async (ruleId: string, ruleName: string, isTemplate: boolean) => {
     if (!zoneId) return;
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) return;
     
     try {
       setActionLoading(ruleId);
 
       if (isTemplate) {
-        // For template rules, use the friendlyId to remove
         const response = await fetch(`/api/domains/rules/bulk-action`, {
           method: 'POST',
           headers: {
@@ -150,7 +202,7 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
           },
           body: JSON.stringify({
             action: 'remove',
-            selectedRules: [ruleName], // ruleName contains friendlyId
+            selectedRules: [ruleName],
             targetZoneIds: [zoneId],
             preview: false
           })
@@ -159,12 +211,11 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
         const result = await response.json();
         if (result.success) {
           toast.success(`Regla ${ruleName} eliminada exitosamente`);
-          await loadDomainRules(); // Reload
+          await loadDomainRules();
         } else {
           toast.error('Error al eliminar la regla');
         }
       } else {
-        // For custom rules, delete directly by Cloudflare rule ID
         const response = await fetch(`/api/domains/rules/custom/${ruleId}`, {
           method: 'DELETE',
           headers: {
@@ -175,7 +226,7 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
 
         if (response.ok) {
           toast.success('Regla personalizada eliminada');
-          await loadDomainRules(); // Reload
+          await loadDomainRules();
         } else {
           toast.error('Error al eliminar la regla personalizada');
         }
@@ -193,10 +244,12 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
       loadDomainRules();
       loadAvailableTemplates();
     }
-  }, [isOpen, zoneId]);
+  }, [isOpen, zoneId, loadDomainRules]);
 
   const handleCleanTemplateRules = async () => {
     if (!zoneId || !rulesData) return;
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) return;
 
     try {
       setActionLoading('template');
@@ -212,14 +265,12 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
         })
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to clean template rules');
-      }
+      if (!response.ok) throw new Error('Failed to clean template rules');
 
       const result = await response.json();
       if (result.success) {
         toast.success(`${result.data.removedCount} reglas de plantilla eliminadas`);
-        await loadDomainRules(); // Reload
+        await loadDomainRules();
       } else {
         toast.error('Error al limpiar reglas de plantilla');
       }
@@ -233,6 +284,8 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
 
   const handleCleanAllRules = async () => {
     if (!zoneId || !rulesData) return;
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) return;
 
     try {
       setActionLoading('all');
@@ -248,14 +301,12 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
         })
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to clean all rules');
-      }
+      if (!response.ok) throw new Error('Failed to clean all rules');
 
       const result = await response.json();
       if (result.success) {
         toast.success(`${result.data.removedCount} reglas eliminadas`);
-        await loadDomainRules(); // Reload
+        await loadDomainRules();
       } else {
         toast.error('Error al limpiar todas las reglas');
       }
@@ -269,22 +320,16 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
 
   const totalRules = rulesData ? rulesData.templateRules.length + rulesData.customRules.length : 0;
   
-  // Check if domain has conflicts based on security rules analysis
   const domainHasConflicts = useMemo(() => {
-    // This would be populated from the domain's securityRules.hasConflicts
-    // For now, we'll check if any template rules have version conflicts
-    return false; // TODO: Implement based on actual conflict detection
-  }, [rulesData]);
+    return false;
+  }, []);
 
   const getConflictDetails = useCallback(() => {
     if (!rulesData) return [];
     
     const conflicts: Array<{ruleId: string, message: string, suggestion?: string}> = [];
     
-    // Check template rules for version conflicts or outdated versions
     rulesData.templateRules.forEach(rule => {
-      // Example conflict detection logic
-      // This would be enhanced based on actual conflict analysis
       if (rule.version && parseFloat(rule.version) < 2.0) {
         conflicts.push({
           ruleId: rule.friendlyId,
@@ -299,7 +344,7 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl w-[90vw] max-h-[80vh] overflow-y-auto sm:max-w-6xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
@@ -317,7 +362,6 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
           </div>
         ) : rulesData ? (
           <div className="space-y-6">
-            {/* Summary */}
             <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
               <div className="flex items-center gap-4">
                 <div className="text-center">
@@ -384,7 +428,6 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
               </div>
             </div>
 
-            {/* Template Rules */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -431,16 +474,13 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
                           </Button>
                         </div>
                       </div>
-                      <div className="text-sm text-muted-foreground bg-muted p-2 rounded font-mono">
-                        {rule.expression}
-                      </div>
+                      <CollapsibleExpression expression={rule.expression} />
                     </div>
                   ))
                 )}
               </CardContent>
             </Card>
 
-            {/* Custom Rules */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -485,16 +525,13 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
                           </Button>
                         </div>
                       </div>
-                      <div className="text-sm text-muted-foreground bg-muted p-2 rounded font-mono">
-                        {rule.expression}
-                      </div>
+                      <CollapsibleExpression expression={rule.expression} />
                     </div>
                   ))
                 )}
               </CardContent>
             </Card>
 
-            {/* Conflicts Section */}
             {domainHasConflicts && (
               <Card>
                 <CardHeader>
@@ -526,7 +563,6 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName, apiToken
               </Card>
             )}
 
-            {/* Warning */}
             {rulesData.customRules.length > 0 && (
               <Alert>
                 <AlertTriangle className="h-4 w-4" />

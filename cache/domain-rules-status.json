@@ -13,7 +13,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:48:56.265Z"
+      "lastAnalyzed": "2025-09-15T04:07:41.729Z"
     },
     {
       "zoneId": "b9c0f3d6eb914effb88316c321c30c32",
@@ -28,7 +28,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:48:57.970Z"
+      "lastAnalyzed": "2025-09-15T04:07:44.747Z"
     },
     {
       "zoneId": "193dc6e1f7caab0eb9fcd59a67ef183a",
@@ -57,7 +57,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:48:59.509Z"
+      "lastAnalyzed": "2025-09-15T04:07:48.405Z"
     },
     {
       "zoneId": "d448d35d7f288cc512efa3cd45f55569",
@@ -86,7 +86,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:01.634Z"
+      "lastAnalyzed": "2025-09-15T04:07:51.939Z"
     },
     {
       "zoneId": "aec71a95294bc3b0ed026793ce2703e6",
@@ -115,22 +115,14 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:03.530Z"
+      "lastAnalyzed": "2025-09-15T04:07:55.236Z"
     },
     {
       "zoneId": "b4433448b872ab765efec4363b65bd87",
       "domainName": "bpack.com.ar",
       "appliedRules": [],
-      "customRules": [
-        {
-          "cloudflareRulesetId": "c55235554b9c4f81a31028e854cc61cf",
-          "cloudflareRuleId": "9eaf52054d4f4dcfbee8ed0b2178f3b9",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
-          "action": "js_challenge",
-          "description": "waf02"
-        }
-      ],
-      "lastAnalyzed": "2025-09-14T20:49:05.127Z"
+      "customRules": [],
+      "lastAnalyzed": "2025-09-15T04:07:58.396Z"
     },
     {
       "zoneId": "8a807deb21754d9dd749bcd962fb2d89",
@@ -145,7 +137,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:06.662Z"
+      "lastAnalyzed": "2025-09-15T04:08:01.678Z"
     },
     {
       "zoneId": "84f90991c74d7a1aa9445975cfe8cb18",
@@ -160,21 +152,30 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:08.257Z"
+      "lastAnalyzed": "2025-09-15T04:08:05.179Z"
     },
     {
       "zoneId": "99b3909f7a4be4cd869f5dc6e2af5f32",
       "domainName": "buttman.com.uy",
-      "appliedRules": [],
+      "appliedRules": [
+        {
+          "ruleId": "1b27fa18-4577-4975-9a7a-5289d10f7c29",
+          "ruleName": "WAF2",
+          "version": "1.0.0",
+          "status": "active",
+          "cloudflareRulesetId": "7488b43bb2444a0eb67d120b135679cd",
+          "cloudflareRuleId": "b5476e06d18e49b7937fff8c24223f62"
+        }
+      ],
       "customRules": [],
-      "lastAnalyzed": "2025-09-14T20:49:09.852Z"
+      "lastAnalyzed": "2025-09-15T04:55:31.737Z"
     },
     {
       "zoneId": "c5b17067e6dd822e8c4174ab75aac7a2",
       "domainName": "buttman.uy",
       "appliedRules": [],
       "customRules": [],
-      "lastAnalyzed": "2025-09-14T20:49:11.319Z"
+      "lastAnalyzed": "2025-09-15T04:08:12.857Z"
     },
     {
       "zoneId": "e508c9cdf3215c89d0c906468a1fe0aa",
@@ -189,7 +190,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:13.129Z"
+      "lastAnalyzed": "2025-09-15T04:08:16.396Z"
     },
     {
       "zoneId": "91c2f37c88700b17a5acfe0cf03e5845",
@@ -204,7 +205,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:14.864Z"
+      "lastAnalyzed": "2025-09-15T04:08:19.937Z"
     },
     {
       "zoneId": "f22be7149862fb089508ab7046ed69e7",
@@ -219,7 +220,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:16.631Z"
+      "lastAnalyzed": "2025-09-15T04:08:23.122Z"
     },
     {
       "zoneId": "fd3a7c11246a768298d58439e1122bee",
@@ -241,7 +242,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:18.070Z"
+      "lastAnalyzed": "2025-09-15T04:08:26.559Z"
     },
     {
       "zoneId": "3c7ea415ff5ce890a8a2d7750b83c167",
@@ -256,7 +257,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:19.703Z"
+      "lastAnalyzed": "2025-09-15T04:08:29.693Z"
     },
     {
       "zoneId": "5784eccfbe1699511a1316bf4cd9e030",
@@ -271,7 +272,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:21.773Z"
+      "lastAnalyzed": "2025-09-15T04:08:32.980Z"
     },
     {
       "zoneId": "c3983eba162ebf7c5e991c29a062449c",
@@ -286,7 +287,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:23.314Z"
+      "lastAnalyzed": "2025-09-15T04:08:36.318Z"
     },
     {
       "zoneId": "51a7467ceea992963aa4c4f225dfb296",
@@ -301,7 +302,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:25.066Z"
+      "lastAnalyzed": "2025-09-15T04:08:39.857Z"
     },
     {
       "zoneId": "7b58275dcd7559feb839b9b6bff63cc7",
@@ -323,7 +324,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:26.836Z"
+      "lastAnalyzed": "2025-09-15T04:08:43.666Z"
     },
     {
       "zoneId": "2bc9b218d34b816bb76433dd232abe65",
@@ -338,7 +339,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:28.510Z"
+      "lastAnalyzed": "2025-09-15T04:08:47.106Z"
     },
     {
       "zoneId": "1de3f5b800e110cdcb87fc10c3e14592",
@@ -360,7 +361,7 @@
           "description": "waf01"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:30.171Z"
+      "lastAnalyzed": "2025-09-14T21:12:39.324Z"
     },
     {
       "zoneId": "67fcfd8970dfdb1085a2d5f3fdba918e",
@@ -375,7 +376,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:31.740Z"
+      "lastAnalyzed": "2025-09-14T21:12:42.697Z"
     },
     {
       "zoneId": "f00685f0c28bc0941ee926407a2b42d2",
@@ -390,7 +391,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:33.432Z"
+      "lastAnalyzed": "2025-09-14T21:12:46.173Z"
     },
     {
       "zoneId": "171dd55feb3143610978201e575dfc1f",
@@ -405,7 +406,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:35.038Z"
+      "lastAnalyzed": "2025-09-14T21:12:49.644Z"
     },
     {
       "zoneId": "3965ae9e76545e5c42c875fdf56f2685",
@@ -420,7 +421,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:36.676Z"
+      "lastAnalyzed": "2025-09-14T21:12:53.184Z"
     },
     {
       "zoneId": "93b8dd22857e27f788c8fdb9acacc3a7",
@@ -435,7 +436,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:38.220Z"
+      "lastAnalyzed": "2025-09-14T21:12:56.607Z"
     },
     {
       "zoneId": "99988882c85cf19172784306db2a428f",
@@ -450,7 +451,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:40.249Z"
+      "lastAnalyzed": "2025-09-14T21:12:59.885Z"
     },
     {
       "zoneId": "9c00d0e42e16a8f3ea3fdfb5b69b2a74",
@@ -465,7 +466,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:41.542Z"
+      "lastAnalyzed": "2025-09-14T21:13:03.247Z"
     },
     {
       "zoneId": "95230063ab0950d00fb8fac2c090e8a2",
@@ -480,7 +481,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:42.850Z"
+      "lastAnalyzed": "2025-09-14T21:13:06.778Z"
     },
     {
       "zoneId": "9e621c64d34a49a78edb00281e5ed6b4",
@@ -495,7 +496,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:44.650Z"
+      "lastAnalyzed": "2025-09-14T21:13:10.119Z"
     },
     {
       "zoneId": "07120a716a4a56a15fa780b7d254ed53",
@@ -510,7 +511,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:46.358Z"
+      "lastAnalyzed": "2025-09-14T21:13:13.314Z"
     },
     {
       "zoneId": "cf2352c08759c5510d3d8bc06f61487d",
@@ -525,7 +526,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:47.844Z"
+      "lastAnalyzed": "2025-09-14T21:13:16.525Z"
     },
     {
       "zoneId": "b6705fc500c5e4a122af4d4197eba8af",
@@ -540,7 +541,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:49.779Z"
+      "lastAnalyzed": "2025-09-14T21:13:20.145Z"
     },
     {
       "zoneId": "dac3a59faa916b0ce22b221c482967d9",
@@ -562,7 +563,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:51.403Z"
+      "lastAnalyzed": "2025-09-14T21:13:23.464Z"
     },
     {
       "zoneId": "b1d965d0efaf9e67960d5145dda69913",
@@ -577,7 +578,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:53.239Z"
+      "lastAnalyzed": "2025-09-14T21:13:26.553Z"
     },
     {
       "zoneId": "30261799ae9e14e5873eb00a27913ac7",
@@ -592,7 +593,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:55.022Z"
+      "lastAnalyzed": "2025-09-14T21:13:30.263Z"
     },
     {
       "zoneId": "1a21a103d5662d4b422e1103806b2c02",
@@ -607,7 +608,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:56.568Z"
+      "lastAnalyzed": "2025-09-14T21:13:33.554Z"
     },
     {
       "zoneId": "c9a4796cdd18dd9d4f83ef036e262ae7",
@@ -622,7 +623,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:49:58.367Z"
+      "lastAnalyzed": "2025-09-14T21:13:36.826Z"
     },
     {
       "zoneId": "06a6b49ecef27a8263eebf4cd52a460a",
@@ -637,7 +638,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:00.054Z"
+      "lastAnalyzed": "2025-09-14T21:13:40.105Z"
     },
     {
       "zoneId": "23b7d0a9e5b34aa2ce56760d26ec9758",
@@ -659,7 +660,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:07.229Z"
+      "lastAnalyzed": "2025-09-14T21:13:43.595Z"
     },
     {
       "zoneId": "f818610074ccc4074940d4e659b8938b",
@@ -674,7 +675,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:11.533Z"
+      "lastAnalyzed": "2025-09-14T21:13:47.028Z"
     },
     {
       "zoneId": "383b35a29ba40e5ff906f0ce28fbc988",
@@ -689,7 +690,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:12.999Z"
+      "lastAnalyzed": "2025-09-14T21:13:50.302Z"
     },
     {
       "zoneId": "c2ae36c638451f201a41ac68f834f04e",
@@ -704,7 +705,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:14.516Z"
+      "lastAnalyzed": "2025-09-14T21:13:53.571Z"
     },
     {
       "zoneId": "7eab5c71f996e95dcf3daab1a9170093",
@@ -719,7 +720,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:16.016Z"
+      "lastAnalyzed": "2025-09-14T21:13:56.771Z"
     },
     {
       "zoneId": "c70f835fcdb8a8aac8ba46368c3bbad4",
@@ -734,14 +735,14 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:17.672Z"
+      "lastAnalyzed": "2025-09-14T21:14:00.034Z"
     },
     {
       "zoneId": "3d844acb6a1494ad00d7a8ebc0aa3514",
       "domainName": "iturrarte.com.ar",
       "appliedRules": [],
       "customRules": [],
-      "lastAnalyzed": "2025-09-14T20:50:18.847Z"
+      "lastAnalyzed": "2025-09-14T21:14:02.295Z"
     },
     {
       "zoneId": "d2056fc9c6050a9a4f83833cf807221b",
@@ -756,7 +757,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:20.353Z"
+      "lastAnalyzed": "2025-09-14T21:14:05.922Z"
     },
     {
       "zoneId": "41792a5e6818e97abe9017b7924527df",
@@ -771,7 +772,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:22.157Z"
+      "lastAnalyzed": "2025-09-14T21:14:09.466Z"
     },
     {
       "zoneId": "c152ddc5212238e107fdbc33490d6ce8",
@@ -786,7 +787,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:23.917Z"
+      "lastAnalyzed": "2025-09-14T21:14:12.646Z"
     },
     {
       "zoneId": "2dd689c49c4054ac4544ca4d737c8ac9",
@@ -801,8 +802,8 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-14T20:50:25.406Z"
+      "lastAnalyzed": "2025-09-14T21:14:15.914Z"
     }
   ],
-  "lastUpdated": "2025-09-14T20:50:49.161Z"
+  "lastUpdated": "2025-09-15T04:55:31.737Z"
 }

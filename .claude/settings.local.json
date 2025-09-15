@@ -18,9 +18,32 @@
       "Bash(killall:*)",
       "Bash(rm:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(vercel:*)",
+      "Read(//c/Users/nicol/**)",
+      "mcp__ide__getDiagnostics",
+      "WebFetch(domain:docs.mcp.cloudflare.com)",
+      "WebFetch(domain:api.cloudflare.com)",
+      "Bash(cat:*)",
+      "Bash(powershell:*)",
+      "Bash(del /f .nexttrace)",
+      "WebSearch",
+      "Bash(start http://localhost:3001)",
+      "Bash(dir:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []
+  },
+  "mcpServers": {
+    "cloudflare-docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://docs.mcp.cloudflare.com/sse"
+      ]
+    }
   }
 }

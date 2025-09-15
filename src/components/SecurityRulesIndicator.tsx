@@ -7,21 +7,26 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Shield, ShieldOff, AlertTriangle, Clock, CheckCircle, Settings } from 'lucide-react';
 import { DomainStatus } from '@/types/cloudflare';
 import { DomainRulesModal } from './DomainRulesModal';
+import { tokenStorage } from '@/lib/tokenStorage';
 
 interface SecurityRulesIndicatorProps {
   domain: DomainStatus;
   compact?: boolean;
-  apiToken?: string;
 }
 
-export function SecurityRulesIndicator({ domain, compact = false, apiToken }: SecurityRulesIndicatorProps) {
+export function SecurityRulesIndicator({ domain, compact = false }: SecurityRulesIndicatorProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [templateRules, setTemplateRules] = useState<string[]>([]);
   const [rulesLoaded, setRulesLoaded] = useState(false);
   const securityRules = domain.securityRules;
 
-  // Load template rules when component has security rules data
+  // Debug logging
+  React.useEffect(() => {
+    console.log(`[SecurityRulesIndicator] Domain: ${domain.domain}, Rules:`, securityRules);
+  }, [domain.domain, securityRules]);
+
   const loadTemplateRules = async () => {
+    const apiToken = tokenStorage.getToken();
     if (!apiToken || !domain.zoneId || rulesLoaded) return;
     
     try {
@@ -42,12 +47,11 @@ export function SecurityRulesIndicator({ domain, compact = false, apiToken }: Se
     }
   };
 
-  // Load template rules when security rules are available
   React.useEffect(() => {
-    if (securityRules && securityRules.corporateRules > 0 && !rulesLoaded) {
+    if (securityRules && securityRules.totalRules > 0 && !rulesLoaded) {
       loadTemplateRules();
     }
-  }, [securityRules, rulesLoaded]);
+  }, [securityRules, rulesLoaded, loadTemplateRules]);
 
   if (!securityRules) {
     return (
@@ -60,7 +64,7 @@ export function SecurityRulesIndicator({ domain, compact = false, apiToken }: Se
                 size="sm"
                 className="h-8 px-2"
                 onClick={() => {
-                  if (apiToken) {
+                  if (tokenStorage.getToken()) {
                     loadTemplateRules();
                     setModalOpen(true);
                   }
@@ -78,7 +82,6 @@ export function SecurityRulesIndicator({ domain, compact = false, apiToken }: Se
     );
   }
 
-  // New format with pills + custom counter
   const renderNewFormat = () => {
     return (
       <div className="flex items-center gap-1">
@@ -90,7 +93,7 @@ export function SecurityRulesIndicator({ domain, compact = false, apiToken }: Se
                 size="sm"
                 className="h-8 px-2"
                 onClick={() => {
-                  if (apiToken) {
+                  if (tokenStorage.getToken()) {
                     if (!rulesLoaded) {
                       loadTemplateRules();
                     }
@@ -111,28 +114,36 @@ export function SecurityRulesIndicator({ domain, compact = false, apiToken }: Se
           </Tooltip>
         </TooltipProvider>
 
-        {/* Template rules pills */}
-        {templateRules.slice(0, 3).map((friendlyId, index) => (
-          <Badge key={index} variant="secondary" className="text-xs px-1.5 py-0.5">
-            {friendlyId}
-          </Badge>
-        ))}
-        
-        {/* Show +X for remaining template rules */}
-        {templateRules.length > 3 && (
-          <Badge variant="outline" className="text-xs px-1.5 py-0.5">
-            +{templateRules.length - 3}
-          </Badge>
+        {securityRules.corporateRules > 0 && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge variant="outline" className="text-xs px-1.5 py-0.5 bg-green-50 text-green-700 border-green-200">
+                  {securityRules.corporateRules} reglas
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Reglas de plantilla: {securityRules.corporateRules}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
 
-        {/* Custom rules counter */}
         {securityRules.customRules > 0 && (
-          <Badge variant="outline" className="text-xs px-1.5 py-0.5 text-blue-600">
-            +{securityRules.customRules}
-          </Badge>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge variant="outline" className="text-xs px-1.5 py-0.5 text-blue-600">
+                  {securityRules.customRules} custom
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{securityRules.customRules} reglas personalizadas</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
 
-        {/* Conflict indicator */}
         {securityRules.hasConflicts && (
           <TooltipProvider>
             <Tooltip>
@@ -153,13 +164,12 @@ export function SecurityRulesIndicator({ domain, compact = false, apiToken }: Se
     <>
       {renderNewFormat()}
       
-      {apiToken && (
+      {tokenStorage.getToken() && (
         <DomainRulesModal
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
           zoneId={domain.zoneId}
           domainName={domain.domain}
-          apiToken={apiToken}
         />
       )}
     </>
@@ -176,6 +186,8 @@ export function SecurityRulesColumn({ domains, onAnalyzeSecurityRules, loading }
   const hasSecurityData = domains.some(domain => domain.securityRules !== undefined);
   const totalWithConflicts = domains.filter(domain => domain.securityRules?.hasConflicts).length;
   const totalWithCorporateRules = domains.filter(domain => domain.securityRules && domain.securityRules.corporateRules > 0).length;
+  const totalWithCustomRules = domains.filter(domain => domain.securityRules && domain.securityRules.customRules > 0).length;
+  const totalWithAnyRules = domains.filter(domain => domain.securityRules && domain.securityRules.totalRules > 0).length;
 
   return (
     <div className="space-y-2">
@@ -195,10 +207,20 @@ export function SecurityRulesColumn({ domains, onAnalyzeSecurityRules, loading }
       </div>
       
       {hasSecurityData && (
-        <div className="flex gap-2 text-xs">
+        <div className="flex gap-2 text-xs flex-wrap">
           <Badge variant="outline" className="text-green-600">
-            {totalWithCorporateRules} con reglas corporativas
+            {totalWithAnyRules} con reglas
           </Badge>
+          {totalWithCorporateRules > 0 && (
+            <Badge variant="outline" className="text-purple-600">
+              {totalWithCorporateRules} corporativas
+            </Badge>
+          )}
+          {totalWithCustomRules > 0 && (
+            <Badge variant="outline" className="text-blue-600">
+              {totalWithCustomRules} personalizadas
+            </Badge>
+          )}
           {totalWithConflicts > 0 && (
             <Badge variant="destructive">
               {totalWithConflicts} con conflictos

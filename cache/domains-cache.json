@@ -35,16 +35,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-08-20T04:00:07.047508Z",
-        "modified_on": "2025-09-10T08:23:54.721607Z"
+        "modified_on": "2025-09-12T08:23:57.462558Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 4,
-        "corporateRules": 2,
-        "customRules": 2,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-11T13:34:37.903Z"
+        "totalRules": 1,
+        "corporateRules": 0,
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-15T04:07:41.729Z"
       }
     },
     {
@@ -82,106 +82,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-10-04T16:40:46.311908Z",
-        "modified_on": "2025-09-10T08:23:56.664535Z"
+        "modified_on": "2025-09-12T08:23:59.311214Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:39.298Z"
-      }
-    },
-    {
-      "domain": "baby-party.com.ar",
-      "zoneId": "193dc6e1f7caab0eb9fcd59a67ef183a",
-      "rootRecord": {
-        "id": "b834832c89a0db255c5518bbb9fac2c0",
-        "name": "baby-party.com.ar",
-        "type": "A",
-        "content": "54.36.178.172",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2019-06-11T03:00:34.813299Z",
-        "modified_on": "2025-02-07T21:05:44.173221Z"
-      },
-      "wwwRecord": {
-        "id": "e8776910dde8f447a620e472ea9362ae",
-        "name": "www.baby-party.com.ar",
-        "type": "CNAME",
-        "content": "baby-party.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2019-06-11T03:00:35.852652Z",
-        "modified_on": "2025-02-07T21:05:50.56726Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T12:56:43.901Z"
-      }
-    },
-    {
-      "domain": "babyparty.com.ar",
-      "zoneId": "efbdbc447602fae76016f260c8c1f500",
-      "rootRecord": {
-        "id": "6e7fdbbe1cf4e4594399dc2af981ccb0",
-        "name": "babyparty.com.ar",
-        "type": "A",
-        "content": "54.36.178.172",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2018-05-02T15:11:22.666079Z",
-        "modified_on": "2025-02-07T21:04:35.534173Z"
-      },
-      "wwwRecord": {
-        "id": "ee7840cb4c11b08f6a16e95c3758d5c2",
-        "name": "www.babyparty.com.ar",
-        "type": "CNAME",
-        "content": "babyparty.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2018-05-02T15:11:37.411228Z",
-        "modified_on": "2025-02-07T21:04:39.857971Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T12:56:45.113Z"
+        "lastAnalyzed": "2025-09-15T04:07:44.747Z"
       }
     },
     {
@@ -217,106 +127,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-17T00:50:04.827595Z",
-        "modified_on": "2025-09-10T08:23:58.515489Z"
+        "modified_on": "2025-09-12T08:24:01.154989Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:40.863Z"
-      }
-    },
-    {
-      "domain": "beweb.com.ar",
-      "zoneId": "d448d35d7f288cc512efa3cd45f55569",
-      "rootRecord": {
-        "id": "172a30ca2e93479014c112022103f370",
-        "name": "beweb.com.ar",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2018-07-17T02:43:04.831688Z",
-        "modified_on": "2024-11-30T03:39:04.058184Z"
-      },
-      "wwwRecord": {
-        "id": "296a7e2bfc21848163faa70d9858051e",
-        "name": "www.beweb.com.ar",
-        "type": "CNAME",
-        "content": "beweb.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2018-07-17T02:43:02.5912Z",
-        "modified_on": "2024-11-30T03:39:09.800145Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T12:56:47.245Z"
-      }
-    },
-    {
-      "domain": "bibar.com.ar",
-      "zoneId": "1037f04179efd9522d01534463670e82",
-      "rootRecord": {
-        "id": "80074f3baa15c0efe7fa9d4465d35c48",
-        "name": "bibar.com.ar",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2020-07-14T15:44:37.48377Z",
-        "modified_on": "2024-12-02T03:45:04.257136Z"
-      },
-      "wwwRecord": {
-        "id": "ae3284b3f749b86699fbe5be591932e5",
-        "name": "www.bibar.com.ar",
-        "type": "CNAME",
-        "content": "bibar.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2020-07-14T15:44:42.347342Z",
-        "modified_on": "2024-12-02T03:45:10.838591Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T12:56:47.970Z"
+        "lastAnalyzed": "2025-09-15T04:07:48.405Z"
       }
     },
     {
@@ -354,106 +174,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-08T20:40:15.752143Z",
-        "modified_on": "2025-09-10T08:24:00.335875Z"
+        "modified_on": "2025-09-12T08:24:03.015895Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:42.466Z"
-      }
-    },
-    {
-      "domain": "bordatex.com.ar",
-      "zoneId": "aec71a95294bc3b0ed026793ce2703e6",
-      "rootRecord": {
-        "id": "f6253e5236cdb1db7751271c2fc6b354",
-        "name": "bordatex.com.ar",
-        "type": "A",
-        "content": "54.36.178.172",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2017-10-23T18:44:20.643067Z",
-        "modified_on": "2025-09-09T03:10:31.379779Z"
-      },
-      "wwwRecord": {
-        "id": "b319fb6b643f0f9a5ea388c03c8609c5",
-        "name": "www.bordatex.com.ar",
-        "type": "CNAME",
-        "content": "bordatex.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2017-10-23T18:44:21.667555Z",
-        "modified_on": "2025-09-09T03:10:37.337009Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T12:56:50.743Z"
-      }
-    },
-    {
-      "domain": "bordatexsa.com.ar",
-      "zoneId": "8ada5ebe0a45ffac9bae6bab3b2a05d1",
-      "rootRecord": {
-        "id": "ef529e66029c2fab54725a58b5e62596",
-        "name": "bordatexsa.com.ar",
-        "type": "A",
-        "content": "167.114.118.145",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2017-10-30T13:57:24.762743Z",
-        "modified_on": "2025-09-11T04:02:57.434408Z"
-      },
-      "wwwRecord": {
-        "id": "fee8301acbfd2deaac8e928cf7de3beb",
-        "name": "www.bordatexsa.com.ar",
-        "type": "CNAME",
-        "content": "bordatexsa.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2017-10-30T13:57:20.688633Z",
-        "modified_on": "2025-09-11T04:02:58.395562Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T12:56:51.586Z"
+        "lastAnalyzed": "2025-09-15T04:07:51.939Z"
       }
     },
     {
@@ -465,23 +195,23 @@
         "type": "A",
         "content": "15.235.53.147",
         "proxiable": true,
-        "proxied": false,
+        "proxied": true,
         "ttl": 1,
         "settings": {},
         "meta": {},
         "comment": null,
         "tags": [],
         "created_on": "2025-09-09T19:14:40.051519Z",
-        "modified_on": "2025-09-10T22:49:46.320629Z"
+        "modified_on": "2025-09-11T19:37:20.564499Z"
       },
-      "rootProxied": false,
+      "rootProxied": true,
       "wwwProxied": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:43.380Z"
+        "lastAnalyzed": "2025-09-15T04:07:55.236Z"
       }
     },
     {
@@ -510,7 +240,7 @@
         "type": "CNAME",
         "content": "wp.wpenginepowered.com",
         "proxiable": true,
-        "proxied": false,
+        "proxied": true,
         "ttl": 1,
         "settings": {
           "flatten_cname": false
@@ -519,16 +249,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:12:34.035644Z",
-        "modified_on": "2025-09-10T23:26:25.174854Z"
+        "modified_on": "2025-09-12T08:24:06.208333Z"
       },
       "rootProxied": false,
-      "wwwProxied": false,
+      "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 0,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:44.845Z"
+        "lastAnalyzed": "2025-09-15T04:07:58.396Z"
       }
     },
     {
@@ -557,7 +287,7 @@
         "type": "CNAME",
         "content": "wp.wpenginepowered.com",
         "proxiable": true,
-        "proxied": false,
+        "proxied": true,
         "ttl": 1,
         "settings": {
           "flatten_cname": false
@@ -566,16 +296,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:04:22.553763Z",
-        "modified_on": "2025-09-10T23:26:28.083625Z"
+        "modified_on": "2025-09-12T08:24:08.168357Z"
       },
       "rootProxied": false,
-      "wwwProxied": false,
+      "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:46.384Z"
+        "lastAnalyzed": "2025-09-15T04:08:01.678Z"
       }
     },
     {
@@ -611,16 +341,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-05-05T08:55:10.286725Z",
-        "modified_on": "2025-09-10T08:24:07.559412Z"
+        "modified_on": "2025-09-12T08:24:10.278769Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 3,
-        "corporateRules": 1,
-        "customRules": 2,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-11T13:34:47.895Z"
+        "totalRules": 1,
+        "corporateRules": 0,
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-15T04:08:05.179Z"
       }
     },
     {
@@ -639,16 +369,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-18T22:12:22.88951Z",
-        "modified_on": "2025-09-10T08:24:09.531106Z"
+        "modified_on": "2025-09-14T17:09:46.37727Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": true,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 0,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:49.179Z"
+        "lastAnalyzed": "2025-09-15T04:08:09.032Z"
       }
     },
     {
@@ -667,16 +399,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-18T22:09:45.344247Z",
-        "modified_on": "2025-09-10T08:24:11.384384Z"
+        "modified_on": "2025-09-12T08:24:14.278027Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 0,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:50.638Z"
+        "lastAnalyzed": "2025-09-15T04:08:12.857Z"
       }
     },
     {
@@ -712,16 +444,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-12T21:32:37.703779Z",
-        "modified_on": "2025-09-10T08:24:13.491716Z"
+        "modified_on": "2025-09-12T08:24:16.145508Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:52.777Z"
+        "lastAnalyzed": "2025-09-15T04:08:16.396Z"
       }
     },
     {
@@ -757,16 +489,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-01-25T15:57:04.809306Z",
-        "modified_on": "2025-09-10T08:24:15.481016Z"
+        "modified_on": "2025-09-12T08:24:18.061531Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:54.063Z"
+        "lastAnalyzed": "2025-09-15T04:08:19.937Z"
       }
     },
     {
@@ -802,59 +534,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-04-06T18:15:04.392398Z",
-        "modified_on": "2025-09-10T08:24:17.299499Z"
+        "modified_on": "2025-09-12T08:24:21.283929Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:34:55.355Z"
-      }
-    },
-    {
-      "domain": "cestel.com.ar",
-      "zoneId": "fd3a7c11246a768298d58439e1122bee",
-      "rootRecord": {
-        "id": "fd33bbf7003091991c2547a7488ea3d2",
-        "name": "cestel.com.ar",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2020-08-26T04:23:46.623665Z",
-        "modified_on": "2024-12-01T22:24:52.894429Z"
-      },
-      "wwwRecord": {
-        "id": "0ab72b45e28a697d85fc7fc1295f3fb6",
-        "name": "www.cestel.com.ar",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2020-08-26T04:23:49.547255Z",
-        "modified_on": "2024-12-01T22:24:58.834062Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T12:57:05.614Z"
+        "lastAnalyzed": "2025-09-15T04:08:23.122Z"
       }
     },
     {
@@ -888,16 +577,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-02-28T14:44:05.267294Z",
-        "modified_on": "2025-09-10T08:24:19.191955Z"
+        "modified_on": "2025-09-12T08:24:23.44516Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
-        "corporateRules": 1,
+        "totalRules": 1,
+        "corporateRules": 0,
         "customRules": 1,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-11T13:34:56.891Z"
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-15T04:08:26.559Z"
       }
     },
     {
@@ -933,16 +622,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-14T18:05:25.55251Z",
-        "modified_on": "2025-09-10T08:24:21.456545Z"
+        "modified_on": "2025-09-12T08:24:25.592088Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 3,
-        "corporateRules": 1,
-        "customRules": 2,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-11T13:34:58.382Z"
+        "totalRules": 1,
+        "corporateRules": 0,
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-15T04:08:29.693Z"
       }
     },
     {
@@ -980,16 +669,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-07-17T17:37:16.790088Z",
-        "modified_on": "2025-09-10T11:55:20.224011Z"
+        "modified_on": "2025-09-12T08:24:27.82619Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 3,
-        "corporateRules": 1,
-        "customRules": 2,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-11T13:34:59.745Z"
+        "totalRules": 1,
+        "corporateRules": 0,
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-15T04:08:32.980Z"
       }
     },
     {
@@ -1023,16 +712,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-07-17T17:29:08.915797Z",
-        "modified_on": "2025-09-10T08:24:25.354403Z"
+        "modified_on": "2025-09-12T08:24:29.897087Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:03.717Z"
+        "lastAnalyzed": "2025-09-15T04:08:36.318Z"
       }
     },
     {
@@ -1068,61 +757,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-10-03T12:58:25.620419Z",
-        "modified_on": "2025-09-10T08:24:27.268136Z"
+        "modified_on": "2025-09-12T08:24:31.768912Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 5,
-        "corporateRules": 2,
-        "customRules": 3,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-11T13:35:05.798Z"
-      }
-    },
-    {
-      "domain": "cuidalabocha.org.ar",
-      "zoneId": "7b58275dcd7559feb839b9b6bff63cc7",
-      "rootRecord": {
-        "id": "5b420880f6b498eec265be7fc8efe886",
-        "name": "cuidalabocha.org.ar",
-        "type": "A",
-        "content": "185.230.63.171",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2024-07-05T00:38:34.218452Z",
-        "modified_on": "2024-07-05T00:38:34.218452Z"
-      },
-      "wwwRecord": {
-        "id": "ecae363a3c73b4b77f85736f82593c4d",
-        "name": "www.cuidalabocha.org.ar",
-        "type": "CNAME",
-        "content": "cuidalabocha.org",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2024-07-05T00:39:07.320214Z",
-        "modified_on": "2024-07-05T00:39:07.320214Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T12:57:13.974Z"
+        "lastAnalyzed": "2025-09-15T04:08:39.857Z"
       }
     },
     {
@@ -1160,16 +804,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-11-01T00:31:14.443878Z",
-        "modified_on": "2025-09-10T08:24:29.185601Z"
+        "modified_on": "2025-09-12T08:24:33.741202Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 4,
-        "corporateRules": 2,
-        "customRules": 2,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-11T13:35:07.396Z"
+        "totalRules": 1,
+        "corporateRules": 0,
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-15T04:08:43.666Z"
       }
     },
     {
@@ -1205,16 +849,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-01-24T17:22:12.787862Z",
-        "modified_on": "2025-09-10T08:24:31.43974Z"
+        "modified_on": "2025-09-12T08:24:35.705042Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 3,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 3,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:08.825Z"
+        "lastAnalyzed": "2025-09-15T04:08:47.106Z"
       }
     },
     {
@@ -1261,7 +905,7 @@
         "corporateRules": 0,
         "customRules": 2,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:10.336Z"
+        "lastAnalyzed": "2025-09-14T21:12:39.324Z"
       }
     },
     {
@@ -1299,16 +943,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-09T23:10:45.113789Z",
-        "modified_on": "2025-09-10T08:24:33.529428Z"
+        "modified_on": "2025-09-12T08:24:37.761587Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:11.905Z"
+        "lastAnalyzed": "2025-09-14T21:12:42.697Z"
       }
     },
     {
@@ -1346,16 +990,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-08-30T19:43:47.669012Z",
-        "modified_on": "2025-09-10T08:24:35.539933Z"
+        "modified_on": "2025-09-12T08:24:40.019069Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:13.586Z"
+        "lastAnalyzed": "2025-09-14T21:12:46.173Z"
       }
     },
     {
@@ -1393,16 +1037,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-07-06T01:24:35.477312Z",
-        "modified_on": "2025-09-10T08:24:37.845344Z"
+        "modified_on": "2025-09-12T08:24:42.058891Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:14.913Z"
+        "lastAnalyzed": "2025-09-14T21:12:49.644Z"
       }
     },
     {
@@ -1438,16 +1082,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-07T19:50:45.729097Z",
-        "modified_on": "2025-09-10T08:24:40.25197Z"
+        "modified_on": "2025-09-12T08:24:44.126697Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:16.168Z"
+        "lastAnalyzed": "2025-09-14T21:12:53.184Z"
       }
     },
     {
@@ -1483,16 +1127,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-15T19:34:03.881628Z",
-        "modified_on": "2025-09-10T08:24:42.156635Z"
+        "modified_on": "2025-09-12T08:24:46.034523Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:18.355Z"
+        "lastAnalyzed": "2025-09-14T21:12:56.607Z"
       }
     },
     {
@@ -1516,11 +1160,11 @@
       "rootProxied": true,
       "wwwProxied": false,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:19.890Z"
+        "lastAnalyzed": "2025-09-14T21:12:59.885Z"
       }
     },
     {
@@ -1558,7 +1202,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-07-18T19:09:04.036486Z",
-        "modified_on": "2025-09-10T08:24:45.343046Z"
+        "modified_on": "2025-09-12T08:24:49.446456Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -1567,7 +1211,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:21.458Z"
+        "lastAnalyzed": "2025-09-14T21:13:03.247Z"
       }
     },
     {
@@ -1603,16 +1247,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-22T23:12:08.842634Z",
-        "modified_on": "2025-09-10T08:24:47.14908Z"
+        "modified_on": "2025-09-12T08:24:51.642354Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:22.875Z"
+        "lastAnalyzed": "2025-09-14T21:13:06.778Z"
       }
     },
     {
@@ -1650,16 +1294,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-02-14T16:39:12.421424Z",
-        "modified_on": "2025-09-10T08:24:49.132203Z"
+        "modified_on": "2025-09-12T08:24:53.748646Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:24.307Z"
+        "lastAnalyzed": "2025-09-14T21:13:10.119Z"
       }
     },
     {
@@ -1695,16 +1339,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-05-18T18:27:47.959205Z",
-        "modified_on": "2025-09-10T08:24:51.20884Z"
+        "modified_on": "2025-09-12T08:24:55.81217Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:25.685Z"
+        "lastAnalyzed": "2025-09-14T21:13:13.314Z"
       }
     },
     {
@@ -1740,16 +1384,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-08-31T18:43:15.752505Z",
-        "modified_on": "2025-09-10T08:24:53.017723Z"
+        "modified_on": "2025-09-12T08:24:57.731247Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:27.074Z"
+        "lastAnalyzed": "2025-09-14T21:13:16.525Z"
       }
     },
     {
@@ -1785,63 +1429,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-28T21:17:44.230472Z",
-        "modified_on": "2025-09-10T08:24:55.015599Z"
+        "modified_on": "2025-09-12T08:24:59.728536Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 3,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 3,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:28.417Z"
-      }
-    },
-    {
-      "domain": "exactian.com",
-      "zoneId": "dac3a59faa916b0ce22b221c482967d9",
-      "rootRecord": {
-        "id": "61e1bab3949b6c8d1947c3b738f0dd64",
-        "name": "exactian.com",
-        "type": "CNAME",
-        "content": "vps1.beweb.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2025-08-27T20:51:02.204819Z",
-        "modified_on": "2025-09-01T02:20:29.857702Z"
-      },
-      "wwwRecord": {
-        "id": "272040038f5cacdaca2de183c5455e95",
-        "name": "www.exactian.com",
-        "type": "CNAME",
-        "content": "exactian.com",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2025-08-27T20:51:02.219304Z",
-        "modified_on": "2025-09-01T02:20:37.175483Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T12:57:37.524Z"
+        "lastAnalyzed": "2025-09-14T21:13:20.145Z"
       }
     },
     {
@@ -1879,16 +1476,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-09-13T13:42:10.971036Z",
-        "modified_on": "2025-09-10T08:24:56.902586Z"
+        "modified_on": "2025-09-12T08:25:03.966068Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 3,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 3,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:29.950Z"
+        "lastAnalyzed": "2025-09-14T21:13:23.464Z"
       }
     },
     {
@@ -1924,16 +1521,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-08-26T02:42:38.038177Z",
-        "modified_on": "2025-09-10T08:24:58.824213Z"
+        "modified_on": "2025-09-12T08:25:09.307738Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:31.345Z"
+        "lastAnalyzed": "2025-09-14T21:13:26.553Z"
       }
     },
     {
@@ -1971,16 +1568,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-08-22T14:29:01.29443Z",
-        "modified_on": "2025-09-10T08:25:01.426196Z"
+        "modified_on": "2025-09-12T08:25:11.126082Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:32.879Z"
+        "lastAnalyzed": "2025-09-14T21:13:30.263Z"
       }
     },
     {
@@ -2016,16 +1613,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-03-22T23:48:34.131337Z",
-        "modified_on": "2025-09-10T08:25:07.439804Z"
+        "modified_on": "2025-09-12T08:25:13.191Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:34.343Z"
+        "lastAnalyzed": "2025-09-14T21:13:33.554Z"
       }
     },
     {
@@ -2063,16 +1660,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-05-18T22:56:32.004271Z",
-        "modified_on": "2025-09-10T08:25:09.571451Z"
+        "modified_on": "2025-09-12T08:25:15.061492Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:35.822Z"
+        "lastAnalyzed": "2025-09-14T21:13:36.826Z"
       }
     },
     {
@@ -2081,56 +1678,11 @@
       "rootProxied": false,
       "wwwProxied": false,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:37.518Z"
-      }
-    },
-    {
-      "domain": "hitcreativo.com",
-      "zoneId": "23b7d0a9e5b34aa2ce56760d26ec9758",
-      "rootRecord": {
-        "id": "a27c34e532a11d242b55ab0e6b0d600d",
-        "name": "hitcreativo.com",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2019-04-24T16:38:18.779625Z",
-        "modified_on": "2024-11-30T19:32:47.371088Z"
-      },
-      "wwwRecord": {
-        "id": "e38feca0ea0cf98c1b6510427626fdcb",
-        "name": "www.hitcreativo.com",
-        "type": "CNAME",
-        "content": "hitcreativo.com",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2019-04-24T16:38:19.612887Z",
-        "modified_on": "2024-11-30T19:32:52.822558Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T12:57:48.500Z"
+        "lastAnalyzed": "2025-09-14T21:13:40.105Z"
       }
     },
     {
@@ -2156,11 +1708,11 @@
       "rootProxied": true,
       "wwwProxied": false,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:38.914Z"
+        "lastAnalyzed": "2025-09-14T21:13:43.595Z"
       }
     },
     {
@@ -2198,16 +1750,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-02T18:45:42.722314Z",
-        "modified_on": "2025-09-10T08:25:14.153936Z"
+        "modified_on": "2025-09-12T08:25:20.223071Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:40.796Z"
+        "lastAnalyzed": "2025-09-14T21:13:47.028Z"
       }
     },
     {
@@ -2243,16 +1795,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-15T00:24:24.727057Z",
-        "modified_on": "2025-09-10T08:25:16.046312Z"
+        "modified_on": "2025-09-12T08:25:22.549293Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:42.488Z"
+        "lastAnalyzed": "2025-09-14T21:13:50.302Z"
       }
     },
     {
@@ -2288,16 +1840,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-09T16:33:15.757686Z",
-        "modified_on": "2025-09-10T08:25:17.873749Z"
+        "modified_on": "2025-09-12T08:25:24.5155Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:44.140Z"
+        "lastAnalyzed": "2025-09-14T21:13:53.571Z"
       }
     },
     {
@@ -2333,16 +1885,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-09-16T13:04:15.792137Z",
-        "modified_on": "2025-09-10T08:25:19.975315Z"
+        "modified_on": "2025-09-12T08:25:26.408261Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:45.613Z"
+        "lastAnalyzed": "2025-09-14T21:13:56.771Z"
       }
     },
     {
@@ -2378,16 +1930,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-08T13:36:30.139213Z",
-        "modified_on": "2025-09-10T08:25:21.978667Z"
+        "modified_on": "2025-09-12T08:25:28.440585Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:46.955Z"
+        "lastAnalyzed": "2025-09-14T21:14:00.034Z"
       }
     },
     {
@@ -2432,7 +1984,7 @@
         "corporateRules": 0,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:47.746Z"
+        "lastAnalyzed": "2025-09-14T21:14:02.295Z"
       }
     },
     {
@@ -2470,146 +2022,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-06-25T15:55:02.355017Z",
-        "modified_on": "2025-09-10T08:25:23.926689Z"
+        "modified_on": "2025-09-12T08:25:30.345797Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:49.245Z"
-      }
-    },
-    {
-      "domain": "laplantadecafe.ar",
-      "zoneId": "2e1b4318ebec74e7e77445e506e787a0",
-      "rootRecord": {
-        "id": "95adf9a52b5a835017fb5bc03d42b699",
-        "name": "laplantadecafe.ar",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2022-08-11T13:39:02.88054Z",
-        "modified_on": "2024-11-30T15:05:23.453071Z"
-      },
-      "wwwRecord": {
-        "id": "1e5cd97754509628bef8e643ca3e29a0",
-        "name": "www.laplantadecafe.ar",
-        "type": "CNAME",
-        "content": "laplantadecafe.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2022-08-11T13:39:21.42571Z",
-        "modified_on": "2024-11-30T15:05:27.977831Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "laplantadecafe.com",
-      "zoneId": "dd7bf54c1315803b661786e6523037ea",
-      "rootRecord": {
-        "id": "7fb99ba1bc140c505fb142f805546013",
-        "name": "laplantadecafe.com",
-        "type": "A",
-        "content": "51.222.248.70",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2022-08-11T14:21:04.26647Z",
-        "modified_on": "2022-08-17T20:58:30.001806Z"
-      },
-      "wwwRecord": {
-        "id": "7319603df8a6b27b7fcd4f26c0e8a5dd",
-        "name": "www.laplantadecafe.com",
-        "type": "A",
-        "content": "51.222.248.70",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2022-08-11T14:21:04.280561Z",
-        "modified_on": "2022-08-17T20:58:40.173541Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "laplantadecafe.com.ar",
-      "zoneId": "b309b7b796b7a262293f974e24448fca",
-      "rootRecord": {
-        "id": "2fcbecbf4f12921c82173caa1012f76d",
-        "name": "laplantadecafe.com.ar",
-        "type": "A",
-        "content": "51.222.248.70",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2022-08-11T14:19:40.459747Z",
-        "modified_on": "2022-08-17T21:06:54.766753Z"
-      },
-      "wwwRecord": {
-        "id": "50da69b7a963f5856df669a05bedd410",
-        "name": "www.laplantadecafe.com.ar",
-        "type": "CNAME",
-        "content": "laplantadecafe.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2022-08-11T14:20:07.560763Z",
-        "modified_on": "2022-08-17T21:07:00.414764Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "lastAnalyzed": "2025-09-14T21:14:05.922Z"
       }
     },
     {
@@ -2645,16 +2067,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-09-04T15:37:59.518905Z",
-        "modified_on": "2025-09-10T08:25:25.925319Z"
+        "modified_on": "2025-09-12T08:25:32.292679Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:50.752Z"
+        "lastAnalyzed": "2025-09-14T21:14:09.466Z"
       }
     },
     {
@@ -2690,16 +2112,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-04-14T20:13:57.031814Z",
-        "modified_on": "2025-09-10T08:25:27.904039Z"
+        "modified_on": "2025-09-12T08:25:34.383923Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 2,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 2,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:52.127Z"
+        "lastAnalyzed": "2025-09-14T21:14:12.646Z"
       }
     },
     {
@@ -2735,16 +2157,16 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-08-27T15:11:58.631682Z",
-        "modified_on": "2025-09-10T08:25:30.310349Z"
+        "modified_on": "2025-09-12T08:25:36.446083Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
       "securityRules": {
-        "totalRules": 3,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 3,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-11T13:35:53.523Z"
+        "lastAnalyzed": "2025-09-14T21:14:15.914Z"
       }
     },
     {
@@ -2782,7 +2204,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-08-18T20:05:53.163898Z",
-        "modified_on": "2025-09-10T08:25:32.345388Z"
+        "modified_on": "2025-09-12T08:25:38.543933Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2826,51 +2248,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-14T13:41:54.243219Z",
-        "modified_on": "2025-09-10T08:25:34.424875Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "liv.com.ar",
-      "zoneId": "ac4ab9b8263b3834a61f0b9ff03bb0a6",
-      "rootRecord": {
-        "id": "6e201110f4b386880bffe5e10a524d6f",
-        "name": "liv.com.ar",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2023-04-12T14:44:12.40465Z",
-        "modified_on": "2024-11-30T18:24:53.346999Z"
-      },
-      "wwwRecord": {
-        "id": "4cfcdf0c734e29b14f06ed6e8b314489",
-        "name": "www.liv.com.ar",
-        "type": "CNAME",
-        "content": "liv.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2023-04-12T14:45:06.203622Z",
-        "modified_on": "2024-11-30T18:24:58.044602Z"
+        "modified_on": "2025-09-12T08:25:40.619124Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2916,54 +2294,10 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-06-18T13:44:18.207412Z",
-        "modified_on": "2025-09-10T08:25:36.369353Z"
+        "modified_on": "2025-09-12T08:25:42.556631Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "marquevich.com",
-      "zoneId": "b0dd8db1843b5b383dde9c05f7d31be0",
-      "rootRecord": {
-        "id": "63ddd2b3f981ff45e2699b774c60ce43",
-        "name": "marquevich.com",
-        "type": "A",
-        "content": "184.168.221.41",
-        "proxiable": true,
-        "proxied": false,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2019-02-17T22:27:08.342879Z",
-        "modified_on": "2019-02-17T22:27:08.342879Z"
-      },
-      "wwwRecord": {
-        "id": "79d82d78fe1a288917b0909fa98244e0",
-        "name": "www.marquevich.com",
-        "type": "CNAME",
-        "content": "marquevich.com",
-        "proxiable": true,
-        "proxied": false,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2019-02-17T22:27:10.601241Z",
-        "modified_on": "2019-02-17T22:27:10.601241Z"
-      },
-      "rootProxied": false,
-      "wwwProxied": false,
       "securityRules": {
         "totalRules": 0,
         "corporateRules": 0,
@@ -3004,7 +2338,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-24T14:14:47.674148Z",
-        "modified_on": "2025-09-10T08:25:38.227221Z"
+        "modified_on": "2025-09-12T08:25:44.456406Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -3050,7 +2384,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-05-29T00:31:06.043141Z",
-        "modified_on": "2025-09-10T08:25:40.088398Z"
+        "modified_on": "2025-09-12T08:25:46.543148Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3096,7 +2430,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-06-03T15:46:52.938099Z",
-        "modified_on": "2025-09-10T08:25:41.916477Z"
+        "modified_on": "2025-09-12T08:25:48.603289Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3140,7 +2474,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-08-28T15:58:49.366637Z",
-        "modified_on": "2025-09-10T08:25:43.852887Z"
+        "modified_on": "2025-09-12T08:25:50.515198Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -3184,7 +2518,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-04-09T18:16:49.31311Z",
-        "modified_on": "2025-09-10T08:25:45.653221Z"
+        "modified_on": "2025-09-12T08:25:52.282441Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3230,7 +2564,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-04-22T13:00:18.131743Z",
-        "modified_on": "2025-09-10T08:25:48.55297Z"
+        "modified_on": "2025-09-12T08:25:54.353868Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3276,7 +2610,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-06-26T19:03:48.698446Z",
-        "modified_on": "2025-09-10T08:25:50.659705Z"
+        "modified_on": "2025-09-12T08:25:56.282803Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -3322,7 +2656,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-29T13:43:37.288667Z",
-        "modified_on": "2025-09-10T08:25:52.533477Z"
+        "modified_on": "2025-09-12T08:25:58.190171Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3366,49 +2700,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-01-03T15:24:07.063418Z",
-        "modified_on": "2025-09-10T08:25:54.548789Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "ovcestel.com.ar",
-      "zoneId": "ce290cf35be04b80e2dfc4bd6f5a262e",
-      "rootRecord": {
-        "id": "94dc441481c6ee10ed6ffdbc279cabd9",
-        "name": "ovcestel.com.ar",
-        "type": "A",
-        "content": "131.108.0.130",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2022-02-10T17:08:50.147527Z",
-        "modified_on": "2022-02-10T17:08:50.147527Z"
-      },
-      "wwwRecord": {
-        "id": "a1df22db4539ae5858bd0e2abbec7fdd",
-        "name": "www.ovcestel.com.ar",
-        "type": "A",
-        "content": "131.108.0.130",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2022-02-10T17:08:50.153868Z",
-        "modified_on": "2022-02-10T17:08:50.153868Z"
+        "modified_on": "2025-09-12T08:26:00.018861Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3452,7 +2744,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-03T17:48:33.518352Z",
-        "modified_on": "2025-09-10T08:25:56.648475Z"
+        "modified_on": "2025-09-12T08:26:02.031174Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3498,7 +2790,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-09-12T18:45:56.878243Z",
-        "modified_on": "2025-09-10T08:25:58.938526Z"
+        "modified_on": "2025-09-12T08:26:04.039862Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -3542,98 +2834,10 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-03T19:17:10.623224Z",
-        "modified_on": "2025-09-10T08:26:01.083191Z"
+        "modified_on": "2025-09-12T08:26:05.979421Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "patentarg.ar",
-      "zoneId": "975fe76ab3e734a37cd5a3fded5d4848",
-      "rootRecord": {
-        "id": "3830734a3e67321c6c946d47d976bfd9",
-        "name": "patentarg.ar",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": false,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2023-07-25T03:45:05.104647Z",
-        "modified_on": "2025-04-30T18:21:01.353539Z"
-      },
-      "wwwRecord": {
-        "id": "74fff6541c4e4a93df9b78a9fa602709",
-        "name": "www.patentarg.ar",
-        "type": "CNAME",
-        "content": "patentarg.ar",
-        "proxiable": true,
-        "proxied": false,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2023-07-25T03:45:18.938222Z",
-        "modified_on": "2025-04-30T18:21:10.716191Z"
-      },
-      "rootProxied": false,
-      "wwwProxied": false,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "patentarg.com.ar",
-      "zoneId": "4d5e909c8ec2a37973f1998497a44ba1",
-      "rootRecord": {
-        "id": "a9ac24c46c614f7ec22bd6e2a2d74b9d",
-        "name": "patentarg.com.ar",
-        "type": "A",
-        "content": "51.222.248.70",
-        "proxiable": true,
-        "proxied": false,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2023-07-25T03:45:57.515476Z",
-        "modified_on": "2024-09-26T01:09:00.51506Z"
-      },
-      "wwwRecord": {
-        "id": "b9b00743d5a1895d8e9fd2d417be225d",
-        "name": "www.patentarg.com.ar",
-        "type": "CNAME",
-        "content": "patentarg.com.ar",
-        "proxiable": true,
-        "proxied": false,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2023-07-25T03:46:07.506518Z",
-        "modified_on": "2024-09-26T01:09:05.072969Z"
-      },
-      "rootProxied": false,
-      "wwwProxied": false,
       "securityRules": {
         "totalRules": 0,
         "corporateRules": 0,
@@ -3674,7 +2878,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-29T03:36:59.903069Z",
-        "modified_on": "2025-09-10T08:26:03.20203Z"
+        "modified_on": "2025-09-12T08:26:09.883986Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3718,7 +2922,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-09-03T12:27:08.831446Z",
-        "modified_on": "2025-09-10T08:26:05.036266Z"
+        "modified_on": "2025-09-12T08:26:11.958014Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3762,7 +2966,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-03-17T15:06:40.387822Z",
-        "modified_on": "2025-09-10T08:26:06.900831Z"
+        "modified_on": "2025-09-12T08:26:13.886538Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3808,7 +3012,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-12-14T21:02:35.06967Z",
-        "modified_on": "2025-09-10T08:26:08.839123Z"
+        "modified_on": "2025-09-12T08:26:16.193586Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3854,7 +3058,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-04-03T20:52:12.409689Z",
-        "modified_on": "2025-09-10T08:26:10.819058Z"
+        "modified_on": "2025-09-12T08:26:18.138225Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3927,7 +3131,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-07T19:22:04.18351Z",
-        "modified_on": "2025-09-10T08:26:13.929001Z"
+        "modified_on": "2025-09-12T08:26:21.484337Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3973,7 +3177,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-01-04T18:34:51.104726Z",
-        "modified_on": "2025-09-10T08:26:15.724342Z"
+        "modified_on": "2025-09-12T08:26:23.30923Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4019,7 +3223,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-12-07T00:12:51.83001Z",
-        "modified_on": "2025-09-10T08:26:17.505864Z"
+        "modified_on": "2025-09-12T08:26:25.32988Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4106,7 +3310,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-05-27T13:00:22.746183Z",
-        "modified_on": "2025-09-10T08:26:22.425475Z"
+        "modified_on": "2025-09-12T08:26:30.706849Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -4152,7 +3356,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2017-08-09T03:02:10.079534Z",
-        "modified_on": "2025-09-10T08:26:24.303362Z"
+        "modified_on": "2025-09-12T08:26:32.693261Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -4196,7 +3400,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-06T14:12:23.534285Z",
-        "modified_on": "2025-09-10T08:26:26.273843Z"
+        "modified_on": "2025-09-12T08:26:35.140436Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4271,7 +3475,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-08-12T18:44:14.387431Z",
-        "modified_on": "2025-09-10T08:26:29.61638Z"
+        "modified_on": "2025-09-12T08:26:38.981376Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4341,7 +3545,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-01-12T16:10:24.299297Z",
-        "modified_on": "2025-09-10T08:26:34.192038Z"
+        "modified_on": "2025-09-12T08:26:43.980819Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4385,7 +3589,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-10-09T22:11:22.383459Z",
-        "modified_on": "2025-09-10T08:26:36.078672Z"
+        "modified_on": "2025-09-12T08:26:45.822497Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -4429,7 +3633,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-11-21T20:48:36.986426Z",
-        "modified_on": "2025-09-10T08:26:37.917489Z"
+        "modified_on": "2025-09-12T08:26:47.683651Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -4473,7 +3677,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-03-16T13:24:33.378372Z",
-        "modified_on": "2025-09-10T08:26:39.96918Z"
+        "modified_on": "2025-09-12T08:26:50.673786Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4517,7 +3721,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-24T15:51:03.518596Z",
-        "modified_on": "2025-09-10T08:26:41.930749Z"
+        "modified_on": "2025-09-12T08:26:52.700381Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4563,51 +3767,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-10-31T23:21:49.407185Z",
-        "modified_on": "2025-09-10T08:26:43.911302Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "realstep.com.ar",
-      "zoneId": "2c92d5c35795bfc1adcfc5257203d166",
-      "rootRecord": {
-        "id": "b81dd10db84672a970bd0620d2fb4687",
-        "name": "realstep.com.ar",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2025-02-08T02:49:33.909646Z",
-        "modified_on": "2025-02-10T22:06:15.752045Z"
-      },
-      "wwwRecord": {
-        "id": "113f61f00c156f99aadfa266fd24c4bd",
-        "name": "www.realstep.com.ar",
-        "type": "CNAME",
-        "content": "realstep.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2025-02-08T02:50:01.588594Z",
-        "modified_on": "2025-02-10T22:06:19.592837Z"
+        "modified_on": "2025-09-12T08:26:54.830839Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4653,7 +3813,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-11-22T23:40:25.644856Z",
-        "modified_on": "2025-09-10T08:26:45.784Z"
+        "modified_on": "2025-09-12T08:26:57.071873Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4711,7 +3871,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-10-31T20:00:11.923423Z",
-        "modified_on": "2025-09-10T08:26:49.142332Z"
+        "modified_on": "2025-09-12T08:27:00.746259Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4757,7 +3917,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-17T20:12:04.272065Z",
-        "modified_on": "2025-09-10T08:26:51.549379Z"
+        "modified_on": "2025-09-12T08:27:02.850786Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4815,94 +3975,6 @@
       }
     },
     {
-      "domain": "sexto-sentido.com.ar",
-      "zoneId": "10b115e983b445b2824406c92abe31e9",
-      "rootRecord": {
-        "id": "0443557a691b498b6521c43e4e77de3d",
-        "name": "sexto-sentido.com.ar",
-        "type": "A",
-        "content": "185.133.35.13",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2021-07-04T22:27:59.720566Z",
-        "modified_on": "2024-06-25T21:13:18.529106Z"
-      },
-      "wwwRecord": {
-        "id": "ce35d605bbbfc7abbdb098396f5017e3",
-        "name": "www.sexto-sentido.com.ar",
-        "type": "CNAME",
-        "content": "sextosentido13.mitiendanube.com",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2021-07-04T22:15:20.453753Z",
-        "modified_on": "2024-06-25T21:13:25.250106Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "sinergiq.com",
-      "zoneId": "54598f437cd8ca8114de9a15f7d013e5",
-      "rootRecord": {
-        "id": "fd3fb261c290926aff5905ea62bdce21",
-        "name": "sinergiq.com",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2016-06-29T15:01:49.887404Z",
-        "modified_on": "2024-11-30T22:49:32.149011Z"
-      },
-      "wwwRecord": {
-        "id": "17f54072e701d2ee880be794a6fd430f",
-        "name": "www.sinergiq.com",
-        "type": "CNAME",
-        "content": "sinergiq.com",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2021-11-10T05:37:06.160441Z",
-        "modified_on": "2024-11-30T22:49:38.927894Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
       "domain": "somoswapp.com.ar",
       "zoneId": "9cfb6d33e370c54298b1253be36e1ac9",
       "rootRecord": {
@@ -4935,7 +4007,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-01-16T14:07:30.240158Z",
-        "modified_on": "2025-09-10T08:26:53.548955Z"
+        "modified_on": "2025-09-12T08:27:04.765995Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4979,7 +4051,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-03-13T14:50:46.456173Z",
-        "modified_on": "2025-09-10T08:26:55.401056Z"
+        "modified_on": "2025-09-12T08:27:06.993624Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -5023,7 +4095,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-10-02T16:32:45.913754Z",
-        "modified_on": "2025-09-10T08:26:58.295223Z"
+        "modified_on": "2025-09-12T08:27:09.19461Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5067,54 +4139,10 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-12-20T15:32:16.880723Z",
-        "modified_on": "2025-09-10T08:27:00.134099Z"
+        "modified_on": "2025-09-12T08:27:11.086921Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "tiendasexclusivas.com",
-      "zoneId": "6ac73adf770a1a2b2e43b6713959096b",
-      "rootRecord": {
-        "id": "820ac609b4a151bf3425a294d79748f1",
-        "name": "tiendasexclusivas.com",
-        "type": "A",
-        "content": "1.1.1.1",
-        "proxiable": false,
-        "proxied": false,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2018-07-17T02:43:50.51878Z",
-        "modified_on": "2024-06-25T21:19:33.358444Z"
-      },
-      "wwwRecord": {
-        "id": "9bdbdab1c4563a11f2c524f3517d12fe",
-        "name": "www.tiendasexclusivas.com",
-        "type": "CNAME",
-        "content": "tiendasexclusivas.com",
-        "proxiable": true,
-        "proxied": false,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2018-07-17T02:43:51.287504Z",
-        "modified_on": "2024-06-25T21:19:39.086254Z"
-      },
-      "rootProxied": false,
-      "wwwProxied": false,
       "securityRules": {
         "totalRules": 0,
         "corporateRules": 0,
@@ -5155,51 +4183,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-03T01:09:33.882644Z",
-        "modified_on": "2025-09-10T08:27:01.994298Z"
-      },
-      "rootProxied": true,
-      "wwwProxied": true,
-      "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
-      }
-    },
-    {
-      "domain": "torreondelmonje.com.ar",
-      "zoneId": "9128053a94d316f95efdf34d02474b26",
-      "rootRecord": {
-        "id": "d3dab3c8a09c22a9b394006cf4d130b8",
-        "name": "torreondelmonje.com.ar",
-        "type": "A",
-        "content": "195.35.17.168",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {},
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2021-06-07T02:55:31.389906Z",
-        "modified_on": "2024-12-01T02:07:34.735166Z"
-      },
-      "wwwRecord": {
-        "id": "66c5348c2091d3f842fd498c4f7e1f26",
-        "name": "www.torreondelmonje.com.ar",
-        "type": "CNAME",
-        "content": "torreondelmonje.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2021-06-07T02:55:40.50133Z",
-        "modified_on": "2024-12-01T02:07:39.212263Z"
+        "modified_on": "2025-09-12T08:27:12.995822Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5243,7 +4227,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-25T21:30:19.782446Z",
-        "modified_on": "2025-09-10T08:27:03.928609Z"
+        "modified_on": "2025-09-12T08:27:14.998873Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5289,7 +4273,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-01T22:14:17.501654Z",
-        "modified_on": "2025-09-10T08:27:05.787423Z"
+        "modified_on": "2025-09-12T08:27:16.929028Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5360,7 +4344,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-07-02T18:43:44.276835Z",
-        "modified_on": "2025-09-10T08:27:09.180156Z"
+        "modified_on": "2025-09-12T08:27:20.260743Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5404,7 +4388,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-19T14:03:41.012238Z",
-        "modified_on": "2025-09-10T08:27:11.075605Z"
+        "modified_on": "2025-09-12T08:27:22.48081Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5521,7 +4505,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-10-30T17:50:50.431424Z",
-        "modified_on": "2025-09-10T08:27:14.759058Z"
+        "modified_on": "2025-09-12T08:27:25.674147Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5567,7 +4551,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-08-08T17:31:43.039636Z",
-        "modified_on": "2025-09-10T08:27:16.760158Z"
+        "modified_on": "2025-09-12T08:27:27.708528Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5654,6 +4638,6 @@
       }
     }
   ],
-  "lastUpdate": "2025-09-11T13:36:15.309Z",
-  "totalCount": 133
+  "lastUpdate": "2025-09-15T04:08:48.555Z",
+  "totalCount": 110
 }
