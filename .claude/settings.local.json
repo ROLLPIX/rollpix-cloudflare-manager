@@ -10,7 +10,13 @@
       "Bash(claude mcp add:*)",
       "Bash(npx shadcn@latest add:*)",
       "Bash(find:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git clean:*)",
+      "Bash(git pull:*)",
+      "Bash(npx next:*)",
+      "Bash(curl:*)",
+      "Bash(killall:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []
