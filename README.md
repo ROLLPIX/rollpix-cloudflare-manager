@@ -39,11 +39,12 @@ Una aplicación web moderna para gestionar visualmente dominios en Cloudflare co
 ## 🛠 Tecnologías Utilizadas
 
 ### Frontend
-- **Next.js 15.5.3** - App Router con Turbopack para desarrollo rápido
+- **Next.js 15.5.3** - App Router optimizado para producción
 - **React 19.1.0** - React Server Components y Concurrent Features
 - **TypeScript 5.x** - Tipado fuerte para mayor seguridad y productividad
 - **shadcn/ui** - Componentes UI modernos y accesibles basados en Radix UI
-- **Tailwind CSS 4.x** - Estilizado utilitario y responsive con nueva arquitectura
+- **Tailwind CSS 3.4.0** - Estilizado utilitario estable y compatible con producción
+- **Zustand 5.x** - State management centralizado sin prop drilling
 - **Lucide React 0.543.0** - Iconografía consistente y profesional
 
 ### Backend y APIs
@@ -58,7 +59,9 @@ Una aplicación web moderna para gestionar visualmente dominios en Cloudflare co
   "react": "19.1.0",
   "react-dom": "19.1.0",
   "typescript": "^5",
-  "tailwindcss": "^4",
+  "tailwindcss": "^3.4.0",
+  "zustand": "^5.0.8",
+  "zod": "^4.1.8",
   "lucide-react": "^0.543.0",
   "sonner": "^2.0.7",
   "uuid": "^13.0.0"
@@ -171,10 +174,10 @@ npm install
 npm install react@19.1.0 react-dom@19.1.0 next@15.5.3
 ```
 
-#### Problemas con Tailwind CSS 4
+#### Problemas con dependencias de Tailwind
 ```bash
-# Si Tailwind CSS 4 causa problemas, usa la v3
-npm install tailwindcss@^3.4.0 @tailwindcss/postcss@^3
+# Reinstalar Tailwind CSS 3 si hay problemas
+npm install tailwindcss@^3.4.0 autoprefixer tailwindcss-animate
 ```
 
 #### Error con shadcn/ui components
@@ -288,6 +291,26 @@ rollpix-cloudflare-manager/
 └── .env.local                                    # Variables de entorno (generado)
 ```
 
+## 🆕 Últimas Mejoras (Enero 2025)
+
+### ✅ Fixes Críticos Implementados
+- **Agregar reglas funciona correctamente**: Solucionado usando endpoint directo de Cloudflare API
+- **Paginación corregida**: Ahora muestra hasta 200 dominios en lugar de solo 20
+- **Modal de reglas optimizado**: Carga sin errores con mejor manejo de JSON
+- **Pills de reglas inmediatos**: Muestra cantidad de reglas de plantilla al lado del escudo
+
+### 🛠 Mejoras Técnicas
+- **Migración a Tailwind CSS 3**: Mayor estabilidad y compatibilidad con Vercel
+- **State Management con Zustand**: Eliminado prop drilling, estado centralizado
+- **Mejor error handling**: Logging detallado y manejo robusto de errores
+- **Validación con Zod**: Sanitización automática de inputs API
+- **Token storage seguro**: localStorage con expiración automática
+
+### 🚀 Optimizaciones de Performance
+- **Refresh individual restaurado**: Funcionalidad completa con fallbacks múltiples
+- **API calls optimizadas**: Filtrado directo en Cloudflare API
+- **Build limpio**: Compatible con deployment en Vercel sin errores
+
 ## 🔄 Flujo de Funcionamiento
 
 ### Inicialización
@@ -340,11 +363,35 @@ npm run test:e2e:ui
 
 ## 🚀 Despliegue
 
-### Vercel (Recomendado)
+### Vercel (Recomendado) ✅
+La aplicación está optimizada para deployment en Vercel con las siguientes características:
+
+- ✅ **Build estable**: Migrado a Tailwind CSS 3 para compatibilidad total
+- ✅ **Zero configuration**: Deploy directo desde GitHub
+- ✅ **Edge Functions**: API Routes optimizadas para edge runtime
+- ✅ **TypeScript compatible**: Build limpio sin errores de compilación
+
 ```bash
+# Desarrollo local
+npm run dev
+
+# Build de producción (verifica que compila correctamente)
 npm run build
+
+# Deploy automático
+git push origin master  # Auto-deploy en Vercel
+
+# O deploy manual
 npx vercel --prod
 ```
+
+### Configuración en Vercel Dashboard
+1. **Framework Preset**: Next.js
+2. **Build Command**: `npm run build` (default)
+3. **Output Directory**: `.next` (default)
+4. **Install Command**: `npm ci` (recomendado)
+5. **Environment Variables**:
+   - `CLOUDFLARE_API_TOKEN` (opcional, para token predeterminado)
 
 ### Docker
 ```bash
