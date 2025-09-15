@@ -32,7 +32,9 @@
       "WebSearch",
       "Bash(start http://localhost:3001)",
       "Bash(dir:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(start http://localhost:3003)",
+      "Bash(start http://localhost:3002)"
     ],
     "deny": [],
     "ask": []

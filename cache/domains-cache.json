@@ -376,11 +376,11 @@
       "underAttackMode": true,
       "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
+        "totalRules": 1,
+        "corporateRules": 1,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:09.032Z"
+        "lastAnalyzed": "2025-09-15T04:55:31.737Z"
       }
     },
     {
@@ -766,7 +766,7 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:39.857Z"
+        "lastAnalyzed": "2025-09-15T21:32:39.871Z"
       }
     },
     {
@@ -4638,6 +4638,6 @@
       }
     }
   ],
-  "lastUpdate": "2025-09-15T04:08:48.555Z",
+  "lastUpdate": "2025-09-15T21:41:33.664Z",
   "totalCount": 110
 }

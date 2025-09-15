@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Key, Shield, Globe, CheckCircle, XCircle, Clock, AlertTriangle, LogOut } from 'lucide-react';
 import { tokenStorage } from '@/lib/tokenStorage';
+import { SimpleThemeToggle } from '@/components/SimpleThemeToggle';
 import Image from 'next/image';
 
 export default function Home() {
@@ -108,8 +109,13 @@ export default function Home() {
     <div className="container mx-auto py-8 px-4">
       {!isTokenSet ? (
         <div className="max-w-4xl mx-auto space-y-6">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-3xl font-bold flex items-center gap-2"><Key className="h-8 w-8" />Configuración API Cloudflare</h1>
+            </div>
+            <SimpleThemeToggle />
+          </div>
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2"><Key className="h-8 w-8" />Configuración API Cloudflare</h1>
             <p className="text-muted-foreground mt-2">Configura y verifica tu token API de Cloudflare para gestionar dominios y reglas de seguridad</p>
             <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mt-4">
               <div className="flex items-start gap-2">
@@ -180,9 +186,10 @@ export default function Home() {
                   <path d="M95.04 9.847c-.167 0-.334.004-.5.013a.28.28 0 00-.079.017.285.285 0 00-.182.192l-.712 2.456c-.305 1.055-.192 2.03.322 2.746.471.661 1.258 1.05 2.213 1.094l3.858.232a.351.351 0 01.275.149.365.365 0 01.041.328.484.484 0 01-.42.32l-4.008.232c-2.176.1-4.521 1.856-5.342 3.998l-.29.756a.212.212 0 00.095.262c.03.017.062.027.096.028h13.802a.366.366 0 00.356-.265 9.846 9.846 0 00.367-2.677c-.001-5.457-4.429-9.88-9.891-9.88z" fill="#FBAD41"></path>
                 </svg>
               </div>
-              
+
             </div>
             <div className="flex items-center gap-2">
+              <SimpleThemeToggle />
               <div className="text-xs text-muted-foreground mr-2">
                 <div>Token: ***{storedToken?.slice(-8)}</div>
                 {tokenAge !== null && <div>Guardado: {tokenAge === 0 ? 'Ahora' : `hace ${tokenAge}h`}</div>}

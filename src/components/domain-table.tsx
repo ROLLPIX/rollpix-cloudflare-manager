@@ -50,8 +50,14 @@ export function DomainTable() {
   } = useDomainStore();
 
   useEffect(() => {
-    initializeDomains();
-  }, [initializeDomains]);
+    console.log('[DomainTable] useEffect running, initializeDomains type:', typeof initializeDomains);
+    if (typeof initializeDomains === 'function') {
+      console.log('[DomainTable] calling initializeDomains...');
+      initializeDomains();
+    } else {
+      console.error('[DomainTable] initializeDomains is not a function!', initializeDomains);
+    }
+  }, []); // Solo ejecutar una vez al montar el componente
 
   const processedDomains = useMemo(() => {
     let processed = [...allDomains];

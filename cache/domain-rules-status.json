@@ -302,7 +302,7 @@
           "description": "waf02"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:39.857Z"
+      "lastAnalyzed": "2025-09-15T21:32:39.871Z"
     },
     {
       "zoneId": "7b58275dcd7559feb839b9b6bff63cc7",
@@ -805,5 +805,5 @@
       "lastAnalyzed": "2025-09-14T21:14:15.914Z"
     }
   ],
-  "lastUpdated": "2025-09-15T04:55:31.737Z"
+  "lastUpdated": "2025-09-15T21:32:39.871Z"
 }

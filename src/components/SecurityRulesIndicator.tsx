@@ -16,8 +16,6 @@ interface SecurityRulesIndicatorProps {
 
 export function SecurityRulesIndicator({ domain, compact = false }: SecurityRulesIndicatorProps) {
   const [modalOpen, setModalOpen] = useState(false);
-  const [templateRules, setTemplateRules] = useState<string[]>([]);
-  const [rulesLoaded, setRulesLoaded] = useState(false);
   const securityRules = domain.securityRules;
 
   // Debug logging
@@ -25,56 +23,27 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
     console.log(`[SecurityRulesIndicator] Domain: ${domain.domain}, Rules:`, securityRules);
   }, [domain.domain, securityRules]);
 
-  const loadTemplateRules = async () => {
-    const apiToken = tokenStorage.getToken();
-    if (!apiToken || !domain.zoneId || rulesLoaded) return;
-    
-    try {
-      const response = await fetch(`/api/domains/rules/${domain.zoneId}`, {
-        headers: { 'x-api-token': apiToken }
-      });
-      
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          const friendlyIds = result.data.templateRules.map((rule: any) => rule.friendlyId);
-          setTemplateRules(friendlyIds);
-          setRulesLoaded(true);
-        }
-      }
-    } catch (error) {
-      console.error('Error loading template rules:', error);
-    }
-  };
-
-  React.useEffect(() => {
-    if (securityRules && securityRules.totalRules > 0 && !rulesLoaded) {
-      loadTemplateRules();
-    }
-  }, [securityRules, rulesLoaded, loadTemplateRules]);
-
   if (!securityRules) {
     return (
       <div className="flex items-center gap-2">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
-                className="h-8 px-2"
+                className="h-8 px-2 opacity-50"
                 onClick={() => {
                   if (tokenStorage.getToken()) {
-                    loadTemplateRules();
                     setModalOpen(true);
                   }
                 }}
               >
-                <ShieldOff className="h-4 w-4" />
+                <Clock className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Sin reglas de seguridad - Click para configurar</p>
+              <p>Datos de reglas no analizados - Click para cargar</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -94,9 +63,6 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
                 className="h-8 px-2"
                 onClick={() => {
                   if (tokenStorage.getToken()) {
-                    if (!rulesLoaded) {
-                      loadTemplateRules();
-                    }
                     setModalOpen(true);
                   }
                 }}

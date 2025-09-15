@@ -191,9 +191,20 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         set({
           allDomains: mergedDomains,
           totalCount: domainData.totalCount,
-          lastUpdate: new Date(),
-          loadingProgress: { completed: domainData.totalCount, total: domainData.totalCount }
+          lastUpdate: new Date()
         });
+
+        // Save to cache
+        try {
+          await fetch('/api/cache', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ domains: mergedDomains })
+          });
+          console.log('[DomainStore] Cache updated after fast fetch');
+        } catch (cacheError) {
+          console.warn('[DomainStore] Failed to save cache:', cacheError);
+        }
 
         toast.success(`${domainData.totalCount} dominios actualizados rápidamente (reglas preservadas).`);
       } else {
@@ -203,17 +214,16 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
           allDomains: domainData.domains,
           totalCount: domainData.totalCount,
           lastUpdate: new Date(),
-          loadingProgress: { completed: domainData.totalCount, total: domainData.totalCount }
+          loadingProgress: { completed: 1, total: 3 } // Step 1 of 3: domains loaded
         });
-        // Slow path - include security rules analysis
-        if (!isBackground) {
-          set({ loadingProgress: { completed: domainData.totalCount / 2, total: domainData.totalCount } });
-        }
 
         const accessibleZoneIds = domainData.domains.map((domain: any) => domain.zoneId);
         console.log('[DomainStore] Analyzing security rules for accessible zones...', accessibleZoneIds.length);
 
         try {
+          // Step 2: Analyze security rules
+          set({ loadingProgress: { completed: 2, total: 3 } });
+
           const analyzeResponse = await fetch('/api/security-rules/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -225,6 +235,9 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
           });
 
           if (analyzeResponse.ok) {
+            // Step 3: Enrich domains with rules data
+            set({ loadingProgress: { completed: 3, total: 3 } });
+
             const enrichResponse = await fetch('/api/domains/enrich', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' }
@@ -233,18 +246,50 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
             if (enrichResponse.ok) {
               const enrichResult = await enrichResponse.json();
               set({
-                allDomains: enrichResult.success ? enrichResult.data.domains : domainData.domains,
-                loadingProgress: { completed: domainData.totalCount, total: domainData.totalCount }
+                allDomains: enrichResult.success ? enrichResult.data.domains : domainData.domains
               });
               toast.success(`${domainData.totalCount} dominios y reglas actualizados completamente.`);
             } else {
+              // Save basic domains to cache when enrich fails
+              try {
+                await fetch('/api/cache', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ domains: domainData.domains })
+                });
+                console.log('[DomainStore] Cache updated after enrich failure');
+              } catch (cacheError) {
+                console.warn('[DomainStore] Failed to save cache after enrich failure:', cacheError);
+              }
               toast.success(`${domainData.totalCount} dominios actualizados (reglas fallaron).`);
             }
           } else {
+            // Save basic domains to cache when analyze fails
+            try {
+              await fetch('/api/cache', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ domains: domainData.domains })
+              });
+              console.log('[DomainStore] Cache updated after analyze failure');
+            } catch (cacheError) {
+              console.warn('[DomainStore] Failed to save cache after analyze failure:', cacheError);
+            }
             toast.success(`${domainData.totalCount} dominios actualizados (análisis de reglas falló).`);
           }
         } catch (rulesError) {
           console.warn('[DomainStore] Rules analysis failed:', rulesError);
+          // Save basic domains to cache when rules analysis fails
+          try {
+            await fetch('/api/cache', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ domains: domainData.domains })
+            });
+            console.log('[DomainStore] Cache updated after rules analysis error');
+          } catch (cacheError) {
+            console.warn('[DomainStore] Failed to save cache after rules analysis error:', cacheError);
+          }
           toast.success(`${domainData.totalCount} dominios actualizados (sin análisis de reglas).`);
         }
       }
@@ -300,26 +345,43 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
       if (cacheResponse.status === 'fulfilled' && cacheResponse.value.ok) {
         try {
           const cacheData = await cacheResponse.value.json();
-          if (cacheData.domains && cacheData.domains.length > 0) {
+          console.log('[DomainStore] Cache response received:', cacheData);
+
+          if (cacheData.domains && Array.isArray(cacheData.domains) && cacheData.domains.length > 0) {
             const loadTime = Date.now() - startTime;
             console.log(`[DomainStore] Cache loaded in ${loadTime}ms with ${cacheData.domains.length} domains`);
 
             set({
               allDomains: cacheData.domains,
-              totalCount: cacheData.totalCount,
-              lastUpdate: new Date(cacheData.lastUpdate)
+              totalCount: cacheData.totalCount || cacheData.domains.length,
+              lastUpdate: cacheData.lastUpdate ? new Date(cacheData.lastUpdate) : new Date()
             });
 
-            toast.success('Dominios cargados desde caché.');
+            toast.success(`${cacheData.domains.length} dominios cargados desde caché.`);
             return;
+          } else {
+            console.log('[DomainStore] Cache exists but no valid domains found:', cacheData);
           }
         } catch (e) {
           console.error("Failed to parse cache:", e);
         }
+      } else {
+        console.log('[DomainStore] Cache response failed:', {
+          status: cacheResponse.status,
+          ok: cacheResponse.status === 'fulfilled' ? cacheResponse.value.ok : false
+        });
       }
 
-      console.log('[DomainStore] No cache available. Use "Actualizar Todo" button to load domains.');
-      toast.info('Usa el botón "Actualizar Todo" para cargar los dominios desde Cloudflare.');
+      console.log('[DomainStore] No cache available. Auto-fetching domains from Cloudflare...');
+
+      // Auto-fetch if no cache is available
+      const apiToken = tokenStorage.getToken();
+      if (apiToken) {
+        console.log('[DomainStore] Token available, starting auto-fetch...');
+        await get().fetchFromCloudflare(false, false); // Fast fetch without rules
+      } else {
+        toast.info('Introduce tu token de Cloudflare para cargar los dominios.');
+      }
 
     } catch (error) {
       console.error('[DomainStore] Error in initializeDomains:', error);
@@ -369,7 +431,6 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     console.log(`[DomainStore] Starting refresh for domain ${zoneId}`);
     set({ refreshingDomainId: zoneId });
     const apiToken = tokenStorage.getToken();
-    console.log('[DomainStore] RefreshSingle - Token being used:', apiToken ? `${apiToken.substring(0, 8)}...` : 'null');
     if (!apiToken) {
       toast.error('API Token no encontrado.');
       set({ refreshingDomainId: null });
@@ -379,94 +440,78 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     try {
       console.log(`[DomainStore] Refreshing domain ${zoneId} - trying optimized approach`);
 
-      // Try optimized approach: refresh rules first, then get fresh data from cache
-      let rulesUpdated = false;
+      // Get basic domain data for specific zone
+      console.log(`[DomainStore] Getting basic domain data for ${zoneId}`);
+      const domainResponse = await fetch(`/api/domains?zoneId=${zoneId}`, {
+        headers: { 'x-api-token': apiToken },
+      });
 
-      try {
-        console.log(`[DomainStore] Analyzing security rules for ${zoneId}`);
-        const analyzeResponse = await fetch('/api/security-rules/analyze', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            apiToken,
-            zoneIds: [zoneId],
-            forceRefresh: true
-          })
-        });
+      if (domainResponse.ok) {
+        const domainData = await domainResponse.json();
+        const updatedDomain = domainData.domains?.find((d: any) => d.zoneId === zoneId);
 
-        if (analyzeResponse.ok) {
-          console.log(`[DomainStore] Security rules analysis completed`);
-          rulesUpdated = true;
-        } else {
-          console.warn(`[DomainStore] Security rules analysis failed: ${analyzeResponse.status}`);
-        }
-      } catch (error) {
-        console.warn(`[DomainStore] Security rules analysis error:`, error);
-      }
+        if (updatedDomain) {
+          console.log(`[DomainStore] Found basic domain data, now getting security rules for ${zoneId}`);
 
-      // Get fresh domain data
-      try {
-        console.log(`[DomainStore] Fetching domain data for ${zoneId}`);
-        const domainResponse = await fetch(`/api/domains?zoneId=${zoneId}`, {
-          headers: { 'x-api-token': apiToken }
-        });
+          // Try to get security rules for this specific domain
+          try {
+            const rulesResponse = await fetch(`/api/domains/rules/${zoneId}`, {
+              headers: { 'x-api-token': apiToken }
+            });
 
-        if (domainResponse.ok) {
-          const domainData = await domainResponse.json();
-          const updatedDomain = domainData.domains?.[0];
+            if (rulesResponse.ok) {
+              const rulesResult = await rulesResponse.json();
+              console.log(`[DomainStore] Rules response for ${zoneId}:`, rulesResult);
 
-          if (updatedDomain) {
-            console.log(`[DomainStore] Fresh domain data obtained for individual refresh`);
-
-            // For individual domain refresh, we want to use the fresh data from Cloudflare
-            // instead of enriching from potentially stale cache
-            let finalDomain = updatedDomain;
-
-            // If rules were updated, try to get fresh security rules data
-            if (rulesUpdated) {
-              try {
-                console.log(`[DomainStore] Getting fresh security rules for ${zoneId}`);
-                const analyzeResponse = await fetch('/api/security-rules/analyze', {
-                  method: 'GET',
-                  headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (analyzeResponse.ok) {
-                  const analyzeResult = await analyzeResponse.json();
-                  if (analyzeResult.success) {
-                    const domainRulesStatus = analyzeResult.data.domainStatuses?.find((ds: any) => ds.zoneId === zoneId);
-                    if (domainRulesStatus) {
-                      // Merge security rules data with fresh domain data
-                      finalDomain = {
-                        ...updatedDomain,
-                        securityRules: {
-                          totalRules: domainRulesStatus.appliedRules?.length || 0,
-                          appliedRules: domainRulesStatus.appliedRules || [],
-                          customRules: domainRulesStatus.customRules || []
-                        }
-                      };
-                      console.log(`[DomainStore] Fresh security rules merged`);
-                    }
+              if (rulesResult.success) {
+                // Combine domain data with rules data
+                const templateRulesCount = rulesResult.data.templateRules?.length || 0;
+                const customRulesCount = rulesResult.data.customRules?.length || 0;
+                const enrichedDomain = {
+                  ...updatedDomain,
+                  securityRules: {
+                    totalRules: templateRulesCount + customRulesCount,
+                    corporateRules: templateRulesCount,
+                    customRules: customRulesCount,
+                    hasConflicts: rulesResult.data.hasConflicts || false
                   }
-                }
-              } catch (error) {
-                console.warn(`[DomainStore] Failed to get fresh security rules, using domain data without rules:`, error);
+                };
+
+                console.log(`[DomainStore] Enriched domain with rules:`, enrichedDomain.securityRules);
+
+                set(state => ({
+                  allDomains: state.allDomains.map(d =>
+                    d.zoneId === zoneId ? enrichedDomain : d
+                  ),
+                  lastUpdate: new Date()
+                }));
+
+                toast.success(`Dominio ${enrichedDomain.domain} actualizado con reglas de seguridad.`);
+                return;
               }
             }
-
-            // Update state
-            set(state => ({
-              allDomains: state.allDomains.map(d => d.zoneId === zoneId ? finalDomain : d),
-              lastUpdate: new Date()
-            }));
-
-            toast.success(`Dominio ${finalDomain.domain} actualizado correctamente.`);
-            return;
+          } catch (rulesError) {
+            console.warn(`[DomainStore] Failed to get security rules for ${zoneId}:`, rulesError);
           }
+
+          // Fallback: use domain data without fresh rules
+          const { allDomains } = get();
+          const existingDomain = allDomains.find(d => d.zoneId === zoneId);
+          const finalDomain = {
+            ...updatedDomain,
+            securityRules: existingDomain?.securityRules || updatedDomain.securityRules
+          };
+
+          set(state => ({
+            allDomains: state.allDomains.map(d => d.zoneId === zoneId ? finalDomain : d),
+            lastUpdate: new Date()
+          }));
+
+          toast.success(`Dominio ${finalDomain.domain} actualizado (reglas preservadas).`);
+          return;
         }
-      } catch (error) {
-        console.warn(`[DomainStore] Domain fetch failed:`, error);
       }
+
 
       // Fallback: use cache data but inform user
       console.log(`[DomainStore] Falling back to cache data`);
@@ -523,7 +568,9 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         })
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (response.ok && result.success) {
         // Update local state
         set(state => ({
           allDomains: state.allDomains.map(d =>
@@ -532,7 +579,10 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         }));
         toast.success(`Under Attack Mode ${enabled ? 'activado' : 'desactivado'} correctamente.`);
       } else {
-        toast.error('Error al cambiar Under Attack Mode.');
+        // Show specific error message from API
+        const errorMsg = result.error || 'Error al cambiar Under Attack Mode.';
+        toast.error(errorMsg);
+        console.error('Under Attack Mode toggle failed:', result);
       }
     } catch (error) {
       console.error('Error toggling Under Attack Mode:', error);
@@ -575,7 +625,9 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         })
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (response.ok && result.success) {
         // Update local state
         set(state => ({
           allDomains: state.allDomains.map(d =>
@@ -584,7 +636,10 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         }));
         toast.success(`Bot Fight Mode ${enabled ? 'activado' : 'desactivado'} correctamente.`);
       } else {
-        toast.error('Error al cambiar Bot Fight Mode.');
+        // Show specific error message from API
+        const errorMsg = result.error || 'Error al cambiar Bot Fight Mode.';
+        toast.error(errorMsg);
+        console.error('Bot Fight Mode toggle failed:', result);
       }
     } catch (error) {
       console.error('Error toggling Bot Fight Mode:', error);

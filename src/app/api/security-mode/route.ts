@@ -105,17 +105,30 @@ export async function POST(request: NextRequest) {
         }
 
         const currentConfig = await getCurrentResponse.json();
+        console.log(`[Bot Fight Toggle] Current config for zone ${zoneId}:`, currentConfig.result);
 
-        // Update configuration with Bot Fight Mode
+        // Update configuration with Bot Fight Mode - send only essential fields
+        // This avoids read-only field errors from Cloudflare
         const updateConfig = {
-          ...currentConfig.result,
           fight_mode: enabled,
           enable_js: enabled,
-          // Set appropriate actions for Bot Fight Mode
-          sbfm_likely_automated: enabled ? 'challenge' : 'allow',
-          sbfm_definitely_automated: enabled ? 'block' : 'allow',
-          sbfm_verified_bots: 'allow', // Always allow verified bots
+          // Include only essential Super Bot Fight Mode settings if they exist
+          ...(currentConfig.result.sbfm_likely_automated && {
+            sbfm_likely_automated: enabled ? 'challenge' : 'allow'
+          }),
+          ...(currentConfig.result.sbfm_definitely_automated && {
+            sbfm_definitely_automated: enabled ? 'block' : 'allow'
+          }),
+          ...(currentConfig.result.sbfm_verified_bots && {
+            sbfm_verified_bots: 'allow'
+          })
         };
+
+        console.log(`[Bot Fight Toggle] Sending update for zone ${zoneId}:`);
+        console.log(`- fight_mode: ${currentConfig.result.fight_mode} → ${enabled}`);
+        console.log(`- enable_js: ${currentConfig.result.enable_js} → ${enabled}`);
+        console.log(`- Sending minimal config (avoiding read-only fields):`, updateConfig);
+        console.log(`- Excluded read-only fields: using_latest_model, auto_update_model, suppress_session_score`);
 
         response = await fetch(
           `https://api.cloudflare.com/client/v4/zones/${zoneId}/bot_management`,
@@ -129,8 +142,12 @@ export async function POST(request: NextRequest) {
           }
         );
 
+        const responseData = await response.json();
+        console.log(`[Bot Fight Toggle] Response status: ${response.status}`);
+        console.log(`[Bot Fight Toggle] Response data:`, responseData);
+
         if (!response.ok) {
-          const errorData = await response.json();
+          const errorData = responseData;
 
           // Check if Bot Fight Mode is not available for this plan
           if (errorData.errors?.[0]?.code === 1003 || errorData.errors?.[0]?.message?.includes('not available')) {
@@ -154,6 +171,9 @@ export async function POST(request: NextRequest) {
             details: errorData
           });
         }
+
+        // If we get here, the request was successful
+        response = { ok: true, json: () => Promise.resolve(responseData) } as Response;
 
       } catch (error) {
         // Try fallback methods for accounts without Bot Management API access
@@ -242,6 +262,31 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
+
+    console.log(`[${mode} Toggle] SUCCESS - Zone: ${zoneId}, Enabled: ${enabled}`);
+    console.log(`[${mode} Toggle] Final result:`, data.result);
+
+    // Verify the change actually took effect
+    if (mode === 'bot_fight' && data.result) {
+      const actualFightMode = data.result.fight_mode;
+      console.log(`[${mode} Toggle] VERIFICATION - Expected fight_mode: ${enabled}, Actual: ${actualFightMode}`);
+
+      if (actualFightMode !== enabled) {
+        console.error(`[${mode} Toggle] MISMATCH - Bot Fight Mode did not change as expected!`);
+        return NextResponse.json({
+          success: false,
+          mode,
+          enabled: false,
+          zoneId,
+          error: `Bot Fight Mode no se actualizó correctamente. Esperado: ${enabled}, Actual: ${actualFightMode}`,
+          debug: {
+            expected: enabled,
+            actual: actualFightMode,
+            fullResult: data.result
+          }
+        });
+      }
+    }
 
     return NextResponse.json({
       success: true,
