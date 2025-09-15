@@ -3,9 +3,11 @@ import { CloudflareAPI } from '@/lib/cloudflare';
 
 // GET - Get categorized rules for a specific domain
 export async function GET(
-  request: NextRequest, 
+  request: NextRequest,
   { params }: { params: Promise<{ zoneId: string }> }
 ) {
+  const { zoneId } = await params;
+
   try {
     const apiToken = request.headers.get('x-api-token');
     if (!apiToken) {
@@ -14,8 +16,6 @@ export async function GET(
         error: 'API token is required'
       }, { status: 401 });
     }
-
-    const { zoneId } = await params;
     const cloudflareAPI = new CloudflareAPI(apiToken);
 
     // Get categorized rules

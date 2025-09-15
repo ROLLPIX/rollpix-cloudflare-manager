@@ -27,7 +27,8 @@
       "Bash(powershell:*)",
       "Bash(del /f .nexttrace)",
       "WebSearch",
-      "Bash(start http://localhost:3001)"
+      "Bash(start http://localhost:3001)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []

@@ -345,6 +345,10 @@ export class CloudflareAPI {
       targetRuleset = response.result;
     }
 
+    if (!targetRuleset) {
+      throw new Error('Failed to create or get target ruleset');
+    }
+
     return targetRuleset;
   }
 
