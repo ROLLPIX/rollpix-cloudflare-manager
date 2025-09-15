@@ -61,57 +61,156 @@ export async function POST(request: NextRequest) {
         }
       );
     } else if (mode === 'bot_fight') {
-      // Bot Fight Mode uses a different endpoint
-      // Try the zone settings first with common names
-      const botFightEndpoints = [
-        'bot_fight_mode',
-        'bfm',
-        'bot_management',
-        'challenge_passage'
-      ];
-
-      let success = false;
-      let lastError = null;
-
-      for (const settingName of botFightEndpoints) {
-        try {
-          response = await fetch(
-            `https://api.cloudflare.com/client/v4/zones/${zoneId}/settings/${settingName}`,
-            {
-              method: 'PATCH',
-              headers: {
-                'Authorization': `Bearer ${apiToken}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                value: enabled ? 'on' : 'off'
-              }),
+      // Try the official Bot Management API endpoint first
+      try {
+        // First, get current configuration
+        const getCurrentResponse = await fetch(
+          `https://api.cloudflare.com/client/v4/zones/${zoneId}/bot_management`,
+          {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${apiToken}`,
+              'Content-Type': 'application/json',
             }
-          );
+          }
+        );
 
-          if (response.ok) {
-            success = true;
-            break;
+        if (!getCurrentResponse.ok) {
+          const errorData = await getCurrentResponse.json();
+
+          // Check if it's a permission issue (403 with Authentication error)
+          if (getCurrentResponse.status === 403 && errorData.errors?.[0]?.code === 10000) {
+            return NextResponse.json({
+              success: false,
+              mode,
+              enabled: false,
+              zoneId,
+              error: 'El token API no tiene permisos de "Bot Management Read/Write". Actualiza el token para incluir estos permisos.',
+              errorCode: 'INSUFFICIENT_PERMISSIONS',
+              requiredPermissions: ['Bot Management:Read', 'Bot Management:Write'],
+              helpUrl: 'https://developers.cloudflare.com/fundamentals/api/get-started/create-token/',
+              details: errorData
+            });
           }
 
-          lastError = await response.json();
-        } catch (error) {
-          lastError = error;
+          return NextResponse.json({
+            success: false,
+            mode,
+            enabled: false,
+            zoneId,
+            error: 'No se puede acceder a la configuración de Bot Management.',
+            errorCode: 'ACCESS_DENIED',
+            details: errorData
+          });
         }
-      }
 
-      if (!success) {
-        // Bot Fight Mode may need to be configured through the dashboard
-        return NextResponse.json({
-          success: false,
-          mode,
-          enabled: false,
-          zoneId,
-          error: 'Bot Fight Mode debe configurarse desde el dashboard de Cloudflare. Visita Security > Bots para activarlo.',
-          errorCode: 'DASHBOARD_ONLY',
-          dashboardUrl: `https://dash.cloudflare.com/zones/${zoneId}/security/bots`,
-          details: lastError
-        });
+        const currentConfig = await getCurrentResponse.json();
+
+        // Update configuration with Bot Fight Mode
+        const updateConfig = {
+          ...currentConfig.result,
+          fight_mode: enabled,
+          enable_js: enabled,
+          // Set appropriate actions for Bot Fight Mode
+          sbfm_likely_automated: enabled ? 'challenge' : 'allow',
+          sbfm_definitely_automated: enabled ? 'block' : 'allow',
+          sbfm_verified_bots: 'allow', // Always allow verified bots
+        };
+
+        response = await fetch(
+          `https://api.cloudflare.com/client/v4/zones/${zoneId}/bot_management`,
+          {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${apiToken}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateConfig)
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+
+          // Check if Bot Fight Mode is not available for this plan
+          if (errorData.errors?.[0]?.code === 1003 || errorData.errors?.[0]?.message?.includes('not available')) {
+            return NextResponse.json({
+              success: false,
+              mode,
+              enabled: false,
+              zoneId,
+              error: 'Bot Fight Mode no está disponible para este plan. Actualiza a Pro, Business o Enterprise.',
+              errorCode: 'FEATURE_NOT_AVAILABLE',
+              planUpgradeUrl: `https://dash.cloudflare.com/zones/${zoneId}/billing`
+            });
+          }
+
+          return NextResponse.json({
+            success: false,
+            mode,
+            enabled: false,
+            zoneId,
+            error: 'Error al actualizar Bot Fight Mode.',
+            details: errorData
+          });
+        }
+
+      } catch (error) {
+        // Try fallback methods for accounts without Bot Management API access
+        console.log(`[Bot Fight Toggle] Trying fallback methods for zone ${zoneId}...`);
+
+        const fallbackEndpoints = [
+          'bot_fight_mode',
+          'bfm',
+          'challenge_passage'
+        ];
+
+        let fallbackSuccess = false;
+        let fallbackError = null;
+
+        for (const settingName of fallbackEndpoints) {
+          try {
+            const fallbackResponse = await fetch(
+              `https://api.cloudflare.com/client/v4/zones/${zoneId}/settings/${settingName}`,
+              {
+                method: 'PATCH',
+                headers: {
+                  'Authorization': `Bearer ${apiToken}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  value: enabled ? 'on' : 'off'
+                }),
+              }
+            );
+
+            if (fallbackResponse.ok) {
+              response = fallbackResponse;
+              fallbackSuccess = true;
+              console.log(`[Bot Fight Toggle] Success via fallback endpoint: ${settingName}`);
+              break;
+            }
+
+            fallbackError = await fallbackResponse.json();
+          } catch (fallbackErr) {
+            fallbackError = fallbackErr;
+            continue;
+          }
+        }
+
+        if (!fallbackSuccess) {
+          return NextResponse.json({
+            success: false,
+            mode,
+            enabled: false,
+            zoneId,
+            error: 'Bot Fight Mode requiere permisos especiales del token API o configuración desde el dashboard.',
+            errorCode: 'FALLBACK_FAILED',
+            suggestion: 'Configura Bot Fight Mode desde el dashboard de Cloudflare o actualiza los permisos del token.',
+            dashboardUrl: `https://dash.cloudflare.com/zones/${zoneId}/security/bots`,
+            details: fallbackError
+          });
+        }
       }
     } else {
       return NextResponse.json(
@@ -200,55 +299,119 @@ export async function GET(request: NextRequest) {
       console.error('Error fetching security_level:', error);
     }
 
-    // Get bot fight mode - try multiple possible endpoints
+    // Get bot fight mode using official Bot Management API with fallback
     let botFightData = null;
     let botFightStatus = 'unknown';
+    let botFightMode = false;
 
-    const botFightEndpoints = [
-      'bot_fight_mode',
-      'bfm',
-      'bot_management',
-      'challenge_passage'
-    ];
-
-    for (const settingName of botFightEndpoints) {
-      try {
-        const botFightResponse = await fetch(
-          `https://api.cloudflare.com/client/v4/zones/${zoneId}/settings/${settingName}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${apiToken}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
-        if (botFightResponse.ok) {
-          botFightData = await botFightResponse.json();
-          botFightStatus = `found_as_${settingName}`;
-          break;
+    // Try official Bot Management API first
+    try {
+      const botFightResponse = await fetch(
+        `https://api.cloudflare.com/client/v4/zones/${zoneId}/bot_management`,
+        {
+          headers: {
+            'Authorization': `Bearer ${apiToken}`,
+            'Content-Type': 'application/json',
+          },
         }
-      } catch (error) {
-        // Continue trying other endpoints
-        continue;
+      );
+
+      if (botFightResponse.ok) {
+        botFightData = await botFightResponse.json();
+        const result = botFightData.result;
+
+        // Determine if Bot Fight Mode is enabled - use precise logic to avoid false positives
+        // Basic Bot Fight Mode is primarily indicated by fight_mode
+        botFightMode = !!(result.fight_mode);
+
+        // If fight_mode is not set, check for other reliable indicators
+        if (!botFightMode) {
+          // Super Bot Fight Mode indicators (more conservative)
+          const hasSuperBotFight = !!(
+            (result.sbfm_likely_automated && result.sbfm_likely_automated !== 'allow') ||
+            (result.sbfm_definitely_automated && result.sbfm_definitely_automated !== 'allow')
+          );
+
+          // Only consider it Bot Fight Mode if we have clear Super Bot Fight indicators
+          // and enable_js is also true (more conservative approach)
+          if (hasSuperBotFight && result.enable_js) {
+            botFightMode = true;
+          }
+        }
+
+        botFightStatus = 'official_api';
+      } else {
+        const errorData = await botFightResponse.json();
+
+        // Check if it's a permission issue
+        if (botFightResponse.status === 403 && errorData.errors?.[0]?.code === 10000) {
+          botFightStatus = 'insufficient_permissions';
+          console.warn(`Bot Fight Mode: Token lacks Bot Management Read permission for zone ${zoneId}`);
+        } else {
+          botFightStatus = `error_${botFightResponse.status}`;
+          console.warn(`Bot Fight Mode API error for zone ${zoneId}:`, errorData);
+        }
       }
+    } catch (error) {
+      botFightStatus = 'network_error';
+      console.error(`Bot Fight Mode network error for zone ${zoneId}:`, error);
     }
 
-    if (!botFightData) {
-      console.info(`Bot Fight Mode not found in any of the tested endpoints for zone ${zoneId}`);
+    // If official API failed due to permissions, try fallback methods
+    if (botFightStatus === 'insufficient_permissions' || botFightStatus === 'network_error') {
+      console.log(`[Bot Fight Read] Trying fallback methods for zone ${zoneId}...`);
+
+      const fallbackEndpoints = [
+        'bot_fight_mode',
+        'bfm',
+        'challenge_passage'
+      ];
+
+      for (const settingName of fallbackEndpoints) {
+        try {
+          const fallbackResponse = await fetch(
+            `https://api.cloudflare.com/client/v4/zones/${zoneId}/settings/${settingName}`,
+            {
+              headers: {
+                'Authorization': `Bearer ${apiToken}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+
+          if (fallbackResponse.ok) {
+            const fallbackData = await fallbackResponse.json();
+            if (fallbackData.result?.value === 'on') {
+              botFightMode = true;
+              botFightStatus = `fallback_${settingName}`;
+              botFightData = fallbackData;
+              console.log(`[Bot Fight Read] Found via fallback: ${settingName}`);
+              break;
+            }
+          }
+        } catch (fallbackError) {
+          // Continue trying other fallback endpoints
+          continue;
+        }
+      }
+
+      // If no fallback worked, default to false but indicate limitation
+      if (botFightStatus === 'insufficient_permissions' && !botFightMode) {
+        botFightStatus = 'permissions_required';
+      }
     }
 
     return NextResponse.json({
       zoneId,
       underAttackMode: securityLevelData?.result?.value === 'under_attack',
-      botFightMode: botFightData?.result?.value === 'on',
+      botFightMode,
       securityLevel: securityLevelData?.result?.value || 'unknown',
-      botFightValue: botFightData?.result?.value || 'unknown',
       botFightStatus,
       debug: {
         hasSecurityLevelData: !!securityLevelData,
         hasBotFightData: !!botFightData,
-        testedEndpoints: botFightEndpoints
+        botFightData: botFightData?.result,
+        apiEndpoint: 'zones/:zone_id/bot_management'
       }
     });
 

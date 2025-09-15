@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Plus, Minus, Trash2, AlertTriangle, Play } from 'lucide-react';
+import { Loader2, Plus, Minus, Trash2, AlertTriangle, Play, Shield, ShieldOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { RuleTemplate } from '@/types/cloudflare';
 import { tokenStorage } from '@/lib/tokenStorage';
@@ -16,11 +16,12 @@ interface RulesActionBarProps {
   selectedDomains: string[];
   onClearSelection: () => void;
   onRefresh: () => void;
+  onBulkProxy?: (enabled: boolean) => Promise<void>;
 }
 
 type ActionType = 'add' | 'remove' | 'clean';
 
-export function RulesActionBar({ selectedDomains, onClearSelection, onRefresh }: RulesActionBarProps) {
+export function RulesActionBar({ selectedDomains, onClearSelection, onRefresh, onBulkProxy }: RulesActionBarProps) {
   const [action, setAction] = useState<ActionType>('add');
   const [selectedRules, setSelectedRules] = useState<string[]>([]);
   const [templates, setTemplates] = useState<RuleTemplate[]>([]);
@@ -226,7 +227,7 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefresh }:
             </div>
           )}
 
-          <Button 
+          <Button
             onClick={() => handleExecute(false)}
             disabled={loading || (action !== 'clean' && selectedRules.length === 0)}
             className="ml-2"
@@ -239,6 +240,35 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefresh }:
             <span className="ml-1">Procesar</span>
           </Button>
         </div>
+
+        {onBulkProxy && (
+          <>
+            <Separator orientation="vertical" className="h-6" />
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Proxy:</span>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onBulkProxy(true)}
+                disabled={loading}
+                className="text-green-600 border-green-200 hover:bg-green-50"
+              >
+                <Shield className="h-4 w-4 mr-1" />
+                Habilitar
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onBulkProxy(false)}
+                disabled={loading}
+                className="text-red-600 border-red-200 hover:bg-red-50"
+              >
+                <ShieldOff className="h-4 w-4 mr-1" />
+                Deshabilitar
+              </Button>
+            </div>
+          </>
+        )}
       </div>
 
       <Dialog open={showPreview} onOpenChange={setShowPreview}>

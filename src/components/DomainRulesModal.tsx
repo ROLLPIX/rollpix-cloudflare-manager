@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { RuleTemplate } from '@/types/cloudflare';
 import { CollapsibleExpression } from './CollapsibleExpression';
 import { tokenStorage } from '@/lib/tokenStorage';
+import { useDomainStore } from '@/store/domainStore';
 
 interface TemplateRule {
   friendlyId: string;
@@ -51,6 +52,7 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [availableTemplates, setAvailableTemplates] = useState<RuleTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
+  const { refreshSingleDomain } = useDomainStore();
 
   const loadDomainRules = useCallback(async () => {
     if (!zoneId) return;
@@ -69,8 +71,11 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
       if (response.ok && result.success) {
         setRulesData(result.data);
       } else {
+        console.error('[DomainRulesModal] Error response:', result);
         if (result.errorType === 'INSUFFICIENT_PERMISSIONS') {
           toast.error('Token sin permisos para reglas de seguridad.');
+        } else if (result.errorType === 'JSON_PARSE_ERROR') {
+          toast.error('Error de comunicación con Cloudflare. Intenta de nuevo.');
         } else {
           toast.error(result.error || 'Error al cargar reglas del dominio');
         }
@@ -85,48 +90,92 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
 
   const loadAvailableTemplates = async () => {
     try {
+      console.log('[DomainRulesModal] Loading available templates...');
       const response = await fetch('/api/security-rules');
       const result = await response.json();
+      console.log('[DomainRulesModal] Templates response:', result);
+
       if (result.success) {
-        setAvailableTemplates(result.data.templates.filter((t: RuleTemplate) => t.enabled));
+        const enabledTemplates = result.data.templates.filter((t: RuleTemplate) => t.enabled);
+        console.log('[DomainRulesModal] Enabled templates:', enabledTemplates);
+        setAvailableTemplates(enabledTemplates);
+      } else {
+        console.error('[DomainRulesModal] Failed to load templates:', result);
       }
     } catch (error) {
-      console.error('Error loading templates:', error);
+      console.error('[DomainRulesModal] Error loading templates:', error);
     }
   };
 
   const handleApplyTemplate = async () => {
-    if (!selectedTemplate || !zoneId) return;
+    console.log('[DomainRulesModal] Starting template application...');
+    console.log('[DomainRulesModal] Selected template:', selectedTemplate);
+    console.log('[DomainRulesModal] Zone ID:', zoneId);
+    console.log('[DomainRulesModal] Available templates:', availableTemplates);
+
+    if (!selectedTemplate || !zoneId) {
+      console.log('[DomainRulesModal] Missing required data - aborting');
+      return;
+    }
+
     const apiToken = tokenStorage.getToken();
-    if (!apiToken) return;
+    if (!apiToken) {
+      console.log('[DomainRulesModal] No API token - aborting');
+      return;
+    }
 
     const template = availableTemplates.find(t => t.friendlyId === selectedTemplate);
-    if (!template) return;
+    console.log('[DomainRulesModal] Found template object:', template);
+
+    if (!template) {
+      console.log('[DomainRulesModal] Template not found in available templates - aborting');
+      return;
+    }
 
     try {
       setActionLoading('apply');
-      
+
+      const requestBody = {
+        action: 'add',
+        selectedRules: [selectedTemplate],
+        targetZoneIds: [zoneId],
+        preview: false
+      };
+
+      console.log('[DomainRulesModal] Sending request body:', requestBody);
+
       const response = await fetch(`/api/domains/rules/bulk-action`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-api-token': apiToken
         },
-        body: JSON.stringify({
-          action: 'add',
-          selectedRules: [selectedTemplate],
-          targetZoneIds: [zoneId],
-          preview: false
-        })
+        body: JSON.stringify(requestBody)
       });
 
       const result = await response.json();
+      console.log('[DomainRulesModal] Apply template result:', result);
+
       if (result.success) {
-        toast.success(`Regla ${selectedTemplate} aplicada exitosamente`);
+        const addedCount = result.data?.results?.[0]?.message?.match(/Added: (\d+)/)?.[1] || '0';
+        console.log('[DomainRulesModal] Rule application successful. Extracted added count:', addedCount);
+
+        toast.success(`Regla ${selectedTemplate} aplicada exitosamente (${addedCount} regla${addedCount !== '1' ? 's' : ''} agregada${addedCount !== '1' ? 's' : ''})`);
         setSelectedTemplate('');
+
+        console.log('[DomainRulesModal] Reloading domain rules...');
         await loadDomainRules();
+        console.log('[DomainRulesModal] Domain rules reloaded');
+
+        // Also refresh the domain in the main store to update the table
+        if (zoneId) {
+          console.log('[DomainRulesModal] Refreshing domain in store after rule application');
+          await refreshSingleDomain(zoneId);
+          console.log('[DomainRulesModal] Domain store refreshed');
+        }
       } else {
-        toast.error('Error al aplicar la regla');
+        console.error('[DomainRulesModal] Error applying template:', result);
+        toast.error(`Error al aplicar la regla: ${result.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error applying template:', error);

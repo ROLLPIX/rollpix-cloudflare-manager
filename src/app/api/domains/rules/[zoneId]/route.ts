@@ -49,8 +49,8 @@ export async function GET(
     });
 
   } catch (error) {
-    console.error('Error getting domain rules:', error);
-    
+    console.error(`[API] Error getting domain rules for zone ${zoneId}:`, error);
+
     // Check if it's a 403 permission error
     if (error instanceof Error && error.message.includes('403')) {
       return NextResponse.json({
@@ -59,10 +59,21 @@ export async function GET(
         errorType: 'INSUFFICIENT_PERMISSIONS'
       }, { status: 403 });
     }
-    
+
+    // Check for JSON parsing errors
+    if (error instanceof SyntaxError && error.message.includes('JSON')) {
+      console.error(`[API] JSON parse error for zone ${zoneId}:`, error.message);
+      return NextResponse.json({
+        success: false,
+        error: 'Error parsing response from Cloudflare API',
+        errorType: 'JSON_PARSE_ERROR'
+      }, { status: 500 });
+    }
+
     return NextResponse.json({
       success: false,
-      error: 'Failed to get domain rules'
+      error: 'Failed to get domain rules',
+      errorDetails: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
   }
 }

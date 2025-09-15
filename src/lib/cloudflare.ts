@@ -23,14 +23,27 @@ export class CloudflareAPI {
     if (!response.ok) {
       if (throwOnError) {
         const errorText = await response.text();
-        console.error(`Error en la API de Cloudflare (${response.status}):`, errorText);
+
+        // Don't log 403 errors for individual ruleset access - it's expected when token has limited scope
+        const isRulesetAccess = endpoint.includes('/rulesets/') && response.status === 403;
+        if (!isRulesetAccess) {
+          console.error(`Error en la API de Cloudflare (${response.status}) for endpoint: ${endpoint}`, errorText);
+        }
+
         throw new Error(`Error en la API de Cloudflare: ${response.status} - ${errorText}`);
       } else {
         return response; // Return the failed response for manual handling
       }
     }
 
-    return response.json();
+    try {
+      return await response.json();
+    } catch (error) {
+      console.error(`[CloudflareAPI] JSON parsing error for endpoint ${endpoint}:`, error);
+      console.error(`[CloudflareAPI] Response status: ${response.status} ${response.statusText}`);
+      console.error(`[CloudflareAPI] Response headers:`, Object.fromEntries(response.headers.entries()));
+      throw new Error(`JSON parsing error for ${endpoint}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 
   async getZone(zoneId: string): Promise<CloudflareZone> {
@@ -148,18 +161,84 @@ export class CloudflareAPI {
       console.error(`Error getting security_level for zone ${zoneId}:`, error);
     }
 
+    // Try Bot Management API endpoint first (requires Bot Management Read permission)
     try {
-      const botFightResponse = await this.makeRequest<{ value: string }>(`/zones/${zoneId}/settings/bot_fight_mode`, {}, false);
-      if (botFightResponse.ok) {
-        const result = await botFightResponse.json();
-        botFightMode = result.result.value === 'on';
-      } else {
-        // This is an expected outcome for accounts without this feature.
-        console.info(`Bot Fight Mode not available for zone ${zoneId}.`);
+      const botManagementResponse = await this.makeRequest<any>(`/zones/${zoneId}/bot_management`);
+      if (botManagementResponse && botManagementResponse.result) {
+        const result = botManagementResponse.result;
+        // Check for Bot Fight Mode - be more precise to avoid false positives
+        // Basic Bot Fight Mode is primarily indicated by fight_mode
+        botFightMode = !!(result.fight_mode);
+
+        // If fight_mode is not set, check for other reliable indicators
+        if (!botFightMode) {
+          // Super Bot Fight Mode indicators (more conservative)
+          const hasSuperBotFight = !!(
+            (result.sbfm_likely_automated && result.sbfm_likely_automated !== 'allow') ||
+            (result.sbfm_definitely_automated && result.sbfm_definitely_automated !== 'allow')
+          );
+
+          // Only consider it Bot Fight Mode if we have clear Super Bot Fight indicators
+          // and enable_js is also true (more conservative approach)
+          if (hasSuperBotFight && result.enable_js) {
+            botFightMode = true;
+          }
+        }
+
+        console.log(`[Bot Fight Mode - Official API] Zone ${zoneId}: botFightMode=${botFightMode}`);
+        return { underAttackMode, botFightMode };
       }
     } catch (error) {
-      console.error(`Error getting bot_fight_mode for zone ${zoneId}:`, error);
+      if (error instanceof Error && error.message.includes('403')) {
+        console.warn(`[Bot Fight Mode] Token lacks 'Bot Management Read' permission for zone ${zoneId}. Trying fallback methods...`);
+      } else {
+        console.warn(`[Bot Fight Mode] API error for zone ${zoneId}:`, error instanceof Error ? error.message : error);
+      }
     }
+
+    // FALLBACK 1: Try legacy zone settings endpoints (some accounts may still have these)
+    const fallbackEndpoints = [
+      { path: `/zones/${zoneId}/settings/bot_fight_mode`, property: 'value', expected: 'on' },
+      { path: `/zones/${zoneId}/settings/bfm`, property: 'value', expected: 'on' },
+      { path: `/zones/${zoneId}/settings/challenge_passage`, property: 'value', expected: 'on' }
+    ];
+
+    for (const endpoint of fallbackEndpoints) {
+      try {
+        const response = await this.makeRequest<any>(endpoint.path);
+        if (response && response.result) {
+          const value = response.result[endpoint.property];
+          if (value === endpoint.expected) {
+            botFightMode = true;
+            console.log(`[Bot Fight Mode - Fallback] Zone ${zoneId}: Found via ${endpoint.path} = ${value}`);
+            return { underAttackMode, botFightMode };
+          }
+        }
+      } catch (fallbackError) {
+        // Continue to next fallback
+        continue;
+      }
+    }
+
+    // FALLBACK 2: Check if security level indicates Bot Fight Mode
+    // Some accounts may have this integrated into security level
+    try {
+      const securityLevelResponse = await this.makeRequest<any>(`/zones/${zoneId}/settings/security_level`);
+      if (securityLevelResponse && securityLevelResponse.result) {
+        const securityLevel = securityLevelResponse.result.value;
+        // Some accounts may show 'high' or 'under_attack' when Bot Fight Mode is enabled
+        if (securityLevel === 'high' || securityLevel === 'under_attack') {
+          // This is an assumption - we can't be 100% sure without Bot Management API
+          console.log(`[Bot Fight Mode - Inference] Zone ${zoneId}: Inferred from security_level=${securityLevel} (not definitive)`);
+        }
+      }
+    } catch (error) {
+      // Ignore errors on this fallback
+    }
+
+    // If all fallbacks fail, default to false but log the limitation
+    console.warn(`[Bot Fight Mode] Zone ${zoneId}: Unable to determine Bot Fight Mode status. Token may lack 'Bot Management Read' permission.`);
+    botFightMode = false;
 
     return {
       underAttackMode,
@@ -182,7 +261,26 @@ export class CloudflareAPI {
   }
 
   async getZoneRuleset(zoneId: string, rulesetId: string): Promise<CloudflareRuleset> {
-    const response = await this.makeRequest<CloudflareRuleset>(`/zones/${zoneId}/rulesets/${rulesetId}`);
+    console.log(`[CloudflareAPI] Getting detailed ruleset ${rulesetId} for zone ${zoneId}`);
+
+    // First get basic ruleset info to get the current version
+    const basicResponse = await this.makeRequest<CloudflareRuleset>(`/zones/${zoneId}/rulesets/${rulesetId}`);
+    const version = basicResponse.result.version || 'latest';
+
+    console.log(`[CloudflareAPI] Got ruleset version: ${version}, now getting full ruleset with rules`);
+
+    // Now get the full ruleset with rules using the version-specific endpoint
+    const response = await this.makeRequest<CloudflareRuleset>(`/zones/${zoneId}/rulesets/${rulesetId}/versions/${version}`);
+
+    console.log(`[CloudflareAPI] Full ruleset with rules:`, response.result);
+    console.log(`[CloudflareAPI] Rules count: ${response.result?.rules?.length || 0}`);
+
+    // If rules is still undefined, initialize as empty array
+    if (!response.result.rules) {
+      console.log(`[CloudflareAPI] Rules property is undefined, initializing as empty array`);
+      response.result.rules = [];
+    }
+
     return response.result;
   }
 
@@ -210,32 +308,49 @@ export class CloudflareAPI {
 
   // Rule management within rulesets
   async addRuleToZone(zoneId: string, rule: Partial<CloudflareRule>, phase = 'http_request_firewall_custom'): Promise<CloudflareRuleset> {
+    console.log(`[CloudflareAPI] Adding rule to zone ${zoneId} for phase ${phase}`);
+    console.log(`[CloudflareAPI] Rule to add:`, rule);
+
     // First, get or create the appropriate ruleset for the zone
-    const rulesets = await this.getZoneRulesets(zoneId);
+    const rulesets = await this.getZoneRulesets(zoneId, phase);
+    console.log(`[CloudflareAPI] Found ${rulesets.length} rulesets for phase ${phase}`);
+
     let targetRuleset = rulesets.find(rs => rs.phase === phase);
 
     if (!targetRuleset) {
       // Create a new ruleset for this phase
+      console.log(`[CloudflareAPI] No existing ruleset found, creating new one for phase ${phase}`);
       targetRuleset = await this.createZoneRuleset(zoneId, {
         name: `Custom ${phase} rules`,
         kind: 'zone',
         phase: phase,
         rules: [rule as CloudflareRule]
       });
+      console.log(`[CloudflareAPI] Created new ruleset:`, targetRuleset);
     } else {
-      // Add rule to existing ruleset
-      const updatedRules = [...targetRuleset.rules, rule as CloudflareRule];
-      targetRuleset = await this.updateZoneRuleset(zoneId, targetRuleset.id, {
-        ...targetRuleset,
-        rules: updatedRules
+      // Use the direct "add rule to ruleset" endpoint instead of updating the entire ruleset
+      console.log(`[CloudflareAPI] Adding rule directly to existing ruleset ${targetRuleset.id}`);
+
+      const response = await this.makeRequest<CloudflareRuleset>(`/zones/${zoneId}/rulesets/${targetRuleset.id}/rules`, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: rule.action,
+          expression: rule.expression,
+          description: rule.description,
+          enabled: rule.enabled
+        })
       });
+
+      console.log(`[CloudflareAPI] Rule added successfully. New ruleset version:`, response.result);
+      targetRuleset = response.result;
     }
 
     return targetRuleset;
   }
 
   async updateRuleInZone(zoneId: string, ruleId: string, updatedRule: Partial<CloudflareRule>): Promise<CloudflareRuleset> {
-    const rulesets = await this.getZoneRulesets(zoneId);
+    const allRulesets = await this.getZoneRulesets(zoneId);
+    const rulesets = allRulesets.filter(ruleset => ruleset.phase === 'http_request_firewall_custom');
     
     for (const ruleset of rulesets) {
       const ruleIndex = ruleset.rules.findIndex(rule => rule.id === ruleId);
@@ -254,7 +369,8 @@ export class CloudflareAPI {
   }
 
   async removeRuleFromZone(zoneId: string, ruleId: string): Promise<CloudflareRuleset> {
-    const rulesets = await this.getZoneRulesets(zoneId);
+    const allRulesets = await this.getZoneRulesets(zoneId);
+    const rulesets = allRulesets.filter(ruleset => ruleset.phase === 'http_request_firewall_custom');
     
     for (const ruleset of rulesets) {
       const ruleIndex = ruleset.rules.findIndex(rule => rule.id === ruleId);
@@ -274,8 +390,9 @@ export class CloudflareAPI {
   // Helper method to get all security rules for a zone
   async getZoneSecurityRules(zoneId: string): Promise<Array<CloudflareRule & { rulesetId: string; rulesetName: string }>> {
     console.log(`Getting security rules for zone: ${zoneId}`);
-    // Only get rulesets for the specific phase we care about
-    const rulesets = await this.getZoneRulesets(zoneId, 'http_request_firewall_custom');
+    // Get all rulesets and filter for only custom firewall rulesets
+    const allRulesets = await this.getZoneRulesets(zoneId);
+    const rulesets = allRulesets.filter(ruleset => ruleset.phase === 'http_request_firewall_custom');
     console.log(`Found ${rulesets.length} custom firewall rulesets`);
     const securityRules: Array<CloudflareRule & { rulesetId: string; rulesetName: string }> = [];
     let permissionIssues = 0;

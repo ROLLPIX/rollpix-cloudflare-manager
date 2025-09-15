@@ -6,11 +6,17 @@ import { toast } from 'sonner';
 export type FilterType = 'all' | 'proxied' | 'not-proxied';
 export type SortType = 'name' | 'status';
 
+export interface FilterPills {
+  underAttack: boolean | null; // null = no filter, true = enabled, false = disabled
+  botFight: boolean | null;
+  hasRules: boolean | null;
+  proxy: boolean | null;
+}
+
 interface Preferences {
   perPage: number;
-  sortBy: SortType;
-  filter: FilterType;
   searchTerm: string;
+  filterPills: FilterPills;
 }
 
 interface DomainState {
@@ -20,11 +26,11 @@ interface DomainState {
   isBackgroundRefreshing: boolean;
   selectedDomains: Set<string>;
   updatingRecords: Set<string>;
+  updatingFirewall: Set<string>;
   currentPage: number;
   perPage: number;
   searchTerm: string;
-  filter: FilterType;
-  sortBy: SortType;
+  filterPills: FilterPills;
   totalCount: number;
   lastUpdate: Date | null;
   refreshingDomainId: string | null;
@@ -32,18 +38,22 @@ interface DomainState {
 
 interface DomainActions {
   initializeDomains: () => Promise<void>;
-  fetchFromCloudflare: (isBackground?: boolean) => Promise<void>;
+  fetchFromCloudflare: (isBackground?: boolean, includeRules?: boolean) => Promise<void>;
+  fetchWithRules: () => Promise<void>;
   refreshSingleDomain: (zoneId: string) => Promise<void>;
   toggleProxy: (zoneId: string, recordId: string, currentProxied: boolean) => Promise<void>;
   setSearchTerm: (term: string) => void;
-  setFilter: (filter: FilterType) => void;
-  setSortBy: (sort: SortType) => void;
+  toggleFilterPill: (pillType: keyof FilterPills) => void;
+  clearAllFilters: () => void;
   setCurrentPage: (page: number) => void;
   setPerPage: (perPage: number) => void;
   toggleDomainSelection: (domain: string) => void;
   selectAllDomains: (paginatedDomains: DomainStatus[]) => void;
   clearDomainSelection: () => void;
   savePreferences: (prefs: Partial<Preferences>) => void;
+  toggleUnderAttackMode: (zoneId: string, enabled: boolean) => Promise<void>;
+  toggleBotFightMode: (zoneId: string, enabled: boolean) => Promise<void>;
+  bulkToggleProxy: (enabled: boolean) => Promise<void>;
 }
 
 export const useDomainStore = create<DomainState & DomainActions>((set, get) => ({
@@ -53,11 +63,16 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
   isBackgroundRefreshing: false,
   selectedDomains: new Set(),
   updatingRecords: new Set(),
+  updatingFirewall: new Set(),
   currentPage: 1,
   perPage: 50, // Default per page
   searchTerm: '',
-  filter: 'all',
-  sortBy: 'name',
+  filterPills: {
+    underAttack: null,
+    botFight: null,
+    hasRules: null,
+    proxy: null
+  },
   totalCount: 0,
   lastUpdate: null,
   refreshingDomainId: null,
@@ -66,13 +81,35 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     set({ searchTerm: term, currentPage: 1 });
     get().savePreferences({ searchTerm: term });
   },
-  setFilter: (filter) => {
-    set({ filter, currentPage: 1 });
-    get().savePreferences({ filter });
+
+  toggleFilterPill: (pillType) => {
+    const { filterPills } = get();
+    const currentValue = filterPills[pillType];
+    let newValue: boolean | null;
+
+    // Cycle through: null -> true -> false -> null
+    if (currentValue === null) {
+      newValue = true;
+    } else if (currentValue === true) {
+      newValue = false;
+    } else {
+      newValue = null;
+    }
+
+    const newFilterPills = { ...filterPills, [pillType]: newValue };
+    set({ filterPills: newFilterPills, currentPage: 1 });
+    get().savePreferences({ filterPills: newFilterPills });
   },
-  setSortBy: (sort) => {
-    set({ sortBy: sort, currentPage: 1 });
-    get().savePreferences({ sortBy: sort });
+
+  clearAllFilters: () => {
+    const clearedFilters: FilterPills = {
+      underAttack: null,
+      botFight: null,
+      hasRules: null,
+      proxy: null
+    };
+    set({ filterPills: clearedFilters, currentPage: 1 });
+    get().savePreferences({ filterPills: clearedFilters });
   },
   setCurrentPage: (page) => set({ currentPage: page }),
   setPerPage: (perPage) => {
@@ -84,9 +121,8 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     try {
       const currentPrefs = {
         perPage: get().perPage,
-        sortBy: get().sortBy,
-        filter: get().filter,
         searchTerm: get().searchTerm,
+        filterPills: get().filterPills,
       };
       await fetch('/api/preferences', {
         method: 'POST',
@@ -115,7 +151,7 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
 
   clearDomainSelection: () => set({ selectedDomains: new Set() }),
 
-  fetchFromCloudflare: async (isBackground = false) => {
+  fetchFromCloudflare: async (isBackground = false, includeRules = false) => {
     if (!isBackground) {
       set({ loading: true, loadingProgress: { completed: 0, total: 1 } });
     } else {
@@ -130,67 +166,103 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     }
 
     try {
-      const domainsResponse = await fetch(`/api/domains`, { 
+      console.log(`[DomainStore] Starting fetch - includeRules: ${includeRules}`);
+      const domainsResponse = await fetch(`/api/domains?per_page=200`, {
         headers: { 'x-api-token': apiToken },
       });
       if (!domainsResponse.ok) throw new Error('Error al obtener dominios');
       const domainData = await domainsResponse.json();
 
-      if (!isBackground) {
-        set({ loadingProgress: { completed: domainData.totalCount / 2, total: domainData.totalCount } });
-
-        // Use specific zone IDs from the domains we just fetched (only accessible zones)
-        const accessibleZoneIds = domainData.domains.map((domain: any) => domain.zoneId);
-        console.log('[DomainStore] Calling /api/security-rules/analyze for accessible zones only...', accessibleZoneIds.length);
-
-        const analyzeResponse = await fetch('/api/security-rules/analyze', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            apiToken,
-            zoneIds: accessibleZoneIds,  // ✅ Only analyze zones we have access to
-            forceRefresh: true
-          })
+      if (!includeRules) {
+        // Fast path - preserve existing security rules data while updating basic domain data
+        const { allDomains: currentDomains } = get();
+        const mergedDomains = domainData.domains.map((newDomain: any) => {
+          const existingDomain = currentDomains.find(d => d.zoneId === newDomain.zoneId);
+          if (existingDomain?.securityRules) {
+            // Preserve security rules from existing domain
+            return {
+              ...newDomain,
+              securityRules: existingDomain.securityRules
+            };
+          }
+          return newDomain;
         });
-        console.log('[DomainStore] Analyze response status:', analyzeResponse.status);
-        if (!analyzeResponse.ok) {
-          console.error('[DomainStore] Analyze failed:', analyzeResponse.status, analyzeResponse.statusText);
-          throw new Error('Error al analizar reglas');
-        }
 
-        console.log('[DomainStore] Calling /api/domains/enrich...');
-        const enrichResponse = await fetch('/api/domains/enrich', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        });
-        console.log('[DomainStore] Enrich response status:', enrichResponse.status);
-        if (!enrichResponse.ok) {
-          console.error('[DomainStore] Enrich failed:', enrichResponse.status, enrichResponse.statusText);
-          throw new Error('Error al enriquecer dominios');
-        }
-        const enrichResult = await enrichResponse.json();
-        
         set({
-          allDomains: enrichResult.success ? enrichResult.data.domains : domainData.domains,
+          allDomains: mergedDomains,
           totalCount: domainData.totalCount,
           lastUpdate: new Date(),
           loadingProgress: { completed: domainData.totalCount, total: domainData.totalCount }
         });
-        toast.success(`${domainData.totalCount} dominios y reglas actualizados.`);
+
+        toast.success(`${domainData.totalCount} dominios actualizados rápidamente (reglas preservadas).`);
       } else {
+        // Slow path - include security rules analysis
+        // Update with basic domain data first
         set({
           allDomains: domainData.domains,
           totalCount: domainData.totalCount,
-          lastUpdate: new Date()
+          lastUpdate: new Date(),
+          loadingProgress: { completed: domainData.totalCount, total: domainData.totalCount }
         });
-        toast.success(`${domainData.totalCount} dominios actualizados en segundo plano.`);
+        // Slow path - include security rules analysis
+        if (!isBackground) {
+          set({ loadingProgress: { completed: domainData.totalCount / 2, total: domainData.totalCount } });
+        }
+
+        const accessibleZoneIds = domainData.domains.map((domain: any) => domain.zoneId);
+        console.log('[DomainStore] Analyzing security rules for accessible zones...', accessibleZoneIds.length);
+
+        try {
+          const analyzeResponse = await fetch('/api/security-rules/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              apiToken,
+              zoneIds: accessibleZoneIds,
+              forceRefresh: !isBackground // Use cache for background refresh
+            })
+          });
+
+          if (analyzeResponse.ok) {
+            const enrichResponse = await fetch('/api/domains/enrich', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (enrichResponse.ok) {
+              const enrichResult = await enrichResponse.json();
+              set({
+                allDomains: enrichResult.success ? enrichResult.data.domains : domainData.domains,
+                loadingProgress: { completed: domainData.totalCount, total: domainData.totalCount }
+              });
+              toast.success(`${domainData.totalCount} dominios y reglas actualizados completamente.`);
+            } else {
+              toast.success(`${domainData.totalCount} dominios actualizados (reglas fallaron).`);
+            }
+          } else {
+            toast.success(`${domainData.totalCount} dominios actualizados (análisis de reglas falló).`);
+          }
+        } catch (rulesError) {
+          console.warn('[DomainStore] Rules analysis failed:', rulesError);
+          toast.success(`${domainData.totalCount} dominios actualizados (sin análisis de reglas).`);
+        }
       }
+
     } catch (error) {
-      console.error('Error fetching from Cloudflare:', error);
-      toast.error('Error al actualizar datos desde Cloudflare.');
+      console.error('[DomainStore] Error fetching domains:', error);
+      toast.error('Error al obtener dominios desde Cloudflare');
     } finally {
-      set({ loading: false, isBackgroundRefreshing: false, loadingProgress: null });
+      set({
+        loading: false,
+        isBackgroundRefreshing: false,
+        loadingProgress: null
+      });
     }
+  },
+
+  fetchWithRules: async () => {
+    await get().fetchFromCloudflare(false, true);
   },
 
   initializeDomains: async () => {
@@ -210,9 +282,13 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
           const prefs = await preferencesResponse.value.json();
           set({
             perPage: prefs.perPage || 50,
-            sortBy: prefs.sortBy || 'name',
-            filter: prefs.filter || 'all',
-            searchTerm: prefs.searchTerm || ''
+            searchTerm: prefs.searchTerm || '',
+            filterPills: prefs.filterPills || {
+              underAttack: null,
+              botFight: null,
+              hasRules: null,
+              proxy: null
+            }
           });
           console.log('[DomainStore] Preferences loaded:', prefs);
         } catch (e) {
@@ -234,12 +310,7 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
               lastUpdate: new Date(cacheData.lastUpdate)
             });
 
-            toast.success('Dominios cargados desde caché, actualizando en segundo plano...');
-
-            // Start background refresh after a short delay to allow UI to render
-            setTimeout(() => {
-              get().fetchFromCloudflare(true);
-            }, 100);
+            toast.success('Dominios cargados desde caché.');
             return;
           }
         } catch (e) {
@@ -247,12 +318,12 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         }
       }
 
-      console.log('[DomainStore] No cache available, fetching from Cloudflare...');
-      await get().fetchFromCloudflare();
+      console.log('[DomainStore] No cache available. Use "Actualizar Todo" button to load domains.');
+      toast.info('Usa el botón "Actualizar Todo" para cargar los dominios desde Cloudflare.');
 
     } catch (error) {
       console.error('[DomainStore] Error in initializeDomains:', error);
-      await get().fetchFromCloudflare();
+      toast.error('Error al cargar preferencias. Usa "Actualizar Todo" para cargar dominios.');
     }
   },
 
@@ -345,30 +416,41 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
           const updatedDomain = domainData.domains?.[0];
 
           if (updatedDomain) {
-            console.log(`[DomainStore] Fresh domain data obtained`);
+            console.log(`[DomainStore] Fresh domain data obtained for individual refresh`);
 
-            // Try to enrich if rules were updated
+            // For individual domain refresh, we want to use the fresh data from Cloudflare
+            // instead of enriching from potentially stale cache
             let finalDomain = updatedDomain;
+
+            // If rules were updated, try to get fresh security rules data
             if (rulesUpdated) {
               try {
-                console.log(`[DomainStore] Enriching domain with security data`);
-                const enrichResponse = await fetch('/api/domains/enrich', {
-                  method: 'POST',
+                console.log(`[DomainStore] Getting fresh security rules for ${zoneId}`);
+                const analyzeResponse = await fetch('/api/security-rules/analyze', {
+                  method: 'GET',
                   headers: { 'Content-Type': 'application/json' }
                 });
 
-                if (enrichResponse.ok) {
-                  const enrichResult = await enrichResponse.json();
-                  if (enrichResult.success) {
-                    const enrichedDomain = enrichResult.data.domains.find((d: any) => d.zoneId === zoneId);
-                    if (enrichedDomain) {
-                      finalDomain = enrichedDomain;
-                      console.log(`[DomainStore] Domain enriched with security data`);
+                if (analyzeResponse.ok) {
+                  const analyzeResult = await analyzeResponse.json();
+                  if (analyzeResult.success) {
+                    const domainRulesStatus = analyzeResult.data.domainStatuses?.find((ds: any) => ds.zoneId === zoneId);
+                    if (domainRulesStatus) {
+                      // Merge security rules data with fresh domain data
+                      finalDomain = {
+                        ...updatedDomain,
+                        securityRules: {
+                          totalRules: domainRulesStatus.appliedRules?.length || 0,
+                          appliedRules: domainRulesStatus.appliedRules || [],
+                          customRules: domainRulesStatus.customRules || []
+                        }
+                      };
+                      console.log(`[DomainStore] Fresh security rules merged`);
                     }
                   }
                 }
               } catch (error) {
-                console.warn(`[DomainStore] Enrichment failed, using basic domain data:`, error);
+                console.warn(`[DomainStore] Failed to get fresh security rules, using domain data without rules:`, error);
               }
             }
 
@@ -409,6 +491,196 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
       toast.error(`Error al actualizar dominio: ${error instanceof Error ? error.message : 'Error desconocido'}`);
     } finally {
       set({ refreshingDomainId: null });
+    }
+  },
+
+  toggleUnderAttackMode: async (zoneId: string, enabled: boolean) => {
+    const firewallKey = `${zoneId}-under_attack`;
+    set(state => ({ updatingFirewall: new Set(state.updatingFirewall.add(firewallKey)) }));
+
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) {
+      toast.error('API Token no encontrado.');
+      set(state => {
+        const newSet = new Set(state.updatingFirewall);
+        newSet.delete(firewallKey);
+        return { updatingFirewall: newSet };
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/security-mode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-token': apiToken
+        },
+        body: JSON.stringify({
+          zoneId,
+          mode: 'under_attack',
+          enabled
+        })
+      });
+
+      if (response.ok) {
+        // Update local state
+        set(state => ({
+          allDomains: state.allDomains.map(d =>
+            d.zoneId === zoneId ? { ...d, underAttackMode: enabled } : d
+          )
+        }));
+        toast.success(`Under Attack Mode ${enabled ? 'activado' : 'desactivado'} correctamente.`);
+      } else {
+        toast.error('Error al cambiar Under Attack Mode.');
+      }
+    } catch (error) {
+      console.error('Error toggling Under Attack Mode:', error);
+      toast.error('Error al cambiar Under Attack Mode.');
+    } finally {
+      set(state => {
+        const newSet = new Set(state.updatingFirewall);
+        newSet.delete(firewallKey);
+        return { updatingFirewall: newSet };
+      });
+    }
+  },
+
+  toggleBotFightMode: async (zoneId: string, enabled: boolean) => {
+    const firewallKey = `${zoneId}-bot_fight`;
+    set(state => ({ updatingFirewall: new Set(state.updatingFirewall.add(firewallKey)) }));
+
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) {
+      toast.error('API Token no encontrado.');
+      set(state => {
+        const newSet = new Set(state.updatingFirewall);
+        newSet.delete(firewallKey);
+        return { updatingFirewall: newSet };
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/security-mode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-token': apiToken
+        },
+        body: JSON.stringify({
+          zoneId,
+          mode: 'bot_fight',
+          enabled
+        })
+      });
+
+      if (response.ok) {
+        // Update local state
+        set(state => ({
+          allDomains: state.allDomains.map(d =>
+            d.zoneId === zoneId ? { ...d, botFightMode: enabled } : d
+          )
+        }));
+        toast.success(`Bot Fight Mode ${enabled ? 'activado' : 'desactivado'} correctamente.`);
+      } else {
+        toast.error('Error al cambiar Bot Fight Mode.');
+      }
+    } catch (error) {
+      console.error('Error toggling Bot Fight Mode:', error);
+      toast.error('Error al cambiar Bot Fight Mode.');
+    } finally {
+      set(state => {
+        const newSet = new Set(state.updatingFirewall);
+        newSet.delete(firewallKey);
+        return { updatingFirewall: newSet };
+      });
+    }
+  },
+
+  bulkToggleProxy: async (enabled: boolean) => {
+    const { selectedDomains, allDomains } = get();
+    const apiToken = tokenStorage.getToken();
+
+    if (!apiToken) {
+      toast.error('API Token no encontrado.');
+      return;
+    }
+
+    if (selectedDomains.size === 0) {
+      toast.error('Selecciona al menos un dominio.');
+      return;
+    }
+
+    // Get records to update from selected domains
+    const recordsToUpdate: Array<{zoneId: string, recordId: string, currentProxied: boolean}> = [];
+
+    selectedDomains.forEach(domainName => {
+      const domain = allDomains.find(d => d.domain === domainName);
+      if (domain) {
+        if (domain.rootRecord) {
+          recordsToUpdate.push({
+            zoneId: domain.zoneId,
+            recordId: domain.rootRecord.id,
+            currentProxied: domain.rootProxied
+          });
+        }
+        if (domain.wwwRecord) {
+          recordsToUpdate.push({
+            zoneId: domain.zoneId,
+            recordId: domain.wwwRecord.id,
+            currentProxied: domain.wwwProxied
+          });
+        }
+      }
+    });
+
+    if (recordsToUpdate.length === 0) {
+      toast.error('No hay registros DNS para actualizar en los dominios seleccionados.');
+      return;
+    }
+
+    // Filter records that actually need changing
+    const recordsNeedingUpdate = recordsToUpdate.filter(record => record.currentProxied !== enabled);
+
+    if (recordsNeedingUpdate.length === 0) {
+      toast.info(`Todos los registros ya ${enabled ? 'tienen' : 'no tienen'} proxy habilitado.`);
+      return;
+    }
+
+    try {
+      set({ loading: true });
+      let successCount = 0;
+      let errorCount = 0;
+
+      // Process records in batches
+      for (const record of recordsNeedingUpdate) {
+        try {
+          await get().toggleProxy(record.zoneId, record.recordId, record.currentProxied);
+          successCount++;
+          // Add small delay to avoid rate limiting
+          await new Promise(resolve => setTimeout(resolve, 100));
+        } catch (error) {
+          console.error(`Error updating proxy for record ${record.recordId}:`, error);
+          errorCount++;
+        }
+      }
+
+      if (successCount > 0) {
+        toast.success(`Proxy ${enabled ? 'habilitado' : 'deshabilitado'} en ${successCount} registros.`);
+      }
+      if (errorCount > 0) {
+        toast.error(`${errorCount} registros fallaron al actualizar.`);
+      }
+
+      // Clear selection after bulk operation
+      get().clearDomainSelection();
+
+    } catch (error) {
+      console.error('Error in bulk proxy toggle:', error);
+      toast.error('Error al realizar operación masiva de proxy.');
+    } finally {
+      set({ loading: false });
     }
   },
 }));

@@ -24,8 +24,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     const cloudflareAPI = new CloudflareAPI(apiToken);
 
-    // Get all rulesets for the zone to find which one contains this rule
-    const rulesets = await cloudflareAPI.getZoneRulesets(zoneId);
+    // Get all rulesets and filter for custom firewall rulesets to find which one contains this rule
+    const allRulesets = await cloudflareAPI.getZoneRulesets(zoneId);
+    const rulesets = allRulesets.filter(ruleset => ruleset.phase === 'http_request_firewall_custom');
     
     let rulesetId = null;
     let rulesetToUpdate = null;

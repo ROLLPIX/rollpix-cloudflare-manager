@@ -10,13 +10,17 @@ interface FirewallControlsProps {
   onToggleUnderAttack?: (zoneId: string, enabled: boolean) => Promise<void>;
   onToggleBotFight?: (zoneId: string, enabled: boolean) => Promise<void>;
   isUpdating?: boolean;
+  updatingUnderAttack?: boolean;
+  updatingBotFight?: boolean;
 }
 
-export function FirewallControls({ 
-  domain, 
-  onToggleUnderAttack, 
+export function FirewallControls({
+  domain,
+  onToggleUnderAttack,
   onToggleBotFight,
-  isUpdating = false 
+  isUpdating = false,
+  updatingUnderAttack = false,
+  updatingBotFight = false
 }: FirewallControlsProps) {
   return (
     <TooltipProvider>
@@ -27,18 +31,25 @@ export function FirewallControls({
               size="sm"
               variant="ghost"
               onClick={() => onToggleUnderAttack?.(domain.zoneId, !domain.underAttackMode)}
-              disabled={isUpdating}
+              disabled={isUpdating || updatingUnderAttack}
               className={`w-8 h-8 p-0 ${
-                domain.underAttackMode 
-                  ? 'text-red-500 hover:text-red-600' 
-                  : 'text-gray-400 hover:text-gray-500'
+                updatingUnderAttack
+                  ? 'text-yellow-500'
+                  : domain.underAttackMode
+                    ? 'text-red-500 hover:text-red-600'
+                    : 'text-gray-400 hover:text-gray-500'
               }`}
             >
-              <Siren className="h-4 w-4" />
+              <Siren className={`h-5 w-5 ${updatingUnderAttack ? 'animate-pulse' : ''}`} />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Under Attack Mode: {domain.underAttackMode ? 'Activo' : 'Inactivo'}</p>
+            <p>
+              {updatingUnderAttack
+                ? `${domain.underAttackMode ? 'Deshabilitando' : 'Habilitando'} Under Attack Mode...`
+                : `Under Attack Mode: ${domain.underAttackMode ? 'Activo' : 'Inactivo'}`
+              }
+            </p>
           </TooltipContent>
         </Tooltip>
 
@@ -48,18 +59,25 @@ export function FirewallControls({
               size="sm"
               variant="ghost"
               onClick={() => onToggleBotFight?.(domain.zoneId, !domain.botFightMode)}
-              disabled={isUpdating}
+              disabled={isUpdating || updatingBotFight}
               className={`w-8 h-8 p-0 ${
-                domain.botFightMode 
-                  ? 'text-blue-500 hover:text-blue-600' 
-                  : 'text-gray-400 hover:text-gray-500'
+                updatingBotFight
+                  ? 'text-yellow-500'
+                  : domain.botFightMode
+                    ? 'text-red-500 hover:text-red-600'
+                    : 'text-gray-400 hover:text-gray-500'
               }`}
             >
-              <Bot className="h-4 w-4" />
+              <Bot className={`h-5 w-5 ${updatingBotFight ? 'animate-pulse' : ''}`} />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Bot Fight Mode: {domain.botFightMode ? 'Activo' : 'Inactivo'}</p>
+            <p>
+              {updatingBotFight
+                ? `${domain.botFightMode ? 'Deshabilitando' : 'Habilitando'} Bot Fight Mode...`
+                : `Bot Fight Mode: ${domain.botFightMode ? 'Activo' : 'Inactivo'}`
+              }
+            </p>
           </TooltipContent>
         </Tooltip>
       </div>

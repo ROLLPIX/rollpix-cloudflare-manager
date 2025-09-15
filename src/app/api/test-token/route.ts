@@ -48,9 +48,15 @@ export async function GET(request: NextRequest) {
         
         for (const zone of zonesToCheck) {
           try {
-            // Use optimized filtering to only get custom firewall rulesets
-            const customRulesets = await cloudflareAPI.getZoneRulesets(zone.id, 'http_request_firewall_custom');
-            const allRulesets = await cloudflareAPI.getZoneRulesets(zone.id); // Get total count for comparison
+            // Get all rulesets and filter for only custom firewall rulesets
+            const allZoneRulesets = await cloudflareAPI.getZoneRulesets(zone.id);
+            const customRulesets = allZoneRulesets.filter(ruleset =>
+              ruleset.phase === 'http_request_firewall_custom'
+            );
+
+            // Only use custom rulesets since we don't need others (DDoS, Rate Limiting, etc.)
+            // and they may not be accessible with our token scope
+            const allRulesets = customRulesets;
             
             totalRulesets += allRulesets.length;
             totalCustomRulesets += customRulesets.length;

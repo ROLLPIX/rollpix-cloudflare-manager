@@ -7,15 +7,16 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
-import { RefreshCw, Loader2, Search, Filter, ArrowUpDown, ChevronDown, Globe } from 'lucide-react';
+import { RefreshCw, Loader2, Search, Globe, ChevronDown } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { SecurityRulesIndicator } from './SecurityRulesIndicator';
 import { RulesActionBar } from './RulesActionBar';
 import { DNSPills } from './DNSPills';
 import { FirewallControls } from './FirewallControls';
-import { useDomainStore, FilterType, SortType } from '@/store/domainStore';
+import { useDomainStore } from '@/store/domainStore';
+import { FilterPills } from './FilterPills';
 
 export function DomainTable() {
   const {
@@ -27,21 +28,25 @@ export function DomainTable() {
     currentPage,
     perPage,
     searchTerm,
-    filter,
-    sortBy,
+    filterPills,
     totalCount,
     lastUpdate,
     refreshingDomainId,
     initializeDomains,
     fetchFromCloudflare,
+    fetchWithRules,
     setSearchTerm,
-    setFilter,
-    setSortBy,
     setCurrentPage,
     setPerPage,
     toggleDomainSelection,
     selectAllDomains,
     clearDomainSelection,
+    toggleUnderAttackMode,
+    toggleBotFightMode,
+    updatingFirewall,
+    toggleProxy,
+    updatingRecords,
+    bulkToggleProxy,
   } = useDomainStore();
 
   useEffect(() => {
@@ -50,36 +55,70 @@ export function DomainTable() {
 
   const processedDomains = useMemo(() => {
     let processed = [...allDomains];
+
+    // Apply search filter
     if (searchTerm) {
       processed = processed.filter(domain =>
         domain.domain.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    if (filter !== 'all') {
+
+    // Apply pill filters
+    if (filterPills.underAttack !== null) {
+      processed = processed.filter(domain =>
+        (domain.underAttackMode || false) === filterPills.underAttack
+      );
+    }
+
+    if (filterPills.botFight !== null) {
+      processed = processed.filter(domain =>
+        (domain.botFightMode || false) === filterPills.botFight
+      );
+    }
+
+    if (filterPills.hasRules !== null) {
       processed = processed.filter(domain => {
-        const hasProxiedRecord = domain.rootProxied || domain.wwwProxied;
-        return filter === 'proxied' ? hasProxiedRecord : !hasProxiedRecord;
+        const hasRules = (domain.securityRules?.totalRules || 0) > 0;
+        return hasRules === filterPills.hasRules;
       });
     }
-    processed.sort((a, b) => {
-      if (sortBy === 'name') {
-        return a.domain.localeCompare(b.domain);
-      } else {
-        const getStatusPriority = (domain: DomainStatus) => {
-          const hasAnyRecord = !!domain.rootRecord || !!domain.wwwRecord;
-          const hasAnyProxy = domain.rootProxied || domain.wwwProxied;
-          if (hasAnyRecord && !hasAnyProxy) return 1;
-          if (!hasAnyRecord) return 2;
-          return 3;
-        };
-        const aPriority = getStatusPriority(a);
-        const bPriority = getStatusPriority(b);
-        if (aPriority === bPriority) return a.domain.localeCompare(b.domain);
-        return aPriority - bPriority;
-      }
-    });
+
+    if (filterPills.proxy !== null) {
+      processed = processed.filter(domain => {
+        const hasRootRecord = !!domain.rootRecord;
+        const hasWwwRecord = !!domain.wwwRecord;
+        const rootProxied = domain.rootProxied || false;
+        const wwwProxied = domain.wwwProxied || false;
+
+        if (filterPills.proxy === true) {
+          // Verde: TODOS los registros activos están proxied
+          if (hasRootRecord && hasWwwRecord) {
+            return rootProxied && wwwProxied;
+          } else if (hasRootRecord) {
+            return rootProxied;
+          } else if (hasWwwRecord) {
+            return wwwProxied;
+          }
+          return false; // No tiene registros
+        } else {
+          // Rojo: AL MENOS UNO no está proxied
+          if (hasRootRecord && hasWwwRecord) {
+            return !rootProxied || !wwwProxied;
+          } else if (hasRootRecord) {
+            return !rootProxied;
+          } else if (hasWwwRecord) {
+            return !wwwProxied;
+          }
+          return true; // No tiene registros = considerado "no proxied"
+        }
+      });
+    }
+
+    // Simple alphabetical sort by domain name
+    processed.sort((a, b) => a.domain.localeCompare(b.domain));
+
     return processed;
-  }, [allDomains, searchTerm, filter, sortBy]);
+  }, [allDomains, searchTerm, filterPills]);
 
   const paginatedDomains = useMemo(() => {
     if (perPage === -1) return processedDomains;
@@ -105,16 +144,33 @@ export function DomainTable() {
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-3">
               <Globe className="h-5 w-5" />
-              ROLLPIX Cloudflare Manager
+              Mis dominios
               <span className="text-sm font-normal text-muted-foreground">
                 ({processedDomains.length} de {totalCount} dominios)
               </span>
             </CardTitle>
             <div className="flex flex-col items-end gap-1">
-              <Button variant="outline" size="sm" onClick={() => fetchFromCloudflare()} disabled={loading || isBackgroundRefreshing}>
-                <RefreshCw className={`h-4 w-4 mr-2 ${loading || isBackgroundRefreshing ? 'animate-spin' : ''}`} />
-                {loading && loadingProgress ? `Actualizando ${loadingProgress.completed} de ${loadingProgress.total}...` : (loading ? 'Actualizando...' : 'Actualizar Todo')}
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button variant="outline" size="sm" onClick={() => fetchFromCloudflare()} disabled={loading || isBackgroundRefreshing}>
+                  <RefreshCw className={`h-4 w-4 mr-2 ${loading || isBackgroundRefreshing ? 'animate-spin' : ''}`} />
+                  {loading && loadingProgress ? `Actualizando ${loadingProgress.completed} de ${loadingProgress.total}...` : (loading ? 'Actualizando...' : 'Actualizar Rápido')}
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" disabled={loading || isBackgroundRefreshing} className="px-2">
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => fetchFromCloudflare()}>
+                      🚀 Actualización Rápida (solo DNS + seguridad)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => fetchWithRules()}>
+                      🔍 Actualización Completa (incluye análisis de reglas)
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <div className="flex items-center gap-2 h-4">
                 {isBackgroundRefreshing && <Loader2 className="h-3 w-3 animate-spin" />}
                 {lastUpdate && (
@@ -127,49 +183,37 @@ export function DomainTable() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Buscar dominios..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
+          <div className="flex flex-col gap-4 mb-6">
+            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
+              <div className="lg:w-80">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Buscar dominios..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm"><ArrowUpDown className="h-4 w-4 mr-2" />Ordenar<ChevronDown className="h-4 w-4 ml-2" /></Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setSortBy('name')}>Por Nombre</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setSortBy('status')}>Por Estado</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Select value={filter} onValueChange={(value) => setFilter(value as FilterType)}>
-                <SelectTrigger className="w-40"><Filter className="h-4 w-4 mr-2" /><SelectValue placeholder="Filtrar por" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos</SelectItem>
-                  <SelectItem value="proxied">Con Proxy</SelectItem>
-                  <SelectItem value="not-proxied">Sin Proxy</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={perPage === -1 ? 'all' : perPage.toString()} onValueChange={(value) => setPerPage(value === 'all' ? -1 : parseInt(value))}>
-                <SelectTrigger className="w-32">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm">📄</span>
-                    <SelectValue placeholder="Items por página" />
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="25">25 por página</SelectItem>
-                  <SelectItem value="50">50 por página</SelectItem>
-                  <SelectItem value="all">Mostrar todos</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex-1 flex flex-wrap items-center gap-4">
+                <FilterPills />
+              </div>
+              <div className="flex-shrink-0">
+                <Select value={perPage === -1 ? 'all' : perPage.toString()} onValueChange={(value) => setPerPage(value === 'all' ? -1 : parseInt(value))}>
+                  <SelectTrigger className="w-40">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">📄</span>
+                      <SelectValue placeholder="Items por página" />
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="25">25 por página</SelectItem>
+                    <SelectItem value="50">50 por página</SelectItem>
+                    <SelectItem value="all">Mostrar todos</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 
@@ -177,6 +221,7 @@ export function DomainTable() {
             selectedDomains={allDomains.filter(d => selectedDomains.has(d.domain)).map(d => d.zoneId)}
             onClearSelection={clearDomainSelection}
             onRefresh={() => fetchFromCloudflare()}
+            onBulkProxy={bulkToggleProxy}
           />
 
           {loading && allDomains.length === 0 ? (
@@ -211,8 +256,22 @@ export function DomainTable() {
                       />
                     </TableCell>
                     <TableCell className="font-medium">{domain.domain}</TableCell>
-                    <TableCell><DNSPills domain={domain} /></TableCell>
-                    <TableCell><FirewallControls domain={domain} /></TableCell>
+                    <TableCell>
+                      <DNSPills
+                        domain={domain}
+                        onToggleProxy={toggleProxy}
+                        updatingRecords={updatingRecords}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FirewallControls
+                        domain={domain}
+                        onToggleUnderAttack={toggleUnderAttackMode}
+                        onToggleBotFight={toggleBotFightMode}
+                        updatingUnderAttack={updatingFirewall.has(`${domain.zoneId}-under_attack`)}
+                        updatingBotFight={updatingFirewall.has(`${domain.zoneId}-bot_fight`)}
+                      />
+                    </TableCell>
                     <TableCell><SecurityRulesIndicator domain={domain} compact /></TableCell>
                     <TableCell className="text-right">
                       <Button

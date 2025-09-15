@@ -1,0 +1,22 @@
+{
+  "templates": [
+    {
+      "id": "b45161ad-f123-4ad8-836f-e98e32562c61",
+      "friendlyId": "R001",
+      "name": "test",
+      "description": "test",
+      "enabled": true,
+      "priority": 1,
+      "expression": "((cf.threat_score gt 10) or not (ip.geoip.country in { \"AR\" \"US\" \"CA\" }) )  and not (ip.src in $whitelist_ip) and not (http.user_agent contains \"letsencrypt\")\n",
+      "action": "block",
+      "actionParameters": {},
+      "tags": [],
+      "applicableTags": [],
+      "excludedDomains": [],
+      "createdAt": "2025-09-15T03:28:11.183Z",
+      "updatedAt": "2025-09-15T03:28:11.183Z",
+      "version": "1.0.0"
+    }
+  ],
+  "lastUpdated": "2025-09-15T03:28:11.183Z"
+}

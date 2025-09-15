@@ -23,9 +23,22 @@
       "WebFetch(domain:docs.mcp.cloudflare.com)",
       "WebFetch(domain:api.cloudflare.com)",
       "Bash(curl:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(powershell:*)",
+      "Bash(del /f .nexttrace)",
+      "WebSearch",
+      "Bash(start http://localhost:3001)"
     ],
     "deny": [],
     "ask": []
+  },
+  "mcpServers": {
+    "cloudflare-docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://docs.mcp.cloudflare.com/sse"
+      ]
+    }
   }
 }

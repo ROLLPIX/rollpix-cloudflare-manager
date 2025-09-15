@@ -114,16 +114,19 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
           </Tooltip>
         </TooltipProvider>
 
-        {templateRules.slice(0, 3).map((friendlyId, index) => (
-          <Badge key={index} variant="secondary" className="text-xs px-1.5 py-0.5">
-            {friendlyId}
-          </Badge>
-        ))}
-        
-        {templateRules.length > 3 && (
-          <Badge variant="outline" className="text-xs px-1.5 py-0.5">
-            +{templateRules.length - 3}
-          </Badge>
+        {securityRules.corporateRules > 0 && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge variant="outline" className="text-xs px-1.5 py-0.5 bg-green-50 text-green-700 border-green-200">
+                  {securityRules.corporateRules} reglas
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Reglas de plantilla: {securityRules.corporateRules}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
 
         {securityRules.customRules > 0 && (
@@ -131,7 +134,7 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
             <Tooltip>
               <TooltipTrigger asChild>
                 <Badge variant="outline" className="text-xs px-1.5 py-0.5 text-blue-600">
-                  +{securityRules.customRules} custom
+                  {securityRules.customRules} custom
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
