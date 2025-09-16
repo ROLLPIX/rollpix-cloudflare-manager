@@ -513,27 +513,53 @@ export class CloudflareAPI {
   }
 
   async removeRuleFromZone(zoneId: string, ruleId: string): Promise<CloudflareRuleset> {
-    const allRulesets = await this.getZoneRulesets(zoneId);
-    const rulesets = allRulesets.filter(ruleset => ruleset.phase === 'http_request_firewall_custom');
+    console.log(`[CloudflareAPI] Attempting to remove rule ${ruleId} from zone ${zoneId}`);
 
-    for (const ruleset of rulesets) {
-      // Ensure rules array exists before searching
-      if (!ruleset.rules || !Array.isArray(ruleset.rules)) {
-        console.warn(`[CloudflareAPI] Ruleset ${ruleset.id} has no rules array, skipping...`);
+    // Get basic ruleset metadata (without rules)
+    const allRulesets = await this.getZoneRulesets(zoneId);
+    const customRulesets = allRulesets.filter(ruleset => ruleset.phase === 'http_request_firewall_custom');
+
+    console.log(`[CloudflareAPI] Found ${customRulesets.length} custom rulesets to search for rule ${ruleId}`);
+
+    for (const basicRuleset of customRulesets) {
+      console.log(`[CloudflareAPI] Searching in ruleset ${basicRuleset.id} (${basicRuleset.name})`);
+
+      try {
+        // Get full ruleset details including rules
+        const detailedRuleset = await this.getZoneRuleset(zoneId, basicRuleset.id);
+
+        if (!detailedRuleset.rules || !Array.isArray(detailedRuleset.rules)) {
+          console.warn(`[CloudflareAPI] Ruleset ${basicRuleset.id} has no rules array, skipping...`);
+          continue;
+        }
+
+        console.log(`[CloudflareAPI] Ruleset ${basicRuleset.id} has ${detailedRuleset.rules.length} rules`);
+
+        // Log all rule IDs in this ruleset for debugging
+        const ruleIds = detailedRuleset.rules.map(rule => rule.id);
+        console.log(`[CloudflareAPI] Rule IDs in ruleset ${basicRuleset.id}:`, ruleIds);
+
+        const ruleIndex = detailedRuleset.rules.findIndex(rule => rule.id === ruleId);
+        if (ruleIndex !== -1) {
+          console.log(`[CloudflareAPI] Found rule ${ruleId} at index ${ruleIndex} in ruleset ${basicRuleset.id}`);
+
+          const updatedRules = detailedRuleset.rules.filter(rule => rule.id !== ruleId);
+
+          const result = await this.updateZoneRuleset(zoneId, basicRuleset.id, {
+            ...detailedRuleset,
+            rules: updatedRules
+          });
+
+          console.log(`[CloudflareAPI] Successfully removed rule ${ruleId} from zone ${zoneId}`);
+          return result;
+        }
+      } catch (error) {
+        console.warn(`[CloudflareAPI] Error accessing ruleset ${basicRuleset.id}: ${error}`);
         continue;
       }
-
-      const ruleIndex = ruleset.rules.findIndex(rule => rule.id === ruleId);
-      if (ruleIndex !== -1) {
-        const updatedRules = ruleset.rules.filter(rule => rule.id !== ruleId);
-
-        return await this.updateZoneRuleset(zoneId, ruleset.id, {
-          ...ruleset,
-          rules: updatedRules
-        });
-      }
     }
-    
+
+    console.error(`[CloudflareAPI] Rule ${ruleId} not found in any of the ${customRulesets.length} custom rulesets for zone ${zoneId}`);
     throw new Error(`La regla con ID ${ruleId} no se encontró en la zona ${zoneId}`);
   }
 

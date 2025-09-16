@@ -194,7 +194,14 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
     if (!zoneId) return;
     const apiToken = tokenStorage.getToken();
     if (!apiToken) return;
-    
+
+    console.log(`[DomainRulesModal] Attempting to delete rule:`, {
+      ruleId,
+      ruleName,
+      isTemplate,
+      zoneId
+    });
+
     try {
       setActionLoading(ruleId);
 
