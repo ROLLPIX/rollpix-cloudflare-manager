@@ -163,6 +163,9 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
         toast.success(`Regla ${selectedTemplate} aplicada exitosamente (${addedCount} regla${addedCount !== '1' ? 's' : ''} agregada${addedCount !== '1' ? 's' : ''})`);
         setSelectedTemplate('');
 
+        console.log('[DomainRulesModal] Waiting 1 second for Cloudflare to process the rule...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
         console.log('[DomainRulesModal] Reloading domain rules...');
         await loadDomainRules();
         console.log('[DomainRulesModal] Domain rules reloaded');

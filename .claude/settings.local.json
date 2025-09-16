@@ -34,7 +34,9 @@
       "Bash(dir:*)",
       "Bash(git checkout:*)",
       "Bash(start http://localhost:3003)",
-      "Bash(start http://localhost:3002)"
+      "Bash(start http://localhost:3002)",
+      "Bash(rd:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

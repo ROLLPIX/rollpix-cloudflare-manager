@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { CloudflareAPI } from '@/lib/cloudflare';
 import { DomainRuleStatus, RuleConflict, RuleTemplate, ConflictResolution } from '@/types/cloudflare';
 import { safeReadJsonFile, safeWriteJsonFile } from '@/lib/fileSystem';
+import { classifyRule, getAllTemplateMappings } from '@/lib/ruleMapping';
 
 const DOMAIN_RULES_CACHE_FILE = 'domain-rules-status.json';
 const RULES_TEMPLATES_FILE = 'security-rules-templates.json';
@@ -43,109 +44,8 @@ async function loadRulesTemplates(): Promise<RulesTemplatesCache> {
   }
 }
 
-// Helper function to detect rule conflicts
-function detectConflicts(
-  corporateTemplates: RuleTemplate[],
-  existingRules: Array<any>
-): RuleConflict[] {
-  const conflicts: RuleConflict[] = [];
-
-  for (const template of corporateTemplates) {
-    for (const existingRule of existingRules) {
-      const conflictType = analyzeConflict(template.expression, existingRule.expression, template.action, existingRule.action);
-      
-      if (conflictType) {
-        conflicts.push({
-          zoneId: '',
-          domainName: '',
-          corporateRuleId: template.id,
-          corporateRuleName: template.name,
-          conflictingRule: {
-            cloudflareRuleId: existingRule.id,
-            expression: existingRule.expression,
-            action: existingRule.action,
-            description: existingRule.description
-          },
-          conflictType,
-          suggestedResolution: getSuggestedResolution(conflictType),
-          confidence: getConflictConfidence(conflictType, template.expression, existingRule.expression)
-        });
-      }
-    }
-  }
-
-  return conflicts;
-}
-
-function analyzeConflict(
-  templateExpression: string,
-  existingExpression: string,
-  templateAction: string,
-  existingAction: string
-): 'identical' | 'similar' | 'contradictory' | 'overlapping' | null {
-  // Identical expressions
-  if (templateExpression === existingExpression) {
-    return templateAction === existingAction ? 'identical' : 'contradictory';
-  }
-
-  // Similar expressions (basic similarity check)
-  const similarity = calculateExpressionSimilarity(templateExpression, existingExpression);
-  if (similarity > 0.8) {
-    return 'similar';
-  }
-
-  // Overlapping rules (contain similar patterns)
-  if (similarity > 0.5) {
-    return 'overlapping';
-  }
-
-  return null;
-}
-
-function calculateExpressionSimilarity(expr1: string, expr2: string): number {
-  // Simple similarity calculation based on common keywords
-  const keywords1 = new Set(expr1.toLowerCase().match(/\w+/g) || []);
-  const keywords2 = new Set(expr2.toLowerCase().match(/\w+/g) || []);
-  
-  const intersection = new Set([...keywords1].filter(x => keywords2.has(x)));
-  const union = new Set([...keywords1, ...keywords2]);
-  
-  return intersection.size / union.size;
-}
-
-function getSuggestedResolution(conflictType: string): ConflictResolution {
-  switch (conflictType) {
-    case 'identical':
-      return ConflictResolution.SKIP;
-    case 'similar':
-      return ConflictResolution.REPLACE;
-    case 'contradictory':
-      return ConflictResolution.MANUAL;
-    case 'overlapping':
-      return ConflictResolution.MERGE;
-    default:
-      return ConflictResolution.MANUAL;
-  }
-}
-
-function getConflictConfidence(
-  conflictType: string,
-  templateExpr: string,
-  existingExpr: string
-): number {
-  switch (conflictType) {
-    case 'identical':
-      return 1.0;
-    case 'similar':
-      return calculateExpressionSimilarity(templateExpr, existingExpr);
-    case 'contradictory':
-      return 0.9;
-    case 'overlapping':
-      return 0.7;
-    default:
-      return 0.5;
-  }
-}
+// Legacy functions removed - now using optimized ID-based classification
+// All rule classification is now done via ruleMapping.ts for O(1) lookups
 
 // POST - Analyze rules for specific zones or all zones
 export async function POST(request: NextRequest) {
@@ -168,19 +68,51 @@ export async function POST(request: NextRequest) {
     // Get zones to analyze
     let targetZoneIds = zoneIds;
     if (!targetZoneIds || targetZoneIds.length === 0) {
-      // Analyze all zones
-      const zonesResponse = await cloudflareAPI.getZones(1, 100);
-      targetZoneIds = zonesResponse.zones.map(zone => zone.id);
+      // Analyze all zones with pagination to get ALL zones
+      const allZones = [];
+      let page = 1;
+      let hasMore = true;
+
+      while (hasMore) {
+        const zonesResponse = await cloudflareAPI.getZones(page, 50);
+        allZones.push(...zonesResponse.zones);
+        hasMore = page < zonesResponse.totalPages;
+        page++;
+      }
+
+      targetZoneIds = allZones.map(zone => zone.id);
+      console.log(`[Analyze API] Will analyze ${targetZoneIds.length} total zones`);
     }
 
     const analysisResults: DomainRuleStatus[] = [];
-    
-    for (const zoneId of targetZoneIds) {
+
+    // Get all zones once instead of in each iteration
+    console.log('[Analyze API] Getting zone information for all zones...');
+    const allZonesMap = new Map();
+    let page = 1;
+    let hasMore = true;
+
+    while (hasMore) {
+      const zonesResponse = await cloudflareAPI.getZones(page, 50);
+      zonesResponse.zones.forEach(zone => allZonesMap.set(zone.id, zone));
+      hasMore = page < zonesResponse.totalPages;
+      page++;
+    }
+
+    console.log(`[Analyze API] Processing ${targetZoneIds.length} zones for analysis...`);
+
+    // Function to analyze a single zone
+    const analyzeZone = async (zoneId: string): Promise<DomainRuleStatus | null> => {
+      const analysisStartTime = Date.now();
+      const errors: string[] = [];
+
       try {
-        // Get zone info
-        const zonesResponse = await cloudflareAPI.getZones();
-        const zone = zonesResponse.zones.find(z => z.id === zoneId);
-        if (!zone) continue;
+        // Get zone info from our map
+        const zone = allZonesMap.get(zoneId);
+        if (!zone) {
+          console.warn(`[Analyze API] Zone ${zoneId} not found in zones map`);
+          return null;
+        }
 
         // Check if we have cached analysis and it's recent
         const existingStatus = domainRulesCache.domainStatuses.find(ds => ds.zoneId === zoneId);
@@ -188,98 +120,177 @@ export async function POST(request: NextRequest) {
         const cacheValidityMs = 30 * 60 * 1000; // 30 minutes
 
         if (!forceRefresh && existingStatus && cacheAge < cacheValidityMs) {
-          analysisResults.push(existingStatus);
-          continue;
+          console.log(`[Analyze API] Using cached data for zone ${zoneId} (${zone.name})`);
+          return existingStatus;
         }
 
-        // Get current security rules for this zone
-        const existingRules = await cloudflareAPI.getZoneSecurityRules(zoneId);
-        
-        // Analyze against corporate templates
+        console.log(`[Analyze API] Analyzing zone ${zoneId} (${zone.name})...`);
+
+        // Get only rule summaries (metadata) for fast processing
+        const ruleSummaries = await cloudflareAPI.getZoneSecurityRulesSummary(zoneId);
+        console.log(`[Analyze API] Found ${ruleSummaries.length} rules to analyze for zone ${zone.name}`);
+
+        // Create version map for templates
+        const templateVersionMap = new Map(
+          templatesCache.templates.map(t => [t.id, t.version])
+        );
+
+        // Analyze rules using O(1) ID lookup
         const appliedRules = [];
         const customRules = [];
 
-        for (const rule of existingRules) {
-          // Try to match with corporate templates
-          const matchingTemplate = templatesCache.templates.find(template => 
-            template.expression === rule.expression && template.action === rule.action
-          );
+        for (const ruleSummary of ruleSummaries) {
+          try {
+            // Use fast ID lookup to classify rule
+            const classification = await classifyRule(ruleSummary.id, templateVersionMap);
 
-          if (matchingTemplate) {
-            appliedRules.push({
-              ruleId: matchingTemplate.id,
-              ruleName: matchingTemplate.name,
-              version: matchingTemplate.version,
-              status: 'active' as const,
-              cloudflareRulesetId: rule.rulesetId,
-              cloudflareRuleId: rule.id
-            });
-          } else {
-            // Check for outdated versions (similar expressions)
-            const similarTemplate = templatesCache.templates.find(template => {
-              const similarity = calculateExpressionSimilarity(template.expression, rule.expression);
-              return similarity > 0.8 && template.action === rule.action;
-            });
+            if (classification.type === 'template' && classification.templateId) {
+              // Find template details
+              const template = templatesCache.templates.find(t => t.id === classification.templateId);
 
-            if (similarTemplate) {
-              appliedRules.push({
-                ruleId: similarTemplate.id,
-                ruleName: similarTemplate.name,
-                version: similarTemplate.version,
-                status: 'outdated' as const,
-                cloudflareRulesetId: rule.rulesetId,
-                cloudflareRuleId: rule.id
-              });
+              if (template) {
+                appliedRules.push({
+                  ruleId: template.id,
+                  ruleName: template.name,
+                  version: classification.version!,
+                  status: classification.isOutdated ? 'outdated' as const : 'active' as const,
+                  cloudflareRulesetId: ruleSummary.rulesetId,
+                  cloudflareRuleId: ruleSummary.id,
+                  rulesetName: ruleSummary.rulesetName,
+                  friendlyId: classification.friendlyId,
+                  confidence: 1.0, // High confidence from ID mapping
+                  appliedAt: classification.appliedAt || new Date().toISOString()
+                });
+
+                console.log(`[Analyze API] ✅ Template rule found: ${classification.friendlyId} v${classification.version} (${classification.isOutdated ? 'outdated' : 'current'})`);
+              } else {
+                errors.push(`Template not found for ID: ${classification.templateId}`);
+                console.warn(`[Analyze API] ⚠️ Template ${classification.templateId} not found in cache`);
+              }
             } else {
-              // This is a custom rule
+              // Custom rule - we only need basic info, no expression comparison needed
               customRules.push({
-                cloudflareRulesetId: rule.rulesetId,
-                cloudflareRuleId: rule.id,
-                expression: rule.expression,
-                action: rule.action,
-                description: rule.description
+                cloudflareRulesetId: ruleSummary.rulesetId,
+                cloudflareRuleId: ruleSummary.id,
+                rulesetName: ruleSummary.rulesetName,
+                expression: '', // We don't need the full expression for analysis
+                action: ruleSummary.action || 'unknown',
+                description: ruleSummary.description,
+                isLikelyTemplate: false,
+                estimatedComplexity: 'unknown' as const // We can't estimate without full expression
               });
+
+              console.log(`[Analyze API] 📝 Custom rule found: ${ruleSummary.id}`);
             }
+          } catch (error) {
+            console.error(`[Analyze API] Error classifying rule ${ruleSummary.id}:`, error);
+            errors.push(`Error classifying rule ${ruleSummary.id}: ${error}`);
           }
         }
+
+        const processingTimeMs = Date.now() - analysisStartTime;
+        const totalRulesProcessed = ruleSummaries.length;
+        const templatesMatched = appliedRules.length;
 
         const domainStatus: DomainRuleStatus = {
           zoneId,
           domainName: zone.name,
           appliedRules,
           customRules,
-          lastAnalyzed: new Date().toISOString()
+          lastAnalyzed: new Date().toISOString(),
+          analysisMetadata: {
+            processingTimeMs,
+            rulesProcessed: totalRulesProcessed,
+            templatesMatched,
+            errors: errors.length > 0 ? errors : undefined
+          }
         };
 
-        analysisResults.push(domainStatus);
-
-        // Update cache
-        const existingIndex = domainRulesCache.domainStatuses.findIndex(ds => ds.zoneId === zoneId);
-        if (existingIndex !== -1) {
-          domainRulesCache.domainStatuses[existingIndex] = domainStatus;
-        } else {
-          domainRulesCache.domainStatuses.push(domainStatus);
-        }
+        console.log(`[Analyze API] ✅ Completed analysis for zone ${zoneId} (${zone.name}): ${appliedRules.length} template rules, ${customRules.length} custom rules in ${processingTimeMs}ms`);
+        return domainStatus;
 
       } catch (error) {
-        console.error(`Error analyzing zone ${zoneId}:`, error);
-        // Continue with other zones
+        console.error(`[Analyze API] Error analyzing zone ${zoneId}:`, error);
+        return null;
+      }
+    };
+
+    // Process zones in parallel batches for better performance
+    const BATCH_SIZE = 12; // Optimal batch size for Cloudflare API rate limits
+    const BATCH_DELAY = 250; // Delay between batches (ms)
+
+    console.log(`[Analyze API] Processing in batches of ${BATCH_SIZE} zones with ${BATCH_DELAY}ms delay between batches`);
+
+    for (let i = 0; i < targetZoneIds.length; i += BATCH_SIZE) {
+      const batch = targetZoneIds.slice(i, i + BATCH_SIZE);
+      const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
+      const totalBatches = Math.ceil(targetZoneIds.length / BATCH_SIZE);
+
+      const batchStartTime = Date.now();
+      console.log(`[Analyze API] 🚀 Processing batch ${batchNumber}/${totalBatches} (${batch.length} zones) - Progress: ${Math.round((i / targetZoneIds.length) * 100)}%`);
+
+      // Process batch in parallel
+      const batchResults = await Promise.allSettled(
+        batch.map(zoneId => analyzeZone(zoneId))
+      );
+
+      const batchDuration = Date.now() - batchStartTime;
+      console.log(`[Analyze API] ⏱️ Batch ${batchNumber}/${totalBatches} completed in ${batchDuration}ms`);
+
+      // Collect successful results and update cache progressively
+      for (const result of batchResults) {
+        if (result.status === 'fulfilled' && result.value) {
+          analysisResults.push(result.value);
+
+          // Update cache immediately for this zone
+          const existingIndex = domainRulesCache.domainStatuses.findIndex(ds => ds.zoneId === result.value!.zoneId);
+          if (existingIndex !== -1) {
+            domainRulesCache.domainStatuses[existingIndex] = result.value;
+          } else {
+            domainRulesCache.domainStatuses.push(result.value);
+          }
+        }
+      }
+
+      // Save progress after each batch
+      try {
+        await saveDomainRulesCache(domainRulesCache);
+        console.log(`[Analyze API] Saved progress after batch ${batchNumber}/${totalBatches}`);
+      } catch (saveError) {
+        console.warn(`[Analyze API] Failed to save progress after batch ${batchNumber}:`, saveError);
+      }
+
+      // Rate limiting delay between batches
+      if (i + BATCH_SIZE < targetZoneIds.length) {
+        console.log(`[Analyze API] Waiting ${BATCH_DELAY}ms before next batch...`);
+        await new Promise(resolve => setTimeout(resolve, BATCH_DELAY));
       }
     }
 
-    // Save updated cache
+    // Final cache save
+    console.log(`[Analyze API] 💾 Saving final cache with ${analysisResults.length} domain statuses...`);
     await saveDomainRulesCache(domainRulesCache);
 
-    // Detect conflicts across all analyzed domains
-    const allConflicts: RuleConflict[] = [];
-    for (const domainStatus of analysisResults) {
-      const domainConflicts = detectConflicts(templatesCache.templates, domainStatus.customRules);
-      for (const conflict of domainConflicts) {
-        conflict.zoneId = domainStatus.zoneId;
-        conflict.domainName = domainStatus.domainName;
-      }
-      allConflicts.push(...domainConflicts);
-    }
+    // With the new ID-based system, conflicts are detected during rule application, not post-analysis
+    console.log(`[Analyze API] ✅ Analysis complete using optimized ID-based classification`);
+    const allConflicts: RuleConflict[] = []; // No post-analysis conflicts needed
+
+    // Count actual template rules vs outdated ones for summary
+    const outdatedRules = analysisResults.filter(ds =>
+      ds.appliedRules.some(rule => rule.status === 'outdated')
+    ).length;
+
+    // Enhanced summary with performance metrics
+    const totalProcessed = analysisResults.length;
+    const totalRequested = targetZoneIds.length;
+    const successRate = totalProcessed > 0 ? Math.round((totalProcessed / totalRequested) * 100) : 0;
+    const totalRules = analysisResults.reduce((sum, ds) => sum + ds.appliedRules.length + ds.customRules.length, 0);
+    const totalTemplateRules = analysisResults.reduce((sum, ds) => sum + ds.appliedRules.length, 0);
+    const totalCustomRules = analysisResults.reduce((sum, ds) => sum + ds.customRules.length, 0);
+
+    console.log(`[Analyze API] ✅ Analysis complete! Processed ${totalProcessed}/${totalRequested} domains (${successRate}% success rate)`);
+    console.log(`[Analyze API] 📊 Rules summary: ${totalRules} total (${totalTemplateRules} template, ${totalCustomRules} custom)`);
+    console.log(`[Analyze API] 🔄 Template rules: ${totalTemplateRules - outdatedRules} current, ${outdatedRules} outdated`);
 
     return NextResponse.json({
       success: true,
@@ -287,11 +298,19 @@ export async function POST(request: NextRequest) {
         domainStatuses: analysisResults,
         conflicts: allConflicts,
         summary: {
-          totalDomains: analysisResults.length,
+          totalDomains: totalProcessed,
+          totalRequested: totalRequested,
+          successRate: successRate,
           domainsWithCorporateRules: analysisResults.filter(ds => ds.appliedRules.length > 0).length,
           domainsWithCustomRules: analysisResults.filter(ds => ds.customRules.length > 0).length,
-          outdatedRules: allConflicts.filter(c => c.conflictType === 'identical' || c.conflictType === 'similar').length,
-          totalConflicts: allConflicts.length
+          totalRules: totalRules,
+          totalTemplateRules: totalTemplateRules,
+          totalCustomRules: totalCustomRules,
+          currentTemplateRules: totalTemplateRules - outdatedRules,
+          outdatedTemplateRules: outdatedRules,
+          processedBatches: Math.ceil(totalRequested / BATCH_SIZE),
+          batchSize: BATCH_SIZE,
+          optimizedAnalysis: true // Flag to indicate new optimized analysis was used
         }
       }
     });

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Shield, ShieldOff, AlertTriangle, Clock, CheckCircle, Settings } from 'lucide-react';
+import { Shield, ShieldOff, AlertTriangle, Settings } from 'lucide-react';
 import { DomainStatus } from '@/types/cloudflare';
 import { DomainRulesModal } from './DomainRulesModal';
 import { tokenStorage } from '@/lib/tokenStorage';
@@ -25,25 +25,25 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
 
   if (!securityRules) {
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 px-2 opacity-50"
+                className="h-8 px-2"
                 onClick={() => {
                   if (tokenStorage.getToken()) {
                     setModalOpen(true);
                   }
                 }}
               >
-                <Clock className="h-4 w-4" />
+                <Clock className="h-4 w-4 text-muted-foreground" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Datos de reglas no analizados - Click para cargar</p>
+              <p>Reglas no analizadas - Click para cargar</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -51,14 +51,14 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
     );
   }
 
-  const renderNewFormat = () => {
+  const renderSimplified = () => {
     return (
       <div className="flex items-center gap-1">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 className="h-8 px-2"
                 onClick={() => {
@@ -75,7 +75,12 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{securityRules.totalRules === 0 ? 'Sin reglas de seguridad - Click para configurar' : 'Ver reglas de seguridad de este dominio'}</p>
+              <p>
+                {securityRules.totalRules === 0
+                  ? 'Sin reglas de seguridad - Click para configurar'
+                  : 'Ver reglas de seguridad de este dominio'
+                }
+              </p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -128,7 +133,7 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
 
   return (
     <>
-      {renderNewFormat()}
+      {renderSimplified()}
       
       {tokenStorage.getToken() && (
         <DomainRulesModal

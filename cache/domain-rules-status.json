@@ -8,12 +8,20 @@
         {
           "cloudflareRulesetId": "5544ae411c904795a00194be23cee83b",
           "cloudflareRuleId": "3d1bba19e6664e258888198e766ba961",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:07:41.729Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.576Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1829,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "b9c0f3d6eb914effb88316c321c30c32",
@@ -23,12 +31,20 @@
         {
           "cloudflareRulesetId": "cbde3b751f4f425694a6f979261f584a",
           "cloudflareRuleId": "c41aa59dac29450f9ec400477eebc3f8",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:07:44.747Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.539Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1791,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "193dc6e1f7caab0eb9fcd59a67ef183a",
@@ -52,12 +68,20 @@
         {
           "cloudflareRulesetId": "7dfbf9c035834bf29304a1ba705237e3",
           "cloudflareRuleId": "ff60a9ef3ee04fa7aecad66547b051b8",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:07:48.405Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.570Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1822,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "d448d35d7f288cc512efa3cd45f55569",
@@ -81,12 +105,20 @@
         {
           "cloudflareRulesetId": "7bd322b58afc4bcd84fe1d12778fb661",
           "cloudflareRuleId": "25ea2f0f7f9948af99b1e375dad11397",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:07:51.939Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.592Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1843,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "aec71a95294bc3b0ed026793ce2703e6",
@@ -110,19 +142,32 @@
         {
           "cloudflareRulesetId": "c4129835f22347d793435225ff3e5d62",
           "cloudflareRuleId": "6d8465304bd445d4a074c99e962d7dc9",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:07:55.236Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.639Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1889,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "b4433448b872ab765efec4363b65bd87",
       "domainName": "bpack.com.ar",
       "appliedRules": [],
       "customRules": [],
-      "lastAnalyzed": "2025-09-15T04:07:58.396Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.890Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2140,
+        "rulesProcessed": 0,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "8a807deb21754d9dd749bcd962fb2d89",
@@ -132,12 +177,20 @@
         {
           "cloudflareRulesetId": "993b0373dbe444efbcedf943b7d07050",
           "cloudflareRuleId": "7d4e5eaad0ae4e7f93c6c7c691d72712",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:01.678Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.898Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2145,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "84f90991c74d7a1aa9445975cfe8cb18",
@@ -147,35 +200,44 @@
         {
           "cloudflareRulesetId": "e492c33b0bb24391af296b7267519c4a",
           "cloudflareRuleId": "dc81b8380cde4cef83f2076635c55ccb",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:05.179Z"
+      "lastAnalyzed": "2025-09-16T03:55:31.010Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2255,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "99b3909f7a4be4cd869f5dc6e2af5f32",
       "domainName": "buttman.com.uy",
-      "appliedRules": [
-        {
-          "ruleId": "1b27fa18-4577-4975-9a7a-5289d10f7c29",
-          "ruleName": "WAF2",
-          "version": "1.0.0",
-          "status": "active",
-          "cloudflareRulesetId": "7488b43bb2444a0eb67d120b135679cd",
-          "cloudflareRuleId": "b5476e06d18e49b7937fff8c24223f62"
-        }
-      ],
+      "appliedRules": [],
       "customRules": [],
-      "lastAnalyzed": "2025-09-15T04:55:31.737Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.679Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1920,
+        "rulesProcessed": 0,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "c5b17067e6dd822e8c4174ab75aac7a2",
       "domainName": "buttman.uy",
       "appliedRules": [],
       "customRules": [],
-      "lastAnalyzed": "2025-09-15T04:08:12.857Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.736Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1949,
+        "rulesProcessed": 0,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "e508c9cdf3215c89d0c906468a1fe0aa",
@@ -185,12 +247,20 @@
         {
           "cloudflareRulesetId": "0d8601739b52435cb6422244b1d3f30b",
           "cloudflareRuleId": "92abd726206c48ccb6cc0c36d88b6992",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:16.396Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.889Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2097,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "91c2f37c88700b17a5acfe0cf03e5845",
@@ -200,12 +270,20 @@
         {
           "cloudflareRulesetId": "815776d36b4b40e9900e586e8dc42e56",
           "cloudflareRuleId": "1f823018272e4e8ba0706b6e10314a30",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:19.937Z"
+      "lastAnalyzed": "2025-09-16T03:55:30.833Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2021,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "f22be7149862fb089508ab7046ed69e7",
@@ -215,12 +293,20 @@
         {
           "cloudflareRulesetId": "eaa374989e274faa827c059f278e8be1",
           "cloudflareRuleId": "c7da698a9db747c59f09df312fc776a7",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:23.122Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.169Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1891,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "fd3a7c11246a768298d58439e1122bee",
@@ -237,12 +323,20 @@
         {
           "cloudflareRulesetId": "4ac48793ec2146c69be1bb098e49aaf4",
           "cloudflareRuleId": "3eba20d668544bb0ab4b43bd2856c981",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:26.559Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.167Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1889,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "3c7ea415ff5ce890a8a2d7750b83c167",
@@ -252,12 +346,20 @@
         {
           "cloudflareRulesetId": "32a1130df261427fb22d70ad7edc7ca4",
           "cloudflareRuleId": "3162d7870a1a4607baf3e34176fcfb3c",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:29.693Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.200Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1921,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "5784eccfbe1699511a1316bf4cd9e030",
@@ -267,12 +369,20 @@
         {
           "cloudflareRulesetId": "b162d236c933424392a92df68d8288fa",
           "cloudflareRuleId": "2ea0a436c9ad4e1fbbd7dd9dd497f101",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:32.980Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.308Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2028,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "c3983eba162ebf7c5e991c29a062449c",
@@ -282,12 +392,20 @@
         {
           "cloudflareRulesetId": "baabebaf0ef54eec810b9a793d2e2e23",
           "cloudflareRuleId": "2202af624e62418abbb1679b8827e739",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:36.318Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.201Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1921,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "51a7467ceea992963aa4c4f225dfb296",
@@ -297,12 +415,20 @@
         {
           "cloudflareRulesetId": "ce0827e1a09d434e9f8c247130daa92c",
           "cloudflareRuleId": "095c787b0d944dc58599d62caf541817",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T21:32:39.871Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.115Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1834,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "7b58275dcd7559feb839b9b6bff63cc7",
@@ -319,12 +445,20 @@
         {
           "cloudflareRulesetId": "388d1322010f4b098848c61b69308ebf",
           "cloudflareRuleId": "23a5bdcacaae4ed495772759a4057ed7",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:43.666Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.238Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1957,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "2bc9b218d34b816bb76433dd232abe65",
@@ -334,12 +468,20 @@
         {
           "cloudflareRulesetId": "0b507e2fb35e4ff59e037b11eb6aaf65",
           "cloudflareRuleId": "7f8f4db948004e03a2fbf328f33ef575",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-15T04:08:47.106Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.360Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2078,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "1de3f5b800e110cdcb87fc10c3e14592",
@@ -349,19 +491,30 @@
         {
           "cloudflareRulesetId": "4073219da4074b4aa4408ac74d0c62cb",
           "cloudflareRuleId": "572ff0e272bf44f9aab2bd50aff42ddd",
-          "expression": "((cf.threat_score gt 10) or not (ip.geoip.country in { \"AR\" \"US\" \"CA\" } )) and not (ip.src in $whitelist_ip)",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "ByScoreAndCountry"
+          "description": "ByScoreAndCountry",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         },
         {
           "cloudflareRulesetId": "4073219da4074b4aa4408ac74d0c62cb",
           "cloudflareRuleId": "fdf40c88b9f7438da126b22b0a9930c3",
-          "expression": "((http.user_agent contains \"Scrapy\" ) or  (http.user_agent contains \"seranking\" ) or (http.user_agent contains \"Bytespider\") or (http.user_agent contains \"GeedoProductSearch\") or (http.user_agent contains \"opensiteexplorer\") or (http.user_agent contains \"BLEXBot\") or (http.user_agent contains \"Barkrowler\") or (http.user_agent contains \"GPTBot\") or (http.user_agent contains \"Amazonbot\") or (http.user_agent contains \"Yandex\") or (http.user_agent contains \"Semrush\") or (http.user_agent contains \"AhrefsBot\") or (http.user_agent contains \"claude\")  or (http.user_agent contains \"CCBot\") or (http.user_agent contains \"ChatGPT-User\") or (http.user_agent contains \"GPTBot\") or (http.user_agent contains \"YouBot\") or (http.user_agent contains \"Google-Extended\") or (http.user_agent contains \"Applebot-Extended\") or (http.user_agent contains \"anthropic-ai\") or (http.user_agent contains \"ClaudeBot\") or (http.user_agent contains \"Omgilibot\") or (http.user_agent contains \"Omgili\") or (http.user_agent contains \"FacebookBot\") or (http.user_agent contains \"Diffbot\") or (http.user_agent contains \"ImagesiftBot\") or (http.user_agent contains \"PerplexityBot\") or (http.user_agent contains \"cohere-ai\") or (http.user_agent contains \"Meta-ExternalAgent\") or (http.user_agent contains \"Meta-ExternalFetcher\") or (http.user_agent contains \"Timpibot\") or (http.user_agent contains \"Webzio-Extended\") or ( ip.geoip.country in {\"cn\" \"ru\" \"in\" \"vn\" \"ir\" \"id\" \"ua\" \"ks\" \"tr\" \"pk\" \"bd\" \"eg\" \"ro\" \"im\" \"kh\" \"jp\" \"np\" \"za\" \"my\" \"kr\" \"bg\" \"sg\" \"ci\" \"cy\" \"cz\" \"is\" \"pl\" \"ke\" \"ae\" \"tm\" \"th\" \"ma\" \"ve\" \"uz\" \"mn\" \"et\" \"tw\" \"ph\" \"al\" \"jm\" \"hu\" \"dz\" \"kg\" \"gh\" \"iq\" \"kz\" \"sa\" \"ee\" \"ng\" \"sn\" \"md\" \"ps\" \"sl\" \"m\" \"tz\" \"lb\" \"rw\" \"ug\" \"bw\" \"ne\" \"sd\" \"fi\" \"sg\" } and not ip.src in $whitelist_ip )) and (not http.user_agent contains \"letsencrypt\")",
+          "rulesetName": "default",
+          "expression": "",
           "action": "block",
-          "description": "waf01"
+          "description": "waf01",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:12:39.324Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.306Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2024,
+        "rulesProcessed": 2,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "67fcfd8970dfdb1085a2d5f3fdba918e",
@@ -371,12 +524,20 @@
         {
           "cloudflareRulesetId": "fc998f924c694ea79c934ec5e8937fd1",
           "cloudflareRuleId": "c3ea298ad8794e63ade83c6369e10281",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:12:42.697Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.208Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1925,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "f00685f0c28bc0941ee926407a2b42d2",
@@ -386,12 +547,20 @@
         {
           "cloudflareRulesetId": "3e41e8c13b4643c8983be5782604e857",
           "cloudflareRuleId": "76846f9d3a5749d9b982691dd7fc4a14",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:12:46.173Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.118Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1834,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "171dd55feb3143610978201e575dfc1f",
@@ -401,12 +570,20 @@
         {
           "cloudflareRulesetId": "58a373c7e6ad442c939015e58fca192e",
           "cloudflareRuleId": "1a2ad9c894eb49dab5d9a4e276aa6cf2",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:12:49.644Z"
+      "lastAnalyzed": "2025-09-16T03:55:33.049Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1763,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "3965ae9e76545e5c42c875fdf56f2685",
@@ -416,12 +593,20 @@
         {
           "cloudflareRulesetId": "8d13ff070052412db157eaff0258f178",
           "cloudflareRuleId": "f253333eb30c433994c9ef5167daa284",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:12:53.184Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.622Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1989,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "93b8dd22857e27f788c8fdb9acacc3a7",
@@ -431,12 +616,20 @@
         {
           "cloudflareRulesetId": "cb93762deb764aa8b3b0ac0d3470da8e",
           "cloudflareRuleId": "294be966d7a84536a3d04b25ca67b000",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:12:56.607Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.602Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1968,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "99988882c85cf19172784306db2a428f",
@@ -446,12 +639,20 @@
         {
           "cloudflareRulesetId": "07f92671ef3446498b2180f610e8015f",
           "cloudflareRuleId": "f8deb3cc11294f41b3e2e0760dd58fcd",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:12:59.885Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.541Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1906,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "9c00d0e42e16a8f3ea3fdfb5b69b2a74",
@@ -461,12 +662,20 @@
         {
           "cloudflareRulesetId": "a123c846e7c346ac9a43009f802335a4",
           "cloudflareRuleId": "208f6a4ace0e43238cf4d80346786aa2",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:03.247Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.436Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1800,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "95230063ab0950d00fb8fac2c090e8a2",
@@ -476,12 +685,20 @@
         {
           "cloudflareRulesetId": "061dd8aa965346d3bbf83dc2cd6bd29d",
           "cloudflareRuleId": "3794277091f74b34b7b5cdf5d7a077a1",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:06.778Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.601Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1965,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "9e621c64d34a49a78edb00281e5ed6b4",
@@ -491,12 +708,20 @@
         {
           "cloudflareRulesetId": "635cf2dfdf52446e93e2a59137c52467",
           "cloudflareRuleId": "b87d607b44084595bb74cfcd03fe41ff",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:10.119Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.660Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2023,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "07120a716a4a56a15fa780b7d254ed53",
@@ -506,12 +731,20 @@
         {
           "cloudflareRulesetId": "a1820e60a3be4887b575cccf9fdc4bf4",
           "cloudflareRuleId": "5908468e0d10400b90f681441ffc65d2",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:13.314Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.509Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1871,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "cf2352c08759c5510d3d8bc06f61487d",
@@ -521,12 +754,20 @@
         {
           "cloudflareRulesetId": "ba154d3498ea4e95b311f2b6c6fd4a8d",
           "cloudflareRuleId": "578f1f555c254c378c88c52b62289065",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:16.525Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.579Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1940,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "b6705fc500c5e4a122af4d4197eba8af",
@@ -536,12 +777,20 @@
         {
           "cloudflareRulesetId": "30ed7ed1696b4f16a2d085d8ff4b87cf",
           "cloudflareRuleId": "e0832ee5ad5449389cc22bd008553ce9",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:20.145Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.618Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1979,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "dac3a59faa916b0ce22b221c482967d9",
@@ -558,12 +807,20 @@
         {
           "cloudflareRulesetId": "e3693b1a855a4ec28bde9a40c5517bd0",
           "cloudflareRuleId": "7a2321a906d14430a1f6f558b5332b1a",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:23.464Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.634Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1974,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "b1d965d0efaf9e67960d5145dda69913",
@@ -573,12 +830,20 @@
         {
           "cloudflareRulesetId": "2863bb3ef9fc4803805f88bc6c0c9e9c",
           "cloudflareRuleId": "25012a04ba624340892ea37d0e9f61ff",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:26.553Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.604Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1942,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "30261799ae9e14e5873eb00a27913ac7",
@@ -588,12 +853,20 @@
         {
           "cloudflareRulesetId": "336ece8408214e02b04c621792b795fb",
           "cloudflareRuleId": "39a1f17c6f27404c9e04fd57354bb7d3",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:30.263Z"
+      "lastAnalyzed": "2025-09-16T03:55:35.556Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1893,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "1a21a103d5662d4b422e1103806b2c02",
@@ -603,12 +876,20 @@
         {
           "cloudflareRulesetId": "677b8f8b0a8d4e11adc625d86c23ddb8",
           "cloudflareRuleId": "6c5666688c5940c18b93256f36528cd4",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:33.554Z"
+      "lastAnalyzed": "2025-09-16T03:55:37.773Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1851,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "c9a4796cdd18dd9d4f83ef036e262ae7",
@@ -618,12 +899,20 @@
         {
           "cloudflareRulesetId": "83ccbc6c790c4baa97d31ba2782988a2",
           "cloudflareRuleId": "7e71386a6eb34174bdc65f50c6a0dc8d",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:36.826Z"
+      "lastAnalyzed": "2025-09-16T03:55:38.023Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2100,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "06a6b49ecef27a8263eebf4cd52a460a",
@@ -633,12 +922,20 @@
         {
           "cloudflareRulesetId": "faf4dfcc0e2349449fe28cefb7856ea2",
           "cloudflareRuleId": "92fb3232e60247bdb254f38cee88786d",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:40.105Z"
+      "lastAnalyzed": "2025-09-16T03:55:38.020Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2096,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "23b7d0a9e5b34aa2ce56760d26ec9758",
@@ -655,12 +952,20 @@
         {
           "cloudflareRulesetId": "48c3aea8477f4525952367ad1dcbdbee",
           "cloudflareRuleId": "d9c74a99e11e427b97c65ab1e6119f9b",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:43.595Z"
+      "lastAnalyzed": "2025-09-16T03:55:37.911Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1987,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "f818610074ccc4074940d4e659b8938b",
@@ -670,12 +975,20 @@
         {
           "cloudflareRulesetId": "c160f709c9204cb482866b20dc57955a",
           "cloudflareRuleId": "25bad7fca4c34a898cfe3b08455c08b6",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:47.028Z"
+      "lastAnalyzed": "2025-09-16T03:55:37.956Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2031,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "383b35a29ba40e5ff906f0ce28fbc988",
@@ -685,12 +998,20 @@
         {
           "cloudflareRulesetId": "3e413f479bb64c488c558c815d69cd87",
           "cloudflareRuleId": "b340cfd878a6433db4699eb281bf2895",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:50.302Z"
+      "lastAnalyzed": "2025-09-16T03:55:37.701Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1775,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "c2ae36c638451f201a41ac68f834f04e",
@@ -700,12 +1021,20 @@
         {
           "cloudflareRulesetId": "45f6713d07194fcf8a34c379462c8185",
           "cloudflareRuleId": "6ca2d514f02a41a3a1bc6b4a8212e5ba",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:53.571Z"
+      "lastAnalyzed": "2025-09-16T03:55:37.841Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1915,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "7eab5c71f996e95dcf3daab1a9170093",
@@ -715,12 +1044,20 @@
         {
           "cloudflareRulesetId": "8d50723d3e784c9da3bdfde0f65518fb",
           "cloudflareRuleId": "11e1c94fc32241f7a4a6474350ca63b6",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:13:56.771Z"
+      "lastAnalyzed": "2025-09-16T03:55:37.820Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1893,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "c70f835fcdb8a8aac8ba46368c3bbad4",
@@ -730,19 +1067,32 @@
         {
           "cloudflareRulesetId": "ef605c4031c6438e9182d495ec367cf4",
           "cloudflareRuleId": "07e61030bd044b0a8dd0ad5208d809b7",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:14:00.034Z"
+      "lastAnalyzed": "2025-09-16T03:55:37.848Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1920,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "3d844acb6a1494ad00d7a8ebc0aa3514",
       "domainName": "iturrarte.com.ar",
       "appliedRules": [],
       "customRules": [],
-      "lastAnalyzed": "2025-09-14T21:14:02.295Z"
+      "lastAnalyzed": "2025-09-16T03:55:36.781Z",
+      "analysisMetadata": {
+        "processingTimeMs": 852,
+        "rulesProcessed": 0,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "d2056fc9c6050a9a4f83833cf807221b",
@@ -752,12 +1102,20 @@
         {
           "cloudflareRulesetId": "ed085b3c65a546118c0f12dd207ad4a1",
           "cloudflareRuleId": "ff4cfd3b39a243fd8feb93c04da3f300",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:14:05.922Z"
+      "lastAnalyzed": "2025-09-16T03:55:37.815Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1865,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "41792a5e6818e97abe9017b7924527df",
@@ -767,12 +1125,20 @@
         {
           "cloudflareRulesetId": "ad0d92c62bb04bc9b07f9d2ffcefd769",
           "cloudflareRuleId": "6b05cf1a8ab647fe80db2b7febed0c44",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:14:09.466Z"
+      "lastAnalyzed": "2025-09-16T03:55:37.897Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1946,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "c152ddc5212238e107fdbc33490d6ce8",
@@ -782,12 +1148,20 @@
         {
           "cloudflareRulesetId": "a806e848d75b484aa7ae4b34e78f760e",
           "cloudflareRuleId": "da91e7d9ce6042f49542c7d5046f1891",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:14:12.646Z"
+      "lastAnalyzed": "2025-09-16T03:55:40.449Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2155,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     },
     {
       "zoneId": "2dd689c49c4054ac4544ca4d737c8ac9",
@@ -797,13 +1171,1401 @@
         {
           "cloudflareRulesetId": "4efc6e4cab7044c1be1dbaa1eae94a55",
           "cloudflareRuleId": "100a136fcda14a3e91c58045275dc40f",
-          "expression": "(((not ip.geoip.country in {\"AR\" \"US\" \"CA\"}) and not ip.src in $whitelist_ip) or (cf.client.bot and (http.request.uri.query contains \"p=\" or http.request.uri.query contains \"dir=\" or http.request.uri.query contains \"order=\" or http.request.uri.query contains \"mode=\" or http.request.uri.query contains \"limit=\" or http.request.uri.query contains \"cat=\" or http.request.uri.query contains \"SID=\" or http.request.uri.query contains \"criterion=\" or http.request.uri.query contains \"color=\" or http.request.uri.query contains \"size=\" or http.request.uri.query contains \"price=\" or http.request.uri.query contains \"brand=\")) or ( http.user_agent contains \"Scrapy\" or http.user_agent contains \"seranking\" or http.user_agent contains \"Bytespider\" or http.user_agent contains \"GeedoProductSearch\" or http.user_agent contains \"opensiteexplorer\" or http.user_agent contains \"BLEXBot\" or http.user_agent contains \"Barkrowler\" or http.user_agent contains \"GPTBot\" or http.user_agent contains \"Amazonbot\" or http.user_agent contains \"Yandex\" or http.user_agent contains \"Semrush\" or http.user_agent contains \"AhrefsBot\" or http.user_agent contains \"claude\" or http.user_agent contains \"CCBot\" or http.user_agent contains \"ChatGPT-User\" or http.user_agent contains \"YouBot\" or http.user_agent contains \"Google-Extended\" or http.user_agent contains \"Applebot-Extended\" or http.user_agent contains \"anthropic-ai\" or http.user_agent contains \"ClaudeBot\" or http.user_agent contains \"Omgilibot\" or http.user_agent contains \"Omgili\" or http.user_agent contains \"FacebookBot\" or http.user_agent contains \"Diffbot\" or http.user_agent contains \"ImagesiftBot\" or http.user_agent contains \"PerplexityBot\" or http.user_agent contains \"cohere-ai\" or http.user_agent contains \"Meta-ExternalAgent\" or http.user_agent contains \"Meta-ExternalFetcher\" or http.user_agent contains \"Timpibot\" or http.user_agent contains \"Webzio-Extended\")) and (not starts_with(http.request.uri.path, \"/.well-known\"))",
+          "rulesetName": "default",
+          "expression": "",
           "action": "js_challenge",
-          "description": "waf02"
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
         }
       ],
-      "lastAnalyzed": "2025-09-14T21:14:15.914Z"
+      "lastAnalyzed": "2025-09-16T03:55:40.299Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2004,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "1d292b4360e392b22616c7dee38cf5c7",
+      "domainName": "librosdelaarena.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "72b98635b22a43c98057e9eead7df96f",
+          "cloudflareRuleId": "705efcb45fcb48b78d81077f7bdcd2a6",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:40.206Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1911,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "2673a1c7c100396479b090971bb2ae5f",
+      "domainName": "limpasa.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "14b8ee153ff147e3a952f9911e47da28",
+          "cloudflareRuleId": "bbbab9ff8e7b4c52a13e0feb02a47631",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:40.271Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1975,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "be396e6d36d1de794e05a4f91f4867d6",
+      "domainName": "macrofer.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "1d57d4665c0c43ebab21b76ecaa1cf95",
+          "cloudflareRuleId": "ba7c1472d1fa4e8699f547aa4690de44",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:40.279Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1982,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "8d7bd1dac8499f6aa7353e928898d87d",
+      "domainName": "mayoristaelgauchito.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "76c581976b81463d8698701a48bb34dc",
+          "cloudflareRuleId": "8b0f923eb9f6411f8cfcaf7bf3e979cc",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:40.211Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1914,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "f6b5d6dd76ed51070eb0bdb7ef04892b",
+      "domainName": "megamixdistribuidor.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "f28f8f5aa0274457891fd0aab27278d3",
+          "cloudflareRuleId": "45330057df83400f872cade7ddffeaa3",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:40.561Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2263,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "da2e89c50a9d444b36e222aa6fc8a1ee",
+      "domainName": "menorcoste.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "6353e46376cd46ca9dbab9cbb872f47b",
+          "cloudflareRuleId": "5d8294d1df1d4723a84ec8bb13726cf6",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:40.231Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1933,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "c1eae45391058860743553d0a6fcefa9",
+      "domainName": "meyersacif.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "98f98aea4602436985c152a19ae929e4",
+          "cloudflareRuleId": "344b9f090c4648759380105372f76c7d",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:40.203Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1904,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "d8c8a7bcfc4cf254862c61b020692f54",
+      "domainName": "mhod.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "606d97ca49514fde8a5923564cd08624",
+          "cloudflareRuleId": "81514d689ac843c0adc84c30c255a3a8",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:40.132Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1833,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "d706a2c4c7c3f90cb8430f70838206b3",
+      "domainName": "multienvasesonline.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "23ee9a109f684ed3862b2e61ce6b03bc",
+          "cloudflareRuleId": "5d71a20936a349f4bd5e2a19b50989d3",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:40.208Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1908,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "ba6697717c01a3b4eebb517b8d91ffeb",
+      "domainName": "mundofigus.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "71e815f9e87145879f2fbf5a56ecf2cf",
+          "cloudflareRuleId": "c90b5eb0d01143b4a63b66ea341b7937",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:40.204Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1904,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "624dcd5d46b89f6ccd69dfc81b04c7c7",
+      "domainName": "mundofigus.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "72a52960cce648a4a90ab84754c18159",
+          "cloudflareRuleId": "d6138b9f196e41cc88eefeac77335ef7",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.648Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1822,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "6b44fd5af8497927d2320fa80c353b48",
+      "domainName": "nitrobikes.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "ac3a56a4a635476eaf1abf90c8c9662a",
+          "cloudflareRuleId": "2a12f880f91c4a9eb2019dbb33ace748",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.850Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2023,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "a1b1092875a274b0bd7d692aa1bcb579",
+      "domainName": "oxfordlibreria.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "6b153be2cbef475ea65860aec45fd497",
+          "cloudflareRuleId": "f91437f365904602b2e21907601523cd",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.696Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1868,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "e55be2a80cfb7d6cb55b1a6d27fb0eaf",
+      "domainName": "pampahogar.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "412196ff4e7c4c8ca645e84e7cf150ee",
+          "cloudflareRuleId": "a70465b87f894d7a80096ef79c9f349f",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.758Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1929,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "fe21ab7042b46f80749fd512c259fa61",
+      "domainName": "pandatoys.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "16250f0ef59b49be80a2174ef68bb75f",
+          "cloudflareRuleId": "86a758a3ab8c485f95f32c4c36c53548",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.619Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1790,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "444ea570750ddd69c3b051998e3f4dce",
+      "domainName": "peluches-yanitoys.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "9e8c8222206a43428146533afff27f2d",
+          "cloudflareRuleId": "be3655a30320460b905b6685e851597d",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.712Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1882,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "cef04c1881cfa69137c42a3e001d013f",
+      "domainName": "perrosygatos.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "c2b94bd567834bcca31aae97c31cd3dc",
+          "cloudflareRuleId": "e04d38fd497247a59eb3333a9a0a0ed0",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.826Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1995,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "139a34db3581a9ad3fd94d0dbfae8b41",
+      "domainName": "pharmamerican.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "94fdf309b8f34ee2b19528da4d954cab",
+          "cloudflareRuleId": "26d5924998a0415f8614db92247eb3b9",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.694Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1863,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "58883939b42d09a9110d7d431f0a7a4a",
+      "domainName": "piccinhnos.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "e2a53b82b0274d2b98016aee6bb79704",
+          "cloudflareRuleId": "c5ebed17fbf84d9c83d2355736cceab4",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:43.114Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2282,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "1871e4a29a0ca3eb950d6934c2ff7cf1",
+      "domainName": "piccinhnos.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "0a6cd93cfa6549f9bd92a2a184b5c29a",
+          "cloudflareRuleId": "0c0012ba33f14dc4afc938329c0b61a6",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.621Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1788,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "b9d2dc7b4178ec97fdacb700cedd6cf5",
+      "domainName": "piedravlanca.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "df14b28e665b428c882cdd5e5f6a9af5",
+          "cloudflareRuleId": "722aa300bc924e23a9349ad8514bea01",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.732Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1898,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "da46ee1cd859d5067db1a945539111c7",
+      "domainName": "pintureriadelfondo.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "a975214418704baf869be11598021af9",
+          "cloudflareRuleId": "c0baf4fa3c2847ef8226d876cbe92adb",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:42.846Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1994,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "de7daaf2cb8177fea95feadabde80c9a",
+      "domainName": "pintureriagiannoni.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "dde25b107e724858a7fc2ea5a5decb9f",
+          "cloudflareRuleId": "37bea4f5018349a7b63bbb66ac69b747",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.403Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2025,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "a4214fbb6c0b8adb6cc3bd28cd6bffb7",
+      "domainName": "pintureriagiannoni.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "02221d14cef540bebcd1684ef72bb290",
+          "cloudflareRuleId": "e9a74dffdb614241aff04250bfda23fe",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.284Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1905,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "ef15f0c1e375c66d0dcf6338a98a0c6d",
+      "domainName": "pintureriaimagen.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "45f809a30bfb4042813227d33f1e5ca6",
+          "cloudflareRuleId": "ead93c19148644f986e04442f35a417b",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.536Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2156,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "16117843ff12ecd430bf15d13ec961e7",
+      "domainName": "pintureriaimagensa.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "85977c8d37e04cee84f8b8ec2c1c81fd",
+          "cloudflareRuleId": "e1c93b341acf4b9f836edd76bf129d5b",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.321Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1940,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "66295091da68f88fcab963c37b6f277f",
+      "domainName": "pintureriasambito.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "0159c9fdcdaf49fa85b7708449b9ab05",
+          "cloudflareRuleId": "97cfbca67e314cfe9d12ba2235af4dad",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.439Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2057,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "aa62ec0e4c77649a2b0bd92bc4a378a2",
+      "domainName": "pintureriascaporaso.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "c34bc0eaf7044a2ca6775422fde93afe",
+          "cloudflareRuleId": "c10ee41ec4414bd4a443575f387a8e03",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.286Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1904,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "5ddd40d9ed9261c78d5d9f0f449364eb",
+      "domainName": "pintureriasimagen.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "8a57c5e1f3f24af199bbdec13808f6cf",
+          "cloudflareRuleId": "99b51248168d44f9a6e66b7e81e8d945",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.376Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1993,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "a7e27532bc2dc81d088adc5c23051415",
+      "domainName": "pintureriasimagensa.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "58a87f7968c14cd48e8153632d3936b7",
+          "cloudflareRuleId": "e8cd4465b55d4eabb9d1c7a2ea89b42c",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.234Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1850,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "27065c419e5dcb7f9d83d25590f15e0d",
+      "domainName": "pintureriatomas.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "a7085a2383dc45d0afce136925667385",
+          "cloudflareRuleId": "139bfc9fef674cfcb659a475de6e0002",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.232Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1848,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "778330789b4e721f9eb72d837c5065aa",
+      "domainName": "pixdelsur.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "0f8f653ddba745b38080c768650e12d0",
+          "cloudflareRuleId": "3012ffc8deb747888c4bea8e27dbac73",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.537Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2152,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "385bba83422bc6c84ae4ea3051d3ef20",
+      "domainName": "pixdelsur.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "661ae852dd4f446fb7e1396581f17b43",
+          "cloudflareRuleId": "dd63fce69fe9400ebfef381f313bd9b9",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.399Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2013,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "827f61a1fade361cce9070443254341c",
+      "domainName": "plastigas.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "bbd37331366840d698261cc37d42c62b",
+          "cloudflareRuleId": "fcc7208604024ea4a4f83455ee1850b0",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:45.318Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1931,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "f7675c1995ac3aa1a4dbdd9c480c9bf8",
+      "domainName": "popper-store.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "61857148e7b64617824dc9e11f40b5e9",
+          "cloudflareRuleId": "92d268b66f7643a19b998e1356cb7dc8",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.672Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1879,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "b59a3b3eb7c18f512cf58efbba6d4ffc",
+      "domainName": "prointecweb.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "e0ce3913c3e04c50befc31dae36600ec",
+          "cloudflareRuleId": "860dcf3f9f2e48bc94eec151463c1397",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.833Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2039,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "cdc98857e54fe3dc7030426853bd84a2",
+      "domainName": "puntopintura.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "0d3ac33aa79842d49c74b743ed0f7fed",
+          "cloudflareRuleId": "d425346e74d249c8b0413e00a3165b26",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.702Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1907,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "8a95a5a1cde35c920a817471441d84f5",
+      "domainName": "puntopintura.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "97ab7993ddc64997a20d2c7e708574dc",
+          "cloudflareRuleId": "d4237c3d959f459f9e477a1c36301535",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.548Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1752,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "3844209581c660b78443bc14ec6a6504",
+      "domainName": "quiksilver.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "65d14fd1ef3d4fa6b5e3e1d6f7eb9c2e",
+          "cloudflareRuleId": "55986e3d76f74508a8f1e0bed1d1ef54",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.598Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1801,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "573ef6ea2dfe5186c3f9de9948041792",
+      "domainName": "rollpix.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "584c84e29a8442fba736c89c9d9da9dc",
+          "cloudflareRuleId": "aba1316cae17467490d139c86597350b",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.606Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1809,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "f68a4c98471b85b736ebca25dda61088",
+      "domainName": "rollpix.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "65f6196150d845c4b1e4bfb86b920736",
+          "cloudflareRuleId": "4331fd1c56404ff9a4c7a5a2bcbf50c0",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.788Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1990,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "6d35c53630f930cfddc207ea4aef7756",
+      "domainName": "roxy.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "082b9b95da34406389bfeab10e9e1250",
+          "cloudflareRuleId": "95f9f9f1a42b4ac8a17ef82c18f73f74",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.837Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2038,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "134baf5e8483102ab41e639b644f6526",
+      "domainName": "rvca.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "8fd3b25f270a47e18a6c01496e50ec67",
+          "cloudflareRuleId": "24c02cc0d1164dc0bec317a1d0ef24d8",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.939Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2140,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "e498f265c6f99614eb7b1303f92b1f19",
+      "domainName": "saintgottard.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "daf43ec150574409aaaa1a08ffcf0558",
+          "cloudflareRuleId": "01079bbd6d624533bf2ca6c32cf17729",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.877Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2073,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "9cfb6d33e370c54298b1253be36e1ac9",
+      "domainName": "somoswapp.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "85b21cf116e64de09918997e66d343e1",
+          "cloudflareRuleId": "09bc0d75cfc4485e969aabc702d0c994",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.746Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1926,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "5c8eddcde7409358ae774babfcd52fd1",
+      "domainName": "sportsman.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "6731906533fa4068ad959f1d0513ba81",
+          "cloudflareRuleId": "8c42a252b683407db8726be9d0f8ee27",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:47.766Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1945,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "9ded8443de0e4c3bd020e13bb3bdc823",
+      "domainName": "tiendaforeva.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "4273862805e146a0b4ec4928256c2e19",
+          "cloudflareRuleId": "7b30bef17f614672b2f6a922d5b16602",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.071Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1869,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "bbf2c3c839418c1bc0b0420009b9341f",
+      "domainName": "tiendaimco.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "43bdbdc22bed4ac4b126fd6ec759ca4b",
+          "cloudflareRuleId": "c18fcc8acfa545dc81fbb523823b71ac",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.201Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1998,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "1e31e56dbcfcab14f90c7fde3ee55a33",
+      "domainName": "tiribellihogar.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "0c708ef3a9194073b7978d0da6f669e9",
+          "cloudflareRuleId": "5188f6a92dac4f15b9af8431a42064ab",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.151Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1947,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "642f87377860fa101fc9818929236bfb",
+      "domainName": "tout.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "c490445b10f44037aba3e9c61c953468",
+          "cloudflareRuleId": "6029c456033443478671cc7723f001a2",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.126Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1921,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "ab0ed3bbce853b252ef52b45adeaa873",
+      "domainName": "tout.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "57ccc04b80ec4baa9a5eca43c506f3e7",
+          "cloudflareRuleId": "7ba97900a64645a494531e41bedd6456",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.216Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2010,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "b787ca1cf0f0fb3d4111eb442349d289",
+      "domainName": "trialum.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "05308bfe7da74f5e81bddbeeb8e69141",
+          "cloudflareRuleId": "c318d88266e7429f861481075eca10e4",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.078Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1872,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "03b5f64cdf3f3030b73667f63551cabf",
+      "domainName": "undercar.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "3170ebb248ca4407a7ce175a07d3c6b0",
+          "cloudflareRuleId": "62096f8e7877471eb2b1e3228483b6a7",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.202Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1994,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "4e3fa38c302aba67531f5651efd4ba6e",
+      "domainName": "urbaniasa.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "9cd37e145a4540398c2cc4f248f7f31b",
+          "cloudflareRuleId": "e405c1dc5d5d4421b9c1e7589b82e2f9",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.316Z",
+      "analysisMetadata": {
+        "processingTimeMs": 2107,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "129e2a604e0b25dcddcb91a5dcd47b56",
+      "domainName": "vantergroup.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "207cd41a0f5c4584b72510ac75430c02",
+          "cloudflareRuleId": "68c45c405db048d6b0153163cd17d387",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.150Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1940,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "9c2247d09cacefbf6a6423d4fa63b2d5",
+      "domainName": "vassallo.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "9df943312b1c47e1a2a986ae93b7b36d",
+          "cloudflareRuleId": "ad14174a5b0d45cb875f3ac45f1b9693",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.008Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1796,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "82bdf36c9d9d01c6b1a8db2342b23e36",
+      "domainName": "vialmaq.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "da3c4ec096d44381909bebcab8be60da",
+          "cloudflareRuleId": "e8b5b9f668be4eb3a4579b8f9bec5860",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.124Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1910,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "6a579cac0037f12d6191126e3fe0bb24",
+      "domainName": "victorgullo.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "d4c8033350954ea6831d429e3b5cf8dd",
+          "cloudflareRuleId": "3cc6d01bcce84e8bbbdee61e16be8b03",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:50.129Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1901,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "4094f2608f395e84c03bdab7a096fac1",
+      "domainName": "victorgullo.com.ar",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "7f22d825726a47419ad9f6690d98a4f0",
+          "cloudflareRuleId": "a6dd2975da214a7d98802d3fe4a66d98",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:55:52.472Z",
+      "analysisMetadata": {
+        "processingTimeMs": 1885,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
+    },
+    {
+      "zoneId": "b154ecd6a15f07924383de1ce382b11f",
+      "domainName": "vitamin-way.com",
+      "appliedRules": [],
+      "customRules": [
+        {
+          "cloudflareRulesetId": "24d22a1ef983471c9470c08a34594f0c",
+          "cloudflareRuleId": "670b4232e5fd4a4d91e4f0e5b8ed2cf2",
+          "rulesetName": "default",
+          "expression": "",
+          "action": "js_challenge",
+          "description": "waf02",
+          "isLikelyTemplate": false,
+          "estimatedComplexity": "unknown"
+        }
+      ],
+      "lastAnalyzed": "2025-09-16T03:56:04.539Z",
+      "analysisMetadata": {
+        "processingTimeMs": 13951,
+        "rulesProcessed": 1,
+        "templatesMatched": 0
+      }
     }
   ],
-  "lastUpdated": "2025-09-15T21:32:39.871Z"
+  "lastUpdated": "2025-09-16T03:56:04.545Z"
 }

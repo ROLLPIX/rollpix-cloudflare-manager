@@ -15,13 +15,13 @@ import { tokenStorage } from '@/lib/tokenStorage';
 interface RulesActionBarProps {
   selectedDomains: string[];
   onClearSelection: () => void;
-  onRefresh: () => void;
+  onRefreshSelectedDomains?: (zoneIds: string[]) => Promise<void>;
   onBulkProxy?: (enabled: boolean) => Promise<void>;
 }
 
 type ActionType = 'add' | 'remove' | 'clean';
 
-export function RulesActionBar({ selectedDomains, onClearSelection, onRefresh, onBulkProxy }: RulesActionBarProps) {
+export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSelectedDomains, onBulkProxy }: RulesActionBarProps) {
   const [action, setAction] = useState<ActionType>('add');
   const [selectedRules, setSelectedRules] = useState<string[]>([]);
   const [templates, setTemplates] = useState<RuleTemplate[]>([]);
@@ -139,7 +139,12 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefresh, o
         const { summary } = result.data;
         toast.success(`Acción completada: ${summary.successful}/${summary.total} exitosos`);
         onClearSelection();
-        onRefresh();
+
+        // Refresh only affected domains instead of all domains
+        if (onRefreshSelectedDomains) {
+          await onRefreshSelectedDomains(selectedDomains);
+        }
+
         setShowPreview(false);
         setSelectedRules([]);
       } else {

@@ -121,17 +121,30 @@ export interface DomainRuleStatus {
     ruleName: string;
     version: string;
     status: 'active' | 'outdated' | 'custom' | 'conflict';
-    cloudflareRulesetId?: string;
-    cloudflareRuleId?: string;
+    cloudflareRulesetId: string;
+    cloudflareRuleId: string;
+    rulesetName?: string; // Name of the ruleset containing this rule
+    friendlyId?: string; // Template friendly ID (e.g., R001)
+    confidence?: number; // Confidence level for template matching (0-1)
+    appliedAt?: string; // When the rule was applied/detected
   }>;
   customRules: Array<{
     cloudflareRulesetId: string;
     cloudflareRuleId: string;
+    rulesetName?: string; // Name of the ruleset containing this rule
     expression: string;
     action: string;
     description?: string;
+    isLikelyTemplate?: boolean; // If this custom rule looks like it should be a template
+    estimatedComplexity?: 'simple' | 'medium' | 'complex'; // Rule complexity estimate
   }>;
   lastAnalyzed: string;
+  analysisMetadata?: {
+    processingTimeMs?: number; // Time taken to analyze this domain
+    rulesProcessed?: number; // Total rules processed
+    templatesMatched?: number; // Templates successfully matched
+    errors?: string[]; // Any errors encountered during analysis
+  };
 }
 
 export enum ConflictResolution {

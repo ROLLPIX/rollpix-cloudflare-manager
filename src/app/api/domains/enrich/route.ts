@@ -78,14 +78,9 @@ export async function POST(request: NextRequest) {
       }
       
       return {
-        ...domain,
-        securityRules: {
-          totalRules: 0,
-          corporateRules: 0,
-          customRules: 0,
-          hasConflicts: false,
-          lastAnalyzed: undefined
-        }
+        ...domain
+        // Don't add securityRules property if no rules data exists
+        // This allows SecurityRulesIndicator to properly detect unanalyzed domains
       };
     });
 

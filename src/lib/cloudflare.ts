@@ -1,5 +1,6 @@
 import { CloudflareZone, CloudflareDNSRecord, CloudflareApiResponse, DomainStatus, CloudflareRuleset, CloudflareRule, RuleTemplate } from '@/types/cloudflare';
 import { createCloudflareRuleName, parseCloudflareRuleName, isTemplateRule, compareVersions } from './ruleUtils';
+import { addRuleMapping, removeRuleMapping, classifyRule, classifyRulesBatch } from './ruleMapping';
 
 const CLOUDFLARE_API_BASE = 'https://api.cloudflare.com/client/v4';
 
@@ -246,6 +247,135 @@ export class CloudflareAPI {
     };
   }
 
+  // Unified function to get complete domain information (DNS + Security + Rules)
+  async getCompleteDomainInfo(zoneId: string, zoneName: string, templateVersionMap: Map<string, string>): Promise<DomainStatus> {
+    const startTime = Date.now();
+    console.log(`[CloudflareAPI] Getting complete domain info for ${zoneName} (${zoneId})`);
+
+    try {
+      // Execute all API calls in parallel for maximum efficiency
+      const [dnsData, securityData, rulesData] = await Promise.all([
+        this.getDNSRecords(zoneId, 1, 100),
+        this.getSecuritySettings(zoneId),
+        this.getZoneSecurityRulesSummary(zoneId)
+      ]);
+
+      console.log(`[CloudflareAPI] ${zoneName}: Got ${dnsData.records.length} DNS records, ${rulesData.length} rules`);
+
+      // Process DNS records
+      const rootRecord = dnsData.records.find(record =>
+        record.name === zoneName && (record.type === 'A' || record.type === 'CNAME')
+      );
+      const wwwRecord = dnsData.records.find(record =>
+        record.name === `www.${zoneName}` && (record.type === 'A' || record.type === 'CNAME')
+      );
+
+      const rootProxied = rootRecord?.proxied || false;
+      const wwwProxied = wwwRecord?.proxied || false;
+
+      // Classify rules using optimized batch processing
+      const appliedRules = [];
+      const customRules = [];
+
+      if (rulesData.length > 0) {
+        // Get all rule IDs for batch classification
+        const ruleIds = rulesData.map(rule => rule.id);
+
+        try {
+          // Use optimized batch classification
+          const classifications = await classifyRulesBatch(ruleIds, templateVersionMap);
+
+          for (const ruleSummary of rulesData) {
+            const classification = classifications.get(ruleSummary.id);
+
+            if (!classification) {
+              console.warn(`[CloudflareAPI] No classification found for rule ${ruleSummary.id}`);
+              continue;
+            }
+
+            if (classification.type === 'template' && classification.templateId) {
+              appliedRules.push({
+                ruleId: classification.templateId,
+                ruleName: '', // Will be filled by caller if needed
+                version: classification.version!,
+                status: classification.isOutdated ? 'outdated' as const : 'active' as const,
+                cloudflareRulesetId: ruleSummary.rulesetId,
+                cloudflareRuleId: ruleSummary.id,
+                rulesetName: ruleSummary.rulesetName,
+                friendlyId: classification.friendlyId,
+                confidence: 1.0,
+                appliedAt: classification.appliedAt || new Date().toISOString()
+              });
+            } else {
+              customRules.push({
+                cloudflareRulesetId: ruleSummary.rulesetId,
+                cloudflareRuleId: ruleSummary.id,
+                rulesetName: ruleSummary.rulesetName,
+                expression: '', // Not needed for summary
+                action: ruleSummary.action || 'unknown',
+                description: ruleSummary.description,
+                isLikelyTemplate: false,
+                estimatedComplexity: 'unknown' as const
+              });
+            }
+          }
+        } catch (error) {
+          console.error(`[CloudflareAPI] Error in batch rule classification for ${zoneName}:`, error);
+          // Fallback to individual classification if batch fails
+          for (const ruleSummary of rulesData) {
+            customRules.push({
+              cloudflareRulesetId: ruleSummary.rulesetId,
+              cloudflareRuleId: ruleSummary.id,
+              rulesetName: ruleSummary.rulesetName,
+              expression: '',
+              action: ruleSummary.action || 'unknown',
+              description: ruleSummary.description,
+              isLikelyTemplate: false,
+              estimatedComplexity: 'unknown' as const
+            });
+          }
+        }
+      }
+
+      const processingTime = Date.now() - startTime;
+      console.log(`[CloudflareAPI] ✅ ${zoneName}: Complete info processed in ${processingTime}ms (${appliedRules.length} template, ${customRules.length} custom rules)`);
+
+      // Build complete domain status
+      const domainStatus: DomainStatus = {
+        domain: zoneName,
+        zoneId,
+        rootRecord,
+        wwwRecord,
+        rootProxied,
+        wwwProxied,
+        underAttackMode: securityData.underAttackMode,
+        botFightMode: securityData.botFightMode,
+        securityRules: {
+          totalRules: appliedRules.length + customRules.length,
+          corporateRules: appliedRules.length,
+          customRules: customRules.length,
+          hasConflicts: appliedRules.some(rule => rule.status === 'outdated'),
+          lastAnalyzed: new Date().toISOString()
+        }
+      };
+
+      return domainStatus;
+
+    } catch (error) {
+      console.error(`[CloudflareAPI] Error getting complete domain info for ${zoneName}:`, error);
+
+      // Return basic domain info on error
+      return {
+        domain: zoneName,
+        zoneId,
+        rootProxied: false,
+        wwwProxied: false,
+        underAttackMode: false,
+        botFightMode: false
+      };
+    }
+  }
+
   // Rulesets API methods
   async getZoneRulesets(zoneId: string, phase?: string): Promise<CloudflareRuleset[]> {
     const url = phase
@@ -391,44 +521,164 @@ export class CloudflareAPI {
     throw new Error(`La regla con ID ${ruleId} no se encontró en la zona ${zoneId}`);
   }
 
-  // Helper method to get all security rules for a zone
-  async getZoneSecurityRules(zoneId: string): Promise<Array<CloudflareRule & { rulesetId: string; rulesetName: string }>> {
-    console.log(`Getting security rules for zone: ${zoneId}`);
-    // Get all rulesets and filter for only custom firewall rulesets
-    const allRulesets = await this.getZoneRulesets(zoneId);
-    const rulesets = allRulesets.filter(ruleset => ruleset.phase === 'http_request_firewall_custom');
-    console.log(`Found ${rulesets.length} custom firewall rulesets`);
-    const securityRules: Array<CloudflareRule & { rulesetId: string; rulesetName: string }> = [];
-    let permissionIssues = 0;
+  // Optimized method to get only rule metadata (IDs, names, basic info)
+  async getZoneSecurityRulesSummary(zoneId: string): Promise<Array<{
+    id: string;
+    rulesetId: string;
+    rulesetName: string;
+    description?: string;
+    enabled?: boolean;
+    action?: string;
+  }>> {
+    console.log(`[CloudflareAPI] Getting security rules summary for zone: ${zoneId}`);
 
+    // Get rulesets metadata only
+    const allRulesets = await this.getZoneRulesets(zoneId);
+    const rulesets = allRulesets.filter(ruleset =>
+      ruleset.phase === 'http_request_firewall_custom'
+    );
+
+    console.log(`[CloudflareAPI] Found ${rulesets.length} custom firewall rulesets out of ${allRulesets.length} total rulesets for zone ${zoneId}`);
+
+    if (rulesets.length === 0) {
+      console.log(`[CloudflareAPI] No custom firewall rulesets found for zone ${zoneId}`);
+      return [];
+    }
+
+    const ruleSummaries: Array<{
+      id: string;
+      rulesetId: string;
+      rulesetName: string;
+      description?: string;
+      enabled?: boolean;
+      action?: string;
+    }> = [];
+
+    // Get basic ruleset info (which includes rule IDs but not full rule content)
     for (const ruleset of rulesets) {
-      console.log(`Processing ruleset: ${ruleset.name} (${ruleset.id})`);
-      // Get the detailed ruleset with rules included
+      const knownSystemRulesets = [
+        'Cloudflare Managed Free Ruleset',
+        'Cloudflare Normalization Ruleset',
+        'zone',
+        'DDoS L7 ruleset'
+      ];
+
+      if (knownSystemRulesets.some(name => ruleset.name.includes(name))) {
+        console.log(`[CloudflareAPI] Skipping known system ruleset: ${ruleset.name} (${ruleset.id})`);
+        continue;
+      }
+
       try {
-        const detailedRuleset = await this.getZoneRuleset(zoneId, ruleset.id);
-        console.log(`Found ${detailedRuleset.rules?.length || 0} rules in ruleset: ${ruleset.name}`);
-        for (const rule of detailedRuleset.rules || []) {
-          securityRules.push({
-            ...rule,
-            rulesetId: ruleset.id,
-            rulesetName: ruleset.name
-          });
+        // Get basic ruleset info - this includes rule IDs and basic metadata
+        const rulesetResponse = await this.makeRequest<CloudflareRuleset>(`/zones/${zoneId}/rulesets/${ruleset.id}`);
+        const basicRuleset = rulesetResponse.result;
+
+        if (basicRuleset.rules) {
+          for (const rule of basicRuleset.rules) {
+            ruleSummaries.push({
+              id: rule.id!,
+              rulesetId: ruleset.id,
+              rulesetName: ruleset.name,
+              description: rule.description,
+              enabled: rule.enabled,
+              action: rule.action
+            });
+          }
         }
+
+        console.log(`[CloudflareAPI] Got summary for ${basicRuleset.rules?.length || 0} rules in ruleset: ${ruleset.name}`);
       } catch (error) {
         if (error instanceof Error && error.message.includes('403')) {
-          console.warn(`⚠️ No permissions to access ruleset ${ruleset.id} (${ruleset.name}). Token may need Zone WAF: Edit permission.`);
-          permissionIssues++;
+          console.warn(`[CloudflareAPI] ⚠️ No permissions to access custom ruleset ${ruleset.id} (${ruleset.name})`);
         } else {
-          console.error(`Error getting detailed ruleset ${ruleset.id}:`, error);
+          console.error(`[CloudflareAPI] Error getting summary for ruleset ${ruleset.id}:`, error);
         }
       }
     }
 
-    if (permissionIssues > 0) {
-      console.warn(`🔐 Token permission issue: Could not access ${permissionIssues} rulesets due to insufficient permissions. Please ensure your Cloudflare API token has 'Zone WAF: Edit' permission.`);
+    console.log(`[CloudflareAPI] Zone ${zoneId}: Got summary for ${ruleSummaries.length} total rules`);
+    return ruleSummaries;
+  }
+
+  // Helper method to get all security rules for a zone (LEGACY - use getZoneSecurityRulesSummary for better performance)
+  async getZoneSecurityRules(zoneId: string): Promise<Array<CloudflareRule & { rulesetId: string; rulesetName: string }>> {
+    console.log(`[CloudflareAPI] Getting security rules for zone: ${zoneId}`);
+
+    // Get all rulesets first, then filter properly
+    const allRulesets = await this.getZoneRulesets(zoneId);
+
+    // Filter only for custom firewall rulesets (client-side filtering for accuracy)
+    const rulesets = allRulesets.filter(ruleset =>
+      ruleset.phase === 'http_request_firewall_custom'
+    );
+
+    console.log(`[CloudflareAPI] Found ${rulesets.length} custom firewall rulesets out of ${allRulesets.length} total rulesets for zone ${zoneId}`);
+
+    // Early return if no custom firewall rulesets
+    if (rulesets.length === 0) {
+      console.log(`[CloudflareAPI] No custom firewall rulesets found for zone ${zoneId}`);
+      return [];
     }
 
-    console.log(`Found ${securityRules.length} total rules (${permissionIssues} rulesets inaccessible due to permissions)`);
+    const securityRules: Array<CloudflareRule & { rulesetId: string; rulesetName: string }> = [];
+    let permissionIssues = 0;
+    let processedRulesets = 0;
+
+    // Process rulesets in parallel for better performance
+    const rulesetPromises = rulesets.map(async (ruleset) => {
+      // Skip known problematic rulesets early to avoid 403 errors
+      const knownSystemRulesets = [
+        'Cloudflare Managed Free Ruleset',
+        'Cloudflare Normalization Ruleset',
+        'zone', // Generic zone rulesets often have permission issues
+        'DDoS L7 ruleset'
+      ];
+
+      if (knownSystemRulesets.some(name => ruleset.name.includes(name))) {
+        console.log(`[CloudflareAPI] Skipping known system ruleset: ${ruleset.name} (${ruleset.id})`);
+        return { success: false, rules: [] };
+      }
+
+      console.log(`[CloudflareAPI] Processing custom ruleset: ${ruleset.name} (${ruleset.id})`);
+      try {
+        const detailedRuleset = await this.getZoneRuleset(zoneId, ruleset.id);
+        const rulesCount = detailedRuleset.rules?.length || 0;
+        console.log(`[CloudflareAPI] Found ${rulesCount} rules in custom ruleset: ${ruleset.name}`);
+
+        const rulesWithMetadata = (detailedRuleset.rules || []).map(rule => ({
+          ...rule,
+          rulesetId: ruleset.id,
+          rulesetName: ruleset.name
+        }));
+
+        processedRulesets++;
+        return { success: true, rules: rulesWithMetadata };
+      } catch (error) {
+        if (error instanceof Error && error.message.includes('403')) {
+          console.warn(`[CloudflareAPI] ⚠️ No permissions to access custom ruleset ${ruleset.id} (${ruleset.name}). This may be expected for certain rulesets.`);
+          permissionIssues++;
+        } else {
+          console.error(`[CloudflareAPI] Error getting detailed ruleset ${ruleset.id}:`, error);
+        }
+        return { success: false, rules: [] };
+      }
+    });
+
+    // Wait for all ruleset processing to complete
+    const rulesetResults = await Promise.allSettled(rulesetPromises);
+
+    // Collect all successful results
+    for (const result of rulesetResults) {
+      if (result.status === 'fulfilled' && result.value.success) {
+        securityRules.push(...result.value.rules);
+      }
+    }
+
+    if (permissionIssues > 0) {
+      console.warn(`[CloudflareAPI] 🔐 Token permission issue: Could not access ${permissionIssues}/${rulesets.length} rulesets due to insufficient permissions. Please ensure your Cloudflare API token has 'Zone WAF: Edit' permission.`);
+    }
+
+    console.log(`[CloudflareAPI] Zone ${zoneId}: Found ${securityRules.length} total rules from ${processedRulesets}/${rulesets.length} accessible rulesets`);
     return securityRules;
   }
 
@@ -471,7 +721,26 @@ export class CloudflareAPI {
             
             const updatedRuleset = await this.addRuleToZone(zoneId, newRule);
             const addedRule = updatedRuleset.rules.find(r => r.description === cloudflareRuleName);
-            
+
+            // Update rule mapping
+            if (addedRule) {
+              // Remove old mapping
+              await removeRuleMapping(existingTemplateRule.id);
+
+              // Add new mapping
+              await addRuleMapping({
+                cloudflareRuleId: addedRule.id,
+                templateId: template.id,
+                friendlyId: template.friendlyId,
+                version: template.version,
+                appliedAt: new Date().toISOString(),
+                zoneId,
+                domainName: '' // Will be filled by caller if needed
+              });
+
+              console.log(`[CloudflareAPI] Updated rule mapping: ${addedRule.id} → ${template.friendlyId} v${template.version}`);
+            }
+
             return {
               success: true,
               appliedRuleId: addedRule?.id,
@@ -512,6 +781,21 @@ export class CloudflareAPI {
 
       const addedRule = updatedRuleset.rules.find(r => r.description === cloudflareRuleName);
       console.log(`[CloudflareAPI] Found added rule:`, addedRule);
+
+      // Add rule mapping for new rule
+      if (addedRule) {
+        await addRuleMapping({
+          cloudflareRuleId: addedRule.id,
+          templateId: template.id,
+          friendlyId: template.friendlyId,
+          version: template.version,
+          appliedAt: new Date().toISOString(),
+          zoneId,
+          domainName: '' // Will be filled by caller if needed
+        });
+
+        console.log(`[CloudflareAPI] Added rule mapping: ${addedRule.id} → ${template.friendlyId} v${template.version}`);
+      }
 
       return {
         success: true,

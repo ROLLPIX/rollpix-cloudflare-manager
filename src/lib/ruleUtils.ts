@@ -25,41 +25,44 @@ export function generateNextFriendlyId(existingTemplates: RuleTemplate[]): strin
 }
 
 /**
- * Create Cloudflare rule name with ID and version
- * Format: "Original Name #R001v1.0"
+ * Create Cloudflare rule name with template prefix
+ * Format: "R001-Original Name" (simple prefix for easy detection)
  */
 export function createCloudflareRuleName(originalName: string, friendlyId: string, version: string): string {
-  return `${originalName} #${friendlyId}v${version}`;
+  return `${friendlyId}-${originalName}`;
 }
 
 /**
  * Parse Cloudflare rule name to extract template info
  * Returns null if not a template rule
+ * Format: "R001-Original Name"
  */
 export function parseCloudflareRuleName(cloudflareRuleName: string): {
   originalName: string;
   friendlyId: string;
   version: string;
 } | null {
-  const pattern = /^(.+) #(R\d{3})v(\d+\.\d+)$/;
+  // Simple prefix pattern: R001-Something
+  const pattern = /^(R\d{3})-(.+)$/;
   const match = cloudflareRuleName.match(pattern);
-  
+
   if (!match) {
     return null;
   }
 
   return {
-    originalName: match[1],
-    friendlyId: match[2],
-    version: match[3]
+    originalName: match[2],
+    friendlyId: match[1],
+    version: '1.0' // Default version since we're simplifying
   };
 }
 
 /**
  * Check if a Cloudflare rule is from our template system
+ * Simple check for R001- prefix pattern
  */
 export function isTemplateRule(cloudflareRuleName: string): boolean {
-  return parseCloudflareRuleName(cloudflareRuleName) !== null;
+  return /^R\d{3}-/.test(cloudflareRuleName);
 }
 
 /**

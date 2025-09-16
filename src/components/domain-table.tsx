@@ -9,12 +9,12 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
-import { RefreshCw, Loader2, Search, Globe, ChevronDown } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { RefreshCw, Loader2, Search, Globe } from 'lucide-react';
 import { SecurityRulesIndicator } from './SecurityRulesIndicator';
 import { RulesActionBar } from './RulesActionBar';
 import { DNSPills } from './DNSPills';
 import { FirewallControls } from './FirewallControls';
+import { ProgressPopup } from './ProgressPopup';
 import { useDomainStore } from '@/store/domainStore';
 import { FilterPills } from './FilterPills';
 
@@ -23,6 +23,7 @@ export function DomainTable() {
     allDomains,
     loading,
     loadingProgress,
+    unifiedProgress,
     isBackgroundRefreshing,
     selectedDomains,
     currentPage,
@@ -33,8 +34,8 @@ export function DomainTable() {
     lastUpdate,
     refreshingDomainId,
     initializeDomains,
-    fetchFromCloudflare,
-    fetchWithRules,
+    fetchFromCloudflareUnified,
+    refreshMultipleDomains,
     setSearchTerm,
     setCurrentPage,
     setPerPage,
@@ -157,25 +158,10 @@ export function DomainTable() {
             </CardTitle>
             <div className="flex flex-col items-end gap-1">
               <div className="flex items-center gap-1">
-                <Button variant="outline" size="sm" onClick={() => fetchFromCloudflare()} disabled={loading || isBackgroundRefreshing}>
+                <Button variant="outline" size="sm" onClick={() => fetchFromCloudflareUnified(false, true)} disabled={loading || isBackgroundRefreshing}>
                   <RefreshCw className={`h-4 w-4 mr-2 ${loading || isBackgroundRefreshing ? 'animate-spin' : ''}`} />
-                  {loading && loadingProgress ? `Actualizando ${loadingProgress.completed} de ${loadingProgress.total}...` : (loading ? 'Actualizando...' : 'Actualizar Rápido')}
+                  {loading ? 'Actualizando...' : 'Actualizar Todo'}
                 </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" disabled={loading || isBackgroundRefreshing} className="px-2">
-                      <ChevronDown className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => fetchFromCloudflare()}>
-                      🚀 Actualización Rápida (solo DNS + seguridad)
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => fetchWithRules()}>
-                      🔍 Actualización Completa (incluye análisis de reglas)
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
               </div>
               <div className="flex items-center gap-2 h-4">
                 {isBackgroundRefreshing && <Loader2 className="h-3 w-3 animate-spin" />}
@@ -226,7 +212,7 @@ export function DomainTable() {
           <RulesActionBar
             selectedDomains={allDomains.filter(d => selectedDomains.has(d.domain)).map(d => d.zoneId)}
             onClearSelection={clearDomainSelection}
-            onRefresh={() => fetchFromCloudflare()}
+            onRefreshSelectedDomains={refreshMultipleDomains}
             onBulkProxy={bulkToggleProxy}
           />
 
@@ -323,6 +309,11 @@ export function DomainTable() {
           )}
         </CardContent>
       </Card>
+
+      <ProgressPopup
+        isVisible={!!unifiedProgress}
+        percentage={unifiedProgress?.percentage || 0}
+      />
     </>
   );
 }

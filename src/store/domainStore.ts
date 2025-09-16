@@ -23,6 +23,7 @@ interface DomainState {
   allDomains: DomainStatus[];
   loading: boolean;
   loadingProgress: { completed: number; total: number } | null;
+  unifiedProgress: { percentage: number } | null;
   isBackgroundRefreshing: boolean;
   selectedDomains: Set<string>;
   updatingRecords: Set<string>;
@@ -39,8 +40,10 @@ interface DomainState {
 interface DomainActions {
   initializeDomains: () => Promise<void>;
   fetchFromCloudflare: (isBackground?: boolean, includeRules?: boolean) => Promise<void>;
+  fetchFromCloudflareUnified: (isBackground?: boolean, forceRefresh?: boolean) => Promise<void>;
   fetchWithRules: () => Promise<void>;
   refreshSingleDomain: (zoneId: string) => Promise<void>;
+  refreshMultipleDomains: (zoneIds: string[]) => Promise<void>;
   toggleProxy: (zoneId: string, recordId: string, currentProxied: boolean) => Promise<void>;
   setSearchTerm: (term: string) => void;
   toggleFilterPill: (pillType: keyof FilterPills) => void;
@@ -60,6 +63,7 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
   allDomains: [],
   loading: false,
   loadingProgress: null,
+  unifiedProgress: null,
   isBackgroundRefreshing: false,
   selectedDomains: new Set(),
   updatingRecords: new Set(),
@@ -150,6 +154,138 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
   }),
 
   clearDomainSelection: () => set({ selectedDomains: new Set() }),
+
+  // New unified fetch strategy - gets complete domain info in single pass
+  fetchFromCloudflareUnified: async (isBackground = false, forceRefresh = false) => {
+    // Always show progress for non-background calls
+    const showProgress = !isBackground;
+
+    if (showProgress) {
+      set({
+        loading: true,
+        loadingProgress: { completed: 0, total: 1 },
+        unifiedProgress: { percentage: 0 }
+      });
+    } else {
+      set({ isBackgroundRefreshing: true });
+    }
+
+    const apiToken = tokenStorage.getToken();
+    console.log('[DomainStore] Unified fetch - Token:', apiToken ? `${apiToken.substring(0, 8)}...` : 'null');
+
+    if (!apiToken) {
+      toast.error('API Token no encontrado.');
+      set({ loading: false, isBackgroundRefreshing: false });
+      return;
+    }
+
+    // Start simple percentage progress tracking
+    let progressInterval: NodeJS.Timeout | null = null;
+    let currentPercentage = 0;
+
+    try {
+      console.log(`[DomainStore] Starting unified fetch - forceRefresh: ${forceRefresh}`);
+
+      if (showProgress) {
+        // Simple percentage-based progress simulation
+        progressInterval = setInterval(() => {
+          currentPercentage += Math.random() * 15; // Random increments up to 15%
+          currentPercentage = Math.min(currentPercentage, 85); // Don't go above 85% until complete
+          set({ unifiedProgress: { percentage: Math.round(currentPercentage) } });
+        }, 500); // Update every 500ms
+      }
+
+      // Use unified endpoint for complete domain processing
+      const unifiedResponse = await fetch('/api/domains/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          apiToken,
+          zoneIds: [], // Empty means process all zones
+          forceRefresh
+        })
+      });
+
+      if (!unifiedResponse.ok) {
+        throw new Error('Error en procesamiento unificado de dominios');
+      }
+
+      const unifiedData = await unifiedResponse.json();
+
+      // Clear progress interval
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
+
+      if (unifiedData.success) {
+        const { domains, summary } = unifiedData.data;
+
+        // Final progress update
+        if (showProgress) {
+          set({ unifiedProgress: { percentage: 100 } });
+          // Hide progress after 1 second
+          setTimeout(() => {
+            set({ unifiedProgress: null });
+          }, 1000);
+        }
+
+        set({
+          allDomains: domains,
+          totalCount: summary.totalDomains,
+          lastUpdate: new Date(),
+          loading: false,
+          isBackgroundRefreshing: false
+        });
+
+        // Show success message with unified processing stats
+        const message = `${summary.totalDomains} dominios procesados completamente (${summary.totalTemplateRules} reglas template, ${summary.totalCustomRules} custom)`;
+        if (isBackground) {
+          console.log(`[DomainStore] ${message}`);
+        } else {
+          toast.success(message);
+        }
+
+        console.log('[DomainStore] Unified processing stats:', summary);
+
+      } else {
+        throw new Error(unifiedData.error || 'Error en procesamiento unificado');
+      }
+
+    } catch (error) {
+      console.error('[DomainStore] Unified fetch error:', error);
+
+      // Clear progress interval on error
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
+
+      // Hide progress popup
+      if (showProgress) {
+        set({ unifiedProgress: null });
+      }
+
+      // Fallback to cached data if available
+      try {
+        const cacheResponse = await fetch('/api/domains/complete');
+        if (cacheResponse.ok) {
+          const cacheData = await cacheResponse.json();
+          if (cacheData.success) {
+            set({
+              allDomains: cacheData.data.domains,
+              totalCount: cacheData.data.totalCount,
+              lastUpdate: new Date(cacheData.data.lastUpdate)
+            });
+            toast.warning('Usando datos en caché. La actualización falló.');
+          }
+        }
+      } catch (cacheError) {
+        console.warn('[DomainStore] Cache fallback failed:', cacheError);
+      }
+
+      set({ loading: false, isBackgroundRefreshing: false });
+      toast.error(error instanceof Error ? error.message : 'Error al actualizar dominios');
+    }
+  },
 
   fetchFromCloudflare: async (isBackground = false, includeRules = false) => {
     if (!isBackground) {
@@ -318,7 +454,7 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
       // Load preferences and cache in parallel for better performance
       const [preferencesResponse, cacheResponse] = await Promise.allSettled([
         fetch('/api/preferences'),
-        fetch('/api/cache')
+        fetch('/api/domains/complete') // Use unified cache instead
       ]);
 
       // Handle preferences
@@ -347,17 +483,22 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
           const cacheData = await cacheResponse.value.json();
           console.log('[DomainStore] Cache response received:', cacheData);
 
-          if (cacheData.domains && Array.isArray(cacheData.domains) && cacheData.domains.length > 0) {
+          // Handle unified cache structure
+          const domains = cacheData.success ? cacheData.data?.domains : cacheData.domains;
+          const totalCount = cacheData.success ? cacheData.data?.totalCount : cacheData.totalCount;
+          const lastUpdate = cacheData.success ? cacheData.data?.lastUpdate : cacheData.lastUpdate;
+
+          if (domains && Array.isArray(domains) && domains.length > 0) {
             const loadTime = Date.now() - startTime;
-            console.log(`[DomainStore] Cache loaded in ${loadTime}ms with ${cacheData.domains.length} domains`);
+            console.log(`[DomainStore] Cache loaded in ${loadTime}ms with ${domains.length} domains`);
 
             set({
-              allDomains: cacheData.domains,
-              totalCount: cacheData.totalCount || cacheData.domains.length,
-              lastUpdate: cacheData.lastUpdate ? new Date(cacheData.lastUpdate) : new Date()
+              allDomains: domains,
+              totalCount: totalCount || domains.length,
+              lastUpdate: lastUpdate ? new Date(lastUpdate) : new Date()
             });
 
-            toast.success(`${cacheData.domains.length} dominios cargados desde caché.`);
+            toast.success(`${domains.length} dominios cargados desde caché.`);
             return;
           } else {
             console.log('[DomainStore] Cache exists but no valid domains found:', cacheData);
@@ -536,6 +677,39 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
       toast.error(`Error al actualizar dominio: ${error instanceof Error ? error.message : 'Error desconocido'}`);
     } finally {
       set({ refreshingDomainId: null });
+    }
+  },
+
+  refreshMultipleDomains: async (zoneIds: string[]) => {
+    if (zoneIds.length === 0) return;
+
+    console.log(`[DomainStore] Refreshing ${zoneIds.length} domains:`, zoneIds);
+
+    // Show progress for multiple domain refresh
+    set({ unifiedProgress: { percentage: 0 } });
+
+    const refreshPromises = zoneIds.map(async (zoneId, index) => {
+      try {
+        await get().refreshSingleDomain(zoneId);
+        // Update progress as each domain completes
+        const completedPercentage = Math.round(((index + 1) / zoneIds.length) * 100);
+        set({ unifiedProgress: { percentage: completedPercentage } });
+      } catch (error) {
+        console.error(`[DomainStore] Failed to refresh domain ${zoneId}:`, error);
+      }
+    });
+
+    try {
+      await Promise.all(refreshPromises);
+      toast.success(`${zoneIds.length} dominios actualizados correctamente.`);
+    } catch (error) {
+      console.error('[DomainStore] Error in bulk domain refresh:', error);
+      toast.error('Algunos dominios no se pudieron actualizar.');
+    } finally {
+      // Hide progress after completion
+      setTimeout(() => {
+        set({ unifiedProgress: null });
+      }, 1000);
     }
   },
 

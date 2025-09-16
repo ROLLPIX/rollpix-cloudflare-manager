@@ -35,16 +35,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-08-20T04:00:07.047508Z",
-        "modified_on": "2025-09-12T08:23:57.462558Z"
+        "modified_on": "2025-09-15T08:23:59.099299Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:07:41.729Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.798Z"
       }
     },
     {
@@ -82,16 +84,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-10-04T16:40:46.311908Z",
-        "modified_on": "2025-09-12T08:23:59.311214Z"
+        "modified_on": "2025-09-15T08:24:00.860648Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:07:44.747Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.961Z"
       }
     },
     {
@@ -127,16 +131,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-17T00:50:04.827595Z",
-        "modified_on": "2025-09-12T08:24:01.154989Z"
+        "modified_on": "2025-09-15T08:24:02.903531Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:07:48.405Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.909Z"
       }
     },
     {
@@ -174,44 +180,65 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-08T20:40:15.752143Z",
-        "modified_on": "2025-09-12T08:24:03.015895Z"
+        "modified_on": "2025-09-15T08:24:04.785972Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:07:51.939Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.712Z"
       }
     },
     {
       "domain": "bordoli.com.ar",
       "zoneId": "26735a5e7231abbdf9a4f1ffb447faa5",
       "rootRecord": {
-        "id": "34de4e250f339723521f7efd627f1904",
+        "id": "20dfd9229d622f71a3d66e00f0b381a7",
         "name": "bordoli.com.ar",
         "type": "A",
-        "content": "15.235.53.147",
+        "content": "190.105.228.40",
         "proxiable": true,
-        "proxied": true,
+        "proxied": false,
         "ttl": 1,
         "settings": {},
         "meta": {},
         "comment": null,
         "tags": [],
-        "created_on": "2025-09-09T19:14:40.051519Z",
-        "modified_on": "2025-09-11T19:37:20.564499Z"
+        "created_on": "2025-09-14T14:35:56.708622Z",
+        "modified_on": "2025-09-14T14:35:56.708622Z"
       },
-      "rootProxied": true,
-      "wwwProxied": false,
+      "wwwRecord": {
+        "id": "cb00fde7452135ab0719183008e0da3c",
+        "name": "www.bordoli.com.ar",
+        "type": "CNAME",
+        "content": "bordoli.com.ar",
+        "proxiable": true,
+        "proxied": true,
+        "ttl": 1,
+        "settings": {
+          "flatten_cname": false
+        },
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2025-09-14T14:51:48.709059Z",
+        "modified_on": "2025-09-15T08:24:06.888902Z"
+      },
+      "rootProxied": false,
+      "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:07:55.236Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.869Z"
       }
     },
     {
@@ -232,7 +259,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:12:34.036208Z",
-        "modified_on": "2025-09-10T23:26:23.69274Z"
+        "modified_on": "2025-09-14T14:51:24.982077Z"
       },
       "wwwRecord": {
         "id": "1cc6dafed8eed7808a35133f8e4a3fe2",
@@ -249,16 +276,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:12:34.035644Z",
-        "modified_on": "2025-09-12T08:24:06.208333Z"
+        "modified_on": "2025-09-15T08:24:08.769902Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
+        "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:07:58.396Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.954Z"
       }
     },
     {
@@ -296,16 +325,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:04:22.553763Z",
-        "modified_on": "2025-09-12T08:24:08.168357Z"
+        "modified_on": "2025-09-15T08:24:10.722087Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:01.678Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.738Z"
       }
     },
     {
@@ -341,21 +372,38 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-05-05T08:55:10.286725Z",
-        "modified_on": "2025-09-12T08:24:10.278769Z"
+        "modified_on": "2025-09-15T08:24:12.653392Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:05.179Z"
+        "lastAnalyzed": "2025-09-16T04:49:38.118Z"
       }
     },
     {
       "domain": "buttman.com.uy",
       "zoneId": "99b3909f7a4be4cd869f5dc6e2af5f32",
+      "rootRecord": {
+        "id": "c8a3274d0ec3b4c6e50970b39121561d",
+        "name": "buttman.com.uy",
+        "type": "A",
+        "content": "190.64.98.104",
+        "proxiable": true,
+        "proxied": false,
+        "ttl": 1,
+        "settings": {},
+        "meta": {},
+        "comment": null,
+        "tags": [],
+        "created_on": "2025-09-14T18:44:16.851907Z",
+        "modified_on": "2025-09-14T18:44:16.851907Z"
+      },
       "wwwRecord": {
         "id": "2c6393c64949e2f635625e1393350c49",
         "name": "www.buttman.com.uy",
@@ -369,18 +417,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-18T22:12:22.88951Z",
-        "modified_on": "2025-09-14T17:09:46.37727Z"
+        "modified_on": "2025-09-15T08:24:14.663134Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
-      "underAttackMode": true,
+      "underAttackMode": false,
       "botFightMode": false,
       "securityRules": {
-        "totalRules": 1,
-        "corporateRules": 1,
-        "customRules": 0,
+        "totalRules": 2,
+        "corporateRules": 0,
+        "customRules": 2,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:55:31.737Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.943Z"
       }
     },
     {
@@ -399,16 +447,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-18T22:09:45.344247Z",
-        "modified_on": "2025-09-12T08:24:14.278027Z"
+        "modified_on": "2025-09-15T08:24:16.611111Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 2,
         "corporateRules": 0,
-        "customRules": 0,
+        "customRules": 2,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:12.857Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.729Z"
       }
     },
     {
@@ -444,16 +494,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-12T21:32:37.703779Z",
-        "modified_on": "2025-09-12T08:24:16.145508Z"
+        "modified_on": "2025-09-15T08:24:18.743302Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:16.396Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.725Z"
       }
     },
     {
@@ -489,16 +541,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-01-25T15:57:04.809306Z",
-        "modified_on": "2025-09-12T08:24:18.061531Z"
+        "modified_on": "2025-09-15T08:24:20.806516Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:19.937Z"
+        "lastAnalyzed": "2025-09-16T04:49:37.957Z"
       }
     },
     {
@@ -534,16 +588,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-04-06T18:15:04.392398Z",
-        "modified_on": "2025-09-12T08:24:21.283929Z"
+        "modified_on": "2025-09-15T08:24:22.675476Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:23.122Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.516Z"
       }
     },
     {
@@ -577,16 +633,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-02-28T14:44:05.267294Z",
-        "modified_on": "2025-09-12T08:24:23.44516Z"
+        "modified_on": "2025-09-15T08:24:24.676681Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:26.559Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.687Z"
       }
     },
     {
@@ -622,16 +680,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-14T18:05:25.55251Z",
-        "modified_on": "2025-09-12T08:24:25.592088Z"
+        "modified_on": "2025-09-15T08:24:26.567347Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:29.693Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.629Z"
       }
     },
     {
@@ -669,16 +729,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-07-17T17:37:16.790088Z",
-        "modified_on": "2025-09-12T08:24:27.82619Z"
+        "modified_on": "2025-09-15T08:24:28.474642Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:32.980Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.513Z"
       }
     },
     {
@@ -712,16 +774,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-07-17T17:29:08.915797Z",
-        "modified_on": "2025-09-12T08:24:29.897087Z"
+        "modified_on": "2025-09-15T08:24:30.308874Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:36.318Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.440Z"
       }
     },
     {
@@ -757,16 +821,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-10-03T12:58:25.620419Z",
-        "modified_on": "2025-09-12T08:24:31.768912Z"
+        "modified_on": "2025-09-15T08:24:32.192751Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T21:32:39.871Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.584Z"
       }
     },
     {
@@ -804,16 +870,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-11-01T00:31:14.443878Z",
-        "modified_on": "2025-09-12T08:24:33.741202Z"
+        "modified_on": "2025-09-15T08:24:34.004962Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:43.666Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.585Z"
       }
     },
     {
@@ -849,16 +917,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-01-24T17:22:12.787862Z",
-        "modified_on": "2025-09-12T08:24:35.705042Z"
+        "modified_on": "2025-09-15T08:24:35.870655Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-15T04:08:47.106Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.807Z"
       }
     },
     {
@@ -900,12 +970,14 @@
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 2,
         "corporateRules": 0,
         "customRules": 2,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:12:39.324Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.654Z"
       }
     },
     {
@@ -943,16 +1015,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-09T23:10:45.113789Z",
-        "modified_on": "2025-09-12T08:24:37.761587Z"
+        "modified_on": "2025-09-15T08:24:37.698393Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:12:42.697Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.685Z"
       }
     },
     {
@@ -990,16 +1064,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-08-30T19:43:47.669012Z",
-        "modified_on": "2025-09-12T08:24:40.019069Z"
+        "modified_on": "2025-09-15T08:24:39.602932Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:12:46.173Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.744Z"
       }
     },
     {
@@ -1037,16 +1113,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-07-06T01:24:35.477312Z",
-        "modified_on": "2025-09-12T08:24:42.058891Z"
+        "modified_on": "2025-09-15T08:24:41.623728Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:12:49.644Z"
+        "lastAnalyzed": "2025-09-16T04:49:40.671Z"
       }
     },
     {
@@ -1082,16 +1160,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-07T19:50:45.729097Z",
-        "modified_on": "2025-09-12T08:24:44.126697Z"
+        "modified_on": "2025-09-15T08:24:43.456414Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:12:53.184Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.285Z"
       }
     },
     {
@@ -1127,16 +1207,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-15T19:34:03.881628Z",
-        "modified_on": "2025-09-12T08:24:46.034523Z"
+        "modified_on": "2025-09-15T08:24:45.263941Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:12:56.607Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.142Z"
       }
     },
     {
@@ -1159,12 +1241,14 @@
       },
       "rootProxied": true,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:12:59.885Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.372Z"
       }
     },
     {
@@ -1202,16 +1286,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-07-18T19:09:04.036486Z",
-        "modified_on": "2025-09-12T08:24:49.446456Z"
+        "modified_on": "2025-09-15T08:24:48.436352Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:03.247Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.467Z"
       }
     },
     {
@@ -1247,16 +1333,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-22T23:12:08.842634Z",
-        "modified_on": "2025-09-12T08:24:51.642354Z"
+        "modified_on": "2025-09-15T08:24:50.589439Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:06.778Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.514Z"
       }
     },
     {
@@ -1294,16 +1382,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-02-14T16:39:12.421424Z",
-        "modified_on": "2025-09-12T08:24:53.748646Z"
+        "modified_on": "2025-09-15T08:24:52.641687Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:10.119Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.276Z"
       }
     },
     {
@@ -1339,16 +1429,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-05-18T18:27:47.959205Z",
-        "modified_on": "2025-09-12T08:24:55.81217Z"
+        "modified_on": "2025-09-15T08:24:54.60305Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:13.314Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.823Z"
       }
     },
     {
@@ -1384,16 +1476,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-08-31T18:43:15.752505Z",
-        "modified_on": "2025-09-12T08:24:57.731247Z"
+        "modified_on": "2025-09-15T08:24:56.483954Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:16.525Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.716Z"
       }
     },
     {
@@ -1429,16 +1523,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-28T21:17:44.230472Z",
-        "modified_on": "2025-09-12T08:24:59.728536Z"
+        "modified_on": "2025-09-15T08:24:58.86541Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:20.145Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.247Z"
       }
     },
     {
@@ -1476,16 +1572,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-09-13T13:42:10.971036Z",
-        "modified_on": "2025-09-12T08:25:03.966068Z"
+        "modified_on": "2025-09-15T08:25:01.25319Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:23.464Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.370Z"
       }
     },
     {
@@ -1521,16 +1619,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-08-26T02:42:38.038177Z",
-        "modified_on": "2025-09-12T08:25:09.307738Z"
+        "modified_on": "2025-09-15T08:25:06.179424Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:26.553Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.364Z"
       }
     },
     {
@@ -1568,16 +1668,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-08-22T14:29:01.29443Z",
-        "modified_on": "2025-09-12T08:25:11.126082Z"
+        "modified_on": "2025-09-15T08:25:08.163835Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:30.263Z"
+        "lastAnalyzed": "2025-09-16T04:49:43.397Z"
       }
     },
     {
@@ -1613,16 +1715,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-03-22T23:48:34.131337Z",
-        "modified_on": "2025-09-12T08:25:13.191Z"
+        "modified_on": "2025-09-15T08:25:10.268178Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:33.554Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.111Z"
       }
     },
     {
@@ -1660,16 +1764,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-05-18T22:56:32.004271Z",
-        "modified_on": "2025-09-12T08:25:15.061492Z"
+        "modified_on": "2025-09-15T08:25:12.169507Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:36.826Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.293Z"
       }
     },
     {
@@ -1677,12 +1783,14 @@
       "zoneId": "06a6b49ecef27a8263eebf4cd52a460a",
       "rootProxied": false,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:40.105Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.193Z"
       }
     },
     {
@@ -1707,12 +1815,14 @@
       },
       "rootProxied": true,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:43.595Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.149Z"
       }
     },
     {
@@ -1750,16 +1860,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-02T18:45:42.722314Z",
-        "modified_on": "2025-09-12T08:25:20.223071Z"
+        "modified_on": "2025-09-15T08:25:17.03243Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:47.028Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.225Z"
       }
     },
     {
@@ -1795,16 +1907,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-15T00:24:24.727057Z",
-        "modified_on": "2025-09-12T08:25:22.549293Z"
+        "modified_on": "2025-09-15T08:25:20.595439Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:50.302Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.238Z"
       }
     },
     {
@@ -1840,16 +1954,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-09T16:33:15.757686Z",
-        "modified_on": "2025-09-12T08:25:24.5155Z"
+        "modified_on": "2025-09-15T08:25:23.532506Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:53.571Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.128Z"
       }
     },
     {
@@ -1885,16 +2001,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-09-16T13:04:15.792137Z",
-        "modified_on": "2025-09-12T08:25:26.408261Z"
+        "modified_on": "2025-09-15T08:25:25.453995Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:13:56.771Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.439Z"
       }
     },
     {
@@ -1930,16 +2048,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-08T13:36:30.139213Z",
-        "modified_on": "2025-09-12T08:25:28.440585Z"
+        "modified_on": "2025-09-15T08:25:27.332839Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:14:00.034Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.238Z"
       }
     },
     {
@@ -1979,12 +2099,14 @@
       },
       "rootProxied": false,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 0,
         "corporateRules": 0,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:14:02.295Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.096Z"
       }
     },
     {
@@ -2022,16 +2144,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-06-25T15:55:02.355017Z",
-        "modified_on": "2025-09-12T08:25:30.345797Z"
+        "modified_on": "2025-09-15T08:25:29.210329Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:14:05.922Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.130Z"
       }
     },
     {
@@ -2067,16 +2191,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-09-04T15:37:59.518905Z",
-        "modified_on": "2025-09-12T08:25:32.292679Z"
+        "modified_on": "2025-09-15T08:25:31.114077Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:14:09.466Z"
+        "lastAnalyzed": "2025-09-16T04:49:46.333Z"
       }
     },
     {
@@ -2112,16 +2238,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-04-14T20:13:57.031814Z",
-        "modified_on": "2025-09-12T08:25:34.383923Z"
+        "modified_on": "2025-09-15T08:25:32.934448Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:14:12.646Z"
+        "lastAnalyzed": "2025-09-16T04:49:48.872Z"
       }
     },
     {
@@ -2157,16 +2285,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-08-27T15:11:58.631682Z",
-        "modified_on": "2025-09-12T08:25:36.446083Z"
+        "modified_on": "2025-09-15T08:25:34.802513Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-14T21:14:15.914Z"
+        "lastAnalyzed": "2025-09-16T04:49:48.746Z"
       }
     },
     {
@@ -2204,15 +2334,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-08-18T20:05:53.163898Z",
-        "modified_on": "2025-09-12T08:25:38.543933Z"
+        "modified_on": "2025-09-15T08:25:36.678911Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:48.873Z"
       }
     },
     {
@@ -2248,15 +2381,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-14T13:41:54.243219Z",
-        "modified_on": "2025-09-12T08:25:40.619124Z"
+        "modified_on": "2025-09-15T08:25:38.576766Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:48.785Z"
       }
     },
     {
@@ -2294,15 +2430,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-06-18T13:44:18.207412Z",
-        "modified_on": "2025-09-12T08:25:42.556631Z"
+        "modified_on": "2025-09-15T08:25:40.652174Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:48.792Z"
       }
     },
     {
@@ -2338,15 +2477,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-24T14:14:47.674148Z",
-        "modified_on": "2025-09-12T08:25:44.456406Z"
+        "modified_on": "2025-09-15T08:25:42.623133Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:49.125Z"
       }
     },
     {
@@ -2384,15 +2526,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-05-29T00:31:06.043141Z",
-        "modified_on": "2025-09-12T08:25:46.543148Z"
+        "modified_on": "2025-09-15T08:25:44.500596Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:48.837Z"
       }
     },
     {
@@ -2430,15 +2575,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-06-03T15:46:52.938099Z",
-        "modified_on": "2025-09-12T08:25:48.603289Z"
+        "modified_on": "2025-09-15T08:25:46.360307Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:48.931Z"
       }
     },
     {
@@ -2474,15 +2622,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-08-28T15:58:49.366637Z",
-        "modified_on": "2025-09-12T08:25:50.515198Z"
+        "modified_on": "2025-09-15T08:25:48.206907Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:48.798Z"
       }
     },
     {
@@ -2518,15 +2669,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-04-09T18:16:49.31311Z",
-        "modified_on": "2025-09-12T08:25:52.282441Z"
+        "modified_on": "2025-09-15T08:25:50.246072Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:48.792Z"
       }
     },
     {
@@ -2564,15 +2718,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-04-22T13:00:18.131743Z",
-        "modified_on": "2025-09-12T08:25:54.353868Z"
+        "modified_on": "2025-09-15T08:25:52.122697Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:48.770Z"
       }
     },
     {
@@ -2610,15 +2767,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-06-26T19:03:48.698446Z",
-        "modified_on": "2025-09-12T08:25:56.282803Z"
+        "modified_on": "2025-09-15T08:25:54.060912Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:49.035Z"
       }
     },
     {
@@ -2656,15 +2816,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-29T13:43:37.288667Z",
-        "modified_on": "2025-09-12T08:25:58.190171Z"
+        "modified_on": "2025-09-15T08:25:55.939365Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.638Z"
       }
     },
     {
@@ -2700,15 +2863,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-01-03T15:24:07.063418Z",
-        "modified_on": "2025-09-12T08:26:00.018861Z"
+        "modified_on": "2025-09-15T08:25:57.789222Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.589Z"
       }
     },
     {
@@ -2744,15 +2910,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-03T17:48:33.518352Z",
-        "modified_on": "2025-09-12T08:26:02.031174Z"
+        "modified_on": "2025-09-15T08:25:59.715929Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.753Z"
       }
     },
     {
@@ -2790,15 +2959,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-09-12T18:45:56.878243Z",
-        "modified_on": "2025-09-12T08:26:04.039862Z"
+        "modified_on": "2025-09-15T08:26:01.570785Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.425Z"
       }
     },
     {
@@ -2834,15 +3006,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-03T19:17:10.623224Z",
-        "modified_on": "2025-09-12T08:26:05.979421Z"
+        "modified_on": "2025-09-15T08:26:03.441967Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.500Z"
       }
     },
     {
@@ -2878,15 +3053,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-29T03:36:59.903069Z",
-        "modified_on": "2025-09-12T08:26:09.883986Z"
+        "modified_on": "2025-09-15T08:26:05.321505Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.478Z"
       }
     },
     {
@@ -2922,15 +3100,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-09-03T12:27:08.831446Z",
-        "modified_on": "2025-09-12T08:26:11.958014Z"
+        "modified_on": "2025-09-15T08:26:07.19121Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.713Z"
       }
     },
     {
@@ -2966,15 +3147,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-03-17T15:06:40.387822Z",
-        "modified_on": "2025-09-12T08:26:13.886538Z"
+        "modified_on": "2025-09-15T08:26:09.040252Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.479Z"
       }
     },
     {
@@ -3012,15 +3196,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-12-14T21:02:35.06967Z",
-        "modified_on": "2025-09-12T08:26:16.193586Z"
+        "modified_on": "2025-09-15T08:26:10.975826Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.669Z"
       }
     },
     {
@@ -3058,15 +3245,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-04-03T20:52:12.409689Z",
-        "modified_on": "2025-09-12T08:26:18.138225Z"
+        "modified_on": "2025-09-15T08:26:12.941092Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.497Z"
       }
     },
     {
@@ -3089,11 +3279,14 @@
       },
       "rootProxied": false,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.569Z"
       }
     },
     {
@@ -3131,15 +3324,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-07T19:22:04.18351Z",
-        "modified_on": "2025-09-12T08:26:21.484337Z"
+        "modified_on": "2025-09-15T08:26:16.167519Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:51.454Z"
       }
     },
     {
@@ -3177,15 +3373,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-01-04T18:34:51.104726Z",
-        "modified_on": "2025-09-12T08:26:23.30923Z"
+        "modified_on": "2025-09-15T08:26:18.203126Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.065Z"
       }
     },
     {
@@ -3223,15 +3422,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-12-07T00:12:51.83001Z",
-        "modified_on": "2025-09-12T08:26:25.32988Z"
+        "modified_on": "2025-09-15T08:26:20.086973Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.048Z"
       }
     },
     {
@@ -3256,11 +3458,14 @@
       },
       "rootProxied": true,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.363Z"
       }
     },
     {
@@ -3268,11 +3473,14 @@
       "zoneId": "16117843ff12ecd430bf15d13ec961e7",
       "rootProxied": false,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.171Z"
       }
     },
     {
@@ -3310,15 +3518,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-05-27T13:00:22.746183Z",
-        "modified_on": "2025-09-12T08:26:30.706849Z"
+        "modified_on": "2025-09-15T08:26:24.908615Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.179Z"
       }
     },
     {
@@ -3356,15 +3567,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2017-08-09T03:02:10.079534Z",
-        "modified_on": "2025-09-12T08:26:32.693261Z"
+        "modified_on": "2025-09-15T08:26:26.697375Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.534Z"
       }
     },
     {
@@ -3400,15 +3614,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-06T14:12:23.534285Z",
-        "modified_on": "2025-09-12T08:26:35.140436Z"
+        "modified_on": "2025-09-15T08:26:28.926232Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.115Z"
       }
     },
     {
@@ -3433,11 +3650,14 @@
       },
       "rootProxied": true,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.464Z"
       }
     },
     {
@@ -3475,15 +3695,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-08-12T18:44:14.387431Z",
-        "modified_on": "2025-09-12T08:26:38.981376Z"
+        "modified_on": "2025-09-15T08:26:32.147789Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.174Z"
       }
     },
     {
@@ -3491,11 +3714,14 @@
       "zoneId": "778330789b4e721f9eb72d837c5065aa",
       "rootProxied": false,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.257Z"
       }
     },
     {
@@ -3503,11 +3729,14 @@
       "zoneId": "385bba83422bc6c84ae4ea3051d3ef20",
       "rootProxied": false,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.370Z"
       }
     },
     {
@@ -3545,15 +3774,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-01-12T16:10:24.299297Z",
-        "modified_on": "2025-09-12T08:26:43.980819Z"
+        "modified_on": "2025-09-15T08:26:36.67743Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:54.362Z"
       }
     },
     {
@@ -3589,15 +3821,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-10-09T22:11:22.383459Z",
-        "modified_on": "2025-09-12T08:26:45.822497Z"
+        "modified_on": "2025-09-15T08:26:38.424815Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:56.978Z"
       }
     },
     {
@@ -3633,15 +3868,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-11-21T20:48:36.986426Z",
-        "modified_on": "2025-09-12T08:26:47.683651Z"
+        "modified_on": "2025-09-15T08:26:40.557841Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:56.954Z"
       }
     },
     {
@@ -3677,15 +3915,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-03-16T13:24:33.378372Z",
-        "modified_on": "2025-09-12T08:26:50.673786Z"
+        "modified_on": "2025-09-15T08:26:42.666564Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:56.911Z"
       }
     },
     {
@@ -3721,15 +3962,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-24T15:51:03.518596Z",
-        "modified_on": "2025-09-12T08:26:52.700381Z"
+        "modified_on": "2025-09-15T08:26:44.817163Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:56.960Z"
       }
     },
     {
@@ -3767,15 +4011,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-10-31T23:21:49.407185Z",
-        "modified_on": "2025-09-12T08:26:54.830839Z"
+        "modified_on": "2025-09-15T08:26:46.702401Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:57.264Z"
       }
     },
     {
@@ -3813,15 +4060,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-11-22T23:40:25.644856Z",
-        "modified_on": "2025-09-12T08:26:57.071873Z"
+        "modified_on": "2025-09-15T08:26:48.603524Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:56.918Z"
       }
     },
     {
@@ -3829,11 +4079,14 @@
       "zoneId": "f68a4c98471b85b736ebca25dda61088",
       "rootProxied": false,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:57.159Z"
       }
     },
     {
@@ -3871,15 +4124,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-10-31T20:00:11.923423Z",
-        "modified_on": "2025-09-12T08:27:00.746259Z"
+        "modified_on": "2025-09-15T08:26:51.820804Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:57.199Z"
       }
     },
     {
@@ -3917,15 +4173,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-17T20:12:04.272065Z",
-        "modified_on": "2025-09-12T08:27:02.850786Z"
+        "modified_on": "2025-09-15T08:26:53.723014Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:57.047Z"
       }
     },
     {
@@ -3967,11 +4226,14 @@
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:57.420Z"
       }
     },
     {
@@ -4007,15 +4269,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-01-16T14:07:30.240158Z",
-        "modified_on": "2025-09-12T08:27:04.765995Z"
+        "modified_on": "2025-09-15T08:26:55.648687Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:56.955Z"
       }
     },
     {
@@ -4051,15 +4316,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-03-13T14:50:46.456173Z",
-        "modified_on": "2025-09-12T08:27:06.993624Z"
+        "modified_on": "2025-09-15T08:26:57.485691Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:49:56.930Z"
       }
     },
     {
@@ -4095,15 +4363,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-10-02T16:32:45.913754Z",
-        "modified_on": "2025-09-12T08:27:09.19461Z"
+        "modified_on": "2025-09-15T08:26:59.429718Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.076Z"
       }
     },
     {
@@ -4139,15 +4410,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-12-20T15:32:16.880723Z",
-        "modified_on": "2025-09-12T08:27:11.086921Z"
+        "modified_on": "2025-09-15T08:27:01.400505Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.342Z"
       }
     },
     {
@@ -4183,15 +4457,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-03T01:09:33.882644Z",
-        "modified_on": "2025-09-12T08:27:12.995822Z"
+        "modified_on": "2025-09-15T08:27:03.412518Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.060Z"
       }
     },
     {
@@ -4227,15 +4504,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-25T21:30:19.782446Z",
-        "modified_on": "2025-09-12T08:27:14.998873Z"
+        "modified_on": "2025-09-15T08:27:05.213566Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.014Z"
       }
     },
     {
@@ -4273,15 +4553,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-01T22:14:17.501654Z",
-        "modified_on": "2025-09-12T08:27:16.929028Z"
+        "modified_on": "2025-09-15T08:27:07.18371Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.117Z"
       }
     },
     {
@@ -4304,11 +4587,14 @@
       },
       "rootProxied": true,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.134Z"
       }
     },
     {
@@ -4344,15 +4630,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-07-02T18:43:44.276835Z",
-        "modified_on": "2025-09-12T08:27:20.260743Z"
+        "modified_on": "2025-09-15T08:27:10.253897Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.465Z"
       }
     },
     {
@@ -4388,15 +4677,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-19T14:03:41.012238Z",
-        "modified_on": "2025-09-12T08:27:22.48081Z"
+        "modified_on": "2025-09-15T08:27:12.191811Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.075Z"
       }
     },
     {
@@ -4419,11 +4711,14 @@
       },
       "rootProxied": false,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.095Z"
       }
     },
     {
@@ -4463,11 +4758,14 @@
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.092Z"
       }
     },
     {
@@ -4505,15 +4803,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-10-30T17:50:50.431424Z",
-        "modified_on": "2025-09-12T08:27:25.674147Z"
+        "modified_on": "2025-09-15T08:27:15.387324Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.357Z"
       }
     },
     {
@@ -4551,15 +4852,18 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-08-08T17:31:43.039636Z",
-        "modified_on": "2025-09-12T08:27:27.708528Z"
+        "modified_on": "2025-09-15T08:27:17.236057Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:00.326Z"
       }
     },
     {
@@ -4584,11 +4888,14 @@
       },
       "rootProxied": true,
       "wwwProxied": false,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:09.368Z"
       }
     },
     {
@@ -4630,14 +4937,17 @@
       },
       "rootProxied": true,
       "wwwProxied": true,
+      "underAttackMode": false,
+      "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
+        "totalRules": 1,
         "corporateRules": 0,
-        "customRules": 0,
-        "hasConflicts": false
+        "customRules": 1,
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-16T04:50:08.196Z"
       }
     }
   ],
-  "lastUpdate": "2025-09-15T21:41:33.664Z",
+  "lastUpdate": "2025-09-16T04:50:09.378Z",
   "totalCount": 110
 }
