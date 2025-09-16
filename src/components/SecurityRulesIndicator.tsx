@@ -39,7 +39,7 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
                   }
                 }}
               >
-                <Clock className="h-4 w-4 text-muted-foreground" />
+                <ShieldOff className="h-4 w-4 text-muted-foreground" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
