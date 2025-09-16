@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
       console.log(`[Complete API] 🚀 Processing unified batch ${batchNumber}/${totalBatches} (${batch.length} zones)`);
 
       // Process batch in parallel using unified function
-      const batchPromises = batch.map(async (zoneId) => {
+      const batchPromises = batch.map(async (zoneId: string) => {
         const zone = allZonesMap.get(zoneId);
         if (!zone) {
           console.warn(`[Complete API] Zone ${zoneId} not found in zones map`);

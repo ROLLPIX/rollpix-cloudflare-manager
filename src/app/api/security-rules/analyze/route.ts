@@ -177,7 +177,7 @@ export async function POST(request: NextRequest) {
                 action: ruleSummary.action || 'unknown',
                 description: ruleSummary.description,
                 isLikelyTemplate: false,
-                estimatedComplexity: 'unknown' as const // We can't estimate without full expression
+                estimatedComplexity: 'complex' as const // Default to complex when we can't analyze the full expression
               });
 
               console.log(`[Analyze API] 📝 Custom rule found: ${ruleSummary.id}`);
@@ -231,7 +231,7 @@ export async function POST(request: NextRequest) {
 
       // Process batch in parallel
       const batchResults = await Promise.allSettled(
-        batch.map(zoneId => analyzeZone(zoneId))
+        batch.map((zoneId: string) => analyzeZone(zoneId))
       );
 
       const batchDuration = Date.now() - batchStartTime;
