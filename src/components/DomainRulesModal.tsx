@@ -52,6 +52,7 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [availableTemplates, setAvailableTemplates] = useState<RuleTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
+  const [hasChanges, setHasChanges] = useState(false);
   const { refreshSingleDomain } = useDomainStore();
 
   const loadDomainRules = useCallback(async () => {
@@ -169,6 +170,7 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
         console.log('[DomainRulesModal] Reloading domain rules...');
         await loadDomainRules();
         console.log('[DomainRulesModal] Domain rules reloaded');
+        setHasChanges(true);
 
         // Also refresh the domain in the main store to update the table
         if (zoneId) {
@@ -215,6 +217,12 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
         if (result.success) {
           toast.success(`Regla ${ruleName} eliminada exitosamente`);
           await loadDomainRules();
+          setHasChanges(true);
+
+          // Refresh domain in store
+          if (zoneId) {
+            await refreshSingleDomain(zoneId);
+          }
         } else {
           toast.error('Error al eliminar la regla');
         }
@@ -230,6 +238,12 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
         if (response.ok) {
           toast.success('Regla personalizada eliminada');
           await loadDomainRules();
+          setHasChanges(true);
+
+          // Refresh domain in store
+          if (zoneId) {
+            await refreshSingleDomain(zoneId);
+          }
         } else {
           toast.error('Error al eliminar la regla personalizada');
         }
@@ -246,8 +260,19 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
     if (isOpen && zoneId) {
       loadDomainRules();
       loadAvailableTemplates();
+      setHasChanges(false); // Reset changes flag when opening
     }
   }, [isOpen, zoneId, loadDomainRules]);
+
+  const handleClose = useCallback(async () => {
+    // If there were changes and we have a zoneId, refresh the domain one more time
+    if (hasChanges && zoneId) {
+      console.log('[DomainRulesModal] Modal closing with changes - final domain refresh');
+      await refreshSingleDomain(zoneId);
+    }
+    setHasChanges(false);
+    onClose();
+  }, [hasChanges, zoneId, refreshSingleDomain, onClose]);
 
   const handleCleanTemplateRules = async () => {
     if (!zoneId || !rulesData) return;
@@ -274,6 +299,12 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
       if (result.success) {
         toast.success(`${result.data.removedCount} reglas de plantilla eliminadas`);
         await loadDomainRules();
+        setHasChanges(true);
+
+        // Refresh domain in store
+        if (zoneId) {
+          await refreshSingleDomain(zoneId);
+        }
       } else {
         toast.error('Error al limpiar reglas de plantilla');
       }
@@ -310,6 +341,12 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
       if (result.success) {
         toast.success(`${result.data.removedCount} reglas eliminadas`);
         await loadDomainRules();
+        setHasChanges(true);
+
+        // Refresh domain in store
+        if (zoneId) {
+          await refreshSingleDomain(zoneId);
+        }
       } else {
         toast.error('Error al limpiar todas las reglas');
       }
@@ -346,7 +383,7 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
   }, [rulesData]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-6xl w-[90vw] max-h-[80vh] overflow-y-auto sm:max-w-6xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">

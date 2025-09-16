@@ -4,6 +4,16 @@ import { addRuleMapping, removeRuleMapping, classifyRule, classifyRulesBatch } f
 
 const CLOUDFLARE_API_BASE = 'https://api.cloudflare.com/client/v4';
 
+// Helper function to map template actions to Cloudflare actions
+function mapTemplateActionToCloudflareAction(templateAction: string): string {
+  switch (templateAction) {
+    case 'challenge':
+      return 'managed_challenge';
+    default:
+      return templateAction;
+  }
+}
+
 export class CloudflareAPI {
   private apiToken: string;
 
@@ -505,12 +515,18 @@ export class CloudflareAPI {
   async removeRuleFromZone(zoneId: string, ruleId: string): Promise<CloudflareRuleset> {
     const allRulesets = await this.getZoneRulesets(zoneId);
     const rulesets = allRulesets.filter(ruleset => ruleset.phase === 'http_request_firewall_custom');
-    
+
     for (const ruleset of rulesets) {
+      // Ensure rules array exists before searching
+      if (!ruleset.rules || !Array.isArray(ruleset.rules)) {
+        console.warn(`[CloudflareAPI] Ruleset ${ruleset.id} has no rules array, skipping...`);
+        continue;
+      }
+
       const ruleIndex = ruleset.rules.findIndex(rule => rule.id === ruleId);
       if (ruleIndex !== -1) {
         const updatedRules = ruleset.rules.filter(rule => rule.id !== ruleId);
-        
+
         return await this.updateZoneRuleset(zoneId, ruleset.id, {
           ...ruleset,
           rules: updatedRules
@@ -713,7 +729,7 @@ export class CloudflareAPI {
             const newRule = {
               id: template.id,
               expression: template.expression,
-              action: template.action,
+              action: mapTemplateActionToCloudflareAction(template.action),
               action_parameters: template.actionParameters,
               description: cloudflareRuleName,
               enabled: template.enabled
@@ -769,7 +785,7 @@ export class CloudflareAPI {
       // No existing rule or couldn't parse - add new
       const newRule = {
         expression: template.expression,
-        action: template.action,
+        action: mapTemplateActionToCloudflareAction(template.action),
         action_parameters: template.actionParameters,
         description: cloudflareRuleName,
         enabled: template.enabled
@@ -896,24 +912,41 @@ export class CloudflareAPI {
   }> {
     try {
       const existingRules = await this.getZoneSecurityRules(zoneId);
-      
+
+      if (existingRules.length === 0) {
+        return {
+          success: true,
+          removedCount: 0,
+          message: 'No hay reglas para eliminar'
+        };
+      }
+
       let removedCount = 0;
+      let failedCount = 0;
+
       for (const rule of existingRules) {
         try {
           await this.removeRuleFromZone(zoneId, rule.id);
           removedCount++;
+          console.log(`[CloudflareAPI] Successfully removed rule ${rule.id}`);
         } catch (error) {
-          console.warn(`Failed to remove rule ${rule.id}:`, error);
+          failedCount++;
+          console.warn(`[CloudflareAPI] Failed to remove rule ${rule.id}:`, error);
         }
       }
+
+      const message = failedCount > 0
+        ? `Removed ${removedCount} rules, ${failedCount} failed`
+        : `Removed ${removedCount} rules (template + custom)`;
 
       return {
         success: true,
         removedCount,
-        message: `Removed ${removedCount} rules (template + custom)`
+        message
       };
 
     } catch (error) {
+      console.error(`[CloudflareAPI] Error in removeAllRules for zone ${zoneId}:`, error);
       return {
         success: false,
         removedCount: 0,

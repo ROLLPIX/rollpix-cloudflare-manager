@@ -901,3 +901,4 @@ npm install tailwindcss@^3.4.0 autoprefixer tailwindcss-animate
 **🔒 Security: Arquitectura robusta implementada**
 **✅ Production Ready: Compatible con Vercel y entornos de producción**
 - recordar usar siempre librerias y sintaxis compatible con vercel
+- comprobar compilacion buscando errores previo a subir al repositorio remoto (para evitar errores al deployar en vercel)
