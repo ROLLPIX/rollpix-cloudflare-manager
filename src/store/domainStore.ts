@@ -452,16 +452,11 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     const startTime = Date.now();
 
     try {
-      // Load preferences and cache in parallel for better performance
-      const [preferencesResponse, cacheResponse] = await Promise.allSettled([
-        fetch('/api/preferences'),
-        fetch('/api/domains/complete') // Use unified cache instead
-      ]);
-
-      // Handle preferences
-      if (preferencesResponse.status === 'fulfilled' && preferencesResponse.value.ok) {
-        try {
-          const prefs = await preferencesResponse.value.json();
+      // Load preferences first (this is usually fast)
+      try {
+        const preferencesResponse = await fetch('/api/preferences');
+        if (preferencesResponse.ok) {
+          const prefs = await preferencesResponse.json();
           set({
             perPage: prefs.perPage || 50,
             searchTerm: prefs.searchTerm || '',
@@ -472,16 +467,29 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
               proxy: null
             }
           });
-          console.log('[DomainStore] Preferences loaded:', prefs);
-        } catch (e) {
-          console.error("Failed to parse preferences:", e);
+          console.log('[DomainStore] Preferences loaded successfully');
         }
+      } catch (prefsError) {
+        console.warn('[DomainStore] Failed to load preferences:', prefsError);
+        // Continue without preferences - use defaults
       }
 
-      // Handle cache
-      if (cacheResponse.status === 'fulfilled' && cacheResponse.value.ok) {
-        try {
-          const cacheData = await cacheResponse.value.json();
+      // Try to load cache (with timeout to prevent hanging)
+      try {
+        console.log('[DomainStore] Attempting to load domains cache...');
+
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+        const cacheResponse = await fetch('/api/domains/complete', {
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (cacheResponse.ok) {
+          const cacheData = await cacheResponse.json();
           console.log('[DomainStore] Cache response received:', cacheData);
 
           // Handle unified cache structure
@@ -502,32 +510,39 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
             toast.success(`${domains.length} dominios cargados desde caché.`);
             return;
           } else {
-            console.log('[DomainStore] Cache exists but no valid domains found:', cacheData);
+            console.log('[DomainStore] Cache exists but no valid domains found');
           }
-        } catch (e) {
-          console.error("Failed to parse cache:", e);
+        } else {
+          console.log('[DomainStore] Cache request failed with status:', cacheResponse.status);
         }
-      } else {
-        console.log('[DomainStore] Cache response failed:', {
-          status: cacheResponse.status,
-          ok: cacheResponse.status === 'fulfilled' ? cacheResponse.value.ok : false
-        });
+      } catch (cacheError) {
+        if (cacheError instanceof Error && cacheError.name === 'AbortError') {
+          console.warn('[DomainStore] Cache loading timed out after 10 seconds');
+        } else {
+          console.warn('[DomainStore] Cache loading failed:', cacheError);
+        }
       }
 
-      console.log('[DomainStore] No cache available. Auto-fetching domains from Cloudflare...');
+      console.log('[DomainStore] No valid cache available. Checking for API token...');
 
-      // Auto-fetch if no cache is available
+      // Check if we have a token for auto-fetch
       const apiToken = tokenStorage.getToken();
       if (apiToken) {
         console.log('[DomainStore] Token available, starting auto-fetch...');
-        await get().fetchFromCloudflare(false, false); // Fast fetch without rules
+        try {
+          await get().fetchFromCloudflareUnified(false, false); // Fast unified fetch
+        } catch (fetchError) {
+          console.error('[DomainStore] Auto-fetch failed:', fetchError);
+          toast.error('Error al cargar dominios automáticamente. Usa "Actualizar Todo" manualmente.');
+        }
       } else {
+        console.log('[DomainStore] No API token available');
         toast.info('Introduce tu token de Cloudflare para cargar los dominios.');
       }
 
     } catch (error) {
       console.error('[DomainStore] Error in initializeDomains:', error);
-      toast.error('Error al cargar preferencias. Usa "Actualizar Todo" para cargar dominios.');
+      toast.error('Error al inicializar la aplicación. Recarga la página.');
     }
   },
 

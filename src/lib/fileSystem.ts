@@ -12,7 +12,8 @@ const ALLOWED_FILES = [
   'domains-cache.json',
   'security-rules-templates.json',
   'domain-rules-status.json',
-  'user-preferences.json'
+  'user-preferences.json',
+  'rule-id-mapping.json'
 ] as const;
 
 type AllowedFileName = typeof ALLOWED_FILES[number];

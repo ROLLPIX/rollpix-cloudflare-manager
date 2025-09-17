@@ -178,9 +178,102 @@ export async function POST(request: NextRequest) {
     const totalCustomRules = results.reduce((sum, d) => sum + (d.securityRules?.customRules || 0), 0);
     const domainsWithConflicts = results.filter(d => d.securityRules?.hasConflicts).length;
 
+    // Auto-detect and import templates from collected rules
+    console.log(`[Complete API] 🔍 Starting auto template import process...`);
+
+    // Collect all rules from processed domains for template detection
+    const allCollectedRules: any[] = [];
+    for (const domain of results) {
+      if (domain.securityRules?.templateRules) {
+        // Add template rules with domain context
+        for (const templateRule of domain.securityRules.templateRules) {
+          allCollectedRules.push({
+            ...templateRule,
+            domainName: domain.domain,
+            zoneId: domain.zoneId
+          });
+        }
+      }
+
+      // Note: customRules is a count, not an array, so we can't iterate over individual custom rules
+      // For template auto-detection, we would need to collect rules during the processing phase
+      // This is a limitation of the current implementation
+    }
+
+    console.log(`[Complete API] Collected ${allCollectedRules.length} total rules for template auto-detection`);
+
+    // Perform auto template import if we have rules to analyze
+    let templateImportResult = null;
+    if (allCollectedRules.length > 0) {
+      try {
+        const importResult = await cloudflareAPI.autoImportTemplates(allCollectedRules, templatesCache.templates);
+
+        if (importResult.importedTemplates.length > 0 || importResult.updatedTemplates.length > 0) {
+          console.log(`[Complete API] 📝 Template auto-import successful:`, {
+            imported: importResult.importedTemplates.length,
+            updated: importResult.updatedTemplates.length,
+            skipped: importResult.skippedRules.length
+          });
+
+          // Save updated templates to cache
+          const updatedTemplatesCache: RulesTemplatesCache = {
+            templates: [
+              ...templatesCache.templates,
+              ...importResult.importedTemplates
+            ].map(template => {
+              // Update existing templates with new versions
+              const updated = importResult.updatedTemplates.find(ut => ut.id === template.id);
+              return updated || template;
+            }),
+            lastUpdated: new Date().toISOString()
+          };
+
+          await safeWriteJsonFile(RULES_TEMPLATES_FILE, updatedTemplatesCache);
+          console.log(`[Complete API] 💾 Updated templates cache with auto-imported templates`);
+
+          templateImportResult = {
+            imported: importResult.importedTemplates.length,
+            updated: importResult.updatedTemplates.length,
+            skipped: importResult.skippedRules.length,
+            newTemplates: importResult.importedTemplates.map(t => ({
+              id: t.id,
+              friendlyId: t.friendlyId,
+              name: t.name,
+              version: t.version
+            }))
+          };
+        } else {
+          console.log(`[Complete API] ℹ️ No new templates detected during auto-import`);
+          templateImportResult = {
+            imported: 0,
+            updated: 0,
+            skipped: importResult.skippedRules.length,
+            newTemplates: []
+          };
+        }
+      } catch (importError) {
+        console.error(`[Complete API] ❌ Error during template auto-import:`, importError);
+        templateImportResult = {
+          imported: 0,
+          updated: 0,
+          skipped: 0,
+          error: importError instanceof Error ? importError.message : 'Unknown error'
+        };
+      }
+    } else {
+      console.log(`[Complete API] ℹ️ No rules collected for template auto-detection`);
+      templateImportResult = {
+        imported: 0,
+        updated: 0,
+        skipped: 0,
+        newTemplates: []
+      };
+    }
+
     console.log(`[Complete API] ✅ Unified processing complete! ${totalProcessed}/${totalRequested} domains (${successRate}% success rate)`);
     console.log(`[Complete API] 📊 Rules summary: ${totalRules} total (${totalTemplateRules} template, ${totalCustomRules} custom)`);
     console.log(`[Complete API] ⚠️ Conflicts: ${domainsWithConflicts} domains with outdated template rules`);
+    console.log(`[Complete API] 🔄 Auto template import: ${templateImportResult.imported} imported, ${templateImportResult.updated} updated`);
 
     return NextResponse.json({
       success: true,
@@ -198,7 +291,8 @@ export async function POST(request: NextRequest) {
           domainsWithConflicts: domainsWithConflicts,
           processedBatches: Math.ceil(totalRequested / BATCH_SIZE),
           batchSize: BATCH_SIZE,
-          unifiedProcessing: true // Flag to indicate unified processing was used
+          unifiedProcessing: true, // Flag to indicate unified processing was used
+          templateAutoImport: templateImportResult
         }
       }
     });
@@ -215,23 +309,32 @@ export async function POST(request: NextRequest) {
 // GET - Get cached complete domain information
 export async function GET() {
   try {
+    console.log('[Complete API GET] Loading domains cache...');
     const cache = await safeReadJsonFile<DomainsCache>(DOMAIN_CACHE_FILE);
 
+    console.log(`[Complete API GET] Cache loaded: ${cache.domains?.length || 0} domains`);
     return NextResponse.json({
       success: true,
       data: {
-        domains: cache.domains,
-        totalCount: cache.totalCount,
+        domains: cache.domains || [],
+        totalCount: cache.totalCount || 0,
         lastUpdate: cache.lastUpdate,
         hasCompleteData: true
       }
     });
 
   } catch (error) {
-    console.error('Error loading complete domains cache:', error);
+    console.error('[Complete API GET] Error loading complete domains cache:', error);
+
+    // Return empty cache instead of 404 to prevent app from hanging
     return NextResponse.json({
-      success: false,
-      error: 'No complete domains cache found'
-    }, { status: 404 });
+      success: true,
+      data: {
+        domains: [],
+        totalCount: 0,
+        lastUpdate: null,
+        hasCompleteData: false
+      }
+    });
   }
 }
