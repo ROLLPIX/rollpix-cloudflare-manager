@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { RefreshCw, Loader2, Search, Globe } from 'lucide-react';
+import { toast } from 'sonner';
 import { SecurityRulesIndicator } from './SecurityRulesIndicator';
 import { RulesActionBar } from './RulesActionBar';
 import { DNSPills } from './DNSPills';
@@ -59,6 +60,65 @@ export function DomainTable() {
       console.error('[DomainTable] initializeDomains is not a function!', initializeDomains);
     }
   }, []); // Solo ejecutar una vez al montar el componente
+
+  // Bulk security mode handlers
+  const handleBulkUnderAttack = async (enabled: boolean) => {
+    const selectedZoneIds = allDomains.filter(d => selectedDomains.has(d.domain)).map(d => d.zoneId);
+
+    if (selectedZoneIds.length === 0) {
+      toast.error('Selecciona al menos un dominio');
+      return;
+    }
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const zoneId of selectedZoneIds) {
+      try {
+        await toggleUnderAttackMode(zoneId, enabled);
+        successCount++;
+      } catch (error) {
+        console.error(`Error toggling Under Attack for ${zoneId}:`, error);
+        errorCount++;
+      }
+    }
+
+    if (successCount > 0) {
+      toast.success(`Under Attack ${enabled ? 'habilitado' : 'deshabilitado'} en ${successCount} dominios`);
+    }
+    if (errorCount > 0) {
+      toast.error(`${errorCount} dominios fallaron al actualizar`);
+    }
+  };
+
+  const handleBulkBotFight = async (enabled: boolean) => {
+    const selectedZoneIds = allDomains.filter(d => selectedDomains.has(d.domain)).map(d => d.zoneId);
+
+    if (selectedZoneIds.length === 0) {
+      toast.error('Selecciona al menos un dominio');
+      return;
+    }
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const zoneId of selectedZoneIds) {
+      try {
+        await toggleBotFightMode(zoneId, enabled);
+        successCount++;
+      } catch (error) {
+        console.error(`Error toggling Bot Fight for ${zoneId}:`, error);
+        errorCount++;
+      }
+    }
+
+    if (successCount > 0) {
+      toast.success(`Bot Fight ${enabled ? 'habilitado' : 'deshabilitado'} en ${successCount} dominios`);
+    }
+    if (errorCount > 0) {
+      toast.error(`${errorCount} dominios fallaron al actualizar`);
+    }
+  };
 
   const processedDomains = useMemo(() => {
     let processed = [...allDomains];
@@ -214,6 +274,8 @@ export function DomainTable() {
             onClearSelection={clearDomainSelection}
             onRefreshSelectedDomains={refreshMultipleDomains}
             onBulkProxy={bulkToggleProxy}
+            onBulkUnderAttack={(enabled) => handleBulkUnderAttack(enabled)}
+            onBulkBotFight={(enabled) => handleBulkBotFight(enabled)}
           />
 
           {loading && allDomains.length === 0 ? (

@@ -226,8 +226,9 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
           await loadDomainRules();
           setHasChanges(true);
 
-          // Refresh domain in store
+          // Immediate refresh domain in store to update the table
           if (zoneId) {
+            console.log('[DomainRulesModal] Refreshing domain after template rule deletion');
             await refreshSingleDomain(zoneId);
           }
         } else {
@@ -247,8 +248,9 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
           await loadDomainRules();
           setHasChanges(true);
 
-          // Refresh domain in store
+          // Immediate refresh domain in store to update the table
           if (zoneId) {
+            console.log('[DomainRulesModal] Refreshing domain after custom rule deletion');
             await refreshSingleDomain(zoneId);
           }
         } else {
@@ -308,8 +310,9 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
         await loadDomainRules();
         setHasChanges(true);
 
-        // Refresh domain in store
+        // Immediate refresh domain in store to update the table
         if (zoneId) {
+          console.log('[DomainRulesModal] Refreshing domain after cleaning template rules');
           await refreshSingleDomain(zoneId);
         }
       } else {
@@ -350,8 +353,9 @@ export function DomainRulesModal({ isOpen, onClose, zoneId, domainName }: Domain
         await loadDomainRules();
         setHasChanges(true);
 
-        // Refresh domain in store
+        // Immediate refresh domain in store to update the table
         if (zoneId) {
+          console.log('[DomainRulesModal] Refreshing domain after cleaning all rules');
           await refreshSingleDomain(zoneId);
         }
       } else {

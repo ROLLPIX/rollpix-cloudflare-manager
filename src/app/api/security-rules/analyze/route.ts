@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { CloudflareAPI } from '@/lib/cloudflare';
 import { DomainRuleStatus, RuleConflict, RuleTemplate, ConflictResolution } from '@/types/cloudflare';
 import { safeReadJsonFile, safeWriteJsonFile } from '@/lib/fileSystem';
-import { classifyRule, getAllTemplateMappings } from '@/lib/ruleMapping';
+import { parseCloudflareRuleName } from '@/lib/ruleUtils';
 
 const DOMAIN_RULES_CACHE_FILE = 'domain-rules-status.json';
 const RULES_TEMPLATES_FILE = 'security-rules-templates.json';
@@ -44,8 +44,8 @@ async function loadRulesTemplates(): Promise<RulesTemplatesCache> {
   }
 }
 
-// Legacy functions removed - now using optimized ID-based classification
-// All rule classification is now done via ruleMapping.ts for O(1) lookups
+// Using description-based classification (same method as individual refresh)
+// This ensures consistency between bulk analysis and individual domain refresh
 
 // POST - Analyze rules for specific zones or all zones
 export async function POST(request: NextRequest) {
@@ -126,70 +126,86 @@ export async function POST(request: NextRequest) {
 
         console.log(`[Analyze API] Analyzing zone ${zoneId} (${zone.name})...`);
 
-        // Get only rule summaries (metadata) for fast processing
-        const ruleSummaries = await cloudflareAPI.getZoneSecurityRulesSummary(zoneId);
-        console.log(`[Analyze API] Found ${ruleSummaries.length} rules to analyze for zone ${zone.name}`);
+        // Get full rule details for description parsing (same method as individual refresh)
+        const allRules = await cloudflareAPI.getZoneSecurityRules(zoneId);
+        console.log(`[Analyze API] Found ${allRules.length} rules to analyze for zone ${zone.name}`);
 
         // Create version map for templates
         const templateVersionMap = new Map(
           templatesCache.templates.map(t => [t.id, t.version])
         );
 
-        // Analyze rules using O(1) ID lookup
+        // Analyze rules using description parsing (same as individual refresh)
         const appliedRules = [];
         const customRules = [];
 
-        for (const ruleSummary of ruleSummaries) {
+        for (const rule of allRules) {
           try {
-            // Use fast ID lookup to classify rule
-            const classification = await classifyRule(ruleSummary.id, templateVersionMap);
+            // Use description parsing to classify rule (same method as individual refresh)
+            const parsed = parseCloudflareRuleName(rule.description || '');
 
-            if (classification.type === 'template' && classification.templateId) {
-              // Find template details
-              const template = templatesCache.templates.find(t => t.id === classification.templateId);
+            if (parsed) {
+              // This is a template rule - find the template by friendlyId
+              const template = templatesCache.templates.find(t => t.friendlyId === parsed.friendlyId);
 
               if (template) {
+                // Check if version is outdated
+                const currentVersion = templateVersionMap.get(template.id);
+                const isOutdated = currentVersion ? parsed.version !== currentVersion : false;
+
                 appliedRules.push({
                   ruleId: template.id,
                   ruleName: template.name,
-                  version: classification.version!,
-                  status: classification.isOutdated ? 'outdated' as const : 'active' as const,
-                  cloudflareRulesetId: ruleSummary.rulesetId,
-                  cloudflareRuleId: ruleSummary.id,
-                  rulesetName: ruleSummary.rulesetName,
-                  friendlyId: classification.friendlyId,
-                  confidence: 1.0, // High confidence from ID mapping
-                  appliedAt: classification.appliedAt || new Date().toISOString()
+                  version: parsed.version,
+                  status: isOutdated ? 'outdated' as const : 'active' as const,
+                  cloudflareRulesetId: rule.rulesetId || 'unknown',
+                  cloudflareRuleId: rule.id,
+                  rulesetName: 'Custom Rules', // Default ruleset name
+                  friendlyId: parsed.friendlyId,
+                  confidence: 1.0, // High confidence from description parsing
+                  appliedAt: new Date().toISOString()
                 });
 
-                console.log(`[Analyze API] ✅ Template rule found: ${classification.friendlyId} v${classification.version} (${classification.isOutdated ? 'outdated' : 'current'})`);
+                console.log(`[Analyze API] ✅ Template rule found: ${parsed.friendlyId} v${parsed.version} (${isOutdated ? 'outdated' : 'current'})`);
               } else {
-                errors.push(`Template not found for ID: ${classification.templateId}`);
-                console.warn(`[Analyze API] ⚠️ Template ${classification.templateId} not found in cache`);
+                errors.push(`Template not found for friendlyId: ${parsed.friendlyId}`);
+                console.warn(`[Analyze API] ⚠️ Template ${parsed.friendlyId} not found in cache`);
+
+                // Treat as custom rule if template not found
+                customRules.push({
+                  cloudflareRulesetId: rule.rulesetId || 'unknown',
+                  cloudflareRuleId: rule.id,
+                  rulesetName: 'Custom Rules',
+                  expression: rule.expression || '',
+                  action: rule.action || 'unknown',
+                  description: rule.description || 'No description',
+                  isLikelyTemplate: true, // Looks like template but not found
+                  estimatedComplexity: 'simple' as const
+                });
               }
             } else {
-              // Custom rule - we only need basic info, no expression comparison needed
+              // Custom rule - not from template system
               customRules.push({
-                cloudflareRulesetId: ruleSummary.rulesetId,
-                cloudflareRuleId: ruleSummary.id,
-                rulesetName: ruleSummary.rulesetName,
-                expression: '', // We don't need the full expression for analysis
-                action: ruleSummary.action || 'unknown',
-                description: ruleSummary.description,
+                cloudflareRulesetId: rule.rulesetId || 'unknown',
+                cloudflareRuleId: rule.id,
+                rulesetName: 'Custom Rules',
+                expression: rule.expression || '',
+                action: rule.action || 'unknown',
+                description: rule.description || 'No description',
                 isLikelyTemplate: false,
-                estimatedComplexity: 'complex' as const // Default to complex when we can't analyze the full expression
+                estimatedComplexity: 'complex' as const // Default to complex for custom rules
               });
 
-              console.log(`[Analyze API] 📝 Custom rule found: ${ruleSummary.id}`);
+              console.log(`[Analyze API] 📝 Custom rule found: ${rule.id}`);
             }
           } catch (error) {
-            console.error(`[Analyze API] Error classifying rule ${ruleSummary.id}:`, error);
-            errors.push(`Error classifying rule ${ruleSummary.id}: ${error}`);
+            console.error(`[Analyze API] Error classifying rule ${rule.id}:`, error);
+            errors.push(`Error classifying rule ${rule.id}: ${error}`);
           }
         }
 
         const processingTimeMs = Date.now() - analysisStartTime;
-        const totalRulesProcessed = ruleSummaries.length;
+        const totalRulesProcessed = allRules.length;
         const templatesMatched = appliedRules.length;
 
         const domainStatus: DomainRuleStatus = {
@@ -271,8 +287,8 @@ export async function POST(request: NextRequest) {
     console.log(`[Analyze API] 💾 Saving final cache with ${analysisResults.length} domain statuses...`);
     await saveDomainRulesCache(domainRulesCache);
 
-    // With the new ID-based system, conflicts are detected during rule application, not post-analysis
-    console.log(`[Analyze API] ✅ Analysis complete using optimized ID-based classification`);
+    // Using description-based classification for consistency with individual refresh
+    console.log(`[Analyze API] ✅ Analysis complete using description-based classification`);
     const allConflicts: RuleConflict[] = []; // No post-analysis conflicts needed
 
     // Count actual template rules vs outdated ones for summary
@@ -310,7 +326,7 @@ export async function POST(request: NextRequest) {
           outdatedTemplateRules: outdatedRules,
           processedBatches: Math.ceil(totalRequested / BATCH_SIZE),
           batchSize: BATCH_SIZE,
-          optimizedAnalysis: true // Flag to indicate new optimized analysis was used
+          consistentAnalysis: true // Flag to indicate description-based analysis (same as individual refresh)
         }
       }
     });

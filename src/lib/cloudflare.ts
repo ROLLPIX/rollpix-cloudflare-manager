@@ -267,7 +267,7 @@ export class CloudflareAPI {
       const [dnsData, securityData, rulesData] = await Promise.all([
         this.getDNSRecords(zoneId, 1, 100),
         this.getSecuritySettings(zoneId),
-        this.getZoneSecurityRulesSummary(zoneId)
+        this.getZoneSecurityRules(zoneId) // Use full rules data for description parsing
       ]);
 
       console.log(`[CloudflareAPI] ${zoneName}: Got ${dnsData.records.length} DNS records, ${rulesData.length} rules`);
@@ -283,63 +283,87 @@ export class CloudflareAPI {
       const rootProxied = rootRecord?.proxied || false;
       const wwwProxied = wwwRecord?.proxied || false;
 
-      // Classify rules using optimized batch processing
+      // Classify rules using description parsing (same as bulk analysis fix)
       const appliedRules = [];
       const customRules = [];
 
       if (rulesData.length > 0) {
-        // Get all rule IDs for batch classification
-        const ruleIds = rulesData.map(rule => rule.id);
+        console.log(`[CloudflareAPI] ${zoneName}: Classifying ${rulesData.length} rules using description parsing`);
 
+        // Load templates for friendlyId lookup
         try {
-          // Use optimized batch classification
-          const classifications = await classifyRulesBatch(ruleIds, templateVersionMap);
+          const templatesCache = await import('@/lib/fileSystem').then(fs =>
+            fs.safeReadJsonFile('security-rules-templates.json')
+          ).catch(() => ({ templates: [] }));
 
-          for (const ruleSummary of rulesData) {
-            const classification = classifications.get(ruleSummary.id);
+          for (const rule of rulesData) {
+            // Use description parsing to classify rule (same method as fixed bulk analysis)
+            const parsed = parseCloudflareRuleName(rule.description || '');
 
-            if (!classification) {
-              console.warn(`[CloudflareAPI] No classification found for rule ${ruleSummary.id}`);
-              continue;
-            }
+            if (parsed) {
+              // This is a template rule - find the template by friendlyId
+              const template = templatesCache.templates?.find((t: any) => t.friendlyId === parsed.friendlyId);
 
-            if (classification.type === 'template' && classification.templateId) {
-              appliedRules.push({
-                ruleId: classification.templateId,
-                ruleName: '', // Will be filled by caller if needed
-                version: classification.version!,
-                status: classification.isOutdated ? 'outdated' as const : 'active' as const,
-                cloudflareRulesetId: ruleSummary.rulesetId,
-                cloudflareRuleId: ruleSummary.id,
-                rulesetName: ruleSummary.rulesetName,
-                friendlyId: classification.friendlyId,
-                confidence: 1.0,
-                appliedAt: classification.appliedAt || new Date().toISOString()
-              });
+              if (template) {
+                // Check if version is outdated
+                const currentVersion = templateVersionMap.get(template.id);
+                const isOutdated = currentVersion ? parsed.version !== currentVersion : false;
+
+                appliedRules.push({
+                  ruleId: template.id,
+                  ruleName: template.name,
+                  version: parsed.version,
+                  status: isOutdated ? 'outdated' as const : 'active' as const,
+                  cloudflareRulesetId: rule.rulesetId || 'unknown',
+                  cloudflareRuleId: rule.id,
+                  rulesetName: 'Custom Rules',
+                  friendlyId: parsed.friendlyId,
+                  confidence: 1.0,
+                  appliedAt: new Date().toISOString()
+                });
+
+                console.log(`[CloudflareAPI] ${zoneName}: ✅ Template rule found: ${parsed.friendlyId} v${parsed.version} (${isOutdated ? 'outdated' : 'current'})`);
+              } else {
+                console.warn(`[CloudflareAPI] ${zoneName}: ⚠️ Template ${parsed.friendlyId} not found, treating as custom`);
+
+                // Treat as custom rule if template not found
+                customRules.push({
+                  cloudflareRulesetId: rule.rulesetId || 'unknown',
+                  cloudflareRuleId: rule.id,
+                  rulesetName: 'Custom Rules',
+                  expression: rule.expression || '',
+                  action: rule.action || 'unknown',
+                  description: rule.description || 'No description',
+                  isLikelyTemplate: true,
+                  estimatedComplexity: 'simple' as const
+                });
+              }
             } else {
+              // Custom rule - not from template system
               customRules.push({
-                cloudflareRulesetId: ruleSummary.rulesetId,
-                cloudflareRuleId: ruleSummary.id,
-                rulesetName: ruleSummary.rulesetName,
-                expression: '', // Not needed for summary
-                action: ruleSummary.action || 'unknown',
-                description: ruleSummary.description,
+                cloudflareRulesetId: rule.rulesetId || 'unknown',
+                cloudflareRuleId: rule.id,
+                rulesetName: 'Custom Rules',
+                action: rule.action || 'unknown',
+                description: rule.description || 'No description',
                 isLikelyTemplate: false,
-                estimatedComplexity: 'unknown' as const
+                estimatedComplexity: 'complex' as const
               });
+
+              console.log(`[CloudflareAPI] ${zoneName}: 📝 Custom rule found: ${rule.id}`);
             }
           }
         } catch (error) {
-          console.error(`[CloudflareAPI] Error in batch rule classification for ${zoneName}:`, error);
-          // Fallback to individual classification if batch fails
-          for (const ruleSummary of rulesData) {
+          console.error(`[CloudflareAPI] ${zoneName}: Error in rule classification:`, error);
+          // Fallback: treat all rules as custom
+          for (const rule of rulesData) {
             customRules.push({
-              cloudflareRulesetId: ruleSummary.rulesetId,
-              cloudflareRuleId: ruleSummary.id,
-              rulesetName: ruleSummary.rulesetName,
-              expression: '',
-              action: ruleSummary.action || 'unknown',
-              description: ruleSummary.description,
+              cloudflareRulesetId: rule.rulesetId || 'unknown',
+              cloudflareRuleId: rule.id,
+              rulesetName: 'Custom Rules',
+              expression: rule.expression || '',
+              action: rule.action || 'unknown',
+              description: rule.description || 'No description',
               isLikelyTemplate: false,
               estimatedComplexity: 'unknown' as const
             });
@@ -365,7 +389,13 @@ export class CloudflareAPI {
           corporateRules: appliedRules.length,
           customRules: customRules.length,
           hasConflicts: appliedRules.some(rule => rule.status === 'outdated'),
-          lastAnalyzed: new Date().toISOString()
+          lastAnalyzed: new Date().toISOString(),
+          templateRules: appliedRules.map(rule => ({
+            friendlyId: rule.friendlyId,
+            version: rule.version,
+            isOutdated: rule.status === 'outdated',
+            name: rule.ruleName
+          }))
         }
       };
 
@@ -513,7 +543,9 @@ export class CloudflareAPI {
   }
 
   async removeRuleFromZone(zoneId: string, ruleId: string): Promise<CloudflareRuleset> {
-    console.log(`[CloudflareAPI] Attempting to remove rule ${ruleId} from zone ${zoneId}`);
+    console.log(`[CloudflareAPI] *** ATTEMPTING TO REMOVE RULE ***`);
+    console.log(`[CloudflareAPI] Target Rule ID: ${ruleId}`);
+    console.log(`[CloudflareAPI] Zone ID: ${zoneId}`);
 
     // Get basic ruleset metadata (without rules)
     const allRulesets = await this.getZoneRulesets(zoneId);
@@ -521,8 +553,11 @@ export class CloudflareAPI {
 
     console.log(`[CloudflareAPI] Found ${customRulesets.length} custom rulesets to search for rule ${ruleId}`);
 
+    // First, let's gather ALL rule IDs across all rulesets for comparison
+    const allCurrentRuleIds: string[] = [];
+
     for (const basicRuleset of customRulesets) {
-      console.log(`[CloudflareAPI] Searching in ruleset ${basicRuleset.id} (${basicRuleset.name})`);
+      console.log(`[CloudflareAPI] === Searching in ruleset ${basicRuleset.id} (${basicRuleset.name}) ===`);
 
       try {
         // Get full ruleset details including rules
@@ -535,32 +570,66 @@ export class CloudflareAPI {
 
         console.log(`[CloudflareAPI] Ruleset ${basicRuleset.id} has ${detailedRuleset.rules.length} rules`);
 
-        // Log all rule IDs in this ruleset for debugging
-        const ruleIds = detailedRuleset.rules.map(rule => rule.id);
-        console.log(`[CloudflareAPI] Rule IDs in ruleset ${basicRuleset.id}:`, ruleIds);
+        // Collect all rule IDs from this ruleset
+        const ruleIdsInThisRuleset = detailedRuleset.rules.map(rule => rule.id);
+        allCurrentRuleIds.push(...ruleIdsInThisRuleset);
+
+        console.log(`[CloudflareAPI] Rule IDs in ruleset ${basicRuleset.id}:`);
+        ruleIdsInThisRuleset.forEach((id, index) => {
+          const isTargetRule = id === ruleId;
+          console.log(`[CloudflareAPI]   [${index}] ${id} ${isTargetRule ? '← TARGET RULE!' : ''}`);
+        });
 
         const ruleIndex = detailedRuleset.rules.findIndex(rule => rule.id === ruleId);
         if (ruleIndex !== -1) {
-          console.log(`[CloudflareAPI] Found rule ${ruleId} at index ${ruleIndex} in ruleset ${basicRuleset.id}`);
+          console.log(`[CloudflareAPI] ✅ FOUND TARGET RULE ${ruleId} at index ${ruleIndex} in ruleset ${basicRuleset.id}`);
+
+          const targetRule = detailedRuleset.rules[ruleIndex];
+          console.log(`[CloudflareAPI] Target rule details:`, {
+            id: targetRule.id,
+            description: targetRule.description,
+            action: targetRule.action,
+            enabled: targetRule.enabled
+          });
 
           const updatedRules = detailedRuleset.rules.filter(rule => rule.id !== ruleId);
 
+          console.log(`[CloudflareAPI] Updating ruleset: ${detailedRuleset.rules.length} → ${updatedRules.length} rules`);
+
+          // Remove read-only fields that Cloudflare doesn't allow in updates
+          const { last_updated, version, ...updatePayload } = detailedRuleset;
+
           const result = await this.updateZoneRuleset(zoneId, basicRuleset.id, {
-            ...detailedRuleset,
+            ...updatePayload,
             rules: updatedRules
           });
 
-          console.log(`[CloudflareAPI] Successfully removed rule ${ruleId} from zone ${zoneId}`);
+          console.log(`[CloudflareAPI] ✅ Successfully removed rule ${ruleId} from zone ${zoneId}`);
           return result;
         }
       } catch (error) {
-        console.warn(`[CloudflareAPI] Error accessing ruleset ${basicRuleset.id}: ${error}`);
+        console.warn(`[CloudflareAPI] ⚠️ Error accessing ruleset ${basicRuleset.id}: ${error}`);
         continue;
       }
     }
 
-    console.error(`[CloudflareAPI] Rule ${ruleId} not found in any of the ${customRulesets.length} custom rulesets for zone ${zoneId}`);
-    throw new Error(`La regla con ID ${ruleId} no se encontró en la zona ${zoneId}`);
+    // If we get here, the rule was not found - let's provide detailed debugging info
+    console.error(`[CloudflareAPI] ❌ RULE NOT FOUND - DEBUGGING INFO:`);
+    console.error(`[CloudflareAPI] Target Rule ID: ${ruleId}`);
+    console.error(`[CloudflareAPI] Zone ID: ${zoneId}`);
+    console.error(`[CloudflareAPI] Searched ${customRulesets.length} custom rulesets`);
+    console.error(`[CloudflareAPI] Total rules found across all rulesets: ${allCurrentRuleIds.length}`);
+    console.error(`[CloudflareAPI] All current rule IDs in zone:`, allCurrentRuleIds);
+
+    // Check if the target rule ID has any partial matches
+    const similarIds = allCurrentRuleIds.filter(id =>
+      id.includes(ruleId.slice(0, 8)) || ruleId.includes(id.slice(0, 8))
+    );
+    if (similarIds.length > 0) {
+      console.error(`[CloudflareAPI] Similar IDs found (possible ID mismatch):`, similarIds);
+    }
+
+    throw new Error(`La regla con ID ${ruleId} no se encontró en la zona ${zoneId}. Se revisaron ${customRulesets.length} rulesets con ${allCurrentRuleIds.length} reglas totales.`);
   }
 
   // Optimized method to get only rule metadata (IDs, names, basic info)
@@ -981,22 +1050,90 @@ export class CloudflareAPI {
     }
   }
 
+  // Remove only custom rules (non-template rules) from a zone
+  async removeCustomRules(zoneId: string): Promise<{
+    success: boolean;
+    removedCount: number;
+    message: string;
+  }> {
+    try {
+      console.log(`[CloudflareAPI] Starting removal of custom rules for zone ${zoneId}`);
+
+      // Get categorized rules to identify custom rules
+      const { customRules } = await this.getCategorizedZoneRules(zoneId);
+
+      if (customRules.length === 0) {
+        return {
+          success: true,
+          removedCount: 0,
+          message: 'No hay reglas custom para eliminar'
+        };
+      }
+
+      console.log(`[CloudflareAPI] Found ${customRules.length} custom rules to remove`);
+
+      let removedCount = 0;
+      const errors: string[] = [];
+
+      // Remove each custom rule individually
+      for (const rule of customRules) {
+        try {
+          console.log(`[CloudflareAPI] Removing custom rule ${rule.id}: ${rule.description}`);
+          await this.removeRuleFromZone(zoneId, rule.id);
+          removedCount++;
+          console.log(`[CloudflareAPI] ✅ Successfully removed custom rule ${rule.id}`);
+        } catch (error) {
+          console.error(`[CloudflareAPI] ❌ Failed to remove custom rule ${rule.id}:`, error);
+          errors.push(`Rule ${rule.id}: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+        }
+      }
+
+      const hasErrors = errors.length > 0;
+      const message = hasErrors
+        ? `Se eliminaron ${removedCount}/${customRules.length} reglas custom. Errores: ${errors.join(', ')}`
+        : `Se eliminaron ${removedCount} reglas custom correctamente`;
+
+      return {
+        success: !hasErrors || removedCount > 0, // Success if no errors or at least some rules were removed
+        removedCount,
+        message
+      };
+
+    } catch (error) {
+      console.error(`[CloudflareAPI] Error in removeCustomRules for zone ${zoneId}:`, error);
+      return {
+        success: false,
+        removedCount: 0,
+        message: `No se pudieron eliminar las reglas custom: ${error instanceof Error ? error.message : 'Error desconocido'}`
+      };
+    }
+  }
+
   // Get categorized rules for a zone
   async getCategorizedZoneRules(zoneId: string): Promise<{
     templateRules: Array<CloudflareRule & { rulesetId: string; friendlyId: string; version: string; originalName: string }>;
     customRules: Array<CloudflareRule & { rulesetId: string }>;
   }> {
-    console.log(`Getting categorized rules for zone: ${zoneId}`);
+    console.log(`[CloudflareAPI] *** GETTING CATEGORIZED RULES FOR MODAL ***`);
+    console.log(`[CloudflareAPI] Zone ID: ${zoneId}`);
+
     const allRules = await this.getZoneSecurityRules(zoneId);
-    console.log(`Found ${allRules.length} total rules`);
-    
+    console.log(`[CloudflareAPI] Found ${allRules.length} total rules for modal display`);
+
+    // Log all rule IDs that will be shown in the modal
+    const allRuleIds = allRules.map(rule => rule.id);
+    console.log(`[CloudflareAPI] Rule IDs that will be shown in modal:`, allRuleIds);
+
     const templateRules: Array<CloudflareRule & { rulesetId: string; friendlyId: string; version: string; originalName: string }> = [];
     const customRules: Array<CloudflareRule & { rulesetId: string }> = [];
 
     for (const rule of allRules) {
+      console.log(`[CloudflareAPI] Processing rule ${rule.id} - Description: "${rule.description}"`);
+
       const parsed = parseCloudflareRuleName(rule.description || '');
-      
+
       if (parsed) {
+        console.log(`[CloudflareAPI] → Template rule: ${parsed.friendlyId} v${parsed.version}`);
         templateRules.push({
           ...rule,
           friendlyId: parsed.friendlyId,
@@ -1004,9 +1141,14 @@ export class CloudflareAPI {
           originalName: parsed.originalName
         });
       } else {
+        console.log(`[CloudflareAPI] → Custom rule: ${rule.id}`);
         customRules.push(rule);
       }
     }
+
+    console.log(`[CloudflareAPI] Categorized: ${templateRules.length} template rules, ${customRules.length} custom rules`);
+    console.log(`[CloudflareAPI] Template rule IDs:`, templateRules.map(r => r.id));
+    console.log(`[CloudflareAPI] Custom rule IDs:`, customRules.map(r => r.id));
 
     return { templateRules, customRules };
   }

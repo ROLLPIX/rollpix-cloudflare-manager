@@ -5,9 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Plus, Minus, Trash2, AlertTriangle, Play, Shield, ShieldOff } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Loader2, Plus, Minus, Trash2, Play, Shield, ShieldOff, Siren, Bot } from 'lucide-react';
 import { toast } from 'sonner';
 import { RuleTemplate } from '@/types/cloudflare';
 import { tokenStorage } from '@/lib/tokenStorage';
@@ -17,17 +16,20 @@ interface RulesActionBarProps {
   onClearSelection: () => void;
   onRefreshSelectedDomains?: (zoneIds: string[]) => Promise<void>;
   onBulkProxy?: (enabled: boolean) => Promise<void>;
+  onBulkUnderAttack?: (enabled: boolean) => Promise<void>;
+  onBulkBotFight?: (enabled: boolean) => Promise<void>;
 }
 
-type ActionType = 'add' | 'remove' | 'clean';
+type ActionType = 'add' | 'remove' | 'clean-custom' | 'clean';
 
-export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSelectedDomains, onBulkProxy }: RulesActionBarProps) {
+export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSelectedDomains, onBulkProxy, onBulkUnderAttack, onBulkBotFight }: RulesActionBarProps) {
   const [action, setAction] = useState<ActionType>('add');
   const [selectedRules, setSelectedRules] = useState<string[]>([]);
   const [templates, setTemplates] = useState<RuleTemplate[]>([]);
   const [loading, setLoading] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
-  const [previewResults, setPreviewResults] = useState<any>(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState<string>('');
+  const [pendingAction, setPendingAction] = useState<(() => Promise<void>) | null>(null);
 
   useEffect(() => {
     loadTemplates();
@@ -58,59 +60,25 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
     );
   };
 
-  const handlePreview = async () => {
-    const apiToken = tokenStorage.getToken();
-    if (!apiToken) {
-      toast.error('API Token no encontrado.');
-      return;
-    }
-    if (selectedDomains.length === 0) {
-      toast.error('Selecciona al menos un dominio');
-      return;
-    }
-    if (action !== 'clean' && selectedRules.length === 0) {
-      toast.error('Selecciona al menos una regla');
-      return;
-    }
+  const getConfirmationMessage = () => {
+    const domainCount = selectedDomains.length;
+    const ruleCount = selectedRules.length;
 
-    try {
-      setLoading(true);
-      
-      const response = await fetch('/api/domains/rules/bulk-action', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-token': apiToken
-        },
-        body: JSON.stringify({
-          action,
-          selectedRules,
-          targetZoneIds: selectedDomains,
-          preview: true
-        })
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        setPreviewResults(result.data);
-        setShowPreview(true);
-      } else {
-        toast.error('Error al generar vista previa');
-      }
-    } catch (error) {
-      console.error('Error generating preview:', error);
-      toast.error('Error al generar vista previa');
-    } finally {
-      setLoading(false);
+    switch (action) {
+      case 'add':
+        return `Se van a agregar ${ruleCount} reglas a ${domainCount} dominios seleccionados`;
+      case 'remove':
+        return `Se van a eliminar ${ruleCount} reglas de ${domainCount} dominios seleccionados`;
+      case 'clean-custom':
+        return `Se van a eliminar todas las reglas personalizadas de ${domainCount} dominios seleccionados`;
+      case 'clean':
+        return `Se van a eliminar todas las reglas de ${domainCount} dominios seleccionados`;
+      default:
+        return '';
     }
   };
 
-  const handleExecute = async (confirmed = false) => {
-    if (!confirmed) {
-      await handlePreview();
-      return;
-    }
-
+  const handleRulesAction = async () => {
     const apiToken = tokenStorage.getToken();
     if (!apiToken) {
       toast.error('API Token no encontrado.');
@@ -119,7 +87,7 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
 
     try {
       setLoading(true);
-      
+
       const response = await fetch('/api/domains/rules/bulk-action', {
         method: 'POST',
         headers: {
@@ -138,15 +106,12 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
       if (result.success) {
         const { summary } = result.data;
         toast.success(`Acción completada: ${summary.successful}/${summary.total} exitosos`);
-        onClearSelection();
 
         // Refresh only affected domains instead of all domains
         if (onRefreshSelectedDomains) {
           await onRefreshSelectedDomains(selectedDomains);
         }
 
-        setShowPreview(false);
-        setSelectedRules([]);
       } else {
         toast.error('Error al ejecutar acción');
       }
@@ -155,13 +120,78 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
       toast.error('Error al ejecutar acción');
     } finally {
       setLoading(false);
+      setShowConfirmation(false);
     }
+  };
+
+  const handleConfirmAction = () => {
+    // Validations
+    if (selectedDomains.length === 0) {
+      toast.error('Selecciona al menos un dominio');
+      return;
+    }
+    if (action !== 'clean' && action !== 'clean-custom' && selectedRules.length === 0) {
+      toast.error('Selecciona al menos una regla');
+      return;
+    }
+
+    const message = getConfirmationMessage();
+    setConfirmationMessage(message);
+    setPendingAction(() => () => handleRulesAction());
+    setShowConfirmation(true);
+  };
+
+  const executeConfirmedAction = async () => {
+    if (pendingAction) {
+      await pendingAction();
+      setPendingAction(null);
+    }
+  };
+
+  const handleBulkAction = (actionType: 'proxy' | 'underAttack' | 'botFight', enabled: boolean) => {
+    if (selectedDomains.length === 0) {
+      toast.error('Selecciona al menos un dominio');
+      return;
+    }
+
+    const actionName = {
+      proxy: enabled ? 'habilitar Proxy' : 'deshabilitar Proxy',
+      underAttack: enabled ? 'activar Under Attack Mode' : 'desactivar Under Attack Mode',
+      botFight: enabled ? 'activar Bot Fight Mode' : 'desactivar Bot Fight Mode'
+    }[actionType];
+
+    const message = `Se va a ${actionName} en ${selectedDomains.length} dominios seleccionados`;
+    setConfirmationMessage(message);
+
+    const actionFunction = async () => {
+      try {
+        setLoading(true);
+        switch (actionType) {
+          case 'proxy':
+            if (onBulkProxy) await onBulkProxy(enabled);
+            break;
+          case 'underAttack':
+            if (onBulkUnderAttack) await onBulkUnderAttack(enabled);
+            break;
+          case 'botFight':
+            if (onBulkBotFight) await onBulkBotFight(enabled);
+            break;
+        }
+      } finally {
+        setLoading(false);
+        setShowConfirmation(false);
+      }
+    };
+
+    setPendingAction(() => () => actionFunction());
+    setShowConfirmation(true);
   };
 
   const getActionIcon = () => {
     switch (action) {
       case 'add': return <Plus className="h-4 w-4" />;
       case 'remove': return <Minus className="h-4 w-4" />;
+      case 'clean-custom': return <Trash2 className="h-4 w-4" />;
       case 'clean': return <Trash2 className="h-4 w-4" />;
     }
   };
@@ -170,6 +200,7 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
     switch (action) {
       case 'add': return 'Agregar Reglas';
       case 'remove': return 'Eliminar Reglas';
+      case 'clean-custom': return 'Eliminar Custom';
       case 'clean': return 'Limpiar Todas';
     }
   };
@@ -205,6 +236,12 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
                   Eliminar
                 </div>
               </SelectItem>
+              <SelectItem value="clean-custom">
+                <div className="flex items-center gap-2">
+                  <Trash2 className="h-4 w-4" />
+                  Eliminar Custom
+                </div>
+              </SelectItem>
               <SelectItem value="clean">
                 <div className="flex items-center gap-2">
                   <Trash2 className="h-4 w-4" />
@@ -214,7 +251,7 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
             </SelectContent>
           </Select>
 
-          {action !== 'clean' && (
+          {action !== 'clean' && action !== 'clean-custom' && (
             <div className="flex items-center gap-1 flex-wrap">
               {templates.map((template) => {
                 const friendlyId = template.friendlyId || template.name.match(/^(\d+)-/)?.[1]?.padStart(2, '0').replace(/^/, 'R') || `R${templates.indexOf(template) + 1}`.padStart(3, '0');
@@ -233,8 +270,8 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
           )}
 
           <Button
-            onClick={() => handleExecute(false)}
-            disabled={loading || (action !== 'clean' && selectedRules.length === 0)}
+            onClick={handleConfirmAction}
+            disabled={loading || (action !== 'clean' && action !== 'clean-custom' && selectedRules.length === 0)}
             className="ml-2"
           >
             {loading ? (
@@ -249,100 +286,157 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
         {onBulkProxy && (
           <>
             <Separator orientation="vertical" className="h-6" />
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">Proxy:</span>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => onBulkProxy(true)}
-                disabled={loading}
-                className="text-green-600 border-green-200 hover:bg-green-50"
-              >
-                <Shield className="h-4 w-4 mr-1" />
-                Habilitar
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => onBulkProxy(false)}
-                disabled={loading}
-                className="text-red-600 border-red-200 hover:bg-red-50"
-              >
-                <ShieldOff className="h-4 w-4 mr-1" />
-                Deshabilitar
-              </Button>
-            </div>
+            <TooltipProvider>
+              <div className="flex items-center gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleBulkAction('proxy', true)}
+                      disabled={loading}
+                      className="p-2 hover:bg-green-50"
+                    >
+                      <Shield className="h-4 w-4 text-green-600" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Habilitar Proxy</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleBulkAction('proxy', false)}
+                      disabled={loading}
+                      className="p-2 hover:bg-red-50"
+                    >
+                      <Shield className="h-4 w-4 text-gray-400" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Deshabilitar Proxy</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
+          </>
+        )}
+
+        {onBulkUnderAttack && (
+          <>
+            <Separator orientation="vertical" className="h-6" />
+            <TooltipProvider>
+              <div className="flex items-center gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleBulkAction('underAttack', true)}
+                      disabled={loading}
+                      className="p-2 hover:bg-orange-50"
+                    >
+                      <Siren className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Habilitar Under Attack</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleBulkAction('underAttack', false)}
+                      disabled={loading}
+                      className="p-2 hover:bg-gray-50"
+                    >
+                      <Siren className="h-4 w-4 text-gray-400" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Deshabilitar Under Attack</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
+          </>
+        )}
+
+        {onBulkBotFight && (
+          <>
+            <Separator orientation="vertical" className="h-6" />
+            <TooltipProvider>
+              <div className="flex items-center gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleBulkAction('botFight', true)}
+                      disabled={loading}
+                      className="p-2 hover:bg-blue-50"
+                    >
+                      <Bot className="h-4 w-4 text-blue-500" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Habilitar Bot Fight</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleBulkAction('botFight', false)}
+                      disabled={loading}
+                      className="p-2 hover:bg-gray-50"
+                    >
+                      <Bot className="h-4 w-4 text-gray-400" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Deshabilitar Bot Fight</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
           </>
         )}
       </div>
 
-      <Dialog open={showPreview} onOpenChange={setShowPreview}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              {getActionIcon()}
-              Vista Previa: {getActionText()}
-            </DialogTitle>
-            <DialogDescription>
-              Revisa los cambios antes de aplicarlos
-            </DialogDescription>
-          </DialogHeader>
-
-          {previewResults && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="text-2xl font-bold text-primary">{previewResults.summary.total}</div>
-                  <div className="text-xs text-muted-foreground">Total</div>
-                </div>
-                <div>
-                  <div className="text-lg font-semibold text-green-600">{previewResults.summary.successful}</div>
-                  <div className="text-xs text-muted-foreground">Exitosos</div>
-                </div>
-                <div>
-                  <div className="text-lg font-semibold text-red-600">{previewResults.summary.failed}</div>
-                  <div className="text-xs text-muted-foreground">Fallidos</div>
-                </div>
-              </div>
-
-              {previewResults.summary.conflicts > 0 && (
-                <Alert>
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertDescription>
-                    {previewResults.summary.conflicts} regla(s) existente(s) serán actualizadas automáticamente.
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              <div className="max-h-60 overflow-y-auto space-y-2">
-                {previewResults.results.slice(0, 10).map((result: any, index: number) => (
-                  <div key={index} className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">{result.domainName}</span>
-                    <Badge variant={result.success ? "default" : "destructive"}>
-                      {result.success ? 'OK' : 'Error'}
-                    </Badge>
-                  </div>
-                ))}
-                {previewResults.results.length > 10 && (
-                  <div className="text-center text-sm text-muted-foreground">
-                    ... y {previewResults.results.length - 10} dominios más
-                  </div>
-                )}
-              </div>
+      {showConfirmation && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold mb-4">Confirmar Acción</h3>
+            <p className="text-gray-600 mb-6">{confirmationMessage}</p>
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowConfirmation(false);
+                  setPendingAction(null);
+                }}
+                disabled={loading}
+              >
+                Cancelar
+              </Button>
+              <Button
+                onClick={executeConfirmedAction}
+                disabled={loading}
+              >
+                {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                Confirmar
+              </Button>
             </div>
-          )}
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPreview(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={() => handleExecute(true)} disabled={loading}>
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : getActionIcon()}
-              <span className="ml-1">Ejecutar {getActionText()}</span>
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </div>
+        </div>
+      )}
     </>
   );
 }

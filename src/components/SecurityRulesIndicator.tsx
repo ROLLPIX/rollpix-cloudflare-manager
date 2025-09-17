@@ -18,10 +18,6 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
   const [modalOpen, setModalOpen] = useState(false);
   const securityRules = domain.securityRules;
 
-  // Debug logging
-  React.useEffect(() => {
-    console.log(`[SecurityRulesIndicator] Domain: ${domain.domain}, Rules:`, securityRules);
-  }, [domain.domain, securityRules]);
 
   if (!securityRules) {
     return (
@@ -85,19 +81,33 @@ export function SecurityRulesIndicator({ domain, compact = false }: SecurityRule
           </Tooltip>
         </TooltipProvider>
 
-        {securityRules.corporateRules > 0 && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Badge variant="outline" className="text-xs px-1.5 py-0.5 bg-green-50 text-green-700 border-green-200">
-                  {securityRules.corporateRules} reglas
-                </Badge>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Reglas de plantilla: {securityRules.corporateRules}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        {securityRules.templateRules && securityRules.templateRules.length > 0 && (
+          securityRules.templateRules.map((rule) => (
+            <TooltipProvider key={rule.friendlyId}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge
+                    variant="outline"
+                    className={`text-xs px-1.5 py-0.5 ${
+                      rule.isOutdated
+                        ? 'bg-red-50 text-red-700 border-red-200'
+                        : 'bg-green-50 text-green-700 border-green-200'
+                    }`}
+                  >
+                    {rule.friendlyId}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    {rule.isOutdated
+                      ? 'Esta regla tiene una versión desactualizada'
+                      : `${rule.name} v${rule.version}`
+                    }
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))
         )}
 
         {securityRules.customRules > 0 && (

@@ -2,7 +2,6 @@
  * Secure token storage utility using localStorage
  * Implements basic encoding and provides centralized token management
  */
-import { useState, useEffect } from 'react';
 
 const TOKEN_KEY = 'rollpix_cf_token';
 const TOKEN_TIMESTAMP_KEY = 'rollpix_cf_token_timestamp';
@@ -130,55 +129,4 @@ export const tokenStorage = {
   }
 };
 
-/**
- * React hook for token management
- * Provides reactive token state management
- */
-export const useTokenStorage = () => {
-  const [token, setTokenState] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Load token on mount
-    const loadToken = () => {
-      try {
-        const storedToken = tokenStorage.getToken();
-        setTokenState(storedToken);
-      } catch (error) {
-        console.error('Error loading token:', error);
-        setTokenState(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadToken();
-  }, []);
-
-  const setToken = (newToken: string) => {
-    try {
-      tokenStorage.setToken(newToken);
-      setTokenState(newToken);
-    } catch (error) {
-      console.error('Error setting token:', error);
-      throw error;
-    }
-  };
-
-  const clearToken = () => {
-    tokenStorage.clearToken();
-    setTokenState(null);
-  };
-
-  const hasValidToken = tokenStorage.hasValidToken();
-
-  return {
-    token,
-    isLoading,
-    hasValidToken,
-    setToken,
-    clearToken,
-    tokenAge: tokenStorage.getTokenAge()
-  };
-};
 

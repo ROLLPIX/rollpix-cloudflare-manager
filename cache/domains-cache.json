@@ -35,7 +35,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-08-20T04:00:07.047508Z",
-        "modified_on": "2025-09-15T08:23:59.099299Z"
+        "modified_on": "2025-09-16T08:23:56.718849Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -46,7 +46,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.798Z"
+        "lastAnalyzed": "2025-09-17T04:50:50.236Z",
+        "templateRules": []
       }
     },
     {
@@ -84,7 +85,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-10-04T16:40:46.311908Z",
-        "modified_on": "2025-09-15T08:24:00.860648Z"
+        "modified_on": "2025-09-16T08:23:58.834495Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -95,7 +96,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.961Z"
+        "lastAnalyzed": "2025-09-17T04:50:50.033Z",
+        "templateRules": []
       }
     },
     {
@@ -131,7 +133,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-17T00:50:04.827595Z",
-        "modified_on": "2025-09-15T08:24:02.903531Z"
+        "modified_on": "2025-09-16T08:24:00.778016Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -142,7 +144,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.909Z"
+        "lastAnalyzed": "2025-09-17T04:50:50.455Z",
+        "templateRules": []
       }
     },
     {
@@ -180,7 +183,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-08T20:40:15.752143Z",
-        "modified_on": "2025-09-15T08:24:04.785972Z"
+        "modified_on": "2025-09-16T08:24:02.538903Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -191,7 +194,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.712Z"
+        "lastAnalyzed": "2025-09-17T04:50:50.299Z",
+        "templateRules": []
       }
     },
     {
@@ -227,7 +231,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-09-14T14:51:48.709059Z",
-        "modified_on": "2025-09-15T08:24:06.888902Z"
+        "modified_on": "2025-09-16T08:24:04.248807Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -238,7 +242,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.869Z"
+        "lastAnalyzed": "2025-09-17T04:50:49.925Z",
+        "templateRules": []
       }
     },
     {
@@ -276,7 +281,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:12:34.035644Z",
-        "modified_on": "2025-09-15T08:24:08.769902Z"
+        "modified_on": "2025-09-16T08:24:05.718708Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -284,10 +289,18 @@
       "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
-        "corporateRules": 0,
-        "customRules": 1,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.954Z"
+        "corporateRules": 1,
+        "customRules": 0,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-17T04:50:50.130Z",
+        "templateRules": [
+          {
+            "friendlyId": "R001",
+            "version": "1.0",
+            "isOutdated": true,
+            "name": "WAF2"
+          }
+        ]
       }
     },
     {
@@ -325,7 +338,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:04:22.553763Z",
-        "modified_on": "2025-09-15T08:24:10.722087Z"
+        "modified_on": "2025-09-16T08:24:06.743469Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -333,10 +346,18 @@
       "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
-        "corporateRules": 0,
-        "customRules": 1,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.738Z"
+        "corporateRules": 1,
+        "customRules": 0,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-17T04:50:50.549Z",
+        "templateRules": [
+          {
+            "friendlyId": "R001",
+            "version": "1.0",
+            "isOutdated": true,
+            "name": "WAF2"
+          }
+        ]
       }
     },
     {
@@ -372,7 +393,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-05-05T08:55:10.286725Z",
-        "modified_on": "2025-09-15T08:24:12.653392Z"
+        "modified_on": "2025-09-16T08:24:07.833869Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -383,7 +404,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:38.118Z"
+        "lastAnalyzed": "2025-09-17T04:50:50.310Z",
+        "templateRules": []
       }
     },
     {
@@ -402,7 +424,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-09-14T18:44:16.851907Z",
-        "modified_on": "2025-09-14T18:44:16.851907Z"
+        "modified_on": "2025-09-16T22:43:46.803263Z"
       },
       "wwwRecord": {
         "id": "2c6393c64949e2f635625e1393350c49",
@@ -410,25 +432,33 @@
         "type": "A",
         "content": "190.64.98.104",
         "proxiable": true,
-        "proxied": true,
+        "proxied": false,
         "ttl": 1,
         "settings": {},
         "meta": {},
         "comment": null,
         "tags": [],
         "created_on": "2024-09-18T22:12:22.88951Z",
-        "modified_on": "2025-09-15T08:24:14.663134Z"
+        "modified_on": "2025-09-16T22:43:54.712387Z"
       },
       "rootProxied": false,
-      "wwwProxied": true,
-      "underAttackMode": false,
-      "botFightMode": false,
+      "wwwProxied": false,
+      "underAttackMode": true,
+      "botFightMode": true,
       "securityRules": {
-        "totalRules": 2,
-        "corporateRules": 0,
-        "customRules": 2,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.943Z"
+        "totalRules": 1,
+        "corporateRules": 1,
+        "customRules": 0,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-17T04:50:50.295Z",
+        "templateRules": [
+          {
+            "friendlyId": "R001",
+            "version": "1.0",
+            "isOutdated": true,
+            "name": "WAF2"
+          }
+        ]
       }
     },
     {
@@ -440,25 +470,33 @@
         "type": "A",
         "content": "190.64.98.104",
         "proxiable": true,
-        "proxied": true,
+        "proxied": false,
         "ttl": 1,
         "settings": {},
         "meta": {},
         "comment": null,
         "tags": [],
         "created_on": "2024-09-18T22:09:45.344247Z",
-        "modified_on": "2025-09-15T08:24:16.611111Z"
+        "modified_on": "2025-09-16T22:44:02.72642Z"
       },
       "rootProxied": false,
-      "wwwProxied": true,
+      "wwwProxied": false,
       "underAttackMode": false,
       "botFightMode": false,
       "securityRules": {
-        "totalRules": 2,
-        "corporateRules": 0,
-        "customRules": 2,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.729Z"
+        "totalRules": 1,
+        "corporateRules": 1,
+        "customRules": 0,
+        "hasConflicts": true,
+        "lastAnalyzed": "2025-09-17T04:50:50.516Z",
+        "templateRules": [
+          {
+            "friendlyId": "R001",
+            "version": "1.0",
+            "isOutdated": true,
+            "name": "WAF2"
+          }
+        ]
       }
     },
     {
@@ -494,7 +532,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-12T21:32:37.703779Z",
-        "modified_on": "2025-09-15T08:24:18.743302Z"
+        "modified_on": "2025-09-16T08:24:11.78333Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -505,7 +543,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.725Z"
+        "lastAnalyzed": "2025-09-17T04:50:50.127Z",
+        "templateRules": []
       }
     },
     {
@@ -541,7 +580,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-01-25T15:57:04.809306Z",
-        "modified_on": "2025-09-15T08:24:20.806516Z"
+        "modified_on": "2025-09-16T08:24:12.898375Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -552,7 +591,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:37.957Z"
+        "lastAnalyzed": "2025-09-17T04:50:50.142Z",
+        "templateRules": []
       }
     },
     {
@@ -588,7 +628,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-04-06T18:15:04.392398Z",
-        "modified_on": "2025-09-15T08:24:22.675476Z"
+        "modified_on": "2025-09-16T08:24:13.899748Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -599,7 +639,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.516Z"
+        "lastAnalyzed": "2025-09-17T04:50:52.548Z",
+        "templateRules": []
       }
     },
     {
@@ -633,7 +674,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-02-28T14:44:05.267294Z",
-        "modified_on": "2025-09-15T08:24:24.676681Z"
+        "modified_on": "2025-09-16T08:24:14.887368Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -644,7 +685,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.687Z"
+        "lastAnalyzed": "2025-09-17T04:50:52.910Z",
+        "templateRules": []
       }
     },
     {
@@ -680,7 +722,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-14T18:05:25.55251Z",
-        "modified_on": "2025-09-15T08:24:26.567347Z"
+        "modified_on": "2025-09-16T08:24:16.010572Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -691,7 +733,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.629Z"
+        "lastAnalyzed": "2025-09-17T04:50:52.947Z",
+        "templateRules": []
       }
     },
     {
@@ -729,7 +772,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-07-17T17:37:16.790088Z",
-        "modified_on": "2025-09-15T08:24:28.474642Z"
+        "modified_on": "2025-09-16T08:24:16.9776Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -740,7 +783,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.513Z"
+        "lastAnalyzed": "2025-09-17T04:50:52.720Z",
+        "templateRules": []
       }
     },
     {
@@ -774,7 +818,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-07-17T17:29:08.915797Z",
-        "modified_on": "2025-09-15T08:24:30.308874Z"
+        "modified_on": "2025-09-16T08:24:18.157755Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -785,7 +829,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.440Z"
+        "lastAnalyzed": "2025-09-17T04:50:52.914Z",
+        "templateRules": []
       }
     },
     {
@@ -821,7 +866,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-10-03T12:58:25.620419Z",
-        "modified_on": "2025-09-15T08:24:32.192751Z"
+        "modified_on": "2025-09-16T08:24:19.902829Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -832,7 +877,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.584Z"
+        "lastAnalyzed": "2025-09-17T04:50:52.809Z",
+        "templateRules": []
       }
     },
     {
@@ -870,7 +916,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-11-01T00:31:14.443878Z",
-        "modified_on": "2025-09-15T08:24:34.004962Z"
+        "modified_on": "2025-09-16T08:24:21.293637Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -881,7 +927,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.585Z"
+        "lastAnalyzed": "2025-09-17T04:50:53.118Z",
+        "templateRules": []
       }
     },
     {
@@ -917,7 +964,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-01-24T17:22:12.787862Z",
-        "modified_on": "2025-09-15T08:24:35.870655Z"
+        "modified_on": "2025-09-16T08:24:22.591124Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -928,56 +975,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.807Z"
-      }
-    },
-    {
-      "domain": "dibsa.com.ar",
-      "zoneId": "1de3f5b800e110cdcb87fc10c3e14592",
-      "rootRecord": {
-        "id": "aec7180ea85ec1a75c435ec101869571",
-        "name": "dibsa.com.ar",
-        "type": "CNAME",
-        "content": "ishop4.rollpix.com",
-        "proxiable": true,
-        "proxied": false,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2024-09-03T19:34:33.315495Z",
-        "modified_on": "2025-08-05T23:19:33.219225Z"
-      },
-      "wwwRecord": {
-        "id": "24981c5fee2f1cba6b0f5a14be6e9538",
-        "name": "www.dibsa.com.ar",
-        "type": "CNAME",
-        "content": "dibsa.com.ar",
-        "proxiable": true,
-        "proxied": true,
-        "ttl": 1,
-        "settings": {
-          "flatten_cname": false
-        },
-        "meta": {},
-        "comment": null,
-        "tags": [],
-        "created_on": "2024-09-03T19:34:46.852197Z",
-        "modified_on": "2025-09-09T08:22:44.228747Z"
-      },
-      "rootProxied": false,
-      "wwwProxied": true,
-      "underAttackMode": false,
-      "botFightMode": false,
-      "securityRules": {
-        "totalRules": 2,
-        "corporateRules": 0,
-        "customRules": 2,
-        "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.654Z"
+        "lastAnalyzed": "2025-09-17T04:50:52.749Z",
+        "templateRules": []
       }
     },
     {
@@ -1015,7 +1014,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-09T23:10:45.113789Z",
-        "modified_on": "2025-09-15T08:24:37.698393Z"
+        "modified_on": "2025-09-16T08:24:23.703731Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1026,7 +1025,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.685Z"
+        "lastAnalyzed": "2025-09-17T04:50:52.925Z",
+        "templateRules": []
       }
     },
     {
@@ -1064,7 +1064,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-08-30T19:43:47.669012Z",
-        "modified_on": "2025-09-15T08:24:39.602932Z"
+        "modified_on": "2025-09-16T08:24:24.999506Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1075,7 +1075,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.744Z"
+        "lastAnalyzed": "2025-09-17T04:50:52.925Z",
+        "templateRules": []
       }
     },
     {
@@ -1113,7 +1114,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-07-06T01:24:35.477312Z",
-        "modified_on": "2025-09-15T08:24:41.623728Z"
+        "modified_on": "2025-09-16T08:24:26.099813Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -1124,7 +1125,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:40.671Z"
+        "lastAnalyzed": "2025-09-17T04:50:53.035Z",
+        "templateRules": []
       }
     },
     {
@@ -1160,7 +1162,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-07T19:50:45.729097Z",
-        "modified_on": "2025-09-15T08:24:43.456414Z"
+        "modified_on": "2025-09-16T08:24:27.342501Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1171,7 +1173,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.285Z"
+        "lastAnalyzed": "2025-09-17T04:50:52.621Z",
+        "templateRules": []
       }
     },
     {
@@ -1207,7 +1210,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-15T19:34:03.881628Z",
-        "modified_on": "2025-09-15T08:24:45.263941Z"
+        "modified_on": "2025-09-16T08:24:28.421308Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1218,7 +1221,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.142Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.086Z",
+        "templateRules": []
       }
     },
     {
@@ -1248,7 +1252,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.372Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.276Z",
+        "templateRules": []
       }
     },
     {
@@ -1286,7 +1291,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-07-18T19:09:04.036486Z",
-        "modified_on": "2025-09-15T08:24:48.436352Z"
+        "modified_on": "2025-09-16T08:24:31.01695Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -1297,7 +1302,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.467Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.350Z",
+        "templateRules": []
       }
     },
     {
@@ -1333,7 +1339,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-22T23:12:08.842634Z",
-        "modified_on": "2025-09-15T08:24:50.589439Z"
+        "modified_on": "2025-09-16T08:24:32.015341Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1344,7 +1350,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.514Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.200Z",
+        "templateRules": []
       }
     },
     {
@@ -1382,7 +1389,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-02-14T16:39:12.421424Z",
-        "modified_on": "2025-09-15T08:24:52.641687Z"
+        "modified_on": "2025-09-16T08:24:33.367937Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -1393,7 +1400,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.276Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.201Z",
+        "templateRules": []
       }
     },
     {
@@ -1429,7 +1437,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-05-18T18:27:47.959205Z",
-        "modified_on": "2025-09-15T08:24:54.60305Z"
+        "modified_on": "2025-09-16T08:24:34.500746Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1440,7 +1448,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.823Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.537Z",
+        "templateRules": []
       }
     },
     {
@@ -1476,7 +1485,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-08-31T18:43:15.752505Z",
-        "modified_on": "2025-09-15T08:24:56.483954Z"
+        "modified_on": "2025-09-16T08:24:35.761786Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1487,7 +1496,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.716Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.466Z",
+        "templateRules": []
       }
     },
     {
@@ -1523,7 +1533,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-28T21:17:44.230472Z",
-        "modified_on": "2025-09-15T08:24:58.86541Z"
+        "modified_on": "2025-09-16T08:24:37.211164Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1534,7 +1544,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.247Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.610Z",
+        "templateRules": []
       }
     },
     {
@@ -1572,7 +1583,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-09-13T13:42:10.971036Z",
-        "modified_on": "2025-09-15T08:25:01.25319Z"
+        "modified_on": "2025-09-16T08:24:38.217346Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1583,7 +1594,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.370Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.281Z",
+        "templateRules": []
       }
     },
     {
@@ -1619,7 +1631,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-08-26T02:42:38.038177Z",
-        "modified_on": "2025-09-15T08:25:06.179424Z"
+        "modified_on": "2025-09-16T08:24:39.384442Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1630,7 +1642,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.364Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.565Z",
+        "templateRules": []
       }
     },
     {
@@ -1668,7 +1681,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-08-22T14:29:01.29443Z",
-        "modified_on": "2025-09-15T08:25:08.163835Z"
+        "modified_on": "2025-09-16T08:24:40.368289Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1679,7 +1692,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:43.397Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.202Z",
+        "templateRules": []
       }
     },
     {
@@ -1715,7 +1729,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-03-22T23:48:34.131337Z",
-        "modified_on": "2025-09-15T08:25:10.268178Z"
+        "modified_on": "2025-09-16T08:24:41.564168Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1726,7 +1740,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.111Z"
+        "lastAnalyzed": "2025-09-17T04:50:55.201Z",
+        "templateRules": []
       }
     },
     {
@@ -1764,7 +1779,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-05-18T22:56:32.004271Z",
-        "modified_on": "2025-09-15T08:25:12.169507Z"
+        "modified_on": "2025-09-16T08:24:42.553302Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1775,7 +1790,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.293Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.444Z",
+        "templateRules": []
       }
     },
     {
@@ -1786,11 +1802,12 @@
       "underAttackMode": false,
       "botFightMode": false,
       "securityRules": {
-        "totalRules": 1,
+        "totalRules": 0,
         "corporateRules": 0,
-        "customRules": 1,
+        "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.193Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.603Z",
+        "templateRules": []
       }
     },
     {
@@ -1822,7 +1839,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.149Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.779Z",
+        "templateRules": []
       }
     },
     {
@@ -1860,7 +1878,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-02T18:45:42.722314Z",
-        "modified_on": "2025-09-15T08:25:17.03243Z"
+        "modified_on": "2025-09-16T08:24:46.00113Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1871,7 +1889,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.225Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.515Z",
+        "templateRules": []
       }
     },
     {
@@ -1907,7 +1926,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-15T00:24:24.727057Z",
-        "modified_on": "2025-09-15T08:25:20.595439Z"
+        "modified_on": "2025-09-16T08:24:47.127682Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1918,7 +1937,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.238Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.631Z",
+        "templateRules": []
       }
     },
     {
@@ -1954,7 +1974,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-09T16:33:15.757686Z",
-        "modified_on": "2025-09-15T08:25:23.532506Z"
+        "modified_on": "2025-09-16T08:24:48.344627Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1965,7 +1985,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.128Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.721Z",
+        "templateRules": []
       }
     },
     {
@@ -2001,7 +2022,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-09-16T13:04:15.792137Z",
-        "modified_on": "2025-09-15T08:25:25.453995Z"
+        "modified_on": "2025-09-16T08:24:50.129987Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2012,7 +2033,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.439Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.994Z",
+        "templateRules": []
       }
     },
     {
@@ -2048,7 +2070,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-08T13:36:30.139213Z",
-        "modified_on": "2025-09-15T08:25:27.332839Z"
+        "modified_on": "2025-09-16T08:24:51.087905Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2059,7 +2081,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.238Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.473Z",
+        "templateRules": []
       }
     },
     {
@@ -2106,7 +2129,8 @@
         "corporateRules": 0,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.096Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.182Z",
+        "templateRules": []
       }
     },
     {
@@ -2144,7 +2168,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-06-25T15:55:02.355017Z",
-        "modified_on": "2025-09-15T08:25:29.210329Z"
+        "modified_on": "2025-09-16T08:24:52.14872Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -2155,7 +2179,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.130Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.540Z",
+        "templateRules": []
       }
     },
     {
@@ -2191,7 +2216,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-09-04T15:37:59.518905Z",
-        "modified_on": "2025-09-15T08:25:31.114077Z"
+        "modified_on": "2025-09-16T08:24:53.097977Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2202,7 +2227,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:46.333Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.668Z",
+        "templateRules": []
       }
     },
     {
@@ -2238,7 +2264,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-04-14T20:13:57.031814Z",
-        "modified_on": "2025-09-15T08:25:32.934448Z"
+        "modified_on": "2025-09-16T08:24:54.251315Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2249,7 +2275,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:48.872Z"
+        "lastAnalyzed": "2025-09-17T04:50:57.632Z",
+        "templateRules": []
       }
     },
     {
@@ -2285,7 +2312,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-08-27T15:11:58.631682Z",
-        "modified_on": "2025-09-15T08:25:34.802513Z"
+        "modified_on": "2025-09-16T08:24:55.233793Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2296,7 +2323,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:48.746Z"
+        "lastAnalyzed": "2025-09-17T04:50:59.966Z",
+        "templateRules": []
       }
     },
     {
@@ -2334,7 +2362,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-08-18T20:05:53.163898Z",
-        "modified_on": "2025-09-15T08:25:36.678911Z"
+        "modified_on": "2025-09-16T08:24:56.33645Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2345,7 +2373,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:48.873Z"
+        "lastAnalyzed": "2025-09-17T04:51:00.017Z",
+        "templateRules": []
       }
     },
     {
@@ -2381,7 +2410,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-14T13:41:54.243219Z",
-        "modified_on": "2025-09-15T08:25:38.576766Z"
+        "modified_on": "2025-09-16T08:24:57.273018Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2392,7 +2421,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:48.785Z"
+        "lastAnalyzed": "2025-09-17T04:51:00.045Z",
+        "templateRules": []
       }
     },
     {
@@ -2430,7 +2460,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-06-18T13:44:18.207412Z",
-        "modified_on": "2025-09-15T08:25:40.652174Z"
+        "modified_on": "2025-09-16T08:24:58.284258Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2441,7 +2471,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:48.792Z"
+        "lastAnalyzed": "2025-09-17T04:51:00.158Z",
+        "templateRules": []
       }
     },
     {
@@ -2477,7 +2508,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-24T14:14:47.674148Z",
-        "modified_on": "2025-09-15T08:25:42.623133Z"
+        "modified_on": "2025-09-16T08:24:59.322292Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -2488,7 +2519,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:49.125Z"
+        "lastAnalyzed": "2025-09-17T04:50:59.965Z",
+        "templateRules": []
       }
     },
     {
@@ -2526,7 +2558,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-05-29T00:31:06.043141Z",
-        "modified_on": "2025-09-15T08:25:44.500596Z"
+        "modified_on": "2025-09-16T08:25:00.964574Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2537,7 +2569,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:48.837Z"
+        "lastAnalyzed": "2025-09-17T04:51:00.177Z",
+        "templateRules": []
       }
     },
     {
@@ -2575,7 +2608,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-06-03T15:46:52.938099Z",
-        "modified_on": "2025-09-15T08:25:46.360307Z"
+        "modified_on": "2025-09-16T08:25:05.060195Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2586,7 +2619,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:48.931Z"
+        "lastAnalyzed": "2025-09-17T04:51:00.384Z",
+        "templateRules": []
       }
     },
     {
@@ -2622,7 +2656,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-08-28T15:58:49.366637Z",
-        "modified_on": "2025-09-15T08:25:48.206907Z"
+        "modified_on": "2025-09-16T08:25:06.415001Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -2633,7 +2667,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:48.798Z"
+        "lastAnalyzed": "2025-09-17T04:51:00.219Z",
+        "templateRules": []
       }
     },
     {
@@ -2669,7 +2704,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-04-09T18:16:49.31311Z",
-        "modified_on": "2025-09-15T08:25:50.246072Z"
+        "modified_on": "2025-09-16T08:25:07.471693Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2680,7 +2715,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:48.792Z"
+        "lastAnalyzed": "2025-09-17T04:51:00.454Z",
+        "templateRules": []
       }
     },
     {
@@ -2718,7 +2754,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-04-22T13:00:18.131743Z",
-        "modified_on": "2025-09-15T08:25:52.122697Z"
+        "modified_on": "2025-09-16T08:25:08.603518Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2729,7 +2765,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:48.770Z"
+        "lastAnalyzed": "2025-09-17T04:51:00.129Z",
+        "templateRules": []
       }
     },
     {
@@ -2767,7 +2804,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-06-26T19:03:48.698446Z",
-        "modified_on": "2025-09-15T08:25:54.060912Z"
+        "modified_on": "2025-09-16T08:25:09.616717Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -2778,7 +2815,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:49.035Z"
+        "lastAnalyzed": "2025-09-17T04:50:59.897Z",
+        "templateRules": []
       }
     },
     {
@@ -2816,7 +2854,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-29T13:43:37.288667Z",
-        "modified_on": "2025-09-15T08:25:55.939365Z"
+        "modified_on": "2025-09-16T08:25:10.797135Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2827,7 +2865,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.638Z"
+        "lastAnalyzed": "2025-09-17T04:51:00.093Z",
+        "templateRules": []
       }
     },
     {
@@ -2863,7 +2902,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-01-03T15:24:07.063418Z",
-        "modified_on": "2025-09-15T08:25:57.789222Z"
+        "modified_on": "2025-09-16T08:25:11.740285Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2874,7 +2913,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.589Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.657Z",
+        "templateRules": []
       }
     },
     {
@@ -2910,7 +2950,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-03T17:48:33.518352Z",
-        "modified_on": "2025-09-15T08:25:59.715929Z"
+        "modified_on": "2025-09-16T08:25:12.676419Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2921,7 +2961,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.753Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.359Z",
+        "templateRules": []
       }
     },
     {
@@ -2959,7 +3000,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-09-12T18:45:56.878243Z",
-        "modified_on": "2025-09-15T08:26:01.570785Z"
+        "modified_on": "2025-09-16T08:25:14.058795Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -2970,7 +3011,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.425Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.693Z",
+        "templateRules": []
       }
     },
     {
@@ -3006,7 +3048,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-03T19:17:10.623224Z",
-        "modified_on": "2025-09-15T08:26:03.441967Z"
+        "modified_on": "2025-09-16T08:25:15.308377Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3017,7 +3059,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.500Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.490Z",
+        "templateRules": []
       }
     },
     {
@@ -3053,7 +3096,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-29T03:36:59.903069Z",
-        "modified_on": "2025-09-15T08:26:05.321505Z"
+        "modified_on": "2025-09-16T08:25:16.622885Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3064,7 +3107,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.478Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.908Z",
+        "templateRules": []
       }
     },
     {
@@ -3100,7 +3144,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-09-03T12:27:08.831446Z",
-        "modified_on": "2025-09-15T08:26:07.19121Z"
+        "modified_on": "2025-09-16T08:25:18.179046Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3111,7 +3155,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.713Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.329Z",
+        "templateRules": []
       }
     },
     {
@@ -3147,7 +3192,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-03-17T15:06:40.387822Z",
-        "modified_on": "2025-09-15T08:26:09.040252Z"
+        "modified_on": "2025-09-16T08:25:19.490027Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3158,7 +3203,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.479Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.827Z",
+        "templateRules": []
       }
     },
     {
@@ -3196,7 +3242,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-12-14T21:02:35.06967Z",
-        "modified_on": "2025-09-15T08:26:10.975826Z"
+        "modified_on": "2025-09-16T08:25:20.637107Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3207,7 +3253,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.669Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.402Z",
+        "templateRules": []
       }
     },
     {
@@ -3245,7 +3292,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-04-03T20:52:12.409689Z",
-        "modified_on": "2025-09-15T08:26:12.941092Z"
+        "modified_on": "2025-09-16T08:25:22.235531Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3256,7 +3303,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.497Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.545Z",
+        "templateRules": []
       }
     },
     {
@@ -3286,7 +3334,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.569Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.579Z",
+        "templateRules": []
       }
     },
     {
@@ -3324,7 +3373,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-07T19:22:04.18351Z",
-        "modified_on": "2025-09-15T08:26:16.167519Z"
+        "modified_on": "2025-09-16T08:25:24.420332Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3335,7 +3384,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:51.454Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.381Z",
+        "templateRules": []
       }
     },
     {
@@ -3373,7 +3423,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-01-04T18:34:51.104726Z",
-        "modified_on": "2025-09-15T08:26:18.203126Z"
+        "modified_on": "2025-09-16T08:25:25.455654Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3384,7 +3434,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.065Z"
+        "lastAnalyzed": "2025-09-17T04:51:02.943Z",
+        "templateRules": []
       }
     },
     {
@@ -3422,7 +3473,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-12-07T00:12:51.83001Z",
-        "modified_on": "2025-09-15T08:26:20.086973Z"
+        "modified_on": "2025-09-16T08:25:26.711175Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3433,7 +3484,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.048Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.816Z",
+        "templateRules": []
       }
     },
     {
@@ -3465,7 +3517,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.363Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.966Z",
+        "templateRules": []
       }
     },
     {
@@ -3480,7 +3533,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.171Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.630Z",
+        "templateRules": []
       }
     },
     {
@@ -3518,7 +3572,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-05-27T13:00:22.746183Z",
-        "modified_on": "2025-09-15T08:26:24.908615Z"
+        "modified_on": "2025-09-16T08:25:29.86714Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -3529,7 +3583,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.179Z"
+        "lastAnalyzed": "2025-09-17T04:51:07.980Z",
+        "templateRules": []
       }
     },
     {
@@ -3567,7 +3622,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2017-08-09T03:02:10.079534Z",
-        "modified_on": "2025-09-15T08:26:26.697375Z"
+        "modified_on": "2025-09-16T08:25:31.101291Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -3578,7 +3633,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.534Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.608Z",
+        "templateRules": []
       }
     },
     {
@@ -3614,7 +3670,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-06T14:12:23.534285Z",
-        "modified_on": "2025-09-15T08:26:28.926232Z"
+        "modified_on": "2025-09-16T08:25:32.376333Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3625,7 +3681,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.115Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.846Z",
+        "templateRules": []
       }
     },
     {
@@ -3657,7 +3714,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.464Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.976Z",
+        "templateRules": []
       }
     },
     {
@@ -3695,7 +3753,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-08-12T18:44:14.387431Z",
-        "modified_on": "2025-09-15T08:26:32.147789Z"
+        "modified_on": "2025-09-16T08:25:34.548323Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3706,7 +3764,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.174Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.894Z",
+        "templateRules": []
       }
     },
     {
@@ -3721,7 +3780,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.257Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.884Z",
+        "templateRules": []
       }
     },
     {
@@ -3736,7 +3796,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.370Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.982Z",
+        "templateRules": []
       }
     },
     {
@@ -3774,7 +3835,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-01-12T16:10:24.299297Z",
-        "modified_on": "2025-09-15T08:26:36.67743Z"
+        "modified_on": "2025-09-16T08:25:37.768354Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3785,7 +3846,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:54.362Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.749Z",
+        "templateRules": []
       }
     },
     {
@@ -3821,7 +3883,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-10-09T22:11:22.383459Z",
-        "modified_on": "2025-09-15T08:26:38.424815Z"
+        "modified_on": "2025-09-16T08:25:38.930345Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -3832,7 +3894,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:56.978Z"
+        "lastAnalyzed": "2025-09-17T04:51:04.919Z",
+        "templateRules": []
       }
     },
     {
@@ -3868,7 +3931,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-11-21T20:48:36.986426Z",
-        "modified_on": "2025-09-15T08:26:40.557841Z"
+        "modified_on": "2025-09-16T08:25:41.210458Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -3879,7 +3942,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:56.954Z"
+        "lastAnalyzed": "2025-09-17T04:51:09.906Z",
+        "templateRules": []
       }
     },
     {
@@ -3915,7 +3979,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-03-16T13:24:33.378372Z",
-        "modified_on": "2025-09-15T08:26:42.666564Z"
+        "modified_on": "2025-09-16T08:25:42.278043Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3926,7 +3990,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:56.911Z"
+        "lastAnalyzed": "2025-09-17T04:51:10.240Z",
+        "templateRules": []
       }
     },
     {
@@ -3962,7 +4027,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-24T15:51:03.518596Z",
-        "modified_on": "2025-09-15T08:26:44.817163Z"
+        "modified_on": "2025-09-16T08:25:43.475146Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3973,7 +4038,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:56.960Z"
+        "lastAnalyzed": "2025-09-17T04:51:09.917Z",
+        "templateRules": []
       }
     },
     {
@@ -4011,7 +4077,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-10-31T23:21:49.407185Z",
-        "modified_on": "2025-09-15T08:26:46.702401Z"
+        "modified_on": "2025-09-16T08:25:45.340411Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4022,7 +4088,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:57.264Z"
+        "lastAnalyzed": "2025-09-17T04:51:09.888Z",
+        "templateRules": []
       }
     },
     {
@@ -4060,7 +4127,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-11-22T23:40:25.644856Z",
-        "modified_on": "2025-09-15T08:26:48.603524Z"
+        "modified_on": "2025-09-16T08:25:46.518041Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4071,7 +4138,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:56.918Z"
+        "lastAnalyzed": "2025-09-17T04:51:09.921Z",
+        "templateRules": []
       }
     },
     {
@@ -4086,7 +4154,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:57.159Z"
+        "lastAnalyzed": "2025-09-17T04:51:09.787Z",
+        "templateRules": []
       }
     },
     {
@@ -4124,7 +4193,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-10-31T20:00:11.923423Z",
-        "modified_on": "2025-09-15T08:26:51.820804Z"
+        "modified_on": "2025-09-16T08:25:48.786068Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4135,7 +4204,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:57.199Z"
+        "lastAnalyzed": "2025-09-17T04:51:10.255Z",
+        "templateRules": []
       }
     },
     {
@@ -4173,7 +4243,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-17T20:12:04.272065Z",
-        "modified_on": "2025-09-15T08:26:53.723014Z"
+        "modified_on": "2025-09-16T08:25:49.960962Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4184,7 +4254,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:57.047Z"
+        "lastAnalyzed": "2025-09-17T04:51:10.158Z",
+        "templateRules": []
       }
     },
     {
@@ -4233,7 +4304,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:57.420Z"
+        "lastAnalyzed": "2025-09-17T04:51:10.258Z",
+        "templateRules": []
       }
     },
     {
@@ -4269,7 +4341,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-01-16T14:07:30.240158Z",
-        "modified_on": "2025-09-15T08:26:55.648687Z"
+        "modified_on": "2025-09-16T08:25:50.887251Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4280,7 +4352,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:56.955Z"
+        "lastAnalyzed": "2025-09-17T04:51:09.964Z",
+        "templateRules": []
       }
     },
     {
@@ -4316,7 +4389,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-03-13T14:50:46.456173Z",
-        "modified_on": "2025-09-15T08:26:57.485691Z"
+        "modified_on": "2025-09-16T08:25:52.047477Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -4327,7 +4400,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:49:56.930Z"
+        "lastAnalyzed": "2025-09-17T04:51:09.860Z",
+        "templateRules": []
       }
     },
     {
@@ -4363,7 +4437,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-10-02T16:32:45.913754Z",
-        "modified_on": "2025-09-15T08:26:59.429718Z"
+        "modified_on": "2025-09-16T08:25:53.142795Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4374,7 +4448,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.076Z"
+        "lastAnalyzed": "2025-09-17T04:51:10.553Z",
+        "templateRules": []
       }
     },
     {
@@ -4410,7 +4485,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-12-20T15:32:16.880723Z",
-        "modified_on": "2025-09-15T08:27:01.400505Z"
+        "modified_on": "2025-09-16T08:25:54.191075Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4421,7 +4496,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.342Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.516Z",
+        "templateRules": []
       }
     },
     {
@@ -4457,7 +4533,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-03T01:09:33.882644Z",
-        "modified_on": "2025-09-15T08:27:03.412518Z"
+        "modified_on": "2025-09-16T08:25:55.255742Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4468,7 +4544,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.060Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.844Z",
+        "templateRules": []
       }
     },
     {
@@ -4504,7 +4581,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-25T21:30:19.782446Z",
-        "modified_on": "2025-09-15T08:27:05.213566Z"
+        "modified_on": "2025-09-16T08:25:56.334843Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4515,7 +4592,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.014Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.486Z",
+        "templateRules": []
       }
     },
     {
@@ -4553,7 +4631,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-01T22:14:17.501654Z",
-        "modified_on": "2025-09-15T08:27:07.18371Z"
+        "modified_on": "2025-09-16T08:25:57.718957Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4564,7 +4642,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.117Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.494Z",
+        "templateRules": []
       }
     },
     {
@@ -4594,7 +4673,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.134Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.579Z",
+        "templateRules": []
       }
     },
     {
@@ -4630,7 +4710,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-07-02T18:43:44.276835Z",
-        "modified_on": "2025-09-15T08:27:10.253897Z"
+        "modified_on": "2025-09-16T08:26:00.023714Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4641,7 +4721,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.465Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.522Z",
+        "templateRules": []
       }
     },
     {
@@ -4677,7 +4758,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-19T14:03:41.012238Z",
-        "modified_on": "2025-09-15T08:27:12.191811Z"
+        "modified_on": "2025-09-16T08:26:01.231003Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4688,7 +4769,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.075Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.521Z",
+        "templateRules": []
       }
     },
     {
@@ -4718,7 +4800,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.095Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.907Z",
+        "templateRules": []
       }
     },
     {
@@ -4765,7 +4848,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.092Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.747Z",
+        "templateRules": []
       }
     },
     {
@@ -4803,7 +4887,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-10-30T17:50:50.431424Z",
-        "modified_on": "2025-09-15T08:27:15.387324Z"
+        "modified_on": "2025-09-16T08:26:04.486612Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4814,7 +4898,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.357Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.641Z",
+        "templateRules": []
       }
     },
     {
@@ -4852,7 +4937,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-08-08T17:31:43.039636Z",
-        "modified_on": "2025-09-15T08:27:17.236057Z"
+        "modified_on": "2025-09-16T08:26:05.498352Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4863,7 +4948,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:00.326Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.651Z",
+        "templateRules": []
       }
     },
     {
@@ -4895,7 +4981,8 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:09.368Z"
+        "lastAnalyzed": "2025-09-17T04:51:12.423Z",
+        "templateRules": []
       }
     },
     {
@@ -4944,10 +5031,11 @@
         "corporateRules": 0,
         "customRules": 1,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-16T04:50:08.196Z"
+        "lastAnalyzed": "2025-09-17T04:51:14.586Z",
+        "templateRules": []
       }
     }
   ],
-  "lastUpdate": "2025-09-16T04:50:09.378Z",
-  "totalCount": 110
+  "lastUpdate": "2025-09-17T04:51:14.592Z",
+  "totalCount": 109
 }

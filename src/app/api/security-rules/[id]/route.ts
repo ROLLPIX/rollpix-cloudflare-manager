@@ -87,6 +87,19 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     cache.templates[templateIndex] = updatedTemplate;
     await saveRulesCache(cache);
 
+    // If version changed, invalidate domain cache to refresh rule classifications
+    if (newVersion !== existingTemplate.version) {
+      console.log(`[SecurityRules] Template ${id} version changed from ${existingTemplate.version} to ${newVersion}, invalidating domain cache`);
+      try {
+        // Import domain store invalidation function
+        const { invalidateDomainsCache } = await import('@/store/domainStore');
+        await invalidateDomainsCache();
+        console.log('[SecurityRules] Domain cache invalidated successfully');
+      } catch (error) {
+        console.warn('[SecurityRules] Failed to invalidate domain cache:', error);
+      }
+    }
+
     return NextResponse.json({
       success: true,
       data: updatedTemplate

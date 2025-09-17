@@ -25,36 +25,48 @@ export function generateNextFriendlyId(existingTemplates: RuleTemplate[]): strin
 }
 
 /**
- * Create Cloudflare rule name with template prefix
- * Format: "R001-Original Name" (simple prefix for easy detection)
+ * Create Cloudflare rule name with template prefix and version
+ * Format: "R001-Original Name #v1.2" (includes version for proper tracking)
  */
 export function createCloudflareRuleName(originalName: string, friendlyId: string, version: string): string {
-  return `${friendlyId}-${originalName}`;
+  return `${friendlyId}-${originalName} #v${version}`;
 }
 
 /**
  * Parse Cloudflare rule name to extract template info
  * Returns null if not a template rule
- * Format: "R001-Original Name"
+ * Format: "R001-Original Name #v1.2" or "R001-Original Name" (legacy)
  */
 export function parseCloudflareRuleName(cloudflareRuleName: string): {
   originalName: string;
   friendlyId: string;
   version: string;
 } | null {
-  // Simple prefix pattern: R001-Something
-  const pattern = /^(R\d{3})-(.+)$/;
-  const match = cloudflareRuleName.match(pattern);
+  // New format with version: R001-Something #v1.2
+  const patternWithVersion = /^(R\d{3})-(.+) #v([\d.]+)$/;
+  const matchWithVersion = cloudflareRuleName.match(patternWithVersion);
 
-  if (!match) {
-    return null;
+  if (matchWithVersion) {
+    return {
+      originalName: matchWithVersion[2],
+      friendlyId: matchWithVersion[1],
+      version: matchWithVersion[3]
+    };
   }
 
-  return {
-    originalName: match[2],
-    friendlyId: match[1],
-    version: '1.0' // Default version since we're simplifying
-  };
+  // Legacy format without version: R001-Something
+  const patternLegacy = /^(R\d{3})-(.+)$/;
+  const matchLegacy = cloudflareRuleName.match(patternLegacy);
+
+  if (matchLegacy) {
+    return {
+      originalName: matchLegacy[2],
+      friendlyId: matchLegacy[1],
+      version: '1.0' // Default version for legacy rules
+    };
+  }
+
+  return null;
 }
 
 /**

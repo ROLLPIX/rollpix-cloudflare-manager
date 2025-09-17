@@ -57,6 +57,7 @@ interface DomainActions {
   toggleUnderAttackMode: (zoneId: string, enabled: boolean) => Promise<void>;
   toggleBotFightMode: (zoneId: string, enabled: boolean) => Promise<void>;
   bulkToggleProxy: (enabled: boolean) => Promise<void>;
+  invalidateDomainsCache: () => Promise<void>;
 }
 
 export const useDomainStore = create<DomainState & DomainActions>((set, get) => ({
@@ -579,79 +580,91 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     }
 
     try {
-      console.log(`[DomainStore] Refreshing domain ${zoneId} - trying optimized approach`);
+      console.log(`[DomainStore] Refreshing domain ${zoneId} - individual API calls`);
 
-      // Get basic domain data for specific zone
+      // Step 1: Get basic domain data for specific zone
       console.log(`[DomainStore] Getting basic domain data for ${zoneId}`);
       const domainResponse = await fetch(`/api/domains?zoneId=${zoneId}`, {
         headers: { 'x-api-token': apiToken },
       });
 
-      if (domainResponse.ok) {
-        const domainData = await domainResponse.json();
-        const updatedDomain = domainData.domains?.find((d: any) => d.zoneId === zoneId);
-
-        if (updatedDomain) {
-          console.log(`[DomainStore] Found basic domain data, now getting security rules for ${zoneId}`);
-
-          // Try to get security rules for this specific domain
-          try {
-            const rulesResponse = await fetch(`/api/domains/rules/${zoneId}`, {
-              headers: { 'x-api-token': apiToken }
-            });
-
-            if (rulesResponse.ok) {
-              const rulesResult = await rulesResponse.json();
-              console.log(`[DomainStore] Rules response for ${zoneId}:`, rulesResult);
-
-              if (rulesResult.success) {
-                // Combine domain data with rules data
-                const templateRulesCount = rulesResult.data.templateRules?.length || 0;
-                const customRulesCount = rulesResult.data.customRules?.length || 0;
-                const enrichedDomain = {
-                  ...updatedDomain,
-                  securityRules: {
-                    totalRules: templateRulesCount + customRulesCount,
-                    corporateRules: templateRulesCount,
-                    customRules: customRulesCount,
-                    hasConflicts: rulesResult.data.hasConflicts || false
-                  }
-                };
-
-                console.log(`[DomainStore] Enriched domain with rules:`, enrichedDomain.securityRules);
-
-                set(state => ({
-                  allDomains: state.allDomains.map(d =>
-                    d.zoneId === zoneId ? enrichedDomain : d
-                  ),
-                  lastUpdate: new Date()
-                }));
-
-                toast.success(`Dominio ${enrichedDomain.domain} actualizado con reglas de seguridad.`);
-                return;
-              }
-            }
-          } catch (rulesError) {
-            console.warn(`[DomainStore] Failed to get security rules for ${zoneId}:`, rulesError);
-          }
-
-          // Fallback: use domain data without fresh rules
-          const { allDomains } = get();
-          const existingDomain = allDomains.find(d => d.zoneId === zoneId);
-          const finalDomain = {
-            ...updatedDomain,
-            securityRules: existingDomain?.securityRules || updatedDomain.securityRules
-          };
-
-          set(state => ({
-            allDomains: state.allDomains.map(d => d.zoneId === zoneId ? finalDomain : d),
-            lastUpdate: new Date()
-          }));
-
-          toast.success(`Dominio ${finalDomain.domain} actualizado (reglas preservadas).`);
-          return;
-        }
+      if (!domainResponse.ok) {
+        throw new Error('Failed to get basic domain data');
       }
+
+      const domainData = await domainResponse.json();
+      const updatedDomain = domainData.domains?.[0];
+
+      if (!updatedDomain) {
+        throw new Error('Domain not found in response');
+      }
+
+      console.log(`[DomainStore] Got basic domain data, now getting security rules for ${zoneId}`);
+
+      // Step 2: Get security rules for this specific domain (like modal does)
+      try {
+        const rulesResponse = await fetch(`/api/domains/rules/${zoneId}`, {
+          headers: { 'x-api-token': apiToken }
+        });
+
+        if (rulesResponse.ok) {
+          const rulesResult = await rulesResponse.json();
+          console.log(`[DomainStore] Rules response for ${zoneId}:`, rulesResult);
+
+          if (rulesResult.success) {
+            // Combine domain data with rules data (including individual template rules)
+            const templateRules = rulesResult.data.templateRules || [];
+            const customRulesCount = rulesResult.data.customRules?.length || 0;
+
+            const enrichedDomain = {
+              ...updatedDomain,
+              securityRules: {
+                totalRules: templateRules.length + customRulesCount,
+                corporateRules: templateRules.length,
+                customRules: customRulesCount,
+                hasConflicts: templateRules.some((rule: any) => rule.status === 'outdated'),
+                lastAnalyzed: new Date().toISOString(),
+                templateRules: templateRules.map((rule: any) => ({
+                  friendlyId: rule.friendlyId,
+                  version: rule.version,
+                  isOutdated: rule.status === 'outdated',
+                  name: rule.ruleName
+                }))
+              }
+            };
+
+            console.log(`[DomainStore] Enriched domain with rules:`, enrichedDomain.securityRules);
+
+            set(state => ({
+              allDomains: state.allDomains.map(d =>
+                d.zoneId === zoneId ? enrichedDomain : d
+              ),
+              lastUpdate: new Date()
+            }));
+
+            console.log(`[DomainStore] Domain ${zoneId} refresh completed successfully`);
+            return;
+          }
+        }
+      } catch (rulesError) {
+        console.warn(`[DomainStore] Failed to get security rules for ${zoneId}:`, rulesError);
+      }
+
+      // Fallback: use domain data without fresh rules
+      const { allDomains } = get();
+      const existingDomain = allDomains.find(d => d.zoneId === zoneId);
+      const finalDomain = {
+        ...updatedDomain,
+        securityRules: existingDomain?.securityRules || updatedDomain.securityRules
+      };
+
+      set(state => ({
+        allDomains: state.allDomains.map(d => d.zoneId === zoneId ? finalDomain : d),
+        lastUpdate: new Date()
+      }));
+
+      console.log(`[DomainStore] Domain ${zoneId} refresh completed (rules preserved)`);
+      return;
 
 
       // Fallback: use cache data but inform user
@@ -912,4 +925,22 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
       set({ loading: false });
     }
   },
+
+  invalidateDomainsCache: async () => {
+    console.log('[DomainStore] Invalidating domains cache due to template version change');
+    try {
+      // Force fetch from Cloudflare with rules analysis
+      await get().fetchFromCloudflareUnified(false, true);
+      console.log('[DomainStore] Cache invalidation completed successfully');
+    } catch (error) {
+      console.warn('[DomainStore] Failed to invalidate cache:', error);
+      throw error;
+    }
+  },
 }));
+
+// Export the invalidation function for use in API routes
+export const invalidateDomainsCache = async () => {
+  const store = useDomainStore.getState();
+  await store.invalidateDomainsCache();
+};

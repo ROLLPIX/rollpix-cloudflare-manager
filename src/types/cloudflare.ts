@@ -63,6 +63,12 @@ export interface DomainStatus {
     customRules: number;
     hasConflicts: boolean;
     lastAnalyzed?: string;
+    templateRules?: Array<{
+      friendlyId: string;
+      version: string;
+      isOutdated: boolean;
+      name: string;
+    }>;
   };
 }
 
