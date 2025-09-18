@@ -3,12 +3,12 @@
 import React from 'react';
 import { DomainStatus } from '@/types/cloudflare';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { RefreshCw } from 'lucide-react';
-import { SecurityRulesIndicator } from './SecurityRulesIndicator';
+import { RulePillsDisplay } from './RulePill';
 import { DNSPills } from './DNSPills';
 import { FirewallControls } from './FirewallControls';
+import { Button } from '@/components/ui/button';
+import { RefreshCw } from 'lucide-react';
 
 interface DomainRowProps {
   domain: DomainStatus;
@@ -17,7 +17,7 @@ interface DomainRowProps {
   onToggleProxy: (zoneId: string, recordId: string, proxied: boolean) => Promise<void>;
   onToggleUnderAttack: (zoneId: string, enabled: boolean) => Promise<void>;
   onToggleBotFight: (zoneId: string, enabled: boolean) => Promise<void>;
-  onRefreshDomain: (zoneId: string) => void;
+  onRefreshDomain: (zoneId: string) => Promise<void>;
   updatingRecords: Set<string>;
   updatingFirewall: Set<string>;
   refreshingDomainId: string | null;
@@ -35,6 +35,31 @@ export const DomainRow = React.memo<DomainRowProps>(({
   updatingFirewall,
   refreshingDomainId,
 }) => {
+  // Convert templateRules to rulePills format for display
+  const rulePills = React.useMemo(() => {
+    if (domain.rulePills) {
+      return domain.rulePills;
+    }
+
+    // Convert from securityRules.templateRules to RulePillData format
+    if (domain.securityRules?.templateRules) {
+      return domain.securityRules.templateRules.map(rule => ({
+        id: rule.friendlyId,
+        name: rule.name,
+        version: rule.version,
+        domainVersion: rule.version,
+        isUpdated: !rule.isOutdated,
+        action: 'js_challenge', // Default action for template rules
+        type: 'firewall_custom',
+        expression: 'Template rule', // Placeholder
+        lastUpdated: new Date(domain.securityRules?.lastAnalyzed || Date.now()),
+        templateId: rule.friendlyId
+      }));
+    }
+
+    return [];
+  }, [domain.rulePills, domain.securityRules]);
+
   return (
     <TableRow>
       <TableCell>
@@ -61,7 +86,10 @@ export const DomainRow = React.memo<DomainRowProps>(({
         />
       </TableCell>
       <TableCell>
-        <SecurityRulesIndicator domain={domain} compact />
+        <RulePillsDisplay
+          rules={rulePills}
+          domainId={domain.zoneId}
+        />
       </TableCell>
       <TableCell className="text-right">
         <Button
