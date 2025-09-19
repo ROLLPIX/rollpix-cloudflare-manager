@@ -189,6 +189,130 @@ export async function getRuleMappingsForZoneBatch(zoneId: string): Promise<Map<s
   return zoneMappings;
 }
 
+/**
+ * Mark other domains as outdated when a template is updated
+ * This implements the propagation logic for case 2.1 (newer rule updates template)
+ */
+export async function markOtherDomainsAsOutdated(
+  templateId: string,
+  newVersion: string,
+  excludeZoneId: string
+): Promise<string[]> {
+  console.log(`[RuleMapping] Marking other domains as outdated for template ${templateId}, new version: ${newVersion}`);
+
+  try {
+    await ensureCacheLoaded();
+    const cache = await loadRuleMappingCache();
+
+    // Find all mappings for this template (excluding the current zone)
+    const affectedMappings = cache.mappings.filter(mapping =>
+      mapping.templateId === templateId && mapping.zoneId !== excludeZoneId
+    );
+
+    console.log(`[RuleMapping] Found ${affectedMappings.length} domains using template ${templateId}`);
+
+    const propagatedDomains: string[] = [];
+
+    // Update each affected mapping to mark as outdated
+    for (const mapping of affectedMappings) {
+      if (mapping.version !== newVersion) {
+        // This domain is now outdated
+        console.log(`[RuleMapping] Marking domain ${mapping.domainName} as outdated: ${mapping.version} → ${newVersion}`);
+
+        // Update the mapping to indicate it's outdated but keep the old version
+        // The version comparison in classifyRule will detect it as outdated
+        mapping.appliedAt = new Date().toISOString(); // Update timestamp for tracking
+
+        propagatedDomains.push(mapping.domainName);
+      }
+    }
+
+    // Save updated cache
+    if (propagatedDomains.length > 0) {
+      await saveRuleMappingCache(cache);
+
+      // Also invalidate domains cache to force refresh
+      try {
+        const { invalidateDomainsCache } = await import('@/store/domainStore');
+        await invalidateDomainsCache();
+        console.log(`[RuleMapping] Invalidated domains cache to refresh outdated status`);
+      } catch (error) {
+        console.warn(`[RuleMapping] Could not invalidate domains cache:`, error);
+      }
+    }
+
+    console.log(`[RuleMapping] ✅ Propagated template update to ${propagatedDomains.length} domains`);
+    return propagatedDomains;
+
+  } catch (error) {
+    console.error(`[RuleMapping] Error marking other domains as outdated:`, error);
+    return [];
+  }
+}
+
+/**
+ * Invalidate all mappings for a specific template (useful when template is deleted)
+ */
+export async function invalidateTemplateMappings(templateId: string): Promise<number> {
+  console.log(`[RuleMapping] Invalidating all mappings for template ${templateId}`);
+
+  try {
+    const cache = await loadRuleMappingCache();
+    const initialCount = cache.mappings.length;
+
+    cache.mappings = cache.mappings.filter(mapping => mapping.templateId !== templateId);
+
+    const removedCount = initialCount - cache.mappings.length;
+
+    if (removedCount > 0) {
+      await saveRuleMappingCache(cache);
+      console.log(`[RuleMapping] ✅ Removed ${removedCount} mappings for template ${templateId}`);
+    }
+
+    return removedCount;
+
+  } catch (error) {
+    console.error(`[RuleMapping] Error invalidating template mappings:`, error);
+    return 0;
+  }
+}
+
+/**
+ * Get all domains that use a specific template
+ */
+export async function getDomainsUsingTemplate(templateId: string): Promise<Array<{
+  zoneId: string;
+  domainName: string;
+  version: string;
+  appliedAt: string;
+  isOutdated: boolean;
+}>> {
+  await ensureCacheLoaded();
+  const mappings = Array.from(ruleMappingCache!.values())
+    .filter(mapping => mapping.templateId === templateId);
+
+  // Load current template version to determine outdated status
+  let currentVersion = '1.0';
+  try {
+    const { safeReadJsonFile } = await import('@/lib/fileSystem');
+    const templatesCache = await safeReadJsonFile<{ templates: Array<{ id: string; version: string }> }>('security-rules-templates.json');
+    const template = templatesCache.templates.find(t => t.id === templateId);
+    if (template) {
+      currentVersion = template.version;
+    }
+  } catch (error) {
+    console.warn(`[RuleMapping] Could not load current template version for ${templateId}`);
+  }
+
+  return mappings.map(mapping => ({
+    zoneId: mapping.zoneId,
+    domainName: mapping.domainName,
+    version: mapping.version,
+    appliedAt: mapping.appliedAt,
+    isOutdated: mapping.version !== currentVersion
+  }));
+}
+
 // Statistics and debugging
 export async function getRuleMappingStats(): Promise<{
   totalMappings: number;

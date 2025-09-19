@@ -595,7 +595,7 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
   },
 
   refreshSingleDomain: async (zoneId: string) => {
-    console.log(`[DomainStore] Starting refresh for domain ${zoneId}`);
+    console.log(`[DomainStore] Starting unified refresh for domain ${zoneId}`);
     set({ refreshingDomainId: zoneId });
     const apiToken = tokenStorage.getToken();
     if (!apiToken) {
@@ -605,114 +605,107 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     }
 
     try {
-      console.log(`[DomainStore] Refreshing domain ${zoneId} - individual API calls`);
+      console.log(`[DomainStore] Using unified sync logic for domain ${zoneId}`);
 
-      // Step 1: Get basic domain data for specific zone
-      console.log(`[DomainStore] Getting basic domain data for ${zoneId}`);
-      const domainResponse = await fetch(`/api/domains?zoneId=${zoneId}`, {
-        headers: { 'x-api-token': apiToken },
+      // NEW v3.1.0: Use unified sync logic via /api/domains/complete
+      const unifiedResponse = await fetch('/api/domains/complete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-token': apiToken
+        },
+        body: JSON.stringify({
+          apiToken,
+          zoneIds: [zoneId], // Refresh only this specific domain
+          forceRefresh: true
+        })
       });
 
-      if (!domainResponse.ok) {
-        throw new Error('Failed to get basic domain data');
+      if (!unifiedResponse.ok) {
+        throw new Error('Failed to get unified domain data');
       }
 
-      const domainData = await domainResponse.json();
-      const updatedDomain = domainData.domains?.[0];
+      const unifiedData = await unifiedResponse.json();
+      console.log(`[DomainStore] Unified refresh response for ${zoneId}:`, unifiedData);
 
-      if (!updatedDomain) {
-        throw new Error('Domain not found in response');
-      }
+      if (unifiedData.success && unifiedData.data.domains.length > 0) {
+        const updatedDomain = unifiedData.data.domains[0];
 
-      console.log(`[DomainStore] Got basic domain data, now getting security rules for ${zoneId}`);
-
-      // Step 2: Get security rules for this specific domain (like modal does)
-      try {
-        const rulesResponse = await fetch(`/api/domains/rules/${zoneId}`, {
-          headers: { 'x-api-token': apiToken }
+        console.log(`[DomainStore] Updated domain with unified sync:`, {
+          domain: updatedDomain.domain,
+          totalRules: updatedDomain.securityRules?.totalRules || 0,
+          templateRules: updatedDomain.securityRules?.templateRules?.length || 0,
+          hasConflicts: updatedDomain.securityRules?.hasConflicts || false
         });
 
-        if (rulesResponse.ok) {
-          const rulesResult = await rulesResponse.json();
-          console.log(`[DomainStore] Rules response for ${zoneId}:`, rulesResult);
+        // Update store with new unified data
+        set(state => ({
+          allDomains: state.allDomains.map(d =>
+            d.zoneId === zoneId ? updatedDomain : d
+          ),
+          lastUpdate: new Date()
+        }));
 
-          if (rulesResult.success) {
-            // Combine domain data with rules data (including individual template rules)
-            const templateRules = rulesResult.data.templateRules || [];
-            const customRulesCount = 0; // No longer tracking custom rules
+        // Log sync summary
+        const syncSummary = unifiedData.data.summary?.templateAutoImport;
+        if (syncSummary) {
+          console.log(`[DomainStore] Template sync summary:`, {
+            imported: syncSummary.imported || 0,
+            updated: syncSummary.updated || 0,
+            newTemplates: syncSummary.newTemplates?.length || 0
+          });
 
-            const enrichedDomain = {
+          if (syncSummary.imported > 0 || syncSummary.updated > 0) {
+            toast.success(`Dominio actualizado: ${syncSummary.imported} plantillas nuevas, ${syncSummary.updated} actualizadas`);
+          }
+        }
+
+        console.log(`[DomainStore] Domain ${zoneId} unified refresh completed successfully`);
+        return;
+      }
+
+      throw new Error('No unified data received');
+
+    } catch (error) {
+      console.error(`[DomainStore] Error in unified refresh for domain ${zoneId}:`, error);
+
+      try {
+        // FALLBACK: Try legacy individual refresh method
+        console.log(`[DomainStore] Falling back to legacy refresh method for ${zoneId}`);
+
+        const domainResponse = await fetch(`/api/domains?zoneId=${zoneId}`, {
+          headers: { 'x-api-token': apiToken },
+        });
+
+        if (domainResponse.ok) {
+          const domainData = await domainResponse.json();
+          const updatedDomain = domainData.domains?.[0];
+
+          if (updatedDomain) {
+            const { allDomains } = get();
+            const existingDomain = allDomains.find(d => d.zoneId === zoneId);
+            const finalDomain = {
               ...updatedDomain,
-              securityRules: {
-                totalRules: templateRules.length + customRulesCount,
-                corporateRules: templateRules.length,
-                customRules: customRulesCount,
-                hasConflicts: templateRules.some((rule: any) => rule.status === 'outdated'),
-                lastAnalyzed: new Date().toISOString(),
-                templateRules: templateRules.map((rule: any) => ({
-                  friendlyId: rule.friendlyId,
-                  version: rule.version,
-                  isOutdated: rule.status === 'outdated',
-                  name: rule.ruleName
-                }))
-              }
+              securityRules: existingDomain?.securityRules || updatedDomain.securityRules
             };
 
-            console.log(`[DomainStore] Enriched domain with rules:`, enrichedDomain.securityRules);
-
             set(state => ({
-              allDomains: state.allDomains.map(d =>
-                d.zoneId === zoneId ? enrichedDomain : d
-              ),
+              allDomains: state.allDomains.map(d => d.zoneId === zoneId ? finalDomain : d),
               lastUpdate: new Date()
             }));
 
-            console.log(`[DomainStore] Domain ${zoneId} refresh completed successfully`);
+            toast.info(`Dominio ${updatedDomain.domain} actualizado (método de respaldo)`);
+            console.log(`[DomainStore] Domain ${zoneId} fallback refresh completed`);
             return;
           }
         }
-      } catch (rulesError) {
-        console.warn(`[DomainStore] Failed to get security rules for ${zoneId}:`, rulesError);
+
+        throw new Error('Fallback refresh also failed');
+
+      } catch (fallbackError) {
+        console.error(`[DomainStore] Fallback refresh failed for ${zoneId}:`, fallbackError);
+        toast.error(`Error al actualizar dominio: ${error instanceof Error ? error.message : 'Error desconocido'}`);
       }
-
-      // Fallback: use domain data without fresh rules
-      const { allDomains } = get();
-      const existingDomain = allDomains.find(d => d.zoneId === zoneId);
-      const finalDomain = {
-        ...updatedDomain,
-        securityRules: existingDomain?.securityRules || updatedDomain.securityRules
-      };
-
-      set(state => ({
-        allDomains: state.allDomains.map(d => d.zoneId === zoneId ? finalDomain : d),
-        lastUpdate: new Date()
-      }));
-
-      console.log(`[DomainStore] Domain ${zoneId} refresh completed (rules preserved)`);
-      return;
-
-
-      // Fallback: use cache data but inform user
-      console.log(`[DomainStore] Falling back to cache data`);
-      const cacheResponse = await fetch('/api/cache');
-      if (cacheResponse.ok) {
-        const cacheData = await cacheResponse.json();
-        const cachedDomain = cacheData.domains?.find((d: any) => d.zoneId === zoneId);
-
-        if (cachedDomain) {
-          set(state => ({
-            allDomains: state.allDomains.map(d => d.zoneId === zoneId ? cachedDomain : d)
-          }));
-          toast.info(`Dominio ${cachedDomain.domain} actualizado desde cache (sin datos frescos de Cloudflare).`);
-          return;
-        }
-      }
-
-      throw new Error('No se pudo obtener datos del dominio ni desde Cloudflare ni desde cache');
-
-    } catch (error) {
-      console.error(`[DomainStore] Error refreshing domain ${zoneId}:`, error);
-      toast.error(`Error al actualizar dominio: ${error instanceof Error ? error.message : 'Error desconocido'}`);
     } finally {
       set({ refreshingDomainId: null });
     }

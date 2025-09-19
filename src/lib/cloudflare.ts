@@ -311,16 +311,17 @@ export class CloudflareAPI {
   }
 
   // Unified function to get complete domain information (DNS + Security + Rules)
+  // UPDATED v3.1.0: Uses TemplateSynchronizer for unified sync logic
   async getCompleteDomainInfo(zoneId: string, zoneName: string, templateVersionMap: Map<string, string>): Promise<DomainStatus> {
     const startTime = Date.now();
-    console.log(`[CloudflareAPI] Getting complete domain info for ${zoneName} (${zoneId})`);
+    console.log(`[CloudflareAPI] Getting complete domain info for ${zoneName} (${zoneId}) with unified sync`);
 
     try {
       // Execute all API calls in parallel for maximum efficiency
       const [dnsData, securityData, rulesData] = await Promise.all([
         this.getDNSRecords(zoneId, 1, 100),
         this.getSecuritySettings(zoneId),
-        this.getZoneSecurityRules(zoneId) // Use full rules data for description parsing
+        this.getZoneSecurityRules(zoneId)
       ]);
 
       console.log(`[CloudflareAPI] ${zoneName}: Got ${dnsData.records.length} DNS records, ${rulesData.length} rules`);
@@ -336,80 +337,36 @@ export class CloudflareAPI {
       const rootProxied = rootRecord?.proxied || false;
       const wwwProxied = wwwRecord?.proxied || false;
 
-      // Classify rules using description parsing (same as bulk analysis fix)
-      const appliedRules: any[] = [];
-      // No more custom rules - everything becomes a template
+      // NEW UNIFIED SYNC LOGIC: Use TemplateSynchronizer
+      const { TemplateSynchronizer } = await import('@/lib/templateSync');
+      const synchronizer = new TemplateSynchronizer();
 
-      // Try to load templates for matching
-      let templatesCache = { templates: [] };
-      try {
-        const { safeReadJsonFile } = await import('@/lib/fileSystem');
-        templatesCache = await safeReadJsonFile('security-rules-templates.json').catch(() => ({ templates: [] }));
-      } catch (error) {
-        console.warn(`[CloudflareAPI] ${zoneName}: Could not load templates for matching`);
-      }
+      const syncResult = await synchronizer.syncRulesForDomain(
+        rulesData,
+        { zoneId, name: zoneName }
+      );
 
-      // NEW LOGIC: Match by description name directly, auto-create templates for unmatched rules
-      for (const rule of rulesData) {
-        const ruleDescription = rule.description || '';
-        console.log(`[CloudflareAPI] ${zoneName}: 🔍 Processing rule: "${ruleDescription}"`);
+      console.log(`[CloudflareAPI] ${zoneName}: Sync completed:`, {
+        newTemplates: syncResult.newTemplates.length,
+        updatedTemplates: syncResult.updatedTemplates.length,
+        processedRules: syncResult.processedRules.length,
+        propagatedDomains: syncResult.propagatedDomains.length
+      });
 
-        if (!ruleDescription.trim()) {
-          console.log(`[CloudflareAPI] ${zoneName}: ⚠️ Skipping rule with empty description`);
-          continue;
-        }
-
-        // Find template by exact name match (description = template.name)
-        const matchingTemplate = templatesCache.templates.find((template: any) =>
-          template.name && template.name.toLowerCase() === ruleDescription.toLowerCase()
-        ) as any;
-
-        if (matchingTemplate) {
-          // Template exists - calculate version based on date comparison
-          console.log(`[CloudflareAPI] ${zoneName}: ✅ TEMPLATE FOUND: "${ruleDescription}" → ${matchingTemplate.friendlyId} (${matchingTemplate.name})`);
-
-          const versionInfo = this.calculateRuleVersion(rule, matchingTemplate);
-
-          appliedRules.push({
-            ruleId: matchingTemplate.id,
-            ruleName: matchingTemplate.name,
-            version: versionInfo.version,
-            status: versionInfo.status === 'outdated' ? 'outdated' : 'active',
-            cloudflareRulesetId: rule.rulesetId || 'unknown',
-            cloudflareRuleId: rule.id,
-            rulesetName: 'Custom Rules',
-            friendlyId: matchingTemplate.friendlyId,
-            confidence: 1.0,
-            appliedAt: rule.last_updated || rule.created_on || new Date().toISOString()
-          });
-        } else {
-          // No template found - AUTO-CREATE NEW TEMPLATE
-          console.log(`[CloudflareAPI] ${zoneName}: 🆕 AUTO-CREATING TEMPLATE for: "${ruleDescription}"`);
-
-          const newTemplate = await this.autoCreateTemplate(rule, templatesCache.templates);
-          if (newTemplate) {
-            // Add to templates cache in memory
-            (templatesCache.templates as any[]).push(newTemplate);
-
-            // Add as template rule (new template = current version)
-            appliedRules.push({
-              ruleId: newTemplate.id,
-              ruleName: newTemplate.name,
-              version: newTemplate.version,
-              status: 'active' as const,
-              cloudflareRulesetId: rule.rulesetId || 'unknown',
-              cloudflareRuleId: rule.id,
-              rulesetName: 'Custom Rules',
-              friendlyId: newTemplate.friendlyId,
-              confidence: 1.0,
-              appliedAt: rule.last_updated || rule.created_on || new Date().toISOString()
-            });
-            console.log(`[CloudflareAPI] ${zoneName}: ✅ NEW TEMPLATE CREATED: ${newTemplate.friendlyId} - ${newTemplate.name}`);
-          } else {
-            console.log(`[CloudflareAPI] ${zoneName}: ❌ Failed to auto-create template for: "${ruleDescription}"`);
-          }
-        }
-      }
+      // Build applied rules from sync result
+      const appliedRules = syncResult.processedRules.map(processed => ({
+        ruleId: processed.templateId,
+        ruleName: processed.friendlyId,
+        version: processed.version,
+        status: processed.isOutdated ? 'outdated' : 'active',
+        cloudflareRulesetId: 'unknown',
+        cloudflareRuleId: processed.ruleId,
+        rulesetName: 'Custom Rules',
+        friendlyId: processed.friendlyId,
+        confidence: 1.0,
+        appliedAt: new Date().toISOString(),
+        syncCase: processed.syncCase
+      }));
 
       const processingTime = Date.now() - startTime;
       console.log(`[CloudflareAPI] ✅ ${zoneName}: Complete info processed in ${processingTime}ms (${appliedRules.length} template rules)`);
@@ -1283,14 +1240,14 @@ export class CloudflareAPI {
 
   /**
    * Auto-detect and import templates from existing rules
-   * This is called during unified domain processing to automatically create templates
+   * UPDATED v3.1.0: Uses new unified sync logic with date comparison
    */
   async autoImportTemplates(rules: CloudflareRule[], existingTemplates: RuleTemplate[]): Promise<{
     importedTemplates: RuleTemplate[];
     updatedTemplates: RuleTemplate[];
     skippedRules: string[];
   }> {
-    console.log(`[CloudflareAPI] Starting auto-import of templates from ${rules.length} rules`);
+    console.log(`[CloudflareAPI] Starting auto-import with unified sync logic from ${rules.length} rules`);
 
     const importedTemplates: RuleTemplate[] = [];
     const updatedTemplates: RuleTemplate[] = [];
@@ -1312,78 +1269,88 @@ export class CloudflareAPI {
           continue;
         }
 
-        // Check if rule follows template format OR is a common security rule
-        const isTemplateFormatRule = isTemplateFormat(rule.description || '');
-        const isCommonSecurityRule = (rule.description || '').toLowerCase().includes('waf') ||
-                                    (rule.description || '').toLowerCase().includes('security') ||
-                                    (rule.description || '').toLowerCase().includes('protection') ||
-                                    /\b(block|challenge|allow|log)\b.*\b(bot|spam|attack|threat|malware)\b/i.test(rule.description || '') ||
-                                    /\b(cf\.client\.bot|http\.user_agent|ip\.geoip\.country)\b/i.test(rule.expression || '');
+        const ruleDescription = rule.description || '';
 
-        if (isTemplateFormatRule || isCommonSecurityRule) {
-          let parsedTemplate;
+        // NEW LOGIC: Buscar plantilla existente por comparación directa de descripción (case insensitive)
+        const existingTemplate = existingTemplates.find(template =>
+          template.name.toLowerCase() === ruleDescription.toLowerCase()
+        );
 
-          if (isTemplateFormatRule) {
-            parsedTemplate = parseTemplateFormat(rule.description || '');
-          } else {
-            // Create a synthetic template for common security rules
-            const description = rule.description || 'Security Rule';
-            const friendlyId = generateNextFriendlyId(existingTemplates);
-            const name = description.length > 50 ? `${description.substring(0, 47)}...` : description;
+        if (!existingTemplate) {
+          // CASO 1: Nueva regla (descripción no existe) - Solo si es regla de seguridad válida
+          const isCommonSecurityRule = ruleDescription.toLowerCase().includes('waf') ||
+                                      ruleDescription.toLowerCase().includes('security') ||
+                                      ruleDescription.toLowerCase().includes('protection') ||
+                                      /\b(block|challenge|allow|log)\b.*\b(bot|spam|attack|threat|malware)\b/i.test(ruleDescription) ||
+                                      /\b(cf\.client\.bot|http\.user_agent|ip\.geoip\.country)\b/i.test(rule.expression || '');
 
-            parsedTemplate = {
+          if (isCommonSecurityRule) {
+            console.log(`[CloudflareAPI] CASE 1: Creating new template for "${ruleDescription}"`);
+
+            const friendlyId = generateNextFriendlyId([...existingTemplates, ...importedTemplates]);
+            const newTemplate: RuleTemplate = {
+              id: `auto-template-${friendlyId}-${Date.now()}`,
               friendlyId,
-              name,
-              version: '1.0'
+              name: ruleDescription,
+              description: `Auto-created from rule: ${ruleDescription}`,
+              version: '1.0',
+              expression: rule.expression || '',
+              action: (rule.action as RuleTemplate['action']) || 'block',
+              actionParameters: rule.action_parameters || {},
+              enabled: rule.enabled !== false,
+              priority: existingTemplates.length + importedTemplates.length + 1,
+              tags: ['auto-created'],
+              applicableTags: [],
+              excludedDomains: [],
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
             };
 
-            console.log(`[CloudflareAPI] Created synthetic template for common security rule: ${parsedTemplate.friendlyId} - ${parsedTemplate.name}`);
-          }
-
-          if (parsedTemplate) {
-            console.log(`[CloudflareAPI] Processing rule as template: ${parsedTemplate.friendlyId} - ${parsedTemplate.name} #v${parsedTemplate.version}`);
-
-            // Check if template already exists
-            const existingTemplate = findTemplateByFriendlyId(existingTemplates, parsedTemplate.friendlyId);
-
-            if (existingTemplate) {
-              // Compare versions
-              const versionComparison = compareVersions(parsedTemplate.version, existingTemplate.version);
-
-              if (versionComparison > 0) {
-                // New version is newer - update existing template
-                console.log(`[CloudflareAPI] Updating existing template ${parsedTemplate.friendlyId} from v${existingTemplate.version} to v${parsedTemplate.version}`);
-
-                const updatedTemplate: RuleTemplate = {
-                  ...existingTemplate,
-                  name: parsedTemplate.name,
-                  version: parsedTemplate.version,
-                  expression: rule.expression || existingTemplate.expression,
-                  action: (rule.action as RuleTemplate['action']) || existingTemplate.action,
-                  actionParameters: rule.action_parameters || existingTemplate.actionParameters,
-                  updatedAt: new Date().toISOString()
-                };
-
-                updatedTemplates.push(updatedTemplate);
-              } else {
-                console.log(`[CloudflareAPI] Template ${parsedTemplate.friendlyId} already exists with same or newer version`);
-                skippedRules.push(rule.description || 'No description');
-              }
-            } else {
-              // Create new template
-              console.log(`[CloudflareAPI] Creating new template: ${parsedTemplate.friendlyId}`);
-
-              const newTemplate = createTemplateFromRule(rule, parsedTemplate, existingTemplates);
-              importedTemplates.push(newTemplate);
-            }
+            importedTemplates.push(newTemplate);
+            console.log(`[CloudflareAPI] ✅ Created new template ${friendlyId} v${newTemplate.version}`);
           } else {
-            console.log(`[CloudflareAPI] Failed to parse template format: ${rule.description}`);
-            skippedRules.push(rule.description || 'No description');
+            console.log(`[CloudflareAPI] Skipping non-security rule: ${ruleDescription}`);
+            skippedRules.push(ruleDescription || 'Non-security rule');
           }
         } else {
-          // Not a template format rule or common security rule
-          console.log(`[CloudflareAPI] Skipping non-template rule: ${rule.description}`);
-          skippedRules.push(rule.description || 'No description');
+          // CASO 2: Regla existente - verificar si hay cambios
+          if (rule.expression !== existingTemplate.expression || rule.action !== existingTemplate.action) {
+            console.log(`[CloudflareAPI] CASE 2: Changed rule detected for template ${existingTemplate.friendlyId}`);
+
+            // NEW: Comparar fechas para determinar cuál es más nueva
+            const ruleDate = new Date((rule as any).last_modified || (rule as any).modified_on || new Date());
+            const templateDate = new Date(existingTemplate.updatedAt);
+
+            console.log(`[CloudflareAPI] Date comparison: rule=${ruleDate.toISOString()}, template=${templateDate.toISOString()}`);
+
+            if (ruleDate > templateDate) {
+              // CASO 2.1: Regla más nueva → Actualizar plantilla + incrementar versión
+              console.log(`[CloudflareAPI] CASE 2.1: Rule is newer, updating template ${existingTemplate.friendlyId}`);
+
+              const newVersion = this.incrementVersion(existingTemplate.version);
+              const updatedTemplate: RuleTemplate = {
+                ...existingTemplate,
+                expression: rule.expression || existingTemplate.expression,
+                action: (rule.action as RuleTemplate['action']) || existingTemplate.action,
+                actionParameters: rule.action_parameters || existingTemplate.actionParameters,
+                version: newVersion,
+                updatedAt: new Date().toISOString()
+              };
+
+              updatedTemplates.push(updatedTemplate);
+              console.log(`[CloudflareAPI] ✅ Updated template ${existingTemplate.friendlyId}: ${existingTemplate.version} → ${newVersion}`);
+
+              // TODO: Propagación a otros dominios se manejará en TemplateSynchronizer
+            } else {
+              // CASO 2.2: Regla más vieja → Se maneja en el mapping individual
+              console.log(`[CloudflareAPI] CASE 2.2: Rule is older, will be handled in individual domain mapping`);
+              skippedRules.push(`${ruleDescription} (older rule)`);
+            }
+          } else {
+            // CASO 3: Regla idéntica
+            console.log(`[CloudflareAPI] CASE 3: Identical rule for template ${existingTemplate.friendlyId}`);
+            skippedRules.push(`${ruleDescription} (identical)`);
+          }
         }
       } catch (error) {
         console.error(`[CloudflareAPI] Error processing rule ${rule.id}:`, error);
@@ -1391,7 +1358,7 @@ export class CloudflareAPI {
       }
     }
 
-    console.log(`[CloudflareAPI] Auto-import completed: ${importedTemplates.length} imported, ${updatedTemplates.length} updated, ${skippedRules.length} skipped`);
+    console.log(`[CloudflareAPI] Unified sync completed: ${importedTemplates.length} imported, ${updatedTemplates.length} updated, ${skippedRules.length} skipped`);
 
     return {
       importedTemplates,

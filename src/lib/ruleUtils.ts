@@ -102,7 +102,7 @@ export function compareVersions(version1: string, version2: string): number {
  */
 export function incrementVersion(version: string, major = false): string {
   const parts = version.split('.').map(Number);
-  
+
   if (major) {
     parts[0]++;
     parts[1] = 0;
@@ -113,8 +113,30 @@ export function incrementVersion(version: string, major = false): string {
       parts[1] = 0;
     }
   }
-  
+
   return parts.join('.');
+}
+
+/**
+ * Decrement version number for older rules
+ * 1.0 -> 0.9, 1.5 -> 0.5, 2.3 -> 1.3
+ * Used when a rule found is older than the current template
+ */
+export function decrementVersion(version: string): string {
+  const parts = version.split('.').map(Number);
+
+  // If major version is greater than 0, decrement it and keep minor
+  if (parts[0] > 0) {
+    return `${parts[0] - 1}.${parts[1] || 0}`;
+  }
+
+  // If already at 0.x, decrease minor version
+  if (parts[1] > 0) {
+    return `0.${parts[1] - 1}`;
+  }
+
+  // Fallback for very old versions
+  return '0.5';
 }
 
 /**

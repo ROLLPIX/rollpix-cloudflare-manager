@@ -13,10 +13,11 @@ Una aplicación web moderna para gestionar visualmente dominios en Cloudflare co
 
 ### Sistema de Reglas de Seguridad 🔥 **NUEVO**
 - **Gestión de plantillas**: Crear, editar y versionar reglas de firewall corporativas
+- **Sincronización inteligente**: Auto-detección y versionado por fecha con propagación automática
 - **Aplicación masiva**: Aplicar/remover reglas en múltiples dominios simultáneamente
 - **Detección de conflictos**: Análisis automático de reglas obsoletas o conflictivas
 - **Modal de reglas por dominio**: Ver y gestionar reglas individualmente con detalle completo
-- **Actualización inteligente**: Botón para actualizar reglas a nuevas versiones en todos los dominios
+- **Refresh unificado**: Individual y global funcionan idénticamente (solo filtrado por dominio)
 
 ### Control de Proxy Avanzado
 - **Toggle individual**: Habilitar/deshabilitar proxy para dominios específicos con un clic
@@ -363,6 +364,12 @@ rollpix-cloudflare-manager/
 ```
 
 ## 🆕 Últimas Mejoras (Enero 2025)
+
+### ✅ **Sistema de Sincronización Unificada** (v3.1.0)
+- **Flujo único de reglas**: Refresh individual = refresh global (solo filtrado por dominio)
+- **Versionado inteligente por fecha**: Comparación automática para determinar actualizaciones
+- **Propagación automática**: Cambios se propagan a todos los dominios afectados
+- **3 casos de sincronización**: Nueva regla, regla más nueva, regla más vieja
 
 ### ✅ **Refactorización Arquitectónica Completa** (v3.0.0)
 - **85% reducción de código**: Componentes monolíticos refactorizados en módulos especializados
