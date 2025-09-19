@@ -141,7 +141,8 @@ export const FileOperationSchema = z.object({
     'domains-cache.json',
     'security-rules-templates.json',
     'domain-rules-status.json',
-    'user-preferences.json'
+    'user-preferences.json',
+    'rule-id-mapping.json'
   ])
 });
 

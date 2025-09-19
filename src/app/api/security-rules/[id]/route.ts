@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { RuleTemplate } from '@/types/cloudflare';
 
-const RULES_CACHE_FILE = path.join(process.cwd(), 'security-rules-templates.json');
+const RULES_CACHE_FILE = path.join(process.cwd(), 'cache', 'security-rules-templates.json');
 
 interface RulesCache {
   templates: RuleTemplate[];
@@ -87,22 +87,16 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     cache.templates[templateIndex] = updatedTemplate;
     await saveRulesCache(cache);
 
-    // If version changed, invalidate domain cache to refresh rule classifications
-    if (newVersion !== existingTemplate.version) {
-      console.log(`[SecurityRules] Template ${id} version changed from ${existingTemplate.version} to ${newVersion}, invalidating domain cache`);
-      try {
-        // Import domain store invalidation function
-        const { invalidateDomainsCache } = await import('@/store/domainStore');
-        await invalidateDomainsCache();
-        console.log('[SecurityRules] Domain cache invalidated successfully');
-      } catch (error) {
-        console.warn('[SecurityRules] Failed to invalidate domain cache:', error);
-      }
+    // Return version change flag so client can handle cache invalidation
+    const versionChanged = newVersion !== existingTemplate.version;
+    if (versionChanged) {
+      console.log(`[SecurityRules] Template ${id} version changed from ${existingTemplate.version} to ${newVersion}, client should invalidate cache`);
     }
 
     return NextResponse.json({
       success: true,
-      data: updatedTemplate
+      data: updatedTemplate,
+      versionChanged
     });
   } catch (error) {
     console.error('Error updating security rule:', error);

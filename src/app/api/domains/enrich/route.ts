@@ -68,9 +68,9 @@ export async function POST(request: NextRequest) {
         return {
           ...domain,
           securityRules: {
-            totalRules: ruleStatus.appliedRules.length + ruleStatus.customRules.length,
+            totalRules: ruleStatus.appliedRules.length,
             corporateRules: ruleStatus.appliedRules.length,
-            customRules: ruleStatus.customRules.length,
+            customRules: 0, // No longer tracking custom rules
             hasConflicts: ruleStatus.appliedRules.some(rule => rule.status === 'conflict' || rule.status === 'outdated'),
             lastAnalyzed: ruleStatus.lastAnalyzed
           }

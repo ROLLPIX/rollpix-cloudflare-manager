@@ -42,6 +42,9 @@ export function useDomainTable() {
 
   // Computed values
   const processedDomains = useMemo(() => {
+    if (!allDomains || !Array.isArray(allDomains)) {
+      return [];
+    }
     let processed = [...allDomains];
 
     // Apply search filter
@@ -121,6 +124,10 @@ export function useDomainTable() {
 
   // Bulk operations with notifications
   const handleBulkUnderAttack = async (enabled: boolean) => {
+    if (!allDomains || !Array.isArray(allDomains)) {
+      notifications.error('No hay dominios disponibles');
+      return;
+    }
     const selectedZoneIds = allDomains.filter(d => selectedDomains.has(d.domain)).map(d => d.zoneId);
 
     if (selectedZoneIds.length === 0) {
@@ -153,6 +160,10 @@ export function useDomainTable() {
   };
 
   const handleBulkBotFight = async (enabled: boolean) => {
+    if (!allDomains || !Array.isArray(allDomains)) {
+      notifications.error('No hay dominios disponibles');
+      return;
+    }
     const selectedZoneIds = allDomains.filter(d => selectedDomains.has(d.domain)).map(d => d.zoneId);
 
     if (selectedZoneIds.length === 0) {

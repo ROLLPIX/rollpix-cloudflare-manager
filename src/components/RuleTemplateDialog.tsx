@@ -68,6 +68,7 @@ export function RuleTemplateDialog({
                 <SelectContent>
                   <SelectItem value="block">Block</SelectItem>
                   <SelectItem value="challenge">Challenge</SelectItem>
+                  <SelectItem value="managed_challenge">Managed Challenge</SelectItem>
                   <SelectItem value="allow">Allow</SelectItem>
                   <SelectItem value="log">Log</SelectItem>
                 </SelectContent>

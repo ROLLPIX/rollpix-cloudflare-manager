@@ -175,7 +175,12 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     console.log('[DomainStore] Unified fetch - Token:', apiToken ? `${apiToken.substring(0, 8)}...` : 'null');
 
     if (!apiToken) {
-      toast.error('API Token no encontrado.');
+      // Only show toast if we're in client-side environment
+      if (typeof window !== 'undefined') {
+        toast.error('API Token no encontrado.');
+      } else {
+        console.error('[DomainStore] API Token no encontrado (server-side)');
+      }
       set({ loading: false, isBackgroundRefreshing: false });
       return;
     }
@@ -297,7 +302,12 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     const apiToken = tokenStorage.getToken();
     console.log('[DomainStore] Token being used:', apiToken ? `${apiToken.substring(0, 8)}...` : 'null');
     if (!apiToken) {
-      toast.error('API Token no encontrado.');
+      // Only show toast if we're in client-side environment
+      if (typeof window !== 'undefined') {
+        toast.error('API Token no encontrado.');
+      } else {
+        console.error('[DomainStore] API Token no encontrado (server-side)');
+      }
       set({ loading: false, isBackgroundRefreshing: false });
       return;
     }
@@ -629,7 +639,7 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
           if (rulesResult.success) {
             // Combine domain data with rules data (including individual template rules)
             const templateRules = rulesResult.data.templateRules || [];
-            const customRulesCount = rulesResult.data.customRules?.length || 0;
+            const customRulesCount = 0; // No longer tracking custom rules
 
             const enrichedDomain = {
               ...updatedDomain,
@@ -943,6 +953,14 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
 
   invalidateDomainsCache: async () => {
     console.log('[DomainStore] Invalidating domains cache due to template version change');
+
+    // Check if we have a token first
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) {
+      console.warn('[DomainStore] No API token available for cache invalidation, skipping');
+      return;
+    }
+
     try {
       // Force fetch from Cloudflare with rules analysis
       await get().fetchFromCloudflareUnified(false, true);

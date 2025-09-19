@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { CloudflareAPI } from '@/lib/cloudflare';
 import { DomainRuleStatus, RuleConflict, RuleTemplate, ConflictResolution } from '@/types/cloudflare';
 import { safeReadJsonFile, safeWriteJsonFile } from '@/lib/fileSystem';
-import { parseCloudflareRuleName } from '@/lib/ruleUtils';
+import { incrementVersion } from '@/lib/ruleUtils';
 
 const DOMAIN_RULES_CACHE_FILE = 'domain-rules-status.json';
 const RULES_TEMPLATES_FILE = 'security-rules-templates.json';
@@ -135,30 +135,96 @@ export async function POST(request: NextRequest) {
           templatesCache.templates.map(t => [t.id, t.version])
         );
 
-        // Analyze rules using description parsing (same as individual refresh)
+        // Analyze rules using template synchronization logic
         const appliedRules: any[] = [];
-        const customRules: any[] = [];
 
         for (const rule of allRules) {
           try {
-            console.log(`[Analyze API] 🔍 Rule: "${rule.description}"`);
+            const ruleDescription = rule.description || '';
+            console.log(`[Analyze API] 🔍 Analyzing rule: "${ruleDescription}"`);
 
-            // For now, just treat all as custom rules to make it work
-            customRules.push({
-              cloudflareRulesetId: rule.rulesetId || 'unknown',
-              cloudflareRuleId: rule.id,
-              rulesetName: 'Custom Rules',
-              expression: rule.expression || '',
-              action: rule.action || 'unknown',
-              description: rule.description || 'No description',
-              isLikelyTemplate: false,
-              estimatedComplexity: 'complex' as const
-            });
+            if (!ruleDescription.trim()) {
+              console.log(`[Analyze API] ⚠️ Skipping rule with empty description`);
+              continue;
+            }
 
-            console.log(`[Analyze API] 📝 Custom rule found: ${rule.description}`);
+            // Find template by exact name match (description = template.name)
+            const matchingTemplate = templatesCache.templates.find(template =>
+              template.name && template.name.toLowerCase() === ruleDescription.toLowerCase()
+            );
+
+            if (matchingTemplate) {
+              // Template exists - this is a template rule
+              console.log(`[Analyze API] ✅ Template rule found: ${matchingTemplate.friendlyId} - "${ruleDescription}"`);
+
+              appliedRules.push({
+                templateId: matchingTemplate.id,
+                friendlyId: matchingTemplate.friendlyId,
+                version: matchingTemplate.version,
+                isOutdated: false,
+                cloudflareRuleId: rule.id,
+                cloudflareRulesetId: rule.rulesetId || 'unknown',
+                lastApplied: new Date().toISOString()
+              });
+            } else {
+              // No template found - auto-create new template
+              console.log(`[Analyze API] 🆕 Auto-creating template for: "${ruleDescription}"`);
+
+              // Generate next friendly ID
+              const existingIds = templatesCache.templates
+                .map(t => t.friendlyId)
+                .filter(id => id.match(/^R\d{3}$/))
+                .map(id => parseInt(id.substring(1)))
+                .sort((a, b) => a - b);
+
+              let nextNumber = 1;
+              for (const num of existingIds) {
+                if (num === nextNumber) {
+                  nextNumber++;
+                } else {
+                  break;
+                }
+              }
+              const friendlyId = `R${nextNumber.toString().padStart(3, '0')}`;
+
+              const newTemplate: RuleTemplate = {
+                id: `auto-${friendlyId}-${Date.now()}`,
+                friendlyId: friendlyId,
+                name: ruleDescription, // Use description as template name
+                description: `Auto-imported from Cloudflare rule`,
+                version: '1.0.0',
+                expression: rule.expression || '',
+                action: (rule.action as 'block' | 'challenge' | 'managed_challenge' | 'allow' | 'log' | 'skip') || 'block',
+                actionParameters: rule.action_parameters || {},
+                enabled: rule.enabled !== false,
+                priority: templatesCache.templates.length + 1,
+                tags: ['auto-imported'],
+                applicableTags: [],
+                excludedDomains: [],
+                createdAt: rule.created_on || new Date().toISOString(),
+                updatedAt: rule.last_updated || new Date().toISOString()
+              };
+
+              // Add to cache and save immediately
+              templatesCache.templates.push(newTemplate);
+              await safeWriteJsonFile(RULES_TEMPLATES_FILE, templatesCache);
+
+              appliedRules.push({
+                templateId: newTemplate.id,
+                friendlyId: newTemplate.friendlyId,
+                version: newTemplate.version,
+                isOutdated: false,
+                cloudflareRuleId: rule.id,
+                cloudflareRulesetId: rule.rulesetId || 'unknown',
+                lastApplied: new Date().toISOString()
+              });
+
+              console.log(`[Analyze API] ✅ Created template ${friendlyId} for "${ruleDescription}"`);
+            }
+
           } catch (error) {
-            console.error(`[Analyze API] Error classifying rule ${rule.id}:`, error);
-            errors.push(`Error classifying rule ${rule.id}: ${error}`);
+            console.error(`[Analyze API] Error analyzing rule ${rule.id}:`, error);
+            errors.push(`Error analyzing rule ${rule.id}: ${error}`);
           }
         }
 
@@ -170,7 +236,6 @@ export async function POST(request: NextRequest) {
           zoneId,
           domainName: zone.name,
           appliedRules,
-          customRules,
           lastAnalyzed: new Date().toISOString(),
           analysisMetadata: {
             processingTimeMs,
@@ -180,7 +245,7 @@ export async function POST(request: NextRequest) {
           }
         };
 
-        console.log(`[Analyze API] ✅ Completed analysis for zone ${zoneId} (${zone.name}): ${appliedRules.length} template rules, ${customRules.length} custom rules in ${processingTimeMs}ms`);
+        console.log(`[Analyze API] ✅ Completed analysis for zone ${zoneId} (${zone.name}): ${appliedRules.length} template rules in ${processingTimeMs}ms`);
         return domainStatus;
 
       } catch (error) {
@@ -258,12 +323,11 @@ export async function POST(request: NextRequest) {
     const totalProcessed = analysisResults.length;
     const totalRequested = targetZoneIds.length;
     const successRate = totalProcessed > 0 ? Math.round((totalProcessed / totalRequested) * 100) : 0;
-    const totalRules = analysisResults.reduce((sum, ds) => sum + ds.appliedRules.length + ds.customRules.length, 0);
+    const totalRules = analysisResults.reduce((sum, ds) => sum + ds.appliedRules.length, 0);
     const totalTemplateRules = analysisResults.reduce((sum, ds) => sum + ds.appliedRules.length, 0);
-    const totalCustomRules = analysisResults.reduce((sum, ds) => sum + ds.customRules.length, 0);
 
     console.log(`[Analyze API] ✅ Analysis complete! Processed ${totalProcessed}/${totalRequested} domains (${successRate}% success rate)`);
-    console.log(`[Analyze API] 📊 Rules summary: ${totalRules} total (${totalTemplateRules} template, ${totalCustomRules} custom)`);
+    console.log(`[Analyze API] 📊 Rules summary: ${totalRules} total (${totalTemplateRules} template)`);
     console.log(`[Analyze API] 🔄 Template rules: ${totalTemplateRules - outdatedRules} current, ${outdatedRules} outdated`);
 
     return NextResponse.json({
@@ -276,10 +340,8 @@ export async function POST(request: NextRequest) {
           totalRequested: totalRequested,
           successRate: successRate,
           domainsWithCorporateRules: analysisResults.filter(ds => ds.appliedRules.length > 0).length,
-          domainsWithCustomRules: analysisResults.filter(ds => ds.customRules.length > 0).length,
           totalRules: totalRules,
           totalTemplateRules: totalTemplateRules,
-          totalCustomRules: totalCustomRules,
           currentTemplateRules: totalTemplateRules - outdatedRules,
           outdatedTemplateRules: outdatedRules,
           processedBatches: Math.ceil(totalRequested / BATCH_SIZE),

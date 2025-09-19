@@ -62,6 +62,24 @@ export async function POST(request: NextRequest) {
     // Get zone information for domain names
     const zonesResponse = await cloudflareAPI.getZones(1, 200);
     const zoneMap = new Map(zonesResponse.zones.map(zone => [zone.id, zone.name]));
+    const reverseZoneMap = new Map(zonesResponse.zones.map(zone => [zone.name, zone.id]));
+
+    // Validate and convert targetZoneIds to ensure they are actual zone IDs, not domain names
+    const validatedZoneIds = targetZoneIds.map((zoneId: string) => {
+      // Check if zoneId looks like a domain name instead of a zone ID
+      if (zoneId.includes('.') && !zoneId.match(/^[a-f0-9]{32}$/)) {
+        // This looks like a domain name, try to get the correct zone ID
+        const actualZoneId = reverseZoneMap.get(zoneId);
+        if (actualZoneId) {
+          console.log(`[BulkAction] Converting domain name "${zoneId}" to zone ID "${actualZoneId}"`);
+          return actualZoneId;
+        } else {
+          console.warn(`[BulkAction] Domain name "${zoneId}" not found in available zones`);
+          return zoneId; // Return as-is and let it fail later
+        }
+      }
+      return zoneId; // Already a valid zone ID
+    });
 
     const results: Array<{
       zoneId: string;
@@ -72,8 +90,8 @@ export async function POST(request: NextRequest) {
       conflicts?: any[];
     }> = [];
 
-    // Process each target zone
-    for (const zoneId of targetZoneIds) {
+    // Process each target zone (now using validated zone IDs)
+    for (const zoneId of validatedZoneIds) {
       const domainName = zoneMap.get(zoneId) || zoneId;
       const result = {
         zoneId,
@@ -213,6 +231,31 @@ export async function POST(request: NextRequest) {
       failed: results.filter(r => !r.success).length,
       conflicts: results.reduce((sum, r) => sum + (r.conflicts?.length || 0), 0)
     };
+
+    // If any rules were actually removed/cleaned and it's not a preview, refresh affected domains
+    if (!preview && summary.successful > 0 && (action === 'remove' || action === 'clean' || action === 'clean-custom')) {
+      console.log(`[BulkAction] Refreshing affected domains after ${action} operation on ${summary.successful} domains`);
+
+      // Refresh each affected domain individually to update cache
+      const refreshPromises = validatedZoneIds.map(async (zoneId: string) => {
+        try {
+          const domainName = zoneMap.get(zoneId) || zoneId;
+          console.log(`[BulkAction] Refreshing domain ${domainName} (${zoneId})`);
+
+          const refreshedDomain = await cloudflareAPI.getCompleteDomainInfo(zoneId, domainName, new Map());
+          console.log(`[BulkAction] Successfully refreshed ${domainName} - Rules: ${refreshedDomain.securityRules?.templateRules?.length || 0} template`);
+
+          return { success: true, domain: domainName };
+        } catch (error) {
+          console.warn(`[BulkAction] Failed to refresh domain ${zoneId}:`, error);
+          return { success: false, domain: zoneId, error };
+        }
+      });
+
+      const refreshResults = await Promise.allSettled(refreshPromises);
+      const successfulRefreshes = refreshResults.filter(r => r.status === 'fulfilled' && r.value.success).length;
+      console.log(`[BulkAction] Refreshed ${successfulRefreshes}/${validatedZoneIds.length} domains successfully`);
+    }
 
     return NextResponse.json({
       success: true,

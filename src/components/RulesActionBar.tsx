@@ -12,7 +12,7 @@ import { RuleTemplate } from '@/types/cloudflare';
 import { tokenStorage } from '@/lib/tokenStorage';
 
 interface RulesActionBarProps {
-  selectedDomains: string[];
+  selectedDomains: string[]; // Zone IDs of selected domains
   onClearSelection: () => void;
   onRefreshSelectedDomains?: (zoneIds: string[]) => Promise<void>;
   onBulkProxy?: (enabled: boolean) => Promise<void>;
@@ -61,8 +61,8 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
   };
 
   const getConfirmationMessage = () => {
-    const domainCount = selectedDomains.length;
-    const ruleCount = selectedRules.length;
+    const domainCount = selectedDomains?.length || 0;
+    const ruleCount = selectedRules?.length || 0;
 
     switch (action) {
       case 'add':
@@ -126,11 +126,11 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
 
   const handleConfirmAction = () => {
     // Validations
-    if (selectedDomains.length === 0) {
+    if (!selectedDomains || selectedDomains.length === 0) {
       toast.error('Selecciona al menos un dominio');
       return;
     }
-    if (action !== 'clean' && action !== 'clean-custom' && selectedRules.length === 0) {
+    if (action !== 'clean' && action !== 'clean-custom' && (!selectedRules || selectedRules.length === 0)) {
       toast.error('Selecciona al menos una regla');
       return;
     }
@@ -149,7 +149,7 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
   };
 
   const handleBulkAction = (actionType: 'proxy' | 'underAttack' | 'botFight', enabled: boolean) => {
-    if (selectedDomains.length === 0) {
+    if (!selectedDomains || selectedDomains.length === 0) {
       toast.error('Selecciona al menos un dominio');
       return;
     }
@@ -205,7 +205,7 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
     }
   };
 
-  if (selectedDomains.length === 0) {
+  if (!selectedDomains || !Array.isArray(selectedDomains) || selectedDomains.length === 0) {
     return null;
   }
 

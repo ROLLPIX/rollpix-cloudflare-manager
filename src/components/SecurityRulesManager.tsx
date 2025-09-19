@@ -5,6 +5,7 @@ import { SecurityRulesEmptyState } from './SecurityRulesEmptyState';
 import { RuleTemplateCard } from './RuleTemplateCard';
 import { RuleTemplateDialog } from './RuleTemplateDialog';
 import { BulkUpdatePreviewModal } from './BulkUpdatePreviewModal';
+import { RuleUpdateConfirmationModal } from './RuleUpdateConfirmationModal';
 import { useSecurityRulesManager } from '@/hooks/useSecurityRulesManager';
 
 export default function SecurityRulesManager() {
@@ -18,9 +19,14 @@ export default function SecurityRulesManager() {
     formData,
     showPreviewModal,
     previewData,
+    showUpdateConfirmation,
+    updateConfirmationData,
+    ruleUsageStats,
     setShowCreateDialog,
     setShowEditDialog,
     setShowPreviewModal,
+    setShowUpdateConfirmation,
+    setUpdateConfirmationData,
     handleEditTemplate,
     handleUpdateAllDomains,
     executeBulkUpdate,
@@ -28,6 +34,8 @@ export default function SecurityRulesManager() {
     updateTemplate,
     deleteTemplate,
     updateFormField,
+    handleRuleUpdateConfirmation,
+    registerProgressCallback,
   } = useSecurityRulesManager();
 
 
@@ -52,6 +60,7 @@ export default function SecurityRulesManager() {
                 key={template.id}
                 template={template}
                 isUpdating={updatingTemplate === template.id}
+                usageStats={ruleUsageStats.get(template.friendlyId)}
                 onEdit={handleEditTemplate}
                 onUpdateAll={handleUpdateAllDomains}
                 onDelete={deleteTemplate}
@@ -87,6 +96,20 @@ export default function SecurityRulesManager() {
           template={previewData.template}
           domains={previewData.domains}
           isUpdating={updatingTemplate !== null}
+        />
+      )}
+
+      {updateConfirmationData && (
+        <RuleUpdateConfirmationModal
+          isOpen={showUpdateConfirmation}
+          onClose={() => {
+            setShowUpdateConfirmation(false);
+            setUpdateConfirmationData(null);
+          }}
+          template={updateConfirmationData.template}
+          affectedDomains={updateConfirmationData.affectedDomains}
+          onConfirm={handleRuleUpdateConfirmation}
+          onUpdateProgress={registerProgressCallback}
         />
       )}
     </div>

@@ -50,6 +50,8 @@ export function RulePill({ rule, domainId }: RulePillProps) {
         return '🚫';
       case 'challenge':
         return '❓';
+      case 'managed_challenge':
+        return '🛡️';
       case 'allow':
         return '✅';
       case 'log':

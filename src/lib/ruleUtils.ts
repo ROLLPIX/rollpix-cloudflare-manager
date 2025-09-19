@@ -182,7 +182,7 @@ export function isTemplateFormat(description: string): boolean {
   const templatePattern6 = /^R\d{3}/;
 
   // Pattern 7: Common Cloudflare rule patterns that might be templates
-  const templatePattern7 = /\b(block|challenge|allow|log|skip)\b.*\b(bot|spam|attack|threat|malware|exploit|sql|injection|xss|csrf)\b/i;
+  const templatePattern7 = /\b(block|challenge|managed_challenge|allow|log|skip)\b.*\b(bot|spam|attack|threat|malware|exploit|sql|injection|xss|csrf)\b/i;
 
   // Pattern 8: Common WAF/security rule names
   const templatePattern8 = /\b(waf|waf02|security|firewall|protection|defense|guard)\b/i;
@@ -301,10 +301,10 @@ export function parseTemplateFormat(description: string): {
   }
 
   // Pattern 8: Common security rule patterns - generate template from keywords
-  const securityPattern = /\b(block|challenge|allow|log|skip)\b.*\b(bot|spam|attack|threat|malware|exploit|sql|injection|xss|csrf)\b/i;
+  const securityPattern = /\b(block|challenge|managed_challenge|allow|log|skip)\b.*\b(bot|spam|attack|threat|malware|exploit|sql|injection|xss|csrf)\b/i;
   if (securityPattern.test(trimmed)) {
     // Generate a friendly ID for this rule
-    const action = trimmed.match(/\b(block|challenge|allow|log|skip)\b/i)?.[1] || 'block';
+    const action = trimmed.match(/\b(block|challenge|managed_challenge|allow|log|skip)\b/i)?.[1] || 'block';
     const threat = trimmed.match(/\b(bot|spam|attack|threat|malware|exploit|sql|injection|xss|csrf)\b/i)?.[1] || 'threat';
 
     // Create a simple name from the pattern

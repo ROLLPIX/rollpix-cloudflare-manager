@@ -5,6 +5,7 @@ import { RuleTemplate } from '@/types/cloudflare';
 import { tokenStorage } from '@/lib/tokenStorage';
 import { useNotifications } from './useNotifications';
 import { BulkUpdatePreviewModal } from '@/components/BulkUpdatePreviewModal';
+import { findOutdatedDomains, updateRuleInDomains, AffectedDomain } from '@/lib/ruleUpdater';
 
 export function useSecurityRulesManager() {
   const [templates, setTemplates] = useState<RuleTemplate[]>([]);
@@ -13,6 +14,7 @@ export function useSecurityRulesManager() {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<RuleTemplate | null>(null);
   const [updatingTemplate, setUpdatingTemplate] = useState<string | null>(null);
+  const [ruleUsageStats, setRuleUsageStats] = useState<Map<string, { domainCount: number; domains: string[] }>>(new Map());
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [previewData, setPreviewData] = useState<{
     template: RuleTemplate;
@@ -24,6 +26,15 @@ export function useSecurityRulesManager() {
       reason?: string;
     }>;
   } | null>(null);
+
+  // New state for rule update confirmation
+  const [showUpdateConfirmation, setShowUpdateConfirmation] = useState(false);
+  const [updateConfirmationData, setUpdateConfirmationData] = useState<{
+    template: RuleTemplate;
+    affectedDomains: AffectedDomain[];
+  } | null>(null);
+  const [updateProgress, setUpdateProgress] = useState(0);
+  const [updateProgressCallback, setUpdateProgressCallback] = useState<((progress: number) => void) | null>(null);
 
   const notifications = useNotifications();
 
@@ -37,6 +48,21 @@ export function useSecurityRulesManager() {
     excludedDomains: [] as string[]
   });
 
+  const loadRuleUsageStats = useCallback(async () => {
+    try {
+      const { useDomainStore } = await import('@/store/domainStore');
+      const storeData = useDomainStore.getState().allDomains;
+
+      if (storeData && storeData.length > 0) {
+        const { getRuleUsageStats } = await import('@/lib/ruleUpdater');
+        const stats = await getRuleUsageStats(storeData);
+        setRuleUsageStats(stats);
+      }
+    } catch (error) {
+      console.warn('Error loading rule usage stats:', error);
+    }
+  }, []);
+
   const loadTemplates = useCallback(async () => {
     try {
       setLoading(true);
@@ -45,6 +71,8 @@ export function useSecurityRulesManager() {
 
       if (result.success) {
         setTemplates(result.data.templates);
+        // Load usage stats after templates are loaded
+        await loadRuleUsageStats();
       } else {
         notifications.error('Error al cargar plantillas de reglas');
       }
@@ -54,7 +82,7 @@ export function useSecurityRulesManager() {
     } finally {
       setLoading(false);
     }
-  }, [notifications]);
+  }, [notifications, loadRuleUsageStats]);
 
   const createTemplate = useCallback(async () => {
     try {
@@ -84,6 +112,11 @@ export function useSecurityRulesManager() {
     if (!editingTemplate) return;
 
     try {
+      const oldTemplate = editingTemplate;
+      const hasSignificantChanges =
+        formData.expression !== oldTemplate.expression ||
+        formData.action !== oldTemplate.action;
+
       const response = await fetch(`/api/security-rules/${editingTemplate.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -93,7 +126,40 @@ export function useSecurityRulesManager() {
       const result = await response.json();
 
       if (result.success) {
-        setTemplates(prev => prev.map(t => t.id === editingTemplate.id ? result.data : t));
+        const updatedTemplate = result.data;
+        setTemplates(prev => prev.map(t => t.id === editingTemplate.id ? updatedTemplate : t));
+
+        // If version changed, check for affected domains using CURRENT cache data
+        if (result.versionChanged) {
+          console.log('[SecurityRulesManager] Version changed, checking affected domains using existing cache');
+
+          // Find affected domains using store data ONLY (no API fallback)
+          try {
+            const { useDomainStore } = await import('@/store/domainStore');
+            const storeData = useDomainStore.getState().allDomains;
+
+            if (storeData && storeData.length > 0) {
+              const affectedDomains = await findOutdatedDomains(updatedTemplate, storeData);
+
+              if (affectedDomains.length > 0) {
+                console.log(`[SecurityRulesManager] Found ${affectedDomains.length} domains that need updating`);
+                // Show confirmation modal
+                setUpdateConfirmationData({
+                  template: updatedTemplate,
+                  affectedDomains
+                });
+                setShowUpdateConfirmation(true);
+              } else {
+                console.log('[SecurityRulesManager] No domains need updating for this template');
+              }
+            } else {
+              console.warn('[SecurityRulesManager] No domain data available in store - user needs to refresh domains first');
+            }
+          } catch (error) {
+            console.warn('[SecurityRulesManager] Failed to check affected domains:', error);
+          }
+        }
+
         setShowEditDialog(false);
         setEditingTemplate(null);
         resetForm();
@@ -108,11 +174,39 @@ export function useSecurityRulesManager() {
   }, [formData, editingTemplate, notifications]);
 
   const deleteTemplate = useCallback(async (templateId: string) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar esta plantilla?')) {
-      return;
-    }
-
     try {
+      // Find the template to get its friendlyId
+      const template = templates.find(t => t.id === templateId);
+      if (!template) {
+        notifications.error('Plantilla no encontrada');
+        return;
+      }
+
+      // Check if rule is in use using store data
+      const { useDomainStore } = await import('@/store/domainStore');
+      const storeData = useDomainStore.getState().allDomains;
+
+      if (storeData && storeData.length > 0) {
+        const { isRuleInUse } = await import('@/lib/ruleUpdater');
+        const usage = await isRuleInUse(template.friendlyId, storeData);
+
+        if (usage.inUse) {
+          const domainList = usage.domains.slice(0, 5).join(', ');
+          const moreText = usage.domainCount > 5 ? ` y ${usage.domainCount - 5} más` : '';
+
+          notifications.error(
+            `No se puede eliminar la regla ${template.friendlyId}. ` +
+            `Está siendo usada por ${usage.domainCount} dominio(s): ${domainList}${moreText}. ` +
+            `Elimina la regla de todos los dominios primero.`
+          );
+          return;
+        }
+      }
+
+      if (!confirm('¿Estás seguro de que quieres eliminar esta plantilla?')) {
+        return;
+      }
+
       const response = await fetch(`/api/security-rules/${templateId}`, {
         method: 'DELETE'
       });
@@ -129,7 +223,7 @@ export function useSecurityRulesManager() {
       console.error('Error deleting template:', error);
       notifications.error('Error al eliminar plantilla');
     }
-  }, [notifications]);
+  }, [templates, notifications]);
 
   const handleEditTemplate = useCallback((template: RuleTemplate) => {
     setEditingTemplate(template);
@@ -275,8 +369,123 @@ export function useSecurityRulesManager() {
   }, [previewData, notifications]);
 
   const handleUpdateAllDomains = useCallback(async (template: RuleTemplate) => {
-    await getBulkUpdatePreview(template);
-  }, [getBulkUpdatePreview]);
+    try {
+      // Find domains with outdated versions using ONLY store data (no API calls)
+      const { useDomainStore } = await import('@/store/domainStore');
+      const storeData = useDomainStore.getState().allDomains;
+
+      if (!storeData || storeData.length === 0) {
+        notifications.error('No hay datos de dominios disponibles. Recarga la página.');
+        return;
+      }
+
+      const affectedDomains = await findOutdatedDomains(template, storeData);
+
+      if (affectedDomains.length === 0) {
+        notifications.info('No hay dominios con versiones desactualizadas de esta regla');
+        return;
+      }
+
+      // Show confirmation modal
+      setUpdateConfirmationData({
+        template,
+        affectedDomains
+      });
+      setShowUpdateConfirmation(true);
+    } catch (error) {
+      console.error('Error checking outdated domains:', error);
+      notifications.error('Error al verificar dominios desactualizados');
+    }
+  }, [notifications]);
+
+  const registerProgressCallback = useCallback((callback: (progress: number) => void) => {
+    setUpdateProgressCallback(() => callback);
+  }, []);
+
+  const handleRuleUpdateConfirmation = useCallback(async (updateDomains: boolean) => {
+    if (!updateConfirmationData) return;
+
+    const { template, affectedDomains } = updateConfirmationData;
+
+    if (updateDomains) {
+      const apiToken = tokenStorage.getToken();
+      if (!apiToken) {
+        notifications.error('API Token no encontrado.');
+        return;
+      }
+
+      try {
+        setUpdatingTemplate(template.id);
+
+        const zoneIds = affectedDomains.map(domain => domain.zoneId);
+
+        // Reset progress
+        setUpdateProgress(0);
+
+        const result = await updateRuleInDomains(
+          template,
+          zoneIds,
+          apiToken,
+          (completed, total) => {
+            const progressPercentage = Math.round((completed / total) * 100);
+            console.log(`Progress: ${completed}/${total} (${progressPercentage}%)`);
+            setUpdateProgress(progressPercentage);
+
+            // Call the modal's progress callback if available
+            if (updateProgressCallback) {
+              updateProgressCallback(progressPercentage);
+            }
+          }
+        );
+
+        if (result.successful > 0) {
+          notifications.success(
+            `Regla actualizada en ${result.successful}/${affectedDomains.length} dominios`
+          );
+        }
+
+        if (result.failed.length > 0) {
+          notifications.error(
+            `Error al actualizar ${result.failed.length} dominios`
+          );
+        }
+
+        // Refresh ONLY the affected domains instead of invalidating entire cache
+        try {
+          const { useDomainStore } = await import('@/store/domainStore');
+          const store = useDomainStore.getState();
+
+          console.log(`[SecurityRulesManager] Refreshing ${zoneIds.length} specific domains after rule update`);
+
+          // Refresh only the affected domains
+          for (const zoneId of zoneIds) {
+            try {
+              const affectedDomain = affectedDomains.find(d => d.zoneId === zoneId);
+              if (affectedDomain) {
+                console.log(`[SecurityRulesManager] Refreshing domain: ${affectedDomain.domainName} (${zoneId})`);
+                await store.refreshSingleDomain(zoneId);
+              }
+            } catch (error) {
+              console.warn(`[SecurityRulesManager] Failed to refresh domain ${zoneId}:`, error);
+            }
+          }
+          console.log(`[SecurityRulesManager] Completed refreshing ${zoneIds.length} domains`);
+        } catch (error) {
+          console.warn('Failed to refresh affected domains:', error);
+        }
+
+      } catch (error) {
+        console.error('Error updating domains:', error);
+        notifications.error('Error al actualizar dominios');
+      } finally {
+        setUpdatingTemplate(null);
+      }
+    }
+
+    // Reset modal state
+    setShowUpdateConfirmation(false);
+    setUpdateConfirmationData(null);
+  }, [updateConfirmationData, notifications]);
 
   const resetForm = useCallback(() => {
     setFormData({
@@ -309,11 +518,17 @@ export function useSecurityRulesManager() {
     formData,
     showPreviewModal,
     previewData,
+    showUpdateConfirmation,
+    updateConfirmationData,
+    ruleUsageStats,
+    updateProgress,
 
     // Actions
     setShowCreateDialog,
     setShowEditDialog,
     setShowPreviewModal,
+    setShowUpdateConfirmation,
+    setUpdateConfirmationData,
     handleEditTemplate,
     handleUpdateAllDomains,
     executeBulkUpdate,
@@ -322,5 +537,8 @@ export function useSecurityRulesManager() {
     deleteTemplate,
     updateFormField,
     resetForm,
+    handleRuleUpdateConfirmation,
+    registerProgressCallback,
+    loadRuleUsageStats,
   };
 }

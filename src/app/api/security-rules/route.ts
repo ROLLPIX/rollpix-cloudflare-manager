@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { SecurityRule, RuleTemplate } from '@/types/cloudflare';
 import { generateNextFriendlyId } from '@/lib/ruleUtils';
 
-const RULES_CACHE_FILE = path.join(process.cwd(), 'security-rules-templates.json');
+const RULES_CACHE_FILE = path.join(process.cwd(), 'cache', 'security-rules-templates.json');
 
 interface RulesCache {
   templates: RuleTemplate[];

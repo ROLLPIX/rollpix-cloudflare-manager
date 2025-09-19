@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
     const successRate = totalProcessed > 0 ? Math.round((totalProcessed / totalRequested) * 100) : 0;
     const totalRules = results.reduce((sum, d) => sum + (d.securityRules?.totalRules || 0), 0);
     const totalTemplateRules = results.reduce((sum, d) => sum + (d.securityRules?.corporateRules || 0), 0);
-    const totalCustomRules = results.reduce((sum, d) => sum + (d.securityRules?.customRules || 0), 0);
+    const totalCustomRules = 0; // No longer tracking custom rules
     const domainsWithConflicts = results.filter(d => d.securityRules?.hasConflicts).length;
 
     // Auto-detect and import templates from collected rules
@@ -284,7 +284,7 @@ export async function POST(request: NextRequest) {
           totalRequested: totalRequested,
           successRate: successRate,
           domainsWithTemplateRules: results.filter(d => (d.securityRules?.corporateRules || 0) > 0).length,
-          domainsWithCustomRules: results.filter(d => (d.securityRules?.customRules || 0) > 0).length,
+          domainsWithCustomRules: 0, // No longer tracking custom rules
           totalRules: totalRules,
           totalTemplateRules: totalTemplateRules,
           totalCustomRules: totalCustomRules,

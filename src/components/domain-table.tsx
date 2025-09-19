@@ -142,8 +142,8 @@ export function DomainTable() {
         },
         body: JSON.stringify({
           action: 'add',
-          zoneIds: selectedZoneIds,
-          templateIds: ruleIds
+          targetZoneIds: selectedZoneIds,
+          selectedRules: ruleIds
         })
       });
 
@@ -194,8 +194,8 @@ export function DomainTable() {
         },
         body: JSON.stringify({
           action: 'remove',
-          zoneIds: selectedZoneIds,
-          templateIds: ruleIds
+          targetZoneIds: selectedZoneIds,
+          selectedRules: ruleIds
         })
       });
 
@@ -268,9 +268,9 @@ export function DomainTable() {
           'x-api-token': apiToken
         },
         body: JSON.stringify({
-          action: 'update',
-          zoneIds: selectedZoneIds,
-          templateIds: outdatedRules
+          action: 'add', // 'add' will update existing rules with same friendlyId
+          targetZoneIds: selectedZoneIds,
+          selectedRules: outdatedRules
         })
       });
 
@@ -317,22 +317,15 @@ export function DomainTable() {
 
 
           <RulesActionBar
-            selectedDomainsCount={selectedDomains.size}
-            selectedDomainIds={Array.from(selectedDomains).map(domain => {
+            selectedDomains={Array.from(selectedDomains).map(domain => {
               const domainObj = allDomains.find(d => d.domain === domain);
               return domainObj?.zoneId || '';
             }).filter(Boolean)}
-            onManageTemplates={() => setShowTemplateModal(true)}
-            onApplyRules={handleApplyRules}
-            onRemoveRules={handleRemoveRules}
-            onSyncOutdated={handleSyncOutdated}
             onClearSelection={clearDomainSelection}
-            onRefreshSelected={() => handleRefreshSelected(Array.from(selectedDomains).map(d => allDomains.find(domain => domain.domain === d)?.zoneId).filter(Boolean) as string[])}
+            onRefreshSelectedDomains={(zoneIds) => handleRefreshSelected(zoneIds)}
             onBulkProxy={bulkToggleProxy}
             onBulkUnderAttack={handleBulkUnderAttack}
             onBulkBotFight={handleBulkBotFight}
-            loading={loading}
-            availableTemplates={availableTemplates}
           />
 
           <DomainTableContent

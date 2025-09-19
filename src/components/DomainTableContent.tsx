@@ -16,7 +16,7 @@ interface DomainTableContentProps {
   onToggleProxy: (zoneId: string, recordId: string, proxied: boolean) => Promise<void>;
   onToggleUnderAttack: (zoneId: string, enabled: boolean) => Promise<void>;
   onToggleBotFight: (zoneId: string, enabled: boolean) => Promise<void>;
-  onRefreshDomain: (zoneId: string) => void;
+  onRefreshDomain: (zoneId: string) => Promise<void>;
   updatingRecords: Set<string>;
   updatingFirewall: Set<string>;
   refreshingDomainId: string | null;
@@ -37,7 +37,7 @@ export function DomainTableContent({
   updatingFirewall,
   refreshingDomainId,
 }: DomainTableContentProps) {
-  if (loading && allDomains.length === 0) {
+  if (loading && (!allDomains || allDomains.length === 0)) {
     return <DomainTableSkeleton rows={8} />;
   }
 
@@ -47,7 +47,7 @@ export function DomainTableContent({
         <TableRow>
           <TableHead className="w-12">
             <Checkbox
-              checked={selectedDomains.size === paginatedDomains.length && paginatedDomains.length > 0}
+              checked={paginatedDomains && selectedDomains.size === paginatedDomains.length && paginatedDomains.length > 0}
               onCheckedChange={() => onSelectAll(paginatedDomains)}
             />
           </TableHead>

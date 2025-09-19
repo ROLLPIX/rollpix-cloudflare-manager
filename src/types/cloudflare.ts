@@ -48,6 +48,19 @@ export interface CloudflareApiResponse<T> {
   };
 }
 
+export interface RulePillData {
+  id: string;
+  name: string;
+  version: string;
+  domainVersion?: string;
+  isUpdated: boolean;
+  action: string;
+  type: string;
+  lastUpdated: Date;
+  expression: string;
+  templateId?: string;
+}
+
 export interface DomainStatus {
   domain: string;
   zoneId: string;
@@ -57,6 +70,7 @@ export interface DomainStatus {
   wwwProxied: boolean;
   underAttackMode?: boolean;
   botFightMode?: boolean;
+  rulePills?: RulePillData[];
   securityRules?: {
     totalRules: number;
     corporateRules: number;
@@ -80,7 +94,7 @@ export interface SecurityRule {
   enabled: boolean;
   priority: number;
   expression: string; // Cloudflare rule expression
-  action: 'block' | 'challenge' | 'allow' | 'log' | 'skip';
+  action: 'block' | 'challenge' | 'managed_challenge' | 'allow' | 'log' | 'skip';
   actionParameters?: {
     response?: {
       status_code?: number;
@@ -117,6 +131,8 @@ export interface CloudflareRule {
   };
   ref?: string;
   version?: string;
+  last_updated?: string;
+  created_on?: string;
 }
 
 export interface DomainRuleStatus {
@@ -126,23 +142,13 @@ export interface DomainRuleStatus {
     ruleId: string;
     ruleName: string;
     version: string;
-    status: 'active' | 'outdated' | 'custom' | 'conflict';
+    status: 'active' | 'outdated' | 'conflict';
     cloudflareRulesetId: string;
     cloudflareRuleId: string;
     rulesetName?: string; // Name of the ruleset containing this rule
     friendlyId?: string; // Template friendly ID (e.g., R001)
     confidence?: number; // Confidence level for template matching (0-1)
     appliedAt?: string; // When the rule was applied/detected
-  }>;
-  customRules: Array<{
-    cloudflareRulesetId: string;
-    cloudflareRuleId: string;
-    rulesetName?: string; // Name of the ruleset containing this rule
-    expression: string;
-    action: string;
-    description?: string;
-    isLikelyTemplate?: boolean; // If this custom rule looks like it should be a template
-    estimatedComplexity?: 'simple' | 'medium' | 'complex'; // Rule complexity estimate
   }>;
   lastAnalyzed: string;
   analysisMetadata?: {

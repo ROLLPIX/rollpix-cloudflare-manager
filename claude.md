@@ -2,350 +2,53 @@
 
 ## Proyecto Overview
 
-**ROLLPIX Cloudflare Manager** es una aplicación web desarrollada con **Next.js 15.5.3** para gestionar visualmente dominios en Cloudflare con **sistema completo de reglas de seguridad**. La aplicación permite a los equipos monitorear y controlar múltiples dominios de forma eficiente, incluyendo gestión avanzada de reglas de firewall, operaciones masivas, y detección de conflictos.
+**ROLLPIX Cloudflare Manager** es una aplicación web desarrollada con **Next.js 15.5.3** para gestionar visualmente dominios en Cloudflare con **sistema completo de reglas de seguridad**.
 
-## Versiones y Dependencias Críticas
-
-### Entorno de Desarrollo Probado
-- **Node.js**: `20.15.1` (requerido >= 20.x)
-- **npm**: `10.7.0` 
-- **Sistema Operativo**: Windows 11 (compatible con macOS/Linux)
-
-### Stack Tecnológico Actualizado (v3.0.0)
-- **Frontend**: Next.js 15.5.3 (App Router sin Turbopack) + React 19.1.0 + TypeScript 5.x
-- **UI Framework**: shadcn/ui (Radix UI v1.x) + Tailwind CSS 3.4.0 (migrado para estabilidad)
-- **Backend**: Next.js API Routes + Cloudflare API v4 (DNS + Rulesets)
-- **State Management**: 🆕 **Zustand store pattern** (reemplaza prop drilling)
-- **Security**: 🆕 **Zod validation + secure tokenStorage + fileSystem protection**
-- **Persistencia**: JSON seguro con validación (4 archivos de cache + preferencias)
+## Stack Tecnológico (v3.0.0)
+- **Frontend**: Next.js 15.5.3 + React 19.1.0 + TypeScript 5.x
+- **UI**: shadcn/ui + Tailwind CSS 3.4.0
+- **Backend**: Next.js API Routes + Cloudflare API v4
+- **State**: Zustand store pattern
+- **Security**: Zod validation + secure tokenStorage
 - **Testing**: Playwright 1.55.0 E2E
-- **Icons & UX**: Lucide React 0.543.0 + Sonner 2.0.7 notifications
-- **Arquitectura**: 🆕 **Componentes modulares + hooks personalizados**
 
-### Dependencias Principales Exactas
-```json
-{
-  "next": "15.5.3",
-  "react": "19.1.0",
-  "react-dom": "19.1.0",
-  "typescript": "^5",
-  "tailwindcss": "^3.4.0",
-  "zustand": "^5.0.0",
-  "zod": "^3.23.0",
-  "lucide-react": "^0.543.0",
-  "sonner": "^2.0.7",
-  "uuid": "^13.0.0",
-  "class-variance-authority": "^0.7.1",
-  "clsx": "^2.1.1",
-  "tailwind-merge": "^3.3.1"
-}
-```
+## Dependencias Principales
+- Next.js 15.5.3, React 19.1.0, TypeScript 5.x
+- Zustand, Zod, Lucide React, Sonner
+- shadcn/ui (Radix UI components)
 
-### Radix UI Components (shadcn/ui)
-```json
-{
-  "@radix-ui/react-checkbox": "^1.3.3",
-  "@radix-ui/react-dialog": "^1.1.15",
-  "@radix-ui/react-dropdown-menu": "^2.1.16",
-  "@radix-ui/react-label": "^2.1.7",
-  "@radix-ui/react-popover": "^1.1.15",
-  "@radix-ui/react-select": "^2.2.6",
-  "@radix-ui/react-separator": "^1.1.7",
-  "@radix-ui/react-slot": "^1.2.3",
-  "@radix-ui/react-tabs": "^1.1.13",
-  "@radix-ui/react-tooltip": "^1.2.8"
-}
-```
+## Arquitectura (v3.0.0)
+- Componentes modulares con hooks personalizados
+- Zustand store centralizado sin prop drilling
+- 85% reducción de código en componentes principales
 
-### 🆕 Nueva Arquitectura Modular (v3.0.0)
+## Seguridad
+- Token storage seguro con localStorage + expiración (7 días)
+- Validación Zod en todas las API routes
+- File system protection con path traversal prevention
 
-#### 📊 Métricas de Refactorización
-- **85% reducción de código** en componentes principales
-- **10+ componentes especializados** con responsabilidades claras
-- **2 hooks personalizados** para lógica de negocio
-- **Performance optimizada** con mejor manejo de estado
+## Cache System
+- JSON local cache para evitar rate limiting
+- Archivos: `cache/domains-cache.json`, `cache/security-rules-templates.json`, etc.
+- Flujo: API → Cache → Estado React
 
-#### Componentes Refactorizados
-```typescript
-// DomainTable refactorizado (88 líneas vs 381 líneas originales)
-export function DomainTable() {
-  const {
-    // State
-    allDomains, loading, unifiedProgress,
-    selectedDomains, currentPage, perPage,
-    searchTerm, filterPills, processedDomains,
+## API Routes Principales
+- `/api/domains` - Gestión principal de dominios
+- `/api/security-mode` - Under Attack y Bot Fight Mode
+- `/api/security-rules` - CRUD de plantillas de reglas
+- `/api/domains/rules/[zoneId]` - Reglas específicas por zona
+- `/api/test-token` - Validación de permisos
 
-    // Actions
-    initializeDomains, fetchFromCloudflareUnified,
-    setSearchTerm, setCurrentPage, setPerPage,
-    toggleDomainSelection, selectAllDomains,
-    handleBulkUnderAttack, handleBulkBotFight
-  } = useDomainTable();
+## Cloudflare Integration
+**Permisos requeridos**: Zone Settings/DNS/WAF Edit, Zone/Account Read
+**API**: Procesa rulesets tipo `http_request_firewall_custom`
 
-  useEffect(() => {
-    if (typeof initializeDomains === 'function') {
-      initializeDomains();
-    }
-  }, [initializeDomains]);
-
-  return (
-    <>
-      <DomainTableHeader />
-      <DomainTableFilters />
-      <DomainTableActions />
-      <DomainTableContent />
-      <DomainTablePagination />
-    </>
-  );
-}
-```
-
-#### Hooks Personalizados
-```typescript
-// useDomainTable (200 líneas) - Lógica de tabla de dominios
-export function useDomainTable() {
-  // Estado local y computado
-  // Lógica de filtrado y búsqueda
-  // Operaciones bulk con notificaciones
-  // Gestión de estado de tabla
-  return { /* API completa */ };
-}
-
-// useSecurityRulesManager (218 líneas) - Gestión de reglas
-export function useSecurityRulesManager() {
-  // CRUD de plantillas
-  // Actualización masiva de dominios
-  // Gestión de formularios
-  return { /* API completa */ };
-}
-```
-
-### 🔄 Nueva Arquitectura Store-Based (Zustand)
-
-```typescript
-// Componente principal: DomainTable (SIN PROPS)
-export function DomainTable() {
-  const {
-    allDomains,
-    loading,
-    selectedDomains,
-    currentPage,
-    searchTerm,
-    filter,
-    sortBy,
-    initializeDomains,
-    fetchFromCloudflare,
-    toggleProxy,
-    setSearchTerm,
-    setFilter
-  } = useDomainStore();
-
-  // Token management automático
-  useEffect(() => {
-    initializeDomains(); // Lee cache + background refresh
-  }, [initializeDomains]);
-}
-```
-
-### 🛡️ Sistema de Seguridad Reforzado
-
-```typescript
-// Token Storage Seguro
-export const tokenStorage = {
-  setToken: (token: string) => {
-    const encoded = btoa(token);
-    const timestamp = Date.now();
-    localStorage.setItem(TOKEN_KEY, encoded);
-    localStorage.setItem(TOKEN_TIMESTAMP_KEY, timestamp.toString());
-  },
-
-  getToken: (): string | null => {
-    // Validación de expiración (7 días)
-    // SSR safe implementation
-    if (typeof window === 'undefined') return null;
-
-    const timestamp = localStorage.getItem(TOKEN_TIMESTAMP_KEY);
-    if (timestamp && (Date.now() - parseInt(timestamp)) > TOKEN_EXPIRY_MS) {
-      tokenStorage.clearToken();
-      return null;
-    }
-
-    const encoded = localStorage.getItem(TOKEN_KEY);
-    return encoded ? atob(encoded) : null;
-  }
-};
-
-// File System Seguro con Path Traversal Protection
-export const safeWriteJsonFile = async (fileName: string, data: any) => {
-  const safePath = validateAndGetSafePath(fileName); // Whitelist validation
-  const tempPath = `${safePath}.tmp`;
-  await fs.writeFile(tempPath, JSON.stringify(data, null, 2), 'utf-8');
-  await fs.rename(tempPath, safePath); // Atomic operation
-};
-
-// API Validation con Zod
-export const validateApiRequest = <T>(schema: z.ZodSchema<T>, data: unknown): T => {
-  return schema.parse(data); // Automatic sanitization
-};
-```
-
-### Sistema de Cache Inteligente
-
-El sistema implementa un cache JSON local para evitar rate limiting de la API de Cloudflare:
-
-```typescript
-// Flujo de datos
-1. Primer load: API → Cache JSON → Estado React
-2. Navegación: Cache JSON → Estado React (instantáneo)
-3. Refresh manual: API → Cache JSON → Estado React
-4. Update selectivo: API (dominio específico) → Cache JSON → Estado React
-```
-
-**Archivos de persistencia (con seguridad reforzada):**
-- `cache/domains-cache.json`: Cache de todos los dominios y estados DNS
-- `cache/security-rules-templates.json`: Plantillas de reglas versionadas
-- `cache/domain-rules-status.json`: Estado de reglas con análisis de conflictos
-- `cache/user-preferences.json`: Configuraciones persistentes
-- **🆕 `src/lib/tokenStorage.ts`**: Token seguro con localStorage + expiración
-- **🆕 `src/store/domainStore.ts`**: Estado centralizado con Zustand
-- `.nvmrc`: Versión específica de Node.js (20.15.1)
-
-**🔒 Directorio seguro**: `cache/` con validación whitelist y path traversal protection
-
-### API Routes Implementadas
-
-#### Sistema de Dominios
-- **`/api/domains`**: Gestión principal de dominios con paginación automática
-- **`/api/domains/enrich`**: Enriquecimiento con datos de reglas de seguridad
-- **`/api/proxy-toggle`**: Control individual de proxy DNS
-
-#### Gestión de Seguridad 🆕 (Implementado 2025-01-14)
-- **`/api/security-mode`**: Control de Under Attack Mode y Bot Fight Mode
-  - `POST`: Activar/desactivar modos de seguridad por zona
-  - `GET`: Obtener estado actual de los modos de seguridad
-
-#### Sistema de Reglas de Seguridad 🔥 **NUEVO**
-- **`/api/security-rules`**: CRUD de plantillas de reglas versionadas
-- **`/api/security-rules/[id]`**: Gestión individual de plantillas
-- **`/api/security-rules/analyze`**: Análisis de reglas por dominio con detección de conflictos
-- **`/api/security-rules/apply`**: Aplicación de reglas específicas
-- **`/api/security-rules/init-examples`**: Inicialización con reglas ejemplo
-
-#### Gestión de Reglas por Dominio
-- **`/api/domains/rules/[zoneId]`**: Obtener reglas específicas de una zona
-- **`/api/domains/rules/bulk-action`**: Acciones masivas (add/remove/clean) con preview
-- **`/api/domains/rules/clean`**: Limpieza de reglas por tipo (template/custom/all)
-- **`/api/domains/rules/custom/[ruleId]`**: Eliminar reglas personalizadas individuales
-
-#### Infraestructura
-- **`/api/cache`**: Sistema de cache para dominios
-- **`/api/preferences`**: Persistencia de configuraciones de usuario
-- **`/api/token`**: Gestión segura de tokens API
-- **`/api/test-token`**: Validación completa de permisos de token
-
-### Cloudflare API Integration
-
-#### Permisos de Token Requeridos
-```
-Zone Settings: Read
-DNS: Edit  
-Zone: Read
-Zone Firewall Access Rules: Edit  
-Account Firewall Access Rules: Read
-Zone WAF: Edit
-```
-
-#### Cloudflare Rulesets API
-```typescript
-// Solo procesa rulesets de tipo 'http_request_firewall_custom'
-const customRulesets = rulesets.filter(r => r.phase === 'http_request_firewall_custom');
-
-// Diferencia entre reglas de plantilla vs personalizadas
-const isTemplateRule = (description: string) => {
-  return /^.*#[A-Z]\d+v[\d.]+.*$/.test(description);
-};
-```
-
-## Funcionalidades Implementadas
-
-### 1. Gestión Visual de Dominios (Mejorado)
-- **Indicadores visuales corregidos**: Shield (proxy activo) vs ShieldOff (DNS-only)
-- **Columna de reglas avanzada**: Pills con friendlyId + contador de reglas custom (+X)
-- **Estados prioritarios**: Sin proxy > Sin registros > Con proxy
-- **Botón unificado de actualización**: Checkboxes para DNS/Firewall/Reglas con progreso
-
-### 2. Sistema de Reglas de Seguridad 🔥 **NUEVO**
-```typescript
-interface RuleTemplate {
-  id: string;
-  friendlyId: string;      // R01, R02, etc.
-  name: string;
-  description: string;
-  version: string;         // Versionado para updates
-  expression: string;      // Cloudflare rule expression
-  action: 'block' | 'challenge' | 'allow' | 'log';
-  enabled: boolean;
-  tags: string[];
-}
-```
-
-#### Funcionalidades Principales:
-- **Gestión de plantillas**: Crear/editar/eliminar plantillas con versionado
-- **Aplicación masiva**: Aplicar/remover reglas en múltiples dominios
-- **Detección de conflictos**: Análisis automático de versiones obsoletas
-- **Modal por dominio**: Vista detallada con reglas template + custom
-- **Actualización inteligente**: Botón para update masivo a nueva versión
-- **Preview de operaciones**: Vista previa antes de aplicar cambios masivos
-
-### 3. Control de Proxy Avanzado (Mejorado)
-```typescript
-// Confirmación de cambio de token API
-const [showChangeTokenDialog, setShowChangeTokenDialog] = useState(false);
-
-// Progreso visual para operaciones masivas
-const handleBulkAction = async (action: 'enable' | 'disable') => {
-  setBulkProgress({ current: 0, total: operations.length });
-  // Procesamiento con progreso visual
-  for (let i = 0; i < operations.length; i++) {
-    setBulkProgress(prev => ({ ...prev, current: i + 1 }));
-    await toggleProxy(operations[i]);
-    await new Promise(resolve => setTimeout(resolve, 300)); // Rate limiting
-  }
-};
-```
-
-### 4. Sistema de Filtrado y Ordenamiento
-```typescript
-// Ordenamiento inteligente por estado
-const getStatusPriority = (status: DomainStatus) => {
-  if (status.hasRecords && !status.isProxied) return 1; // Máxima prioridad
-  if (!status.hasRecords) return 2; // Media prioridad  
-  return 3; // Mínima prioridad (proxied)
-};
-
-// Filtrado en tiempo real
-const filterDomains = useMemo(() => {
-  return allDomains
-    .filter(domain => domain.name.includes(searchTerm))
-    .filter(domain => {
-      if (filter === 'proxied') return domain.isProxied;
-      if (filter === 'not-proxied') return !domain.isProxied;
-      return true; // 'all'
-    })
-    .sort((a, b) => {
-      if (sortBy === 'status') {
-        return getStatusPriority(a) - getStatusPriority(b);
-      }
-      return a.name.localeCompare(b.name);
-    });
-}, [allDomains, searchTerm, filter, sortBy]);
-```
-
-### 5. Persistencia y Performance (Extendido)
-- **Cache automático**: Evita re-fetching innecesario
-- **Preferencias persistentes**: UX consistente entre sesiones  
-- **Paginación inteligente**: Carga total una vez, pagina en cliente
-- **Updates selectivos**: Solo refresca dominios modificados
+## Funcionalidades Principales
+- **Gestión visual de dominios**: Proxy controls, DNS management, security rules
+- **Sistema de reglas de seguridad**: Templates versionadas, aplicación masiva, detección de conflictos
+- **Under Attack y Bot Fight Mode**: Control completo desde UI
+- **Filtrado y ordenamiento**: Real-time search, smart sorting por estado
+- **Cache inteligente**: Persistencia + performance optimizada
 
 ## Lógica de Negocio
 

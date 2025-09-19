@@ -1,0 +1,23 @@
+{
+  "mappings": [
+    {
+      "cloudflareRuleId": "7cfacb95e8aa46059ecb1618ab73f619",
+      "templateId": "auto-template-R006-1758252110085",
+      "friendlyId": "R006",
+      "version": "1.0.0",
+      "appliedAt": "2025-09-19T03:35:12.184Z",
+      "zoneId": "8a807deb21754d9dd749bcd962fb2d89",
+      "domainName": ""
+    },
+    {
+      "cloudflareRuleId": "fdd110c84fb148a58e2086e7c5420770",
+      "templateId": "auto-template-R002-1758235980542",
+      "friendlyId": "R002",
+      "version": "1.1.0",
+      "appliedAt": "2025-09-19T04:12:54.427Z",
+      "zoneId": "26735a5e7231abbdf9a4f1ffb447faa5",
+      "domainName": ""
+    }
+  ],
+  "lastUpdated": "2025-09-19T04:12:54.430Z"
+}

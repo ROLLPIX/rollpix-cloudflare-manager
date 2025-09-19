@@ -15,7 +15,27 @@ export async function GET(request: NextRequest) {
 
     if (zoneId) {
       // Fetch a single domain
-      const zone = await cloudflare.getZone(zoneId);
+      let zone;
+
+      // Check if zoneId looks like a domain name instead of a zone ID
+      if (zoneId.includes('.') && !zoneId.match(/^[a-f0-9]{32}$/)) {
+        console.log(`[API] Received domain name "${zoneId}" instead of zone ID, searching for correct zone`);
+        // Search for the zone by domain name
+        const zonesResponse = await cloudflare.getZones(1, 100); // Get up to 100 zones
+        zone = zonesResponse.zones.find(z => z.name === zoneId);
+
+        if (!zone) {
+          return NextResponse.json({
+            error: `Zone not found for domain "${zoneId}". Available zones: ${zonesResponse.zones.map(z => z.name).join(', ')}`
+          }, { status: 404 });
+        }
+
+        console.log(`[API] Found zone ID "${zone.id}" for domain "${zoneId}"`);
+      } else {
+        // Use as zone ID directly
+        zone = await cloudflare.getZone(zoneId);
+      }
+
       const result = await cloudflare.getDomainStatuses(1, 1, [zone]);
       return NextResponse.json(result);
     } else {

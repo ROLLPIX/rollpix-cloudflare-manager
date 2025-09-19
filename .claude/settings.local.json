@@ -36,7 +36,14 @@
       "Bash(start http://localhost:3003)",
       "Bash(start http://localhost:3002)",
       "Bash(rd:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(npx playwright test:*)",
+      "Bash(start http://localhost:3000)",
+      "Bash(netstat:*)",
+      "Bash(claude doctor)",
+      "Bash(del:*)",
+      "Bash(timeout 60 npm run build)"
     ],
     "deny": [],
     "ask": []
