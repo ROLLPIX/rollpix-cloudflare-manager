@@ -37,6 +37,9 @@
 - `/api/security-mode` - Under Attack y Bot Fight Mode
 - `/api/security-rules` - CRUD de plantillas de reglas
 - `/api/domains/rules/[zoneId]` - Reglas específicas por zona
+- `/api/domains/rules/bulk-action-stream` - Operaciones masivas de reglas con streaming
+- `/api/domains/dns/bulk-action-stream` - Operaciones masivas DNS/proxy con streaming
+- `/api/domains/firewall/bulk-action-stream` - Operaciones masivas firewall con streaming
 - `/api/test-token` - Validación de permisos
 
 ## Cloudflare Integration
@@ -46,11 +49,80 @@
 ## Funcionalidades Principales
 - **Gestión visual de dominios**: Proxy controls, DNS management, security rules
 - **Sistema de reglas de seguridad**: Templates versionadas, aplicación masiva, detección de conflictos
+- **Sincronización inteligente de plantillas**: Auto-detección, versionado por fecha, propagación automática
 - **Under Attack y Bot Fight Mode**: Control completo desde UI
 - **Filtrado y ordenamiento**: Real-time search, smart sorting por estado
 - **Cache inteligente**: Persistencia + performance optimizada
 
 ## Lógica de Negocio
+
+### Sistema de Sincronización de Plantillas de Reglas (v3.1.0)
+
+**Flujo unificado para refresh individual y global:**
+
+#### **Proceso de Sincronización Completa**
+1. **Lectura desde Cloudflare**: Obtener todas las reglas del dominio/zona
+2. **Comparación directa**: `rule.description` vs `template.name` (case insensitive)
+3. **Clasificación automática**:
+
+**Caso 1 - Nueva Regla (descripción no existe):**
+```typescript
+if (!existingTemplate) {
+  // Crear nueva plantilla con versión 1.0
+  const newTemplate = createTemplate({
+    name: rule.description,
+    version: "1.0",
+    expression: rule.expression,
+    action: rule.action
+  });
+}
+```
+
+**Caso 2 - Regla Existente con Cambios:**
+```typescript
+if (existingTemplate && (rule.expression !== template.expression || rule.action !== template.action)) {
+  const ruleDate = new Date(rule.lastModified);
+  const templateDate = new Date(template.updatedAt);
+
+  if (ruleDate > templateDate) {
+    // Caso 2.1: Regla más nueva → Actualizar plantilla
+    template.version = incrementVersion(template.version); // 1.0 → 1.1
+    template.expression = rule.expression;
+    template.action = rule.action;
+
+    // Propagar: otros dominios quedan desactualizados automáticamente
+    await markOtherDomainsAsOutdated(template.id, newVersion);
+
+  } else {
+    // Caso 2.2: Regla más vieja → Asignar versión anterior
+    const olderVersion = decrementVersion(template.version); // 1.0 → 0.9
+    domain.assignedVersion = olderVersion;
+    domain.isOutdated = true;
+  }
+}
+```
+
+**Caso 3 - Regla Idéntica:**
+```typescript
+if (rule.expression === template.expression && rule.action === template.action) {
+  // Asignar plantilla actual sin cambios
+  domain.assignedTemplate = template;
+  domain.assignedVersion = template.version;
+  domain.isOutdated = false;
+}
+```
+
+#### **Versionado Inteligente**
+- **Versiones nuevas**: `1.0 → 1.1 → 1.2 → 2.0` (incremento automático)
+- **Versiones viejas**: `1.0 → 0.9`, `1.5 → 0.5` (para reglas anteriores)
+- **Detección de desactualización**: Comparación `domainVersion !== templateVersion`
+
+#### **Propagación Automática**
+Cuando una plantilla se actualiza (Caso 2.1):
+1. Incrementar versión de plantilla principal
+2. Marcar todos los dominios que usan esa plantilla como `isOutdated: true`
+3. Actualizar cache global (`domains-cache.json`, `rule-id-mapping.json`)
+4. Invalidar cache para forzar refresh visual
 
 ### Detección de Estado de Proxy
 ```typescript
@@ -66,7 +138,7 @@ interface DomainStatus {
 
 ### Priorización Visual
 1. **🔴 Sin proxy con registros**: Necesita atención inmediata
-2. **⚫ Sin registros**: Requiere configuración inicial  
+2. **⚫ Sin registros**: Requiere configuración inicial
 3. **🟢 Con proxy**: Funcionando correctamente
 
 ### Gestión de Rate Limiting
@@ -539,7 +611,63 @@ if (parsed) {
 }
 ```
 
-### Changelog Reciente (v3.0.0 - 2025-01-17) 🏗️ **ARCHITECTURAL REFACTORING**
+### Changelog Reciente (v3.2.0 - 2025-01-20) 🚀 **UNIFIED STREAMING PROGRESS SYSTEM**
+
+#### 🆕 **Sistema de Progreso Unificado para Operaciones Masivas**
+- ✅ **NEW**: Sistema de streaming en tiempo real para todas las operaciones masivas
+- ✅ **NEW**: Modal de progreso unificado para DNS, Firewall y Reglas
+- ✅ **NEW**: Feature flags de desarrollo para testing incremental
+- ✅ **NEW**: Manejo inteligente de dominios sin registros DNS
+- ✅ **NEW**: Operaciones cancelables con AbortController
+
+#### 🎛️ **Feature Flags para Desarrollo Seguro**
+```typescript
+// Controles de desarrollo en UI
+const [useNewDNSModal, setUseNewDNSModal] = useState(false);      // DNS/Proxy operations
+const [useNewFirewallModal, setUseNewFirewallModal] = useState(false); // Under Attack/Bot Fight
+
+// Feature flags visibles en UI para testing
+☐ Modal DNS      - Activa modal de progreso para operaciones proxy
+☐ Modal Firewall - Activa modal de progreso para Under Attack/Bot Fight
+```
+
+#### 📊 **Nuevos Endpoints de Streaming**
+- **`/api/domains/dns/bulk-action-stream`** - Operaciones masivas de proxy DNS
+- **`/api/domains/firewall/bulk-action-stream`** - Under Attack Mode y Bot Fight Mode
+- **Server-Sent Events**: Progreso en tiempo real con cancelación
+- **Batch processing**: Límite de 5 dominios por batch con rate limiting
+
+#### 🛡️ **Estrategia Anti-Regresión Implementada**
+- **✅ Funcionalidad preservada**: Todas las operaciones originales funcionan igual por defecto
+- **✅ Desarrollo aditivo**: Nuevas funcionalidades NO reemplazan las existentes
+- **✅ Testing incremental**: Feature flags permiten activar/desactivar nueva funcionalidad
+- **✅ Fallback automático**: Desmarcar checkbox vuelve a funcionalidad original
+
+#### 🔧 **Mejoras en Manejo de Errores DNS**
+```typescript
+// Casos manejados correctamente:
+if (totalRecords === 0) {
+  result.success = true;
+  result.message = "Sin registros DNS (@ o www) - El dominio necesita registros A o CNAME para usar proxy";
+  return result;
+}
+```
+
+#### 📁 **Archivos Principales Modificados**
+- `src/app/api/domains/dns/bulk-action-stream/route.ts` - Nuevo endpoint DNS streaming
+- `src/app/api/domains/firewall/bulk-action-stream/route.ts` - Nuevo endpoint firewall streaming
+- `src/components/RulesActionBar.tsx` - Feature flags y integración modal
+- `src/hooks/useBulkOperation.ts` - Método `startCustomOperation` agregado
+- `src/lib/cloudflare.ts` - Método `updateZoneSetting` para firewall
+- `DEVELOPMENT-STRATEGY.md` - Estrategias anti-regresión documentadas
+
+#### 🧪 **Testing Strategy Implementada**
+1. **Feature Flags**: Control granular de nuevas funcionalidades
+2. **Desarrollo aditivo**: Nueva funcionalidad NO reemplaza existente
+3. **Fallback automático**: Checkbox OFF = funcionalidad original
+4. **Casos edge manejados**: Dominios sin DNS, permisos insuficientes, etc.
+
+### Changelog Anterior (v3.0.0 - 2025-01-17) 🏗️ **ARCHITECTURAL REFACTORING**
 
 #### 🆕 **Refactorización Arquitectónica Completa**
 - ✅ **REFACTOR**: Componentes monolíticos divididos en módulos especializados

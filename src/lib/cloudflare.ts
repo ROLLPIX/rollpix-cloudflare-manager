@@ -257,6 +257,77 @@ export class CloudflareAPI {
     };
   }
 
+  async updateZoneSetting(zoneId: string, setting: string, value: any): Promise<boolean> {
+    try {
+      if (setting === 'security_level') {
+        // For Under Attack Mode
+        const response = await this.makeRequest<any>(`/zones/${zoneId}/settings/security_level`, {
+          method: 'PATCH',
+          body: JSON.stringify({ value })
+        });
+        return !!response?.success;
+      } else if (setting === 'bot_fight_mode') {
+        // For Bot Fight Mode - try official API first
+        try {
+          // Get current configuration
+          const getCurrentResponse = await this.makeRequest<any>(`/zones/${zoneId}/bot_management`);
+
+          if (getCurrentResponse?.success && getCurrentResponse.result) {
+            // Update with Bot Fight Mode settings
+            const updateConfig = {
+              fight_mode: value,
+              enable_js: value,
+              // Include existing Super Bot Fight Mode settings if they exist
+              ...(getCurrentResponse.result.sbfm_likely_automated && {
+                sbfm_likely_automated: value ? 'challenge' : 'allow'
+              }),
+              ...(getCurrentResponse.result.sbfm_definitely_automated && {
+                sbfm_definitely_automated: value ? 'block' : 'allow'
+              }),
+              ...(getCurrentResponse.result.sbfm_verified_bots && {
+                sbfm_verified_bots: 'allow'
+              })
+            };
+
+            const updateResponse = await this.makeRequest<any>(`/zones/${zoneId}/bot_management`, {
+              method: 'PUT',
+              body: JSON.stringify(updateConfig)
+            });
+
+            return !!updateResponse?.success;
+          }
+        } catch (error) {
+          console.warn(`Bot Management API failed for zone ${zoneId}, trying fallback methods...`);
+        }
+
+        // Fallback methods for accounts without Bot Management API access
+        const fallbackEndpoints = ['bot_fight_mode', 'bfm', 'challenge_passage'];
+
+        for (const settingName of fallbackEndpoints) {
+          try {
+            const fallbackResponse = await this.makeRequest<any>(`/zones/${zoneId}/settings/${settingName}`, {
+              method: 'PATCH',
+              body: JSON.stringify({ value: value ? 'on' : 'off' })
+            });
+
+            if (fallbackResponse?.success) {
+              return true;
+            }
+          } catch (fallbackError) {
+            continue;
+          }
+        }
+
+        return false;
+      }
+
+      return false;
+    } catch (error) {
+      console.error(`Error updating zone setting ${setting} for zone ${zoneId}:`, error);
+      return false;
+    }
+  }
+
   // Helper function to calculate rule version based on date comparison
   private calculateRuleVersion(rule: CloudflareRule, template: any): { version: string; status: 'active' | 'outdated' | 'newer' } {
     // Get dates for comparison
@@ -1262,9 +1333,11 @@ export class CloudflareAPI {
           hasExpression: !!rule.expression
         });
 
-        // Skip if already a template rule
-        if (isTemplateRule(rule.description || '')) {
-          console.log(`[CloudflareAPI] Skipping template rule: ${rule.description}`);
+        // Skip if already a template rule by checking rule mapping
+        const { isTemplateRule: isTemplateRuleById } = await import('@/lib/ruleMapping');
+        const isAlreadyTemplate = await isTemplateRuleById(rule.id);
+        if (isAlreadyTemplate) {
+          console.log(`[CloudflareAPI] Skipping already mapped template rule: ${rule.description}`);
           skippedRules.push(rule.description || 'No description');
           continue;
         }
@@ -1277,14 +1350,20 @@ export class CloudflareAPI {
         );
 
         if (!existingTemplate) {
-          // CASO 1: Nueva regla (descripción no existe) - Solo si es regla de seguridad válida
-          const isCommonSecurityRule = ruleDescription.toLowerCase().includes('waf') ||
-                                      ruleDescription.toLowerCase().includes('security') ||
-                                      ruleDescription.toLowerCase().includes('protection') ||
-                                      /\b(block|challenge|allow|log)\b.*\b(bot|spam|attack|threat|malware)\b/i.test(ruleDescription) ||
-                                      /\b(cf\.client\.bot|http\.user_agent|ip\.geoip\.country)\b/i.test(rule.expression || '');
+          // CASO 1: Nueva regla (descripción no existe) - Create template for ANY rule with valid description and expression
+          const hasValidContent = ruleDescription.trim().length > 0 &&
+                                  (rule.expression || '').trim().length > 0 &&
+                                  rule.action;
 
-          if (isCommonSecurityRule) {
+          console.log(`[CloudflareAPI] Rule validation:`, {
+            description: ruleDescription,
+            hasDescription: ruleDescription.trim().length > 0,
+            hasExpression: (rule.expression || '').trim().length > 0,
+            hasAction: !!rule.action,
+            hasValidContent
+          });
+
+          if (hasValidContent) {
             console.log(`[CloudflareAPI] CASE 1: Creating new template for "${ruleDescription}"`);
 
             const friendlyId = generateNextFriendlyId([...existingTemplates, ...importedTemplates]);
@@ -1309,8 +1388,8 @@ export class CloudflareAPI {
             importedTemplates.push(newTemplate);
             console.log(`[CloudflareAPI] ✅ Created new template ${friendlyId} v${newTemplate.version}`);
           } else {
-            console.log(`[CloudflareAPI] Skipping non-security rule: ${ruleDescription}`);
-            skippedRules.push(ruleDescription || 'Non-security rule');
+            console.log(`[CloudflareAPI] Skipping invalid rule (missing description, expression, or action): ${ruleDescription}`);
+            skippedRules.push(ruleDescription || 'Invalid rule content');
           }
         } else {
           // CASO 2: Regla existente - verificar si hay cambios

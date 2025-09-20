@@ -10,6 +10,9 @@ import { Loader2, Plus, Minus, Trash2, Play, Shield, ShieldOff, Siren, Bot } fro
 import { toast } from 'sonner';
 import { RuleTemplate } from '@/types/cloudflare';
 import { tokenStorage } from '@/lib/tokenStorage';
+import { BulkOperationProgressModal } from './BulkOperationProgressModal';
+import { useBulkOperation } from '@/hooks/useBulkOperation';
+import { useDomainStore } from '@/store/domainStore';
 
 interface RulesActionBarProps {
   selectedDomains: string[]; // Zone IDs of selected domains
@@ -20,16 +23,33 @@ interface RulesActionBarProps {
   onBulkBotFight?: (enabled: boolean) => Promise<void>;
 }
 
-type ActionType = 'add' | 'remove' | 'clean-custom' | 'clean';
+type ActionType = 'add' | 'remove' | 'clean' | 'proxy' | 'underAttack' | 'botFight';
 
 export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSelectedDomains, onBulkProxy, onBulkUnderAttack, onBulkBotFight }: RulesActionBarProps) {
   const [action, setAction] = useState<ActionType>('add');
   const [selectedRules, setSelectedRules] = useState<string[]>([]);
   const [templates, setTemplates] = useState<RuleTemplate[]>([]);
   const [loading, setLoading] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [confirmationMessage, setConfirmationMessage] = useState<string>('');
-  const [pendingAction, setPendingAction] = useState<(() => Promise<void>) | null>(null);
+  const [showProgressModal, setShowProgressModal] = useState(false);
+  const [useNewDNSModal, setUseNewDNSModal] = useState(false); // Feature flag for DNS modal
+  const [useNewFirewallModal, setUseNewFirewallModal] = useState(false); // Feature flag for firewall modal
+
+  const apiToken = tokenStorage.getToken() || '';
+  const { allDomains } = useDomainStore();
+
+  const bulkOperation = useBulkOperation({
+    endpoint: '/api/domains/rules/bulk-action-stream',
+    apiToken,
+    onComplete: (summary) => {
+      toast.success(`Operación completada: ${summary.successful} éxitos, ${summary.failed} errores`);
+      if (onRefreshSelectedDomains) {
+        onRefreshSelectedDomains(selectedDomains);
+      }
+    },
+    onError: (error) => {
+      toast.error(`Error en la operación: ${error}`);
+    }
+  });
 
   useEffect(() => {
     loadTemplates();
@@ -47,6 +67,11 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
     }
   };
 
+  const getDomainName = (zoneId: string): string => {
+    const domain = allDomains.find(d => d.zoneId === zoneId);
+    return domain?.domain || zoneId;
+  };
+
   const handleActionChange = (newAction: ActionType) => {
     setAction(newAction);
     setSelectedRules([]);
@@ -60,67 +85,26 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
     );
   };
 
-  const getConfirmationMessage = () => {
+  const getModalTitle = () => {
     const domainCount = selectedDomains?.length || 0;
     const ruleCount = selectedRules?.length || 0;
+    const isEnabled = selectedRules.includes('enabled');
 
     switch (action) {
       case 'add':
-        return `Se van a agregar ${ruleCount} reglas a ${domainCount} dominios seleccionados`;
+        return `Agregar ${ruleCount} reglas a ${domainCount} dominios`;
       case 'remove':
-        return `Se van a eliminar ${ruleCount} reglas de ${domainCount} dominios seleccionados`;
-      case 'clean-custom':
-        return `Se van a eliminar todas las reglas personalizadas de ${domainCount} dominios seleccionados`;
+        return `Eliminar ${ruleCount} reglas de ${domainCount} dominios`;
       case 'clean':
-        return `Se van a eliminar todas las reglas de ${domainCount} dominios seleccionados`;
+        return `Limpiar todas las reglas de ${domainCount} dominios`;
+      case 'proxy':
+        return `${isEnabled ? 'Habilitar' : 'Deshabilitar'} proxy en ${domainCount} dominios`;
+      case 'underAttack':
+        return `${isEnabled ? 'Activar' : 'Desactivar'} Under Attack Mode en ${domainCount} dominios`;
+      case 'botFight':
+        return `${isEnabled ? 'Activar' : 'Desactivar'} Bot Fight Mode en ${domainCount} dominios`;
       default:
-        return '';
-    }
-  };
-
-  const handleRulesAction = async () => {
-    const apiToken = tokenStorage.getToken();
-    if (!apiToken) {
-      toast.error('API Token no encontrado.');
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const response = await fetch('/api/domains/rules/bulk-action', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-token': apiToken
-        },
-        body: JSON.stringify({
-          action,
-          selectedRules,
-          targetZoneIds: selectedDomains,
-          preview: false
-        })
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        const { summary } = result.data;
-        toast.success(`Acción completada: ${summary.successful}/${summary.total} exitosos`);
-
-        // Refresh only affected domains instead of all domains
-        if (onRefreshSelectedDomains) {
-          await onRefreshSelectedDomains(selectedDomains);
-        }
-
-      } else {
-        toast.error('Error al ejecutar acción');
-      }
-    } catch (error) {
-      console.error('Error executing action:', error);
-      toast.error('Error al ejecutar acción');
-    } finally {
-      setLoading(false);
-      setShowConfirmation(false);
+        return 'Operación masiva';
     }
   };
 
@@ -130,22 +114,61 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
       toast.error('Selecciona al menos un dominio');
       return;
     }
-    if (action !== 'clean' && action !== 'clean-custom' && (!selectedRules || selectedRules.length === 0)) {
+    if (action !== 'clean' && (!selectedRules || selectedRules.length === 0)) {
       toast.error('Selecciona al menos una regla');
       return;
     }
 
-    const message = getConfirmationMessage();
-    setConfirmationMessage(message);
-    setPendingAction(() => () => handleRulesAction());
-    setShowConfirmation(true);
+    // Initialize domains for the progress modal
+    const domains = selectedDomains.map(zoneId => ({
+      zoneId,
+      domainName: getDomainName(zoneId)
+    }));
+
+    bulkOperation.initializeDomains(domains);
+    setShowProgressModal(true);
   };
 
-  const executeConfirmedAction = async () => {
-    if (pendingAction) {
-      await pendingAction();
-      setPendingAction(null);
+  const handleStartOperation = async () => {
+    if (action === 'proxy') {
+      // DNS operations using new streaming system
+      const endpoint = '/api/domains/dns/bulk-action-stream';
+      const payload = {
+        action: selectedRules.includes('enabled') ? 'enable_proxy' : 'disable_proxy',
+        targetDomains: selectedDomains.map(zoneId => ({
+          zoneId,
+          domainName: getDomainName(zoneId)
+        }))
+      };
+      await bulkOperation.startCustomOperation(endpoint, payload);
+    } else if (action === 'underAttack' || action === 'botFight') {
+      // Firewall operations using new streaming system
+      const endpoint = '/api/domains/firewall/bulk-action-stream';
+      const actionMap = {
+        underAttack: selectedRules.includes('enabled') ? 'enable_under_attack' : 'disable_under_attack',
+        botFight: selectedRules.includes('enabled') ? 'enable_bot_fight' : 'disable_bot_fight'
+      };
+      const payload = {
+        action: actionMap[action as keyof typeof actionMap],
+        targetDomains: selectedDomains.map(zoneId => ({
+          zoneId,
+          domainName: getDomainName(zoneId)
+        }))
+      };
+      await bulkOperation.startCustomOperation(endpoint, payload);
+    } else {
+      // Rules operations with existing streaming system
+      await bulkOperation.startOperation({
+        action,
+        selectedRules,
+        targetZoneIds: selectedDomains
+      });
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowProgressModal(false);
+    bulkOperation.resetOperation();
   };
 
   const handleBulkAction = (actionType: 'proxy' | 'underAttack' | 'botFight', enabled: boolean) => {
@@ -160,38 +183,67 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
       botFight: enabled ? 'activar Bot Fight Mode' : 'desactivar Bot Fight Mode'
     }[actionType];
 
-    const message = `Se va a ${actionName} en ${selectedDomains.length} dominios seleccionados`;
-    setConfirmationMessage(message);
+    // Check if we should use the new modal for DNS operations
+    if (actionType === 'proxy' && useNewDNSModal) {
+      // Use new modal system for DNS operations
+      const domains = selectedDomains.map(zoneId => ({
+        zoneId,
+        domainName: getDomainName(zoneId)
+      }));
 
-    const actionFunction = async () => {
-      try {
-        setLoading(true);
-        switch (actionType) {
-          case 'proxy':
-            if (onBulkProxy) await onBulkProxy(enabled);
-            break;
-          case 'underAttack':
-            if (onBulkUnderAttack) await onBulkUnderAttack(enabled);
-            break;
-          case 'botFight':
-            if (onBulkBotFight) await onBulkBotFight(enabled);
-            break;
+      bulkOperation.initializeDomains(domains);
+      setShowProgressModal(true);
+
+      // Store the action type and enabled state for the operation
+      setAction('proxy');
+      setSelectedRules(enabled ? ['enabled'] : ['disabled']);
+      return;
+    }
+
+    // Check if we should use the new modal for firewall operations
+    if ((actionType === 'underAttack' || actionType === 'botFight') && useNewFirewallModal) {
+      // Use new modal system for firewall operations
+      const domains = selectedDomains.map(zoneId => ({
+        zoneId,
+        domainName: getDomainName(zoneId)
+      }));
+
+      bulkOperation.initializeDomains(domains);
+      setShowProgressModal(true);
+
+      // Store the action type and enabled state for the operation
+      setAction(actionType);
+      setSelectedRules(enabled ? ['enabled'] : ['disabled']);
+      return;
+    }
+
+    // Use the original callback functions (that already work) for all other operations
+    if (confirm(`¿Confirma ${actionName} en ${selectedDomains.length} dominios seleccionados?`)) {
+      (async () => {
+        try {
+          setLoading(true);
+          switch (actionType) {
+            case 'proxy':
+              if (onBulkProxy) await onBulkProxy(enabled);
+              break;
+            case 'underAttack':
+              if (onBulkUnderAttack) await onBulkUnderAttack(enabled);
+              break;
+            case 'botFight':
+              if (onBulkBotFight) await onBulkBotFight(enabled);
+              break;
+          }
+        } finally {
+          setLoading(false);
         }
-      } finally {
-        setLoading(false);
-        setShowConfirmation(false);
-      }
-    };
-
-    setPendingAction(() => () => actionFunction());
-    setShowConfirmation(true);
+      })();
+    }
   };
 
   const getActionIcon = () => {
     switch (action) {
       case 'add': return <Plus className="h-4 w-4" />;
       case 'remove': return <Minus className="h-4 w-4" />;
-      case 'clean-custom': return <Trash2 className="h-4 w-4" />;
       case 'clean': return <Trash2 className="h-4 w-4" />;
     }
   };
@@ -200,7 +252,6 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
     switch (action) {
       case 'add': return 'Agregar Reglas';
       case 'remove': return 'Eliminar Reglas';
-      case 'clean-custom': return 'Eliminar Custom';
       case 'clean': return 'Limpiar Todas';
     }
   };
@@ -214,6 +265,28 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
       <div className="flex items-center gap-4 p-4 bg-muted rounded-lg border">
         <div className="text-sm font-medium">
           {selectedDomains.length} dominios seleccionados
+        </div>
+
+        {/* Development toggles for new modals */}
+        <div className="flex gap-3 text-xs">
+          <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={useNewDNSModal}
+              onChange={(e) => setUseNewDNSModal(e.target.checked)}
+              className="w-3 h-3"
+            />
+            Modal DNS
+          </label>
+          <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={useNewFirewallModal}
+              onChange={(e) => setUseNewFirewallModal(e.target.checked)}
+              className="w-3 h-3"
+            />
+            Modal Firewall
+          </label>
         </div>
         
         <Separator orientation="vertical" className="h-6" />
@@ -236,12 +309,6 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
                   Eliminar
                 </div>
               </SelectItem>
-              <SelectItem value="clean-custom">
-                <div className="flex items-center gap-2">
-                  <Trash2 className="h-4 w-4" />
-                  Eliminar Custom
-                </div>
-              </SelectItem>
               <SelectItem value="clean">
                 <div className="flex items-center gap-2">
                   <Trash2 className="h-4 w-4" />
@@ -251,7 +318,7 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
             </SelectContent>
           </Select>
 
-          {action !== 'clean' && action !== 'clean-custom' && (
+          {action !== 'clean' && (
             <div className="flex items-center gap-1 flex-wrap">
               {templates.map((template) => {
                 const friendlyId = template.friendlyId || template.name.match(/^(\d+)-/)?.[1]?.padStart(2, '0').replace(/^/, 'R') || `R${templates.indexOf(template) + 1}`.padStart(3, '0');
@@ -271,7 +338,7 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
 
           <Button
             onClick={handleConfirmAction}
-            disabled={loading || (action !== 'clean' && action !== 'clean-custom' && selectedRules.length === 0)}
+            disabled={loading || (action !== 'clean' && selectedRules.length === 0)}
             className="ml-2"
           >
             {loading ? (
@@ -410,33 +477,19 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
         )}
       </div>
 
-      {showConfirmation && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Confirmar Acción</h3>
-            <p className="text-gray-600 mb-6">{confirmationMessage}</p>
-            <div className="flex gap-3 justify-end">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowConfirmation(false);
-                  setPendingAction(null);
-                }}
-                disabled={loading}
-              >
-                Cancelar
-              </Button>
-              <Button
-                onClick={executeConfirmedAction}
-                disabled={loading}
-              >
-                {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                Confirmar
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <BulkOperationProgressModal
+        isOpen={showProgressModal}
+        onClose={handleCloseModal}
+        title={getModalTitle()}
+        domains={bulkOperation.domains}
+        onStart={handleStartOperation}
+        onCancel={bulkOperation.cancelOperation}
+        canCancel={bulkOperation.canCancel}
+        progress={bulkOperation.progress}
+        isStarted={bulkOperation.isStarted}
+        isCompleted={bulkOperation.isCompleted}
+        summary={bulkOperation.summary}
+      />
     </>
   );
 }
