@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CloudflareAPI } from '@/lib/cloudflare';
-import { DomainStatus, RuleTemplate } from '@/types/cloudflare';
+import { DomainStatus, RuleTemplate, CloudflareRule } from '@/types/cloudflare';
 import { safeReadJsonFile, safeWriteJsonFile } from '@/lib/fileSystem';
+import { TemplateSynchronizer, SyncResult } from '@/lib/templateSync';
+import { BatchCacheWriter, PendingChanges } from '@/lib/batchCacheWriter';
 
 const DOMAIN_CACHE_FILE = 'domains-cache.json';
 const RULES_TEMPLATES_FILE = 'security-rules-templates.json';
@@ -78,9 +80,10 @@ export async function POST(request: NextRequest) {
       console.log(`[Complete API] Will process ${targetZoneIds.length} total zones`);
     }
 
-    console.log(`[Complete API] Processing ${targetZoneIds.length} zones with unified strategy`);
+    console.log(`[Complete API] Processing ${targetZoneIds.length} zones with batch synchronization`);
 
     const results: DomainStatus[] = [];
+    const allSyncResults: SyncResult[] = [];
     const BATCH_SIZE = 12; // Optimal batch size for parallel processing
     const BATCH_DELAY = 200; // Delay between batches (ms)
 
@@ -96,16 +99,23 @@ export async function POST(request: NextRequest) {
       page++;
     }
 
-    // Process zones in batches with unified domain info gathering
+    // NUEVA LÓGICA GLOBAL: Recopilar todas las reglas primero, procesar globalmente después
+    console.log(`[Complete API] 🔄 PHASE 1: Collecting all rules from ${targetZoneIds.length} zones`);
+
+    // FASE 1: Recopilar información básica de dominios y reglas
+    const domainRulesMap = new Map<string, {
+      rules: CloudflareRule[];
+      domainInfo: { zoneId: string; name: string };
+      basicDomainInfo?: DomainStatus;
+    }>();
+
     for (let i = 0; i < targetZoneIds.length; i += BATCH_SIZE) {
       const batch = targetZoneIds.slice(i, i + BATCH_SIZE);
       const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
       const totalBatches = Math.ceil(targetZoneIds.length / BATCH_SIZE);
 
-      const batchStartTime = Date.now();
-      console.log(`[Complete API] 🚀 Processing unified batch ${batchNumber}/${totalBatches} (${batch.length} zones)`);
+      console.log(`[Complete API] 📥 Collecting batch ${batchNumber}/${totalBatches} (${batch.length} zones)`);
 
-      // Process batch in parallel using unified function
       const batchPromises = batch.map(async (zoneId: string) => {
         const zone = allZonesMap.get(zoneId);
         if (!zone) {
@@ -114,49 +124,38 @@ export async function POST(request: NextRequest) {
         }
 
         try {
-          // Use unified function to get complete domain info
-          const completeDomainInfo = await cloudflareAPI.getCompleteDomainInfo(
+          // Get basic domain info (DNS + security settings)
+          const basicDomainInfo = await cloudflareAPI.getCompleteDomainInfo(zoneId, zone.name, new Map());
+
+          // Get rules for this domain
+          const rulesData = await cloudflareAPI.getZoneSecurityRules(zoneId);
+
+          return {
             zoneId,
-            zone.name,
-            templateVersionMap
-          );
-
-          // Fill in template names for applied rules
-          if (completeDomainInfo.securityRules && templatesCache.templates.length > 0) {
-            // This would be done in a more efficient way in real implementation
-            // For now, we'll leave the names empty as they're not critical for summary view
-          }
-
-          console.log(`[Complete API] ✅ ${zone.name}: Unified processing complete`);
-          return completeDomainInfo;
+            zone,
+            basicDomainInfo,
+            rulesData
+          };
 
         } catch (error) {
-          console.error(`[Complete API] Error processing zone ${zoneId} (${zone.name}):`, error);
+          console.error(`[Complete API] Error collecting data for zone ${zoneId} (${zone.name}):`, error);
           return null;
         }
       });
 
       const batchResults = await Promise.allSettled(batchPromises);
-      const batchDuration = Date.now() - batchStartTime;
 
-      // Collect successful results and save to cache progressively
-      let successfulInBatch = 0;
       for (const result of batchResults) {
         if (result.status === 'fulfilled' && result.value) {
-          results.push(result.value);
-          successfulInBatch++;
+          const { zoneId, zone, basicDomainInfo, rulesData } = result.value;
 
-          // Save to cache immediately for progressive updates
-          try {
-            await saveDomainsCache([result.value]);
-            console.log(`[Complete API] 💾 Cached domain: ${result.value.domain}`);
-          } catch (cacheError) {
-            console.warn(`[Complete API] Failed to cache domain ${result.value.domain}:`, cacheError);
-          }
+          domainRulesMap.set(zoneId, {
+            rules: rulesData,
+            domainInfo: { zoneId, name: zone.name },
+            basicDomainInfo
+          });
         }
       }
-
-      console.log(`[Complete API] ⏱️ Batch ${batchNumber}/${totalBatches} completed in ${batchDuration}ms (${successfulInBatch}/${batch.length} successful)`);
 
       // Rate limiting delay between batches
       if (i + BATCH_SIZE < targetZoneIds.length) {
@@ -164,6 +163,72 @@ export async function POST(request: NextRequest) {
         await new Promise(resolve => setTimeout(resolve, BATCH_DELAY));
       }
     }
+
+    console.log(`[Complete API] ✅ Collected data from ${domainRulesMap.size} domains`);
+
+    // FASE 2: Procesamiento global de plantillas
+    console.log(`[Complete API] 🔄 PHASE 2: Global template synchronization`);
+
+    const synchronizer = new TemplateSynchronizer();
+    const simplifiedMap = new Map<string, { rules: CloudflareRule[]; domainInfo: { zoneId: string; name: string } }>();
+
+    for (const [zoneId, data] of domainRulesMap) {
+      simplifiedMap.set(zoneId, {
+        rules: data.rules,
+        domainInfo: data.domainInfo
+      });
+    }
+
+    const globalSyncResults = await synchronizer.syncRulesGlobally(simplifiedMap);
+
+    // FASE 3: Combinar resultados con información de dominios
+    console.log(`[Complete API] 🔄 PHASE 3: Combining results with domain info`);
+
+    for (const [zoneId, data] of domainRulesMap) {
+      const syncResult = globalSyncResults.get(zoneId);
+      const basicDomainInfo = data.basicDomainInfo;
+
+      if (!syncResult || !basicDomainInfo) {
+        console.warn(`[Complete API] Missing sync result or basic info for zone ${zoneId}`);
+        continue;
+      }
+
+      // Combine basic domain info with sync results
+      const completeDomainInfo: DomainStatus = {
+        ...basicDomainInfo,
+        securityRules: {
+          totalRules: syncResult.processedRules.length,
+          corporateRules: syncResult.processedRules.length, // All rules are now template rules
+          customRules: 0, // Removed custom rules tracking
+          hasConflicts: syncResult.processedRules.some(r => r.isOutdated),
+          lastAnalyzed: new Date().toISOString(),
+          templateRules: syncResult.processedRules.map(r => ({
+            friendlyId: r.friendlyId,
+            version: r.version,
+            isOutdated: r.isOutdated,
+            name: r.friendlyId // Use friendlyId as name for now
+          }))
+        }
+      };
+
+      results.push(completeDomainInfo);
+      allSyncResults.push(syncResult);
+
+      console.log(`[Complete API] ✅ ${data.domainInfo.name}: Global sync complete (${syncResult.processedRules.length} rules, ${syncResult.processedRules.filter(r => r.isOutdated).length} outdated)`);
+    }
+
+    // BATCH PROCESSING: Apply all accumulated changes atomically
+    console.log(`[Complete API] 🔄 Applying batch changes from ${allSyncResults.length} sync operations...`);
+    const allPendingChanges = allSyncResults.map(sr => sr.pendingChanges);
+    const batchWriter = BatchCacheWriter.getInstance();
+    const batchResult = await batchWriter.applyChanges(allPendingChanges);
+
+    console.log(`[Complete API] ✅ Batch processing complete:`, {
+      ruleMappingsUpdated: batchResult.ruleMappingsUpdated,
+      templatesUpdated: batchResult.templatesUpdated,
+      propagatedDomains: batchResult.propagatedDomains.length,
+      success: batchResult.success
+    });
 
     // Final cache save with all results
     console.log(`[Complete API] 💾 Saving final cache with ${results.length} complete domains...`);
@@ -178,102 +243,35 @@ export async function POST(request: NextRequest) {
     const totalCustomRules = 0; // No longer tracking custom rules
     const domainsWithConflicts = results.filter(d => d.securityRules?.hasConflicts).length;
 
-    // Auto-detect and import templates from collected rules
-    console.log(`[Complete API] 🔍 Starting auto template import process...`);
+    // Template processing statistics from batch results
+    const totalNewTemplates = allSyncResults.reduce((sum, sr) => sum + sr.newTemplates.length, 0);
+    const totalUpdatedTemplates = allSyncResults.reduce((sum, sr) => sum + sr.updatedTemplates.length, 0);
+    const allNewTemplates = allSyncResults.flatMap(sr => sr.newTemplates);
+    const allUpdatedTemplates = allSyncResults.flatMap(sr => sr.updatedTemplates);
 
-    // Collect all rules from processed domains for template detection
-    const allCollectedRules: any[] = [];
-    for (const domain of results) {
-      if (domain.securityRules?.templateRules) {
-        // Add template rules with domain context
-        for (const templateRule of domain.securityRules.templateRules) {
-          allCollectedRules.push({
-            ...templateRule,
-            domainName: domain.domain,
-            zoneId: domain.zoneId
-          });
-        }
-      }
+    const templateImportResult = {
+      imported: totalNewTemplates,
+      updated: totalUpdatedTemplates,
+      skipped: 0, // Not tracked in new system
+      propagatedDomains: batchResult.propagatedDomains.length,
+      newTemplates: allNewTemplates.map(t => ({
+        id: t.id,
+        friendlyId: t.friendlyId,
+        name: t.name,
+        version: t.version
+      })),
+      updatedTemplates: allUpdatedTemplates.map(t => ({
+        id: t.id,
+        friendlyId: t.friendlyId,
+        name: t.name,
+        version: t.version
+      }))
+    };
 
-      // Note: customRules is a count, not an array, so we can't iterate over individual custom rules
-      // For template auto-detection, we would need to collect rules during the processing phase
-      // This is a limitation of the current implementation
-    }
-
-    console.log(`[Complete API] Collected ${allCollectedRules.length} total rules for template auto-detection`);
-
-    // Perform auto template import if we have rules to analyze
-    let templateImportResult = null;
-    if (allCollectedRules.length > 0) {
-      try {
-        const importResult = await cloudflareAPI.autoImportTemplates(allCollectedRules, templatesCache.templates);
-
-        if (importResult.importedTemplates.length > 0 || importResult.updatedTemplates.length > 0) {
-          console.log(`[Complete API] 📝 Template auto-import successful:`, {
-            imported: importResult.importedTemplates.length,
-            updated: importResult.updatedTemplates.length,
-            skipped: importResult.skippedRules.length
-          });
-
-          // Save updated templates to cache
-          const updatedTemplatesCache: RulesTemplatesCache = {
-            templates: [
-              ...templatesCache.templates,
-              ...importResult.importedTemplates
-            ].map(template => {
-              // Update existing templates with new versions
-              const updated = importResult.updatedTemplates.find(ut => ut.id === template.id);
-              return updated || template;
-            }),
-            lastUpdated: new Date().toISOString()
-          };
-
-          await safeWriteJsonFile(RULES_TEMPLATES_FILE, updatedTemplatesCache);
-          console.log(`[Complete API] 💾 Updated templates cache with auto-imported templates`);
-
-          templateImportResult = {
-            imported: importResult.importedTemplates.length,
-            updated: importResult.updatedTemplates.length,
-            skipped: importResult.skippedRules.length,
-            newTemplates: importResult.importedTemplates.map(t => ({
-              id: t.id,
-              friendlyId: t.friendlyId,
-              name: t.name,
-              version: t.version
-            }))
-          };
-        } else {
-          console.log(`[Complete API] ℹ️ No new templates detected during auto-import`);
-          templateImportResult = {
-            imported: 0,
-            updated: 0,
-            skipped: importResult.skippedRules.length,
-            newTemplates: []
-          };
-        }
-      } catch (importError) {
-        console.error(`[Complete API] ❌ Error during template auto-import:`, importError);
-        templateImportResult = {
-          imported: 0,
-          updated: 0,
-          skipped: 0,
-          error: importError instanceof Error ? importError.message : 'Unknown error'
-        };
-      }
-    } else {
-      console.log(`[Complete API] ℹ️ No rules collected for template auto-detection`);
-      templateImportResult = {
-        imported: 0,
-        updated: 0,
-        skipped: 0,
-        newTemplates: []
-      };
-    }
-
-    console.log(`[Complete API] ✅ Unified processing complete! ${totalProcessed}/${totalRequested} domains (${successRate}% success rate)`);
+    console.log(`[Complete API] ✅ Batch processing complete! ${totalProcessed}/${totalRequested} domains (${successRate}% success rate)`);
     console.log(`[Complete API] 📊 Rules summary: ${totalRules} total (${totalTemplateRules} template, ${totalCustomRules} custom)`);
     console.log(`[Complete API] ⚠️ Conflicts: ${domainsWithConflicts} domains with outdated template rules`);
-    console.log(`[Complete API] 🔄 Auto template import: ${templateImportResult.imported} imported, ${templateImportResult.updated} updated`);
+    console.log(`[Complete API] 🔄 Template sync: ${templateImportResult.imported} new, ${templateImportResult.updated} updated, ${templateImportResult.propagatedDomains} propagated`);
 
     return NextResponse.json({
       success: true,
@@ -291,17 +289,23 @@ export async function POST(request: NextRequest) {
           domainsWithConflicts: domainsWithConflicts,
           processedBatches: Math.ceil(totalRequested / BATCH_SIZE),
           batchSize: BATCH_SIZE,
-          unifiedProcessing: true, // Flag to indicate unified processing was used
-          templateAutoImport: templateImportResult
+          batchProcessing: true, // Flag to indicate batch processing was used
+          templateSynchronization: templateImportResult,
+          batchResults: {
+            ruleMappingsUpdated: batchResult.ruleMappingsUpdated,
+            templatesUpdated: batchResult.templatesUpdated,
+            propagatedDomains: batchResult.propagatedDomains.length,
+            success: batchResult.success
+          }
         }
       }
     });
 
   } catch (error) {
-    console.error('Error in unified domain processing:', error);
+    console.error('Error in batch domain processing:', error);
     return NextResponse.json({
       success: false,
-      error: 'Failed to process domains with unified strategy'
+      error: 'Failed to process domains with batch synchronization'
     }, { status: 500 });
   }
 }

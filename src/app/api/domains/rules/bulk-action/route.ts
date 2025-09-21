@@ -42,14 +42,14 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    if (!['add', 'remove', 'clean', 'clean-custom'].includes(action)) {
+    if (!['add', 'remove', 'clean'].includes(action)) {
       return NextResponse.json({
         success: false,
-        error: 'Action must be add, remove, clean, or clean-custom'
+        error: 'Action must be add, remove, or clean'
       }, { status: 400 });
     }
 
-    if (action !== 'clean' && action !== 'clean-custom' && (!selectedRules || selectedRules.length === 0)) {
+    if (action !== 'clean' && (!selectedRules || selectedRules.length === 0)) {
       return NextResponse.json({
         success: false,
         error: 'Selected rules are required for add/remove actions'
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       return zoneId; // Already a valid zone ID
     });
 
-    const results: Array<{
+    const operationResults: Array<{
       zoneId: string;
       domainName: string;
       success: boolean;
@@ -90,150 +90,165 @@ export async function POST(request: NextRequest) {
       conflicts?: any[];
     }> = [];
 
-    // Process each target zone (now using validated zone IDs)
-    for (const zoneId of validatedZoneIds) {
-      const domainName = zoneMap.get(zoneId) || zoneId;
-      const result = {
-        zoneId,
-        domainName,
-        success: false,
-        error: undefined as string | undefined,
-        message: '',
-        conflicts: [] as any[]
-      };
+    console.log(`[BulkAction] Processing ${validatedZoneIds.length} zones in parallel batches (action: ${action})`);
 
-      try {
-        if (action === 'clean') {
-          // Clean all rules
-          if (!preview) {
-            const cleanResult = await cloudflareAPI.removeAllRules(zoneId);
-            result.success = cleanResult.success;
-            result.message = cleanResult.message;
-          } else {
-            // Preview: just get current rules count
-            const existingRules = await cloudflareAPI.getZoneSecurityRules(zoneId);
-            result.success = true;
-            result.message = `Will remove ${existingRules.length} rules`;
-          }
-        } else if (action === 'add') {
-          // Add selected rules
-          let addedCount = 0;
-          let skippedCount = 0;
-          const messages: string[] = [];
+    // Process zones in parallel batches for better performance
+    const BATCH_SIZE = 5; // Conservative batch size to respect rate limits
+    const batchPromises: Promise<Array<{
+      zoneId: string;
+      domainName: string;
+      success: boolean;
+      error?: string;
+      message: string;
+      conflicts?: any[];
+    }>>[] = [];
 
-          for (const friendlyId of selectedRules) {
-            const template = templatesCache.templates.find(t => t.friendlyId === friendlyId);
-            if (!template) {
-              messages.push(`Template ${friendlyId} not found`);
-              continue;
-            }
+    for (let i = 0; i < validatedZoneIds.length; i += BATCH_SIZE) {
+      const batchZoneIds = validatedZoneIds.slice(i, i + BATCH_SIZE);
 
+      const batchPromise = Promise.all(batchZoneIds.map(async (zoneId: string) => {
+        const domainName = zoneMap.get(zoneId) || zoneId;
+        const result = {
+          zoneId,
+          domainName,
+          success: false,
+          error: undefined as string | undefined,
+          message: '',
+          conflicts: [] as any[]
+        };
 
+        try {
+          if (action === 'clean') {
+            // Clean all rules
             if (!preview) {
-              const applyResult = await cloudflareAPI.applyTemplateRule(zoneId, template);
+              const cleanResult = await cloudflareAPI.removeAllRules(zoneId);
+              result.success = cleanResult.success;
+              result.message = cleanResult.message;
+            } else {
+              // Preview: just get current rules count
+              const existingRules = await cloudflareAPI.getZoneSecurityRules(zoneId);
+              result.success = true;
+              result.message = `Will remove ${existingRules.length} rules`;
+            }
+          } else if (action === 'add') {
+            // Add selected rules
+            let addedCount = 0;
+            let skippedCount = 0;
+            const messages: string[] = [];
 
-              if (applyResult.success) {
+            for (const friendlyId of selectedRules) {
+              const template = templatesCache.templates.find(t => t.friendlyId === friendlyId);
+              if (!template) {
+                messages.push(`Template ${friendlyId} not found`);
+                continue;
+              }
 
-                if (applyResult.action === 'added' || applyResult.action === 'updated') {
-                  addedCount++;
+              if (!preview) {
+                const applyResult = await cloudflareAPI.applyTemplateRule(zoneId, template);
+
+                if (applyResult.success) {
+                  if (applyResult.action === 'added' || applyResult.action === 'updated') {
+                    addedCount++;
+                  } else {
+                    skippedCount++;
+                  }
+                  messages.push(applyResult.message);
                 } else {
-                  skippedCount++;
+                  messages.push(`Failed to apply ${friendlyId}: ${applyResult.message}`);
                 }
-                messages.push(applyResult.message);
               } else {
-                messages.push(`Failed to apply ${friendlyId}: ${applyResult.message}`);
-              }
-            } else {
-              // Preview: check for conflicts
-              const existingRules = await cloudflareAPI.getZoneSecurityRules(zoneId);
-              const hasConflict = existingRules.some(rule => 
-                rule.description?.includes(`#${friendlyId}v`)
-              );
-              
-              if (hasConflict) {
-                result.conflicts!.push({
-                  friendlyId,
-                  type: 'update_existing'
-                });
-                messages.push(`${friendlyId} will be updated (rule exists)`);
-              } else {
-                messages.push(`${friendlyId} will be added (new rule)`);
-              }
-              addedCount++;
-            }
-          }
+                // Preview: check for conflicts
+                const existingRules = await cloudflareAPI.getZoneSecurityRules(zoneId);
+                const hasConflict = existingRules.some(rule =>
+                  rule.description?.includes(`#${friendlyId}v`)
+                );
 
-          result.success = true;
-          result.message = preview
-            ? `Will process ${selectedRules.length} rules`
-            : `Added: ${addedCount}, Skipped: ${skippedCount}`;
-
-
-        } else if (action === 'remove') {
-          // Remove selected rules
-          let removedCount = 0;
-          const messages: string[] = [];
-
-          for (const friendlyId of selectedRules) {
-            if (!preview) {
-              const removeResult = await cloudflareAPI.removeTemplateRule(zoneId, friendlyId);
-              if (removeResult.success && removeResult.removedRuleId) {
-                removedCount++;
-              }
-              messages.push(removeResult.message);
-            } else {
-              // Preview: check if rule exists
-              const existingRules = await cloudflareAPI.getZoneSecurityRules(zoneId);
-              const hasRule = existingRules.some(rule => 
-                rule.description?.includes(`#${friendlyId}v`)
-              );
-              
-              if (hasRule) {
-                messages.push(`${friendlyId} will be removed`);
-                removedCount++;
-              } else {
-                messages.push(`${friendlyId} not found`);
+                if (hasConflict) {
+                  result.conflicts!.push({
+                    friendlyId,
+                    type: 'update_existing'
+                  });
+                  messages.push(`${friendlyId} will be updated (rule exists)`);
+                } else {
+                  messages.push(`${friendlyId} will be added (new rule)`);
+                }
+                addedCount++;
               }
             }
-          }
 
-          result.success = true;
-          result.message = preview
-            ? `Will remove ${removedCount} rules`
-            : `Removed: ${removedCount}`;
-        } else if (action === 'clean-custom') {
-          // Clean only custom rules (non-template rules)
-          if (!preview) {
-            const cleanResult = await cloudflareAPI.removeCustomRules(zoneId);
-            result.success = cleanResult.success;
-            result.message = cleanResult.message;
-          } else {
-            // Preview: get custom rules count
-            const { customRules } = await cloudflareAPI.getCategorizedZoneRules(zoneId);
             result.success = true;
-            result.message = `Will remove ${customRules.length} custom rules`;
+            result.message = preview
+              ? `Will process ${selectedRules.length} rules`
+              : `Added: ${addedCount}, Skipped: ${skippedCount}`;
+
+          } else if (action === 'remove') {
+            // Remove selected rules
+            let removedCount = 0;
+            const messages: string[] = [];
+
+            for (const friendlyId of selectedRules) {
+              if (!preview) {
+                const removeResult = await cloudflareAPI.removeTemplateRule(zoneId, friendlyId);
+                if (removeResult.success && removeResult.removedRuleId) {
+                  removedCount++;
+                }
+                messages.push(removeResult.message);
+              } else {
+                // Preview: check if rule exists
+                const existingRules = await cloudflareAPI.getZoneSecurityRules(zoneId);
+                const hasRule = existingRules.some(rule =>
+                  rule.description?.includes(`#${friendlyId}v`)
+                );
+
+                if (hasRule) {
+                  messages.push(`${friendlyId} will be removed`);
+                  removedCount++;
+                } else {
+                  messages.push(`${friendlyId} not found`);
+                }
+              }
+            }
+
+            result.success = true;
+            result.message = preview
+              ? `Will remove ${removedCount} rules`
+              : `Removed: ${removedCount}`;
           }
+
+        } catch (error) {
+          result.success = false;
+          result.error = error instanceof Error ? error.message : 'Unknown error';
+          result.message = `Failed: ${result.error}`;
         }
 
-      } catch (error) {
-        result.success = false;
-        result.error = error instanceof Error ? error.message : 'Unknown error';
-        result.message = `Failed: ${result.error}`;
-      }
+        return result;
+      }));
 
-      results.push(result);
+      batchPromises.push(batchPromise);
+
+      // Add delay between batches to respect rate limits
+      if (i + BATCH_SIZE < validatedZoneIds.length) {
+        await new Promise(resolve => setTimeout(resolve, 300)); // 300ms delay between batches
+      }
     }
+
+    // Wait for all batches to complete and flatten results
+    const batchResults = await Promise.all(batchPromises);
+    const results = batchResults.flat();
+
+    // Add to operationResults
+    operationResults.push(...results);
 
     // Calculate summary
     const summary = {
-      total: results.length,
-      successful: results.filter(r => r.success).length,
-      failed: results.filter(r => !r.success).length,
-      conflicts: results.reduce((sum, r) => sum + (r.conflicts?.length || 0), 0)
+      total: operationResults.length,
+      successful: operationResults.filter(r => r.success).length,
+      failed: operationResults.filter(r => !r.success).length,
+      conflicts: operationResults.reduce((sum, r) => sum + (r.conflicts?.length || 0), 0)
     };
 
     // If any rules were actually removed/cleaned and it's not a preview, refresh affected domains
-    if (!preview && summary.successful > 0 && (action === 'remove' || action === 'clean' || action === 'clean-custom')) {
+    if (!preview && summary.successful > 0 && (action === 'remove' || action === 'clean')) {
       console.log(`[BulkAction] Refreshing affected domains after ${action} operation on ${summary.successful} domains`);
 
       // Refresh each affected domain individually to update cache
@@ -260,7 +275,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        results,
+        results: operationResults,
         summary,
         preview,
         action

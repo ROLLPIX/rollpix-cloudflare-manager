@@ -32,7 +32,8 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
   const [loading, setLoading] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [useNewDNSModal, setUseNewDNSModal] = useState(false); // Feature flag for DNS modal
-  const [useNewFirewallModal, setUseNewFirewallModal] = useState(false); // Feature flag for firewall modal
+  const [useNewFirewallModal, setUseNewFirewallModal] = useState(true); // Feature flag for firewall modal
+  const [useNewRulesModal, setUseNewRulesModal] = useState(true); // Feature flag for rules modal with 3 phases
 
   const apiToken = tokenStorage.getToken() || '';
   const { allDomains } = useDomainStore();
@@ -42,8 +43,28 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
     apiToken,
     onComplete: (summary) => {
       toast.success(`Operación completada: ${summary.successful} éxitos, ${summary.failed} errores`);
-      if (onRefreshSelectedDomains) {
+
+      // For new modal operations, use domain store refresh for seamless cache integration
+      if ((action === 'underAttack' || action === 'botFight') && useNewFirewallModal) {
+        // Firewall operations using new modal
+        const { refreshMultipleDomains, clearDomainSelection } = useDomainStore.getState();
+        refreshMultipleDomains(selectedDomains);
+        // Clear selection after refresh so all domains are visible
+        setTimeout(() => clearDomainSelection(), 500);
+      } else if ((action === 'add' || action === 'remove' || action === 'clean') && useNewRulesModal) {
+        // Rules operations using new modal with 3 phases
+        const { refreshMultipleDomains, clearDomainSelection } = useDomainStore.getState();
+        refreshMultipleDomains(selectedDomains);
+        // Clear selection after refresh so all domains are visible
+        setTimeout(() => clearDomainSelection(), 500);
+      } else if (onRefreshSelectedDomains) {
+        // Fallback to callback for legacy operations
         onRefreshSelectedDomains(selectedDomains);
+        // Also clear selection for legacy operations
+        setTimeout(() => {
+          const { clearDomainSelection } = useDomainStore.getState();
+          clearDomainSelection();
+        }, 500);
       }
     },
     onError: (error) => {
@@ -156,8 +177,17 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
         }))
       };
       await bulkOperation.startCustomOperation(endpoint, payload);
+    } else if ((action === 'add' || action === 'remove' || action === 'clean') && useNewRulesModal) {
+      // Rules operations using new 3-phase streaming system
+      const endpoint = '/api/domains/rules/bulk-action-stream';
+      const payload = {
+        action,
+        selectedRules,
+        targetZoneIds: selectedDomains
+      };
+      await bulkOperation.startCustomOperation(endpoint, payload);
     } else {
-      // Rules operations with existing streaming system
+      // Legacy rules operations with existing streaming system
       await bulkOperation.startOperation({
         action,
         selectedRules,
@@ -489,6 +519,7 @@ export function RulesActionBar({ selectedDomains, onClearSelection, onRefreshSel
         isStarted={bulkOperation.isStarted}
         isCompleted={bulkOperation.isCompleted}
         summary={bulkOperation.summary}
+        phase={bulkOperation.phase}
       />
     </>
   );

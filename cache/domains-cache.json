@@ -35,7 +35,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-08-20T04:00:07.047508Z",
-        "modified_on": "2025-09-18T08:24:28.538441Z"
+        "modified_on": "2025-09-20T08:22:35.441774Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -45,14 +45,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:22.122Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.995Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -92,7 +92,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-10-04T16:40:46.311908Z",
-        "modified_on": "2025-09-18T08:24:30.498245Z"
+        "modified_on": "2025-09-20T08:22:37.394798Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -102,14 +102,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:22.257Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.995Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -147,7 +147,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-17T00:50:04.827595Z",
-        "modified_on": "2025-09-18T08:24:32.470463Z"
+        "modified_on": "2025-09-20T08:22:39.332593Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -157,14 +157,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:22.048Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.995Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -204,7 +204,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-08T20:40:15.752143Z",
-        "modified_on": "2025-09-18T08:24:34.382264Z"
+        "modified_on": "2025-09-20T08:22:41.29896Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -214,14 +214,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:22.133Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.995Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -250,7 +250,7 @@
         "type": "CNAME",
         "content": "bordoli.com.ar",
         "proxiable": true,
-        "proxied": true,
+        "proxied": false,
         "ttl": 1,
         "settings": {
           "flatten_cname": false
@@ -259,24 +259,24 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-09-14T14:51:48.709059Z",
-        "modified_on": "2025-09-18T08:24:36.42171Z"
+        "modified_on": "2025-09-20T20:17:32.360762Z"
       },
       "rootProxied": false,
-      "wwwProxied": true,
+      "wwwProxied": false,
       "underAttackMode": false,
       "botFightMode": false,
       "securityRules": {
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:22.087Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.995Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -299,7 +299,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:12:34.036208Z",
-        "modified_on": "2025-09-19T03:36:45.053315Z"
+        "modified_on": "2025-09-20T20:17:31.495192Z"
       },
       "wwwRecord": {
         "id": "1cc6dafed8eed7808a35133f8e4a3fe2",
@@ -316,19 +316,26 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:12:34.035644Z",
-        "modified_on": "2025-09-19T03:36:52.650695Z"
+        "modified_on": "2025-09-20T20:17:32.332855Z"
       },
       "rootProxied": false,
       "wwwProxied": false,
       "underAttackMode": false,
       "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
+        "totalRules": 1,
+        "corporateRules": 1,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-19T04:10:21.942Z",
-        "templateRules": []
+        "lastAnalyzed": "2025-09-21T00:28:49.995Z",
+        "templateRules": [
+          {
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
+          }
+        ]
       }
     },
     {
@@ -349,7 +356,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:04:22.543318Z",
-        "modified_on": "2025-09-19T03:36:29.188841Z"
+        "modified_on": "2025-09-20T20:17:31.502739Z"
       },
       "wwwRecord": {
         "id": "1759634b565710919bb077da0dccc760",
@@ -366,19 +373,26 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-17T15:04:22.553763Z",
-        "modified_on": "2025-09-19T03:36:37.196261Z"
+        "modified_on": "2025-09-20T20:17:32.392866Z"
       },
       "rootProxied": false,
       "wwwProxied": false,
       "underAttackMode": false,
       "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
+        "totalRules": 1,
+        "corporateRules": 1,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-19T04:10:22.046Z",
-        "templateRules": []
+        "lastAnalyzed": "2025-09-21T00:28:49.995Z",
+        "templateRules": [
+          {
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
+          }
+        ]
       }
     },
     {
@@ -414,7 +428,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-05-05T08:55:10.286725Z",
-        "modified_on": "2025-09-18T08:24:42.059839Z"
+        "modified_on": "2025-09-20T08:22:49.54014Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -424,14 +438,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:22.062Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.995Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -460,26 +474,33 @@
         "type": "A",
         "content": "190.64.98.104",
         "proxiable": true,
-        "proxied": true,
+        "proxied": false,
         "ttl": 1,
         "settings": {},
         "meta": {},
         "comment": null,
         "tags": [],
         "created_on": "2024-09-18T22:12:22.88951Z",
-        "modified_on": "2025-09-18T08:24:44.21599Z"
+        "modified_on": "2025-09-20T20:17:35.242607Z"
       },
       "rootProxied": false,
-      "wwwProxied": true,
+      "wwwProxied": false,
       "underAttackMode": false,
       "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
+        "totalRules": 1,
+        "corporateRules": 1,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-19T04:10:22.057Z",
-        "templateRules": []
+        "lastAnalyzed": "2025-09-21T00:28:49.995Z",
+        "templateRules": [
+          {
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
+          }
+        ]
       }
     },
     {
@@ -491,26 +512,33 @@
         "type": "A",
         "content": "190.64.98.104",
         "proxiable": true,
-        "proxied": true,
+        "proxied": false,
         "ttl": 1,
         "settings": {},
         "meta": {},
         "comment": null,
         "tags": [],
         "created_on": "2024-09-18T22:09:45.344247Z",
-        "modified_on": "2025-09-18T08:24:46.055993Z"
+        "modified_on": "2025-09-20T20:17:34.476542Z"
       },
       "rootProxied": false,
-      "wwwProxied": true,
+      "wwwProxied": false,
       "underAttackMode": false,
       "botFightMode": false,
       "securityRules": {
-        "totalRules": 0,
-        "corporateRules": 0,
+        "totalRules": 1,
+        "corporateRules": 1,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-19T04:10:22.031Z",
-        "templateRules": []
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
+        "templateRules": [
+          {
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
+          }
+        ]
       }
     },
     {
@@ -546,7 +574,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-12T21:32:37.703779Z",
-        "modified_on": "2025-09-18T08:24:47.952756Z"
+        "modified_on": "2025-09-20T08:22:55.404025Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -556,14 +584,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:21.920Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -601,7 +629,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-01-25T15:57:04.809306Z",
-        "modified_on": "2025-09-18T08:24:50.099181Z"
+        "modified_on": "2025-09-20T08:22:57.282639Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -611,14 +639,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:22.004Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -656,7 +684,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-04-06T18:15:04.392398Z",
-        "modified_on": "2025-09-18T08:24:52.031138Z"
+        "modified_on": "2025-09-20T08:22:59.178331Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -666,14 +694,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.866Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -709,7 +737,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-02-28T14:44:05.267294Z",
-        "modified_on": "2025-09-18T08:24:53.92984Z"
+        "modified_on": "2025-09-20T08:23:01.222048Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -719,14 +747,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.715Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -764,7 +792,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-14T18:05:25.55251Z",
-        "modified_on": "2025-09-18T08:24:55.983665Z"
+        "modified_on": "2025-09-20T08:23:03.264351Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -774,14 +802,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.759Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -821,7 +849,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-07-17T17:37:16.790088Z",
-        "modified_on": "2025-09-18T08:24:58.094307Z"
+        "modified_on": "2025-09-20T08:23:05.24413Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -831,14 +859,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.718Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -874,7 +902,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-07-17T17:29:08.915797Z",
-        "modified_on": "2025-09-18T08:25:00.067513Z"
+        "modified_on": "2025-09-20T08:23:07.519739Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -884,14 +912,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.740Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -929,7 +957,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-10-03T12:58:25.620419Z",
-        "modified_on": "2025-09-18T08:25:06.186603Z"
+        "modified_on": "2025-09-20T08:23:09.45706Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -939,14 +967,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.780Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -986,7 +1014,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-11-01T00:31:14.443878Z",
-        "modified_on": "2025-09-18T08:25:08.209985Z"
+        "modified_on": "2025-09-20T08:23:11.976391Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -996,14 +1024,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.959Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1041,7 +1069,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-01-24T17:22:12.787862Z",
-        "modified_on": "2025-09-18T08:25:11.422801Z"
+        "modified_on": "2025-09-20T08:23:13.944986Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1051,14 +1079,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.568Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1098,7 +1126,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-09T23:10:45.113789Z",
-        "modified_on": "2025-09-18T08:25:13.394452Z"
+        "modified_on": "2025-09-20T08:23:16.199967Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1108,14 +1136,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:26.455Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.996Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1155,7 +1183,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-08-30T19:43:47.669012Z",
-        "modified_on": "2025-09-18T08:25:15.396675Z"
+        "modified_on": "2025-09-20T08:23:18.348551Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1165,14 +1193,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.502Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.997Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1212,7 +1240,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-07-06T01:24:35.477312Z",
-        "modified_on": "2025-09-18T08:25:17.276198Z"
+        "modified_on": "2025-09-20T08:23:20.341735Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -1222,14 +1250,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.734Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.997Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1267,7 +1295,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-07T19:50:45.729097Z",
-        "modified_on": "2025-09-18T08:25:19.210353Z"
+        "modified_on": "2025-09-20T08:23:22.417186Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1277,14 +1305,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:25.663Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.998Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1322,7 +1350,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-15T19:34:03.881628Z",
-        "modified_on": "2025-09-18T08:25:21.249422Z"
+        "modified_on": "2025-09-20T08:23:24.311736Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1332,14 +1360,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:30.036Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.998Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1353,16 +1381,16 @@
         "type": "A",
         "content": "15.235.80.3",
         "proxiable": true,
-        "proxied": true,
+        "proxied": false,
         "ttl": 1,
         "settings": {},
         "meta": {},
         "comment": null,
         "tags": [],
         "created_on": "2024-01-29T19:11:01.608099Z",
-        "modified_on": "2024-11-04T04:11:05.799312Z"
+        "modified_on": "2025-09-20T20:17:34.431939Z"
       },
-      "rootProxied": true,
+      "rootProxied": false,
       "wwwProxied": false,
       "underAttackMode": false,
       "botFightMode": false,
@@ -1370,14 +1398,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:29.649Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.998Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1417,7 +1445,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-07-18T19:09:04.036486Z",
-        "modified_on": "2025-09-18T08:25:24.620131Z"
+        "modified_on": "2025-09-20T08:23:27.893318Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -1427,14 +1455,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:30.094Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.998Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1472,7 +1500,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-22T23:12:08.842634Z",
-        "modified_on": "2025-09-18T08:25:26.503391Z"
+        "modified_on": "2025-09-20T08:23:30.286055Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1482,14 +1510,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:29.602Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.998Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1529,7 +1557,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-02-14T16:39:12.421424Z",
-        "modified_on": "2025-09-18T08:25:28.487326Z"
+        "modified_on": "2025-09-20T08:23:32.227474Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -1539,14 +1567,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:29.851Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.998Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1584,7 +1612,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-05-18T18:27:47.959205Z",
-        "modified_on": "2025-09-18T08:25:30.413934Z"
+        "modified_on": "2025-09-20T08:23:34.486679Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1594,14 +1622,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:29.788Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.999Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1639,7 +1667,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-08-31T18:43:15.752505Z",
-        "modified_on": "2025-09-18T08:25:32.33829Z"
+        "modified_on": "2025-09-20T08:23:36.485879Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1649,14 +1677,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:29.863Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.999Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1694,7 +1722,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-03-28T21:17:44.230472Z",
-        "modified_on": "2025-09-18T08:25:34.332785Z"
+        "modified_on": "2025-09-20T08:23:38.740452Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1704,14 +1732,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:30.012Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.999Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1751,7 +1779,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-09-13T13:42:10.971036Z",
-        "modified_on": "2025-09-18T08:25:36.258231Z"
+        "modified_on": "2025-09-20T08:23:40.879577Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1761,14 +1789,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:29.953Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.999Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1806,7 +1834,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-08-26T02:42:38.038177Z",
-        "modified_on": "2025-09-18T08:25:38.203501Z"
+        "modified_on": "2025-09-20T08:23:42.726311Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1816,14 +1844,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:29.796Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.999Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1863,7 +1891,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-08-22T14:29:01.29443Z",
-        "modified_on": "2025-09-18T08:25:40.255686Z"
+        "modified_on": "2025-09-20T08:23:44.889847Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1873,14 +1901,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:29.756Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.999Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1918,7 +1946,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-03-22T23:48:34.131337Z",
-        "modified_on": "2025-09-18T08:25:42.333923Z"
+        "modified_on": "2025-09-20T08:23:46.746871Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1928,14 +1956,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:30.060Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.999Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -1975,7 +2003,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-05-18T22:56:32.004271Z",
-        "modified_on": "2025-09-18T08:25:44.792419Z"
+        "modified_on": "2025-09-20T08:23:49.116923Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -1985,14 +2013,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:33.329Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:49.999Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2009,7 +2037,7 @@
         "corporateRules": 0,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-19T04:10:33.703Z",
+        "lastAnalyzed": "2025-09-21T00:28:49.999Z",
         "templateRules": []
       }
     },
@@ -2022,7 +2050,7 @@
         "type": "CNAME",
         "content": "ishop2.rollpix.com",
         "proxiable": true,
-        "proxied": true,
+        "proxied": false,
         "ttl": 1,
         "settings": {
           "flatten_cname": false
@@ -2031,9 +2059,9 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-05-05T15:27:27.887727Z",
-        "modified_on": "2025-05-05T15:27:27.887727Z"
+        "modified_on": "2025-09-20T20:17:34.622127Z"
       },
-      "rootProxied": true,
+      "rootProxied": false,
       "wwwProxied": false,
       "underAttackMode": false,
       "botFightMode": false,
@@ -2041,14 +2069,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:33.570Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.000Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2088,7 +2116,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-02T18:45:42.722314Z",
-        "modified_on": "2025-09-18T08:25:49.403192Z"
+        "modified_on": "2025-09-20T08:23:53.752324Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2098,14 +2126,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:33.816Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.000Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2143,7 +2171,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-15T00:24:24.727057Z",
-        "modified_on": "2025-09-18T08:25:51.27233Z"
+        "modified_on": "2025-09-20T08:23:55.688692Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2153,14 +2181,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:33.737Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.000Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2198,7 +2226,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-06-09T16:33:15.757686Z",
-        "modified_on": "2025-09-18T08:25:53.511207Z"
+        "modified_on": "2025-09-20T08:23:57.964514Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2208,14 +2236,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:33.499Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.000Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2253,7 +2281,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-09-16T13:04:15.792137Z",
-        "modified_on": "2025-09-18T08:25:55.72666Z"
+        "modified_on": "2025-09-20T08:24:00.347111Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2263,14 +2291,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:33.238Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.000Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2308,7 +2336,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-08T13:36:30.139213Z",
-        "modified_on": "2025-09-18T08:25:57.753435Z"
+        "modified_on": "2025-09-20T08:24:02.706565Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2318,14 +2346,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:33.442Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.000Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2339,14 +2367,14 @@
         "type": "A",
         "content": "192.254.236.193",
         "proxiable": true,
-        "proxied": false,
+        "proxied": true,
         "ttl": 1,
         "settings": {},
         "meta": {},
         "comment": null,
         "tags": [],
         "created_on": "2025-09-08T15:30:25.206552Z",
-        "modified_on": "2025-09-08T15:30:48.909443Z"
+        "modified_on": "2025-09-20T20:04:27.69501Z"
       },
       "wwwRecord": {
         "id": "4b50f501103bbb107773ef66c39a3dcc",
@@ -2354,7 +2382,7 @@
         "type": "CNAME",
         "content": "iturrarte.com.ar",
         "proxiable": true,
-        "proxied": false,
+        "proxied": true,
         "ttl": 1,
         "settings": {
           "flatten_cname": false
@@ -2363,10 +2391,10 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-09-08T15:30:25.273219Z",
-        "modified_on": "2025-09-08T15:31:28.318404Z"
+        "modified_on": "2025-09-20T20:04:31.673946Z"
       },
-      "rootProxied": false,
-      "wwwProxied": false,
+      "rootProxied": true,
+      "wwwProxied": true,
       "underAttackMode": false,
       "botFightMode": false,
       "securityRules": {
@@ -2374,7 +2402,7 @@
         "corporateRules": 0,
         "customRules": 0,
         "hasConflicts": false,
-        "lastAnalyzed": "2025-09-19T04:10:32.426Z",
+        "lastAnalyzed": "2025-09-21T00:28:50.000Z",
         "templateRules": []
       }
     },
@@ -2413,7 +2441,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-06-25T15:55:02.355017Z",
-        "modified_on": "2025-09-18T08:25:59.683826Z"
+        "modified_on": "2025-09-20T08:24:04.744845Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -2423,14 +2451,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:33.718Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.000Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2468,7 +2496,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-09-04T15:37:59.518905Z",
-        "modified_on": "2025-09-18T08:26:01.706516Z"
+        "modified_on": "2025-09-20T08:24:06.829677Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2478,14 +2506,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:33.660Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.000Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2523,7 +2551,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-04-14T20:13:57.031814Z",
-        "modified_on": "2025-09-18T08:26:03.740613Z"
+        "modified_on": "2025-09-20T08:24:08.762525Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2533,14 +2561,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:33.610Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2578,7 +2606,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-08-27T15:11:58.631682Z",
-        "modified_on": "2025-09-18T08:26:05.639792Z"
+        "modified_on": "2025-09-20T08:24:10.908953Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2588,14 +2616,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.293Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2635,7 +2663,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-08-18T20:05:53.163898Z",
-        "modified_on": "2025-09-18T08:26:07.529305Z"
+        "modified_on": "2025-09-20T08:24:12.796208Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2645,14 +2673,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:36.954Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2690,7 +2718,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-14T13:41:54.243219Z",
-        "modified_on": "2025-09-18T08:26:09.436001Z"
+        "modified_on": "2025-09-20T08:24:14.626144Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2700,14 +2728,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.428Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2747,7 +2775,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-06-18T13:44:18.207412Z",
-        "modified_on": "2025-09-18T08:26:11.310948Z"
+        "modified_on": "2025-09-20T08:24:15.956497Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2757,14 +2785,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.163Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2802,7 +2830,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-04-24T14:14:47.674148Z",
-        "modified_on": "2025-09-18T08:26:13.158996Z"
+        "modified_on": "2025-09-20T08:24:17.293509Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -2812,14 +2840,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.330Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2859,7 +2887,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-05-29T00:31:06.043141Z",
-        "modified_on": "2025-09-18T08:26:15.092952Z"
+        "modified_on": "2025-09-20T08:24:18.478667Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2869,14 +2897,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.547Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2916,7 +2944,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-06-03T15:46:52.938099Z",
-        "modified_on": "2025-09-18T08:26:17.162889Z"
+        "modified_on": "2025-09-20T08:24:19.665558Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -2926,14 +2954,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.131Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -2971,7 +2999,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-08-28T15:58:49.366637Z",
-        "modified_on": "2025-09-18T08:26:19.277061Z"
+        "modified_on": "2025-09-20T08:24:21.157128Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -2981,14 +3009,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.217Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3026,7 +3054,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-04-09T18:16:49.31311Z",
-        "modified_on": "2025-09-18T08:26:21.196361Z"
+        "modified_on": "2025-09-20T08:24:22.546203Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3036,14 +3064,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.816Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3083,7 +3111,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-04-22T13:00:18.131743Z",
-        "modified_on": "2025-09-18T08:26:23.056791Z"
+        "modified_on": "2025-09-20T08:24:23.709495Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3093,14 +3121,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.410Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.001Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3140,7 +3168,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-06-26T19:03:48.698446Z",
-        "modified_on": "2025-09-18T08:26:24.967445Z"
+        "modified_on": "2025-09-20T08:24:25.32421Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -3150,14 +3178,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.774Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3197,7 +3225,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-29T13:43:37.288667Z",
-        "modified_on": "2025-09-18T08:26:26.869123Z"
+        "modified_on": "2025-09-20T08:24:26.386083Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3207,14 +3235,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:37.708Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3252,7 +3280,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-01-03T15:24:07.063418Z",
-        "modified_on": "2025-09-18T08:26:28.86671Z"
+        "modified_on": "2025-09-20T08:24:27.572686Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3262,14 +3290,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.591Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3307,7 +3335,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-03T17:48:33.518352Z",
-        "modified_on": "2025-09-18T08:26:30.739588Z"
+        "modified_on": "2025-09-20T08:24:28.547813Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3317,14 +3345,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.306Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3364,7 +3392,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-09-12T18:45:56.878243Z",
-        "modified_on": "2025-09-18T08:26:32.64175Z"
+        "modified_on": "2025-09-20T08:24:29.640768Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -3374,14 +3402,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.464Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3419,7 +3447,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-02-03T19:17:10.623224Z",
-        "modified_on": "2025-09-18T08:26:34.635605Z"
+        "modified_on": "2025-09-20T08:24:30.877619Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3429,14 +3457,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.520Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3474,7 +3502,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-01-29T03:36:59.903069Z",
-        "modified_on": "2025-09-18T08:26:36.436872Z"
+        "modified_on": "2025-09-20T08:24:32.025015Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3484,14 +3512,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.532Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3529,7 +3557,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-09-03T12:27:08.831446Z",
-        "modified_on": "2025-09-18T08:26:38.37757Z"
+        "modified_on": "2025-09-20T08:24:33.058668Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3539,14 +3567,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.429Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3584,7 +3612,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2022-03-17T15:06:40.387822Z",
-        "modified_on": "2025-09-18T08:26:40.292489Z"
+        "modified_on": "2025-09-20T08:24:34.455483Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3594,14 +3622,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.128Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3641,7 +3669,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-12-14T21:02:35.06967Z",
-        "modified_on": "2025-09-18T08:26:42.171532Z"
+        "modified_on": "2025-09-20T08:24:35.45552Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3651,14 +3679,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.082Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3698,7 +3726,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-04-03T20:52:12.409689Z",
-        "modified_on": "2025-09-18T08:26:44.051714Z"
+        "modified_on": "2025-09-20T08:24:36.797921Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3708,14 +3736,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.518Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.002Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3746,14 +3774,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.201Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3793,7 +3821,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-07T19:22:04.18351Z",
-        "modified_on": "2025-09-18T08:26:47.383118Z"
+        "modified_on": "2025-09-20T08:24:39.391858Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3803,14 +3831,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.636Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3850,7 +3878,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-01-04T18:34:51.104726Z",
-        "modified_on": "2025-09-18T08:26:49.467503Z"
+        "modified_on": "2025-09-20T08:24:40.716502Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3860,14 +3888,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:41.298Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3907,7 +3935,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-12-07T00:12:51.83001Z",
-        "modified_on": "2025-09-18T08:26:51.349915Z"
+        "modified_on": "2025-09-20T08:24:41.878244Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -3917,14 +3945,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:45.090Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3957,14 +3985,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:45.339Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -3980,14 +4008,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:44.927Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4027,7 +4055,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-05-27T13:00:22.746183Z",
-        "modified_on": "2025-09-18T08:26:56.034997Z"
+        "modified_on": "2025-09-20T08:24:45.275609Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -4037,14 +4065,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:44.996Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4084,7 +4112,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2017-08-09T03:02:10.079534Z",
-        "modified_on": "2025-09-18T08:26:57.856058Z"
+        "modified_on": "2025-09-20T08:24:46.271589Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -4094,14 +4122,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:45.137Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4139,7 +4167,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-06T14:12:23.534285Z",
-        "modified_on": "2025-09-18T08:26:59.884711Z"
+        "modified_on": "2025-09-20T08:24:47.614912Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4149,14 +4177,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:44.994Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4170,7 +4198,7 @@
         "type": "CNAME",
         "content": "ishop2.rollpix.com",
         "proxiable": true,
-        "proxied": true,
+        "proxied": false,
         "ttl": 1,
         "settings": {
           "flatten_cname": false
@@ -4179,9 +4207,9 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-05-05T15:32:02.243983Z",
-        "modified_on": "2025-05-05T15:32:02.243983Z"
+        "modified_on": "2025-09-20T20:17:32.388178Z"
       },
-      "rootProxied": true,
+      "rootProxied": false,
       "wwwProxied": false,
       "underAttackMode": false,
       "botFightMode": false,
@@ -4189,14 +4217,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:45.108Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4236,7 +4264,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-08-12T18:44:14.387431Z",
-        "modified_on": "2025-09-18T08:27:03.26463Z"
+        "modified_on": "2025-09-20T08:24:49.86429Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4246,14 +4274,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:45.185Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.003Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4269,14 +4297,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:45.164Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.004Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4292,14 +4320,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:44.811Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.004Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4339,7 +4367,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-01-12T16:10:24.299297Z",
-        "modified_on": "2025-09-18T08:27:07.850889Z"
+        "modified_on": "2025-09-20T08:24:53.768498Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4349,14 +4377,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:44.853Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.004Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4394,7 +4422,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-10-09T22:11:22.383459Z",
-        "modified_on": "2025-09-18T08:27:09.80193Z"
+        "modified_on": "2025-09-20T08:24:54.840422Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -4404,14 +4432,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:44.992Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.004Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4425,14 +4453,14 @@
         "type": "A",
         "content": "54.36.178.172",
         "proxiable": true,
-        "proxied": false,
+        "proxied": true,
         "ttl": 1,
         "settings": {},
         "meta": {},
         "comment": null,
         "tags": [],
         "created_on": "2019-01-29T19:08:11.186179Z",
-        "modified_on": "2025-02-04T20:45:54.238117Z"
+        "modified_on": "2025-09-20T20:04:21.467025Z"
       },
       "wwwRecord": {
         "id": "44048aa3de28bce8fe695b092bbee109",
@@ -4449,9 +4477,9 @@
         "comment": null,
         "tags": [],
         "created_on": "2018-11-21T20:48:36.986426Z",
-        "modified_on": "2025-09-18T08:27:11.620597Z"
+        "modified_on": "2025-09-20T08:24:55.976843Z"
       },
-      "rootProxied": false,
+      "rootProxied": true,
       "wwwProxied": true,
       "underAttackMode": false,
       "botFightMode": false,
@@ -4459,14 +4487,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.518Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.005Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4504,7 +4532,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-03-16T13:24:33.378372Z",
-        "modified_on": "2025-09-18T08:27:14.047233Z"
+        "modified_on": "2025-09-20T08:24:56.957273Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4514,14 +4542,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.430Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.005Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4559,7 +4587,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-24T15:51:03.518596Z",
-        "modified_on": "2025-09-18T08:27:16.30715Z"
+        "modified_on": "2025-09-20T08:24:58.290418Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4569,14 +4597,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.637Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.005Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4616,7 +4644,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-10-31T23:21:49.407185Z",
-        "modified_on": "2025-09-18T08:27:18.150411Z"
+        "modified_on": "2025-09-20T08:24:59.786936Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4626,14 +4654,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.839Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.005Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4673,7 +4701,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-11-22T23:40:25.644856Z",
-        "modified_on": "2025-09-18T08:27:20.093569Z"
+        "modified_on": "2025-09-20T08:25:05.069364Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4683,14 +4711,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.913Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.005Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4706,14 +4734,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.628Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.005Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4753,7 +4781,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2021-10-31T20:00:11.923423Z",
-        "modified_on": "2025-09-18T08:27:23.448403Z"
+        "modified_on": "2025-09-20T08:25:08.271186Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4763,14 +4791,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.683Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.005Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4810,7 +4838,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-17T20:12:04.272065Z",
-        "modified_on": "2025-09-18T08:27:25.452856Z"
+        "modified_on": "2025-09-20T08:25:09.406112Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4820,14 +4848,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.990Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.006Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4877,14 +4905,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.665Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.006Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4922,7 +4950,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-01-16T14:07:30.240158Z",
-        "modified_on": "2025-09-18T08:27:27.52536Z"
+        "modified_on": "2025-09-20T08:25:10.979402Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -4932,14 +4960,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.644Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.006Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -4977,7 +5005,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2025-03-13T14:50:46.456173Z",
-        "modified_on": "2025-09-18T08:27:29.489529Z"
+        "modified_on": "2025-09-20T08:25:12.324278Z"
       },
       "rootProxied": false,
       "wwwProxied": true,
@@ -4987,14 +5015,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.796Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.006Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5032,7 +5060,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-10-02T16:32:45.913754Z",
-        "modified_on": "2025-09-18T08:27:31.473478Z"
+        "modified_on": "2025-09-20T08:25:13.495231Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5042,14 +5070,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:48.608Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.006Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5087,7 +5115,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2019-12-20T15:32:16.880723Z",
-        "modified_on": "2025-09-18T08:27:33.322496Z"
+        "modified_on": "2025-09-20T08:25:14.914064Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5097,14 +5125,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.685Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.006Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5142,7 +5170,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-12-03T01:09:33.882644Z",
-        "modified_on": "2025-09-18T08:27:35.61438Z"
+        "modified_on": "2025-09-20T08:25:16.283019Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5152,14 +5180,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.585Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.006Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5197,7 +5225,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-09-25T21:30:19.782446Z",
-        "modified_on": "2025-09-18T08:27:37.734607Z"
+        "modified_on": "2025-09-20T08:25:17.478715Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5207,14 +5235,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.833Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.006Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5254,7 +5282,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-11-01T22:14:17.501654Z",
-        "modified_on": "2025-09-18T08:27:39.596058Z"
+        "modified_on": "2025-09-20T08:25:18.490264Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5264,14 +5292,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.507Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.007Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5302,14 +5330,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.662Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.007Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5347,7 +5375,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2020-07-02T18:43:44.276835Z",
-        "modified_on": "2025-09-18T08:27:43.557633Z"
+        "modified_on": "2025-09-20T08:25:21.548583Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5357,14 +5385,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.493Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.007Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5402,7 +5430,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-09-19T14:03:41.012238Z",
-        "modified_on": "2025-09-18T08:27:45.425349Z"
+        "modified_on": "2025-09-20T08:25:22.984919Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5412,14 +5440,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.392Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.007Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5450,14 +5478,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.894Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.007Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5505,14 +5533,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.402Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.007Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5552,7 +5580,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2024-10-30T17:50:50.431424Z",
-        "modified_on": "2025-09-18T08:27:49.075623Z"
+        "modified_on": "2025-09-20T08:25:25.12148Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5562,14 +5590,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.307Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.007Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5609,7 +5637,7 @@
         "comment": null,
         "tags": [],
         "created_on": "2023-08-08T17:31:43.039636Z",
-        "modified_on": "2025-09-18T08:27:51.028008Z"
+        "modified_on": "2025-09-20T08:25:26.089463Z"
       },
       "rootProxied": true,
       "wwwProxied": true,
@@ -5619,14 +5647,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.260Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.007Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5659,14 +5687,14 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:52.728Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.007Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
@@ -5716,19 +5744,19 @@
         "totalRules": 1,
         "corporateRules": 1,
         "customRules": 0,
-        "hasConflicts": true,
-        "lastAnalyzed": "2025-09-19T04:10:56.310Z",
+        "hasConflicts": false,
+        "lastAnalyzed": "2025-09-21T00:28:50.007Z",
         "templateRules": [
           {
-            "friendlyId": "R002",
-            "version": "0.9.0",
-            "isOutdated": true,
-            "name": "waf02"
+            "friendlyId": "R003",
+            "version": "1.9",
+            "isOutdated": false,
+            "name": "R003"
           }
         ]
       }
     }
   ],
-  "lastUpdate": "2025-09-19T04:10:56.315Z",
+  "lastUpdate": "2025-09-21T00:28:50.035Z",
   "totalCount": 109
 }

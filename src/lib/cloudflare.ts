@@ -1,6 +1,6 @@
 import { CloudflareZone, CloudflareDNSRecord, CloudflareApiResponse, DomainStatus, CloudflareRuleset, CloudflareRule, RuleTemplate } from '@/types/cloudflare';
 import { createCloudflareRuleName, parseCloudflareRuleName, isTemplateRule, compareVersions, isTemplateFormat, parseTemplateFormat, createTemplateFromRule, findTemplateByFriendlyId, generateNextFriendlyId } from './ruleUtils';
-import { addRuleMapping, removeRuleMapping, classifyRule, classifyRulesBatch } from './ruleMapping';
+import { addRuleMapping, removeRuleMapping, classifyRule, classifyRulesBatch, getCloudflareRuleId, getTemplateMappingByZoneAndFriendlyId } from './ruleMapping';
 
 const CLOUDFLARE_API_BASE = 'https://api.cloudflare.com/client/v4';
 
@@ -325,6 +325,63 @@ export class CloudflareAPI {
     } catch (error) {
       console.error(`Error updating zone setting ${setting} for zone ${zoneId}:`, error);
       return false;
+    }
+  }
+
+  async verifyZoneSetting(zoneId: string, setting: string, expectedValue: any, maxRetries: number = 5): Promise<boolean> {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        await new Promise(resolve => setTimeout(resolve, 2000 * attempt)); // Progressive delay
+
+        if (setting === 'security_level') {
+          const response = await this.makeRequest<any>(`/zones/${zoneId}/settings/security_level`);
+          if (response?.success && response.result?.value === expectedValue) {
+            console.log(`[Verification] Zone ${zoneId} security_level verified as ${expectedValue} on attempt ${attempt}`);
+            return true;
+          }
+        } else if (setting === 'bot_fight_mode') {
+          // Try to get current Bot Fight Mode status
+          const securitySettings = await this.getSecuritySettings(zoneId);
+          if (securitySettings.botFightMode === expectedValue) {
+            console.log(`[Verification] Zone ${zoneId} bot_fight_mode verified as ${expectedValue} on attempt ${attempt}`);
+            return true;
+          }
+        }
+
+        console.log(`[Verification] Zone ${zoneId} ${setting} not yet ${expectedValue}, attempt ${attempt}/${maxRetries}`);
+      } catch (error) {
+        console.warn(`[Verification] Error checking ${setting} for zone ${zoneId} on attempt ${attempt}:`, error);
+      }
+    }
+
+    console.error(`[Verification] Failed to verify ${setting}=${expectedValue} for zone ${zoneId} after ${maxRetries} attempts`);
+    return false;
+  }
+
+  async refreshDomainInfo(zoneId: string): Promise<any> {
+    try {
+      // Get basic domain info
+      const zones = await this.getZones(1, 200);
+      const zone = zones.zones.find(z => z.id === zoneId);
+      if (!zone) {
+        throw new Error(`Zone ${zoneId} not found`);
+      }
+
+      // Get DNS records
+      const dnsResponse = await this.getDNSRecords(zoneId);
+
+      // Get security settings
+      const securitySettings = await this.getSecuritySettings(zoneId);
+
+      // Return updated domain info
+      return {
+        domain: zone.name,
+        zoneId: zone.id,
+        securitySettings
+      };
+    } catch (error) {
+      console.error(`Error refreshing domain info for zone ${zoneId}:`, error);
+      throw error;
     }
   }
 
@@ -1088,20 +1145,56 @@ export class CloudflareAPI {
   }> {
     try {
       const existingRules = await this.getZoneSecurityRules(zoneId);
-      
-      const templateRule = existingRules.find(rule => {
+      console.log(`[RemoveTemplate] 🔍 Looking for friendlyId "${friendlyId}" in zone ${zoneId}`);
+      console.log(`[RemoveTemplate] 📋 Found ${existingRules.length} total rules in zone`);
+
+      // Log all rule descriptions for debugging
+      existingRules.forEach((rule, index) => {
+        const parsed = parseCloudflareRuleName(rule.description || '');
+        console.log(`[RemoveTemplate] Rule ${index}: ID=${rule.id}, Description="${rule.description}", Parsed=${JSON.stringify(parsed)}`);
+      });
+
+      // Try multiple methods to find the rule
+      let templateRule = null;
+
+      // Method 1: By parsed friendlyId (original method)
+      templateRule = existingRules.find(rule => {
         const parsed = parseCloudflareRuleName(rule.description || '');
         return parsed && parsed.friendlyId === friendlyId;
       });
 
+      // Method 2: Direct friendlyId match in description (fallback)
       if (!templateRule) {
+        templateRule = existingRules.find(rule =>
+          rule.description && rule.description.includes(friendlyId)
+        );
+        if (templateRule) {
+          console.log(`[RemoveTemplate] 🎯 Found rule using direct friendlyId match: ${templateRule.id}`);
+        }
+      }
+
+      // Method 3: Case insensitive match (fallback 2)
+      if (!templateRule) {
+        templateRule = existingRules.find(rule =>
+          rule.description && rule.description.toLowerCase().includes(friendlyId.toLowerCase())
+        );
+        if (templateRule) {
+          console.log(`[RemoveTemplate] 🎯 Found rule using case-insensitive match: ${templateRule.id}`);
+        }
+      }
+
+      if (!templateRule) {
+        console.warn(`[RemoveTemplate] ❌ Rule with friendlyId "${friendlyId}" not found in zone ${zoneId}`);
         return {
-          success: true,
+          success: false, // ❗ Changed to false when rule not found
           message: `Rule ${friendlyId} not found in zone`
         };
       }
 
+      console.log(`[RemoveTemplate] 🎯 Found rule to remove: ID=${templateRule.id}, Description="${templateRule.description}"`);
+
       await this.removeRuleFromZone(zoneId, templateRule.id);
+      console.log(`[RemoveTemplate] ✅ Successfully removed rule ${templateRule.id} for friendlyId "${friendlyId}"`);
 
       return {
         success: true,
@@ -1110,9 +1203,58 @@ export class CloudflareAPI {
       };
 
     } catch (error) {
+      console.error(`[RemoveTemplate] ❌ Error removing rule ${friendlyId} from zone ${zoneId}:`, error);
       return {
         success: false,
         message: `No se pudo eliminar la regla: ${error instanceof Error ? error.message : 'Error desconocido'}`
+      };
+    }
+  }
+
+  // 🚀 OPTIMIZED: Remove template rule using mapping table (direct Cloudflare ID lookup)
+  async removeTemplateRuleByMapping(zoneId: string, friendlyId: string): Promise<{
+    success: boolean;
+    removedRuleId?: string;
+    message: string;
+  }> {
+    try {
+      console.log(`[RemoveByMapping] 🎯 Looking up cloudflareRuleId for zone ${zoneId}, friendlyId "${friendlyId}"`);
+
+      // Step 1: Direct lookup using mapping table
+      const mapping = await getTemplateMappingByZoneAndFriendlyId(zoneId, friendlyId);
+
+      if (!mapping) {
+        console.warn(`[RemoveByMapping] ❌ No mapping found for zone ${zoneId}, friendlyId "${friendlyId}"`);
+        return {
+          success: false,
+          message: `Mapping not found for rule ${friendlyId} in zone ${zoneId}`
+        };
+      }
+
+      const cloudflareRuleId = mapping.cloudflareRuleId;
+      console.log(`[RemoveByMapping] 🎯 Found cloudflareRuleId: ${cloudflareRuleId}`);
+
+      // Step 2: Remove rule using direct Cloudflare ID (no searching needed)
+      console.log(`[RemoveByMapping] 🗑️ Removing rule ${cloudflareRuleId} from zone ${zoneId}`);
+      await this.removeRuleFromZone(zoneId, cloudflareRuleId);
+
+      // Step 3: Clean up mapping table
+      console.log(`[RemoveByMapping] 🧹 Cleaning up mapping for rule ${cloudflareRuleId}`);
+      await removeRuleMapping(cloudflareRuleId);
+
+      console.log(`[RemoveByMapping] ✅ Successfully removed rule ${cloudflareRuleId} for friendlyId "${friendlyId}"`);
+
+      return {
+        success: true,
+        removedRuleId: cloudflareRuleId,
+        message: `Removed rule ${friendlyId} (CF ID: ${cloudflareRuleId})`
+      };
+
+    } catch (error) {
+      console.error(`[RemoveByMapping] ❌ Error removing rule ${friendlyId} from zone ${zoneId}:`, error);
+      return {
+        success: false,
+        message: `Failed to remove rule: ${error instanceof Error ? error.message : 'Unknown error'}`
       };
     }
   }
@@ -1516,5 +1658,74 @@ export class CloudflareAPI {
         totalRulesProcessed: allRules.length
       }
     };
+  }
+
+  async verifyTemplateRuleApplied(
+    zoneId: string,
+    templateNameOrFriendlyId: string,
+    expectedAction: 'added' | 'removed' | 'cleaned',
+    maxRetries: number = 3
+  ): Promise<boolean> {
+    console.log(`[Verification] 🔍 Starting verification for zone ${zoneId}, template "${templateNameOrFriendlyId}", action "${expectedAction}"`);
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        await new Promise(resolve => setTimeout(resolve, 2000 * attempt)); // Progressive delay
+
+        const currentRules = await this.getZoneSecurityRules(zoneId);
+        console.log(`[Verification] 📋 Found ${currentRules.length} rules in zone ${zoneId} on attempt ${attempt}`);
+
+        if (expectedAction === 'added') {
+          // Check if rule with template name exists (by description OR by friendlyId)
+          const ruleExists = currentRules.some(rule => {
+            const descriptionMatch = rule.description && rule.description.toLowerCase() === templateNameOrFriendlyId.toLowerCase();
+            const parsed = parseCloudflareRuleName(rule.description || '');
+            const friendlyIdMatch = parsed && parsed.friendlyId === templateNameOrFriendlyId;
+            return descriptionMatch || friendlyIdMatch;
+          });
+
+          if (ruleExists) {
+            console.log(`[Verification] ✅ Template rule "${templateNameOrFriendlyId}" confirmed added to zone ${zoneId}`);
+            return true;
+          }
+          console.log(`[Verification] ⏳ Rule "${templateNameOrFriendlyId}" not yet added to zone ${zoneId}`);
+
+        } else if (expectedAction === 'removed') {
+          // Check if rule with template name no longer exists
+          const ruleExists = currentRules.some(rule => {
+            const descriptionMatch = rule.description && rule.description.toLowerCase() === templateNameOrFriendlyId.toLowerCase();
+            const parsed = parseCloudflareRuleName(rule.description || '');
+            const friendlyIdMatch = parsed && parsed.friendlyId === templateNameOrFriendlyId;
+            return descriptionMatch || friendlyIdMatch;
+          });
+
+          if (!ruleExists) {
+            console.log(`[Verification] ✅ Template rule "${templateNameOrFriendlyId}" confirmed removed from zone ${zoneId}`);
+            return true;
+          }
+          console.log(`[Verification] ⚠️ Rule "${templateNameOrFriendlyId}" still exists in zone ${zoneId} - removal failed or pending`);
+
+        } else if (expectedAction === 'cleaned') {
+          // Check if no corporate/template rules exist (only custom rules should remain)
+          const templateRules = currentRules.filter(rule =>
+            rule.description && rule.description.length > 0
+          );
+
+          if (templateRules.length === 0) {
+            console.log(`[Verification] ✅ All template rules confirmed cleaned from zone ${zoneId}`);
+            return true;
+          }
+          console.log(`[Verification] ⚠️ ${templateRules.length} template rules still exist in zone ${zoneId}`);
+        }
+
+        console.log(`[Verification] ⏳ Attempt ${attempt}/${maxRetries} - Rule verification pending for zone ${zoneId}`);
+
+      } catch (error) {
+        console.warn(`[Verification] ❌ Error checking template rule for zone ${zoneId} on attempt ${attempt}:`, error);
+      }
+    }
+
+    console.warn(`[Verification] ❌ Failed to verify template rule action "${expectedAction}" for "${templateNameOrFriendlyId}" in zone ${zoneId} after ${maxRetries} attempts`);
+    return false;
   }
 }

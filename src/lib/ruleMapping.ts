@@ -91,6 +91,22 @@ export async function getTemplateMappingsForZone(zoneId: string): Promise<Templa
   return Array.from(ruleMappingCache!.values()).filter(mapping => mapping.zoneId === zoneId);
 }
 
+export async function getCloudflareRuleId(zoneId: string, friendlyId: string): Promise<string | null> {
+  await ensureCacheLoaded();
+  const mapping = Array.from(ruleMappingCache!.values()).find(
+    m => m.zoneId === zoneId && m.friendlyId === friendlyId
+  );
+  return mapping?.cloudflareRuleId || null;
+}
+
+export async function getTemplateMappingByZoneAndFriendlyId(zoneId: string, friendlyId: string): Promise<TemplateRuleMapping | null> {
+  await ensureCacheLoaded();
+  const mapping = Array.from(ruleMappingCache!.values()).find(
+    m => m.zoneId === zoneId && m.friendlyId === friendlyId
+  );
+  return mapping || null;
+}
+
 export async function getAllTemplateMappings(): Promise<TemplateRuleMapping[]> {
   await ensureCacheLoaded();
   return Array.from(ruleMappingCache!.values());
@@ -311,6 +327,105 @@ export async function getDomainsUsingTemplate(templateId: string): Promise<Array
     appliedAt: mapping.appliedAt,
     isOutdated: mapping.version !== currentVersion
   }));
+}
+
+/**
+ * Batch operation: Calculate which domains will be outdated when templates are updated
+ * Used by BatchCacheWriter to determine propagation without immediate file writes
+ */
+export async function calculateOutdatedDomains(
+  templateUpdates: Array<{ id: string; newVersion: string; excludeZoneId?: string }>
+): Promise<Array<{ domainName: string; zoneId: string; templateId: string; oldVersion: string; newVersion: string }>> {
+  await ensureCacheLoaded();
+  const outdatedDomains: Array<{ domainName: string; zoneId: string; templateId: string; oldVersion: string; newVersion: string }> = [];
+
+  for (const update of templateUpdates) {
+    const affectedMappings = Array.from(ruleMappingCache!.values()).filter(mapping =>
+      mapping.templateId === update.id &&
+      mapping.zoneId !== update.excludeZoneId &&
+      mapping.version !== update.newVersion
+    );
+
+    for (const mapping of affectedMappings) {
+      outdatedDomains.push({
+        domainName: mapping.domainName,
+        zoneId: mapping.zoneId,
+        templateId: mapping.templateId,
+        oldVersion: mapping.version,
+        newVersion: update.newVersion
+      });
+    }
+  }
+
+  return outdatedDomains;
+}
+
+/**
+ * Batch operation: Update rule mappings and handle propagation
+ * Used by BatchCacheWriter for atomic updates
+ */
+export async function batchUpdateRuleMappings(
+  newMappings: TemplateRuleMapping[],
+  removedRuleIds: string[],
+  templateUpdates: Array<{ id: string; newVersion: string; excludeZoneId?: string }>
+): Promise<{
+  updatedMappings: number;
+  propagatedDomains: string[];
+}> {
+  console.log(`[RuleMapping] Batch updating ${newMappings.length} mappings, removing ${removedRuleIds.length} mappings, updating ${templateUpdates.length} templates`);
+
+  const cache = await loadRuleMappingCache();
+  let propagatedDomains: string[] = [];
+
+  // Remove mappings
+  cache.mappings = cache.mappings.filter(m => !removedRuleIds.includes(m.cloudflareRuleId));
+
+  // Add/update new mappings (remove existing first to avoid duplicates)
+  const existingIds = new Set(newMappings.map(m => m.cloudflareRuleId));
+  cache.mappings = cache.mappings.filter(mapping => !existingIds.has(mapping.cloudflareRuleId));
+  cache.mappings.push(...newMappings);
+
+  // Handle template propagation - mark other domains as outdated
+  for (const update of templateUpdates) {
+    const affectedMappings = cache.mappings.filter(mapping =>
+      mapping.templateId === update.id &&
+      mapping.zoneId !== update.excludeZoneId &&
+      mapping.version !== update.newVersion
+    );
+
+    console.log(`[RuleMapping] Template ${update.id} v${update.newVersion}: Found ${affectedMappings.length} domains to propagate`);
+
+    for (const mapping of affectedMappings) {
+      if (mapping.version !== update.newVersion) {
+        console.log(`[RuleMapping] Marking domain ${mapping.domainName} as outdated: ${mapping.version} → ${update.newVersion}`);
+
+        // Update timestamp for tracking (version comparison will detect as outdated)
+        mapping.appliedAt = new Date().toISOString();
+        propagatedDomains.push(mapping.domainName);
+      }
+    }
+  }
+
+  // Save updated cache
+  await saveRuleMappingCache(cache);
+
+  // Invalidate domains cache if there were propagations
+  if (propagatedDomains.length > 0) {
+    try {
+      const { invalidateDomainsCache } = await import('@/store/domainStore');
+      await invalidateDomainsCache();
+      console.log(`[RuleMapping] Invalidated domains cache due to ${propagatedDomains.length} propagations`);
+    } catch (error) {
+      console.warn(`[RuleMapping] Could not invalidate domains cache:`, error);
+    }
+  }
+
+  console.log(`[RuleMapping] ✅ Batch operation completed: ${newMappings.length} updated, ${propagatedDomains.length} propagated`);
+
+  return {
+    updatedMappings: newMappings.length + removedRuleIds.length,
+    propagatedDomains
+  };
 }
 
 // Statistics and debugging

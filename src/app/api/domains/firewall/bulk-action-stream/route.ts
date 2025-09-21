@@ -2,11 +2,16 @@ import { NextRequest } from 'next/server';
 import { CloudflareAPI } from '@/lib/cloudflare';
 
 interface BulkFirewallProgress {
-  type: 'progress' | 'domain_complete' | 'complete' | 'error';
+  type: 'progress' | 'domain_complete' | 'complete' | 'error' | 'phase_update';
   progress: number;
   currentDomain?: string;
   completedDomains?: number;
   totalDomains?: number;
+  phase?: {
+    current: 'api_calls' | 'verification' | 'cache_refresh';
+    description: string;
+    progress: number;
+  };
   domain?: {
     zoneId: string;
     domainName: string;
@@ -63,11 +68,17 @@ export async function POST(request: NextRequest) {
       try {
         const cloudflareAPI = new CloudflareAPI(apiToken);
 
+        // PHASE 1: API CALLS (0-20%)
         sendProgress({
-          type: 'progress',
+          type: 'phase_update',
           progress: 0,
           totalDomains: targetDomains.length,
-          completedDomains: 0
+          completedDomains: 0,
+          phase: {
+            current: 'api_calls',
+            description: 'Enviando cambios a Cloudflare...',
+            progress: 0
+          }
         });
 
         const results: Array<{
@@ -87,7 +98,7 @@ export async function POST(request: NextRequest) {
           if (clientSignal && clientSignal.aborted) {
             sendProgress({
               type: 'error',
-              progress: (completedCount / targetDomains.length) * 100,
+              progress: (completedCount / targetDomains.length) * 20,
               error: 'Operation cancelled by user'
             });
             controller.close();
@@ -151,14 +162,20 @@ export async function POST(request: NextRequest) {
             results.push(result);
             completedCount++;
 
-            // Send individual domain completion
+            // Send individual domain completion for Phase 1 (0-20%)
+            const phase1Progress = (completedCount / targetDomains.length) * 20;
             sendProgress({
               type: 'domain_complete',
-              progress: (completedCount / targetDomains.length) * 100,
+              progress: phase1Progress,
               currentDomain: result.domainName,
               completedDomains: completedCount,
               totalDomains: targetDomains.length,
-              domain: result
+              domain: result,
+              phase: {
+                current: 'api_calls',
+                description: 'Enviando cambios a Cloudflare...',
+                progress: phase1Progress
+              }
             });
           }
 
@@ -166,6 +183,129 @@ export async function POST(request: NextRequest) {
           if (i + BATCH_SIZE < targetDomains.length) {
             await new Promise(resolve => setTimeout(resolve, 300));
           }
+        }
+
+        // PHASE 2: VERIFICATION (20-80%)
+        sendProgress({
+          type: 'phase_update',
+          progress: 20,
+          totalDomains: targetDomains.length,
+          completedDomains: targetDomains.length,
+          phase: {
+            current: 'verification',
+            description: 'Verificando que los cambios se aplicaron correctamente...',
+            progress: 20
+          }
+        });
+
+        let verifiedCount = 0;
+        const successfulResults = results.filter(r => r.success);
+
+        for (const result of successfulResults) {
+          if (clientSignal && clientSignal.aborted) {
+            sendProgress({
+              type: 'error',
+              progress: 20 + (verifiedCount / successfulResults.length) * 60,
+              error: 'Operation cancelled by user'
+            });
+            controller.close();
+            return;
+          }
+
+          try {
+            // Determine expected value and setting for verification
+            let setting: string;
+            let expectedValue: any;
+
+            if (action === 'enable_under_attack' || action === 'disable_under_attack') {
+              setting = 'security_level';
+              expectedValue = action === 'enable_under_attack' ? 'under_attack' : 'medium';
+            } else {
+              setting = 'bot_fight_mode';
+              expectedValue = action === 'enable_bot_fight';
+            }
+
+            // Verify the change was applied
+            const verified = await cloudflareAPI.verifyZoneSetting(result.zoneId, setting, expectedValue, 3);
+
+            if (!verified) {
+              result.success = false;
+              result.message = `Verificación falló: cambio no se aplicó correctamente`;
+              result.error = 'Verification timeout';
+            }
+          } catch (error) {
+            result.success = false;
+            result.message = `Error en verificación: ${error instanceof Error ? error.message : 'Unknown error'}`;
+            result.error = error instanceof Error ? error.message : 'Unknown error';
+          }
+
+          verifiedCount++;
+          const phase2Progress = 20 + (verifiedCount / successfulResults.length) * 60;
+
+          sendProgress({
+            type: 'progress',
+            progress: phase2Progress,
+            currentDomain: result.domainName,
+            completedDomains: verifiedCount,
+            totalDomains: successfulResults.length,
+            phase: {
+              current: 'verification',
+              description: `Verificando ${result.domainName}...`,
+              progress: phase2Progress
+            }
+          });
+        }
+
+        // PHASE 3: CACHE REFRESH (80-100%)
+        sendProgress({
+          type: 'phase_update',
+          progress: 80,
+          totalDomains: targetDomains.length,
+          completedDomains: targetDomains.length,
+          phase: {
+            current: 'cache_refresh',
+            description: 'Actualizando información de dominios...',
+            progress: 80
+          }
+        });
+
+        let refreshedCount = 0;
+        const successfulVerified = results.filter(r => r.success);
+
+        for (const result of successfulVerified) {
+          if (clientSignal && clientSignal.aborted) {
+            sendProgress({
+              type: 'error',
+              progress: 80 + (refreshedCount / successfulVerified.length) * 20,
+              error: 'Operation cancelled by user'
+            });
+            controller.close();
+            return;
+          }
+
+          try {
+            // Refresh domain info to update cache
+            await cloudflareAPI.refreshDomainInfo(result.zoneId);
+          } catch (error) {
+            console.warn(`Failed to refresh domain info for ${result.domainName}:`, error);
+            // Don't fail the operation for cache refresh errors
+          }
+
+          refreshedCount++;
+          const phase3Progress = 80 + (refreshedCount / successfulVerified.length) * 20;
+
+          sendProgress({
+            type: 'progress',
+            progress: phase3Progress,
+            currentDomain: result.domainName,
+            completedDomains: refreshedCount,
+            totalDomains: successfulVerified.length,
+            phase: {
+              current: 'cache_refresh',
+              description: `Actualizando ${result.domainName}...`,
+              progress: phase3Progress
+            }
+          });
         }
 
         // Send final completion
@@ -178,9 +318,14 @@ export async function POST(request: NextRequest) {
         sendProgress({
           type: 'complete',
           progress: 100,
-          completedDomains: completedCount,
+          completedDomains: results.length,
           totalDomains: targetDomains.length,
-          summary
+          summary,
+          phase: {
+            current: 'cache_refresh',
+            description: 'Proceso completado',
+            progress: 100
+          }
         });
 
       } catch (error) {

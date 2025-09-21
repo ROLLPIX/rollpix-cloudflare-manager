@@ -12,11 +12,16 @@ interface BulkOperationDomain {
 }
 
 interface BulkOperationProgress {
-  type: 'progress' | 'domain_complete' | 'complete' | 'error';
+  type: 'progress' | 'domain_complete' | 'complete' | 'error' | 'phase_update';
   progress: number;
   currentDomain?: string;
   completedDomains?: number;
   totalDomains?: number;
+  phase?: {
+    current: 'api_calls' | 'verification' | 'cache_refresh';
+    description: string;
+    progress: number;
+  };
   domain?: {
     zoneId: string;
     domainName: string;
@@ -50,6 +55,7 @@ export function useBulkOperation({
   const [isStarted, setIsStarted] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [summary, setSummary] = useState<{ total: number; successful: number; failed: number } | undefined>();
+  const [phase, setPhase] = useState<{ current: 'api_calls' | 'verification' | 'cache_refresh'; description: string; progress: number } | undefined>();
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const initializeDomains = useCallback((initialDomains: Array<{ zoneId: string; domainName: string }>) => {
@@ -61,6 +67,7 @@ export function useBulkOperation({
     setIsStarted(false);
     setIsCompleted(false);
     setSummary(undefined);
+    setPhase(undefined);
   }, []);
 
   const startCustomOperation = useCallback(async (customEndpoint: string, payload: any) => {
@@ -68,6 +75,7 @@ export function useBulkOperation({
       setIsStarted(true);
       setProgress(0);
       setIsCompleted(false);
+      setPhase(undefined);
 
       // Create abort controller for cancellation
       const abortController = new AbortController();
@@ -116,7 +124,15 @@ export function useBulkOperation({
                 // Update progress
                 setProgress(data.progress);
 
-                if (data.type === 'domain_complete' && data.domain) {
+                // Update phase if provided
+                if (data.phase) {
+                  setPhase(data.phase);
+                }
+
+                if (data.type === 'phase_update' && data.phase) {
+                  // Just update phase, no other action needed
+                  setPhase(data.phase);
+                } else if (data.type === 'domain_complete' && data.domain) {
                   // Update specific domain status
                   setDomains(prev => prev.map(domain =>
                     domain.zoneId === data.domain!.zoneId
@@ -188,6 +204,7 @@ export function useBulkOperation({
     setIsStarted(false);
     setIsCompleted(false);
     setSummary(undefined);
+    setPhase(undefined);
     abortControllerRef.current = null;
   }, []);
 
@@ -197,6 +214,7 @@ export function useBulkOperation({
     isStarted,
     isCompleted,
     summary,
+    phase,
     initializeDomains,
     startOperation,
     startCustomOperation,

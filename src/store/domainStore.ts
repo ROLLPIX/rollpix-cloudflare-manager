@@ -714,28 +714,66 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
   refreshMultipleDomains: async (zoneIds: string[]) => {
     if (zoneIds.length === 0) return;
 
-    console.log(`[DomainStore] Refreshing ${zoneIds.length} domains:`, zoneIds);
+    console.log(`[DomainStore] Refreshing ${zoneIds.length} domains using global sync:`, zoneIds);
 
     // Show progress for multiple domain refresh
     set({ unifiedProgress: { percentage: 0 } });
 
-    const refreshPromises = zoneIds.map(async (zoneId, index) => {
-      try {
-        await get().refreshSingleDomain(zoneId);
-        // Update progress as each domain completes
-        const completedPercentage = Math.round(((index + 1) / zoneIds.length) * 100);
-        set({ unifiedProgress: { percentage: completedPercentage } });
-      } catch (error) {
-        console.error(`[DomainStore] Failed to refresh domain ${zoneId}:`, error);
-      }
-    });
+    const apiToken = tokenStorage.getToken();
+    if (!apiToken) {
+      toast.error('API Token no encontrado.');
+      set({ unifiedProgress: null });
+      return;
+    }
 
     try {
-      await Promise.all(refreshPromises);
-      toast.success(`${zoneIds.length} dominios actualizados correctamente.`);
+      console.log(`[DomainStore] Using unified global sync for ALL domains (not filtering by zoneIds)`);
+
+      // Use global sync for ALL domains to avoid showing only selected ones
+      // We'll filter locally which domains to update, but fetch all data
+      const unifiedResponse = await fetch('/api/domains/complete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-token': apiToken
+        },
+        body: JSON.stringify({
+          apiToken,
+          // DON'T pass zoneIds - fetch ALL domains
+          forceRefresh: true
+        })
+      });
+
+      if (!unifiedResponse.ok) {
+        throw new Error('Failed to get unified domain data');
+      }
+
+      const unifiedResult = await unifiedResponse.json();
+      console.log(`[DomainStore] Unified refresh result:`, unifiedResult);
+
+      if (unifiedResult.success && unifiedResult.data?.domains) {
+        const allRefreshedDomains = unifiedResult.data.domains;
+        console.log(`[DomainStore] Got ${allRefreshedDomains.length} total domains from unified sync`);
+
+        // Update the store with ALL refreshed domains (complete replacement)
+        // But only report success for the requested zoneIds
+        const targetZoneSet = new Set(zoneIds);
+        const updatedTargetDomains = allRefreshedDomains.filter((domain: DomainStatus) =>
+          targetZoneSet.has(domain.zoneId)
+        );
+
+        set({ allDomains: allRefreshedDomains });
+
+        console.log(`[DomainStore] Updated ${updatedTargetDomains.length}/${zoneIds.length} requested domains in complete dataset of ${allRefreshedDomains.length} domains`);
+
+        toast.success(`${updatedTargetDomains.length} dominios actualizados correctamente con sincronización global.`);
+      } else {
+        throw new Error(unifiedResult.error || 'Failed to refresh domains');
+      }
+
     } catch (error) {
       console.error('[DomainStore] Error in bulk domain refresh:', error);
-      toast.error('Algunos dominios no se pudieron actualizar.');
+      toast.error('Error al actualizar dominios. Intenta de nuevo.');
     } finally {
       // Hide progress after completion
       setTimeout(() => {

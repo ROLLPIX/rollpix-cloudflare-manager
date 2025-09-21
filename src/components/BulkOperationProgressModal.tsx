@@ -31,6 +31,11 @@ interface BulkOperationProgressModalProps {
     successful: number;
     failed: number;
   };
+  phase?: {
+    current: 'api_calls' | 'verification' | 'cache_refresh';
+    description: string;
+    progress: number;
+  };
 }
 
 export function BulkOperationProgressModal({
@@ -44,7 +49,8 @@ export function BulkOperationProgressModal({
   progress = 0,
   isStarted = false,
   isCompleted = false,
-  summary
+  summary,
+  phase
 }: BulkOperationProgressModalProps) {
   const [localDomains, setLocalDomains] = useState<BulkOperationDomain[]>(domains);
 
@@ -126,6 +132,48 @@ export function BulkOperationProgressModal({
                 )}
               </div>
               <Progress value={progress} className="w-full" />
+
+              {/* Phase indicator */}
+              {phase && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    {phase.current === 'api_calls' && <RefreshCw className="h-3 w-3 animate-spin" />}
+                    {phase.current === 'verification' && <CheckCircle className="h-3 w-3" />}
+                    {phase.current === 'cache_refresh' && <RefreshCw className="h-3 w-3" />}
+                    <span className="font-medium">
+                      {phase.current === 'api_calls' && 'Fase 1/3:'}
+                      {phase.current === 'verification' && 'Fase 2/3:'}
+                      {phase.current === 'cache_refresh' && 'Fase 3/3:'}
+                    </span>
+                  </div>
+                  <span>{phase.description}</span>
+                </div>
+              )}
+
+              {/* Phase progress bar */}
+              {phase && (
+                <div className="space-y-1">
+                  <div className="flex gap-1">
+                    <div className={`h-1 flex-1 rounded ${
+                      phase.current === 'api_calls' ? 'bg-blue-500' :
+                      phase.progress > 20 ? 'bg-green-500' : 'bg-gray-200'
+                    }`} />
+                    <div className={`h-1 flex-1 rounded ${
+                      phase.current === 'verification' ? 'bg-blue-500' :
+                      phase.progress > 80 ? 'bg-green-500' : 'bg-gray-200'
+                    }`} />
+                    <div className={`h-1 flex-1 rounded ${
+                      phase.current === 'cache_refresh' ? 'bg-blue-500' :
+                      phase.progress === 100 ? 'bg-green-500' : 'bg-gray-200'
+                    }`} />
+                  </div>
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>API Calls</span>
+                    <span>Verificación</span>
+                    <span>Cache</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2">

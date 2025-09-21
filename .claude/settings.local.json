@@ -43,7 +43,8 @@
       "Bash(netstat:*)",
       "Bash(claude doctor)",
       "Bash(del:*)",
-      "Bash(timeout 60 npm run build)"
+      "Bash(timeout 60 npm run build)",
+      "Bash(timeout 30 npm run build)"
     ],
     "deny": [],
     "ask": []
