@@ -21,8 +21,28 @@ interface RulesTemplatesCache {
 
 async function loadRulesTemplates(): Promise<RulesTemplatesCache> {
   try {
-    return await safeReadJsonFile<RulesTemplatesCache>(RULES_TEMPLATES_FILE);
-  } catch {
+    console.log('[Complete API] Loading rules templates from cache...');
+    const result = await safeReadJsonFile<RulesTemplatesCache>(RULES_TEMPLATES_FILE);
+
+    // Defensive check to ensure result has the expected structure
+    if (!result || typeof result !== 'object') {
+      console.log('[Complete API] Invalid templates cache structure, using default');
+      return {
+        templates: [],
+        lastUpdated: new Date().toISOString()
+      };
+    }
+
+    // Ensure templates array exists
+    if (!Array.isArray(result.templates)) {
+      console.log('[Complete API] Templates is not an array, creating empty array');
+      result.templates = [];
+    }
+
+    console.log(`[Complete API] Loaded ${result.templates.length} templates from cache`);
+    return result;
+  } catch (error) {
+    console.log('[Complete API] Error loading templates cache, using default:', error);
     return {
       templates: [],
       lastUpdated: new Date().toISOString()
@@ -57,8 +77,10 @@ export async function POST(request: NextRequest) {
     const templatesCache = await loadRulesTemplates();
 
     // Create template version map for efficient lookup
+    // Add defensive check for templates array
+    const templates = templatesCache?.templates || [];
     const templateVersionMap = new Map(
-      templatesCache.templates.map(t => [t.id, t.version])
+      templates.map(t => [t.id, t.version])
     );
 
     // Get zones to process

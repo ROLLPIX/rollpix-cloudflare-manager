@@ -1,10 +1,12 @@
 /**
  * Secure file system operations
  * Implements path validation and prevents directory traversal attacks
+ * Auto-fallback to memory cache in serverless environments
  */
 import { promises as fs } from 'fs';
 import { join, normalize, resolve } from 'path';
 import { FileOperationSchema, validateApiRequest } from './validation';
+import { UnifiedCache, isServerlessEnvironment } from './memoryCache';
 
 // Define safe cache directory and allowed files
 const SAFE_CACHE_DIR = resolve(process.cwd(), 'cache');
@@ -17,6 +19,54 @@ const ALLOWED_FILES = [
 ] as const;
 
 type AllowedFileName = typeof ALLOWED_FILES[number];
+
+/**
+ * Returns default structure for cache files when they don't exist
+ * @param fileName - Name of the cache file
+ * @returns Default structure based on file type
+ */
+const getDefaultStructure = <T>(fileName: string): T => {
+  switch (fileName) {
+    case 'domains-cache.json':
+      return {
+        domains: [],
+        lastUpdated: new Date().toISOString(),
+        version: '1.0'
+      } as T;
+
+    case 'security-rules-templates.json':
+      return {
+        templates: [],
+        lastUpdated: new Date().toISOString(),
+        version: '1.0'
+      } as T;
+
+    case 'domain-rules-status.json':
+      return {
+        domains: {},
+        lastUpdated: new Date().toISOString(),
+        version: '1.0'
+      } as T;
+
+    case 'user-preferences.json':
+      return {
+        preferences: {},
+        lastUpdated: new Date().toISOString(),
+        version: '1.0'
+      } as T;
+
+    case 'rule-id-mapping.json':
+      return {
+        mapping: {},
+        lastUpdated: new Date().toISOString(),
+        version: '1.0'
+      } as T;
+
+    default:
+      console.warn(`[FileSystem] No default structure defined for ${fileName}, returning empty object`);
+      return {} as T;
+  }
+};
 
 /**
  * Validates file name against whitelist and prevents path traversal
@@ -130,18 +180,13 @@ export const safeWriteFile = async (fileName: string, content: string): Promise<
 
 /**
  * Safely checks if a file exists in the cache directory
+ * Uses UnifiedCache to avoid circular dependencies
  * @param fileName - Name of the file to check
  * @returns True if file exists, false otherwise
  */
 export const safeFileExists = async (fileName: string): Promise<boolean> => {
-  const safePath = validateAndGetSafePath(fileName);
-  
-  try {
-    await fs.access(safePath);
-    return true;
-  } catch (error) {
-    return false;
-  }
+  // Use UnifiedCache directly to avoid circular dependencies
+  return await UnifiedCache.exists(fileName);
 };
 
 /**
@@ -198,35 +243,70 @@ export const listCacheFiles = async (): Promise<string[]> => {
 
 /**
  * Safely reads and parses JSON file
+ * Uses UnifiedCache to avoid circular dependencies
  * @param fileName - Name of the JSON file
  * @returns Parsed JSON object
  * @throws Error if file doesn't exist, can't be read, or contains invalid JSON
  */
 export const safeReadJsonFile = async <T = any>(fileName: string): Promise<T> => {
-  const content = await safeReadFile(fileName);
-  
+  console.log(`[FileSystem] Reading ${fileName} using UnifiedCache (no circular deps)`);
+
   try {
-    return JSON.parse(content) as T;
+    // Use UnifiedCache directly to avoid circular dependencies
+    const data = await UnifiedCache.read<T>(fileName);
+
+    if (data !== null) {
+      return data;
+    }
+
+    // If no data found, return default structure
+    console.log(`[FileSystem] No data found for ${fileName}, returning default structure`);
+    return getDefaultStructure<T>(fileName);
+
   } catch (error) {
-    console.error(`[FileSystem] Error parsing JSON from ${fileName}:`, error);
-    throw new Error(`Invalid JSON in file: ${fileName}`);
+    console.error(`[FileSystem] Error reading ${fileName}:`, error);
+
+    // Return default structure if all else fails
+    console.log(`[FileSystem] Returning default structure for ${fileName} due to error`);
+    return getDefaultStructure<T>(fileName);
   }
 };
 
 /**
  * Safely writes object as JSON file
+ * Uses UnifiedCache to avoid circular dependencies
  * @param fileName - Name of the JSON file
  * @param data - Object to serialize as JSON
  * @throws Error if serialization or write operation fails
  */
 export const safeWriteJsonFile = async (fileName: string, data: any): Promise<void> => {
   try {
-    const content = JSON.stringify(data, null, 2);
-    await safeWriteFile(fileName, content);
+    console.log(`[FileSystem] Writing ${fileName} using UnifiedCache (no circular deps)`);
+
+    // Use UnifiedCache directly to avoid circular dependencies
+    await UnifiedCache.write(fileName, data);
+
+    console.log(`[FileSystem] Successfully wrote ${fileName} using UnifiedCache`);
   } catch (error) {
     console.error(`[FileSystem] Error writing JSON to ${fileName}:`, error);
     throw new Error(`Failed to write JSON file: ${fileName}`);
   }
+};
+
+/**
+ * Invalidates cache for a specific file (compatible with serverless)
+ * @param fileName - Name of the file to invalidate
+ */
+export const invalidateCache = async (fileName: string): Promise<void> => {
+  await UnifiedCache.delete(fileName);
+};
+
+/**
+ * Gets cache information and statistics
+ * @returns Cache information including environment and stats
+ */
+export const getCacheInfo = () => {
+  return UnifiedCache.getInfo();
 };
 
 // Export allowed file names for type safety
