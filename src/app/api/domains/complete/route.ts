@@ -4,6 +4,7 @@ import { DomainStatus, RuleTemplate, CloudflareRule } from '@/types/cloudflare';
 import { safeReadJsonFile, safeWriteJsonFile } from '@/lib/fileSystem';
 import { TemplateSynchronizer, SyncResult } from '@/lib/templateSync';
 import { BatchCacheWriter, PendingChanges } from '@/lib/batchCacheWriter';
+import { isServerlessEnvironment } from '@/lib/memoryCache';
 
 const DOMAIN_CACHE_FILE = 'domains-cache.json';
 const RULES_TEMPLATES_FILE = 'security-rules-templates.json';
@@ -42,7 +43,12 @@ async function loadRulesTemplates(): Promise<RulesTemplatesCache> {
     console.log(`[Complete API] Loaded ${result.templates.length} templates from cache`);
     return result;
   } catch (error) {
-    console.log('[Complete API] Error loading templates cache, using default:', error);
+    console.warn('[Complete API] Error loading templates cache (expected in serverless), using default:', error);
+
+    // In serverless environments, this is expected - start with empty templates
+    const isServerless = isServerlessEnvironment();
+    console.log(`[Complete API] Running in ${isServerless ? 'serverless' : 'local'} environment`);
+
     return {
       templates: [],
       lastUpdated: new Date().toISOString()
@@ -56,7 +62,15 @@ async function saveDomainsCache(domains: DomainStatus[]): Promise<void> {
     lastUpdate: new Date().toISOString(),
     totalCount: domains.length
   };
-  await safeWriteJsonFile(DOMAIN_CACHE_FILE, cache);
+
+  try {
+    await safeWriteJsonFile(DOMAIN_CACHE_FILE, cache);
+    console.log(`[Complete API] Successfully saved domains cache with ${domains.length} domains`);
+  } catch (error) {
+    console.warn(`[Complete API] Failed to save domains cache to disk (serverless environment):`, error);
+    // In serverless environments like Vercel, we rely on memory cache only
+    // This is expected behavior and not an error
+  }
 }
 
 // POST - Get complete domain information in unified process
@@ -241,16 +255,30 @@ export async function POST(request: NextRequest) {
 
     // BATCH PROCESSING: Apply all accumulated changes atomically
     console.log(`[Complete API] 🔄 Applying batch changes from ${allSyncResults.length} sync operations...`);
-    const allPendingChanges = allSyncResults.map(sr => sr.pendingChanges);
-    const batchWriter = BatchCacheWriter.getInstance();
-    const batchResult = await batchWriter.applyChanges(allPendingChanges);
 
-    console.log(`[Complete API] ✅ Batch processing complete:`, {
-      ruleMappingsUpdated: batchResult.ruleMappingsUpdated,
-      templatesUpdated: batchResult.templatesUpdated,
-      propagatedDomains: batchResult.propagatedDomains.length,
-      success: batchResult.success
-    });
+    let batchResult = {
+      ruleMappingsUpdated: 0,
+      templatesUpdated: 0,
+      propagatedDomains: [] as string[],
+      success: true
+    };
+
+    try {
+      const allPendingChanges = allSyncResults.map(sr => sr.pendingChanges);
+      const batchWriter = BatchCacheWriter.getInstance();
+      batchResult = await batchWriter.applyChanges(allPendingChanges);
+
+      console.log(`[Complete API] ✅ Batch processing complete:`, {
+        ruleMappingsUpdated: batchResult.ruleMappingsUpdated,
+        templatesUpdated: batchResult.templatesUpdated,
+        propagatedDomains: batchResult.propagatedDomains.length,
+        success: batchResult.success
+      });
+    } catch (error) {
+      console.warn(`[Complete API] Batch processing failed (serverless environment):`, error);
+      // In serverless environments, we continue without persistent batch changes
+      batchResult.success = false;
+    }
 
     // Final cache save with all results
     console.log(`[Complete API] 💾 Saving final cache with ${results.length} complete domains...`);
@@ -325,9 +353,32 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error in batch domain processing:', error);
+
+    // Provide more specific error messages for debugging
+    let errorMessage = 'Failed to process domains with batch synchronization';
+    let additionalInfo = '';
+
+    if (error instanceof Error) {
+      errorMessage = error.message;
+      additionalInfo = error.stack || '';
+    }
+
+    // Log additional environment info for debugging
+    console.error('Environment info:', {
+      nodeEnv: process.env.NODE_ENV,
+      vercel: process.env.VERCEL,
+      vercelEnv: process.env.VERCEL_ENV,
+      isServerless: isServerlessEnvironment()
+    });
+
     return NextResponse.json({
       success: false,
-      error: 'Failed to process domains with batch synchronization'
+      error: errorMessage,
+      details: additionalInfo.substring(0, 500), // Limit stack trace length
+      environment: {
+        serverless: isServerlessEnvironment(),
+        platform: process.env.VERCEL ? 'vercel' : 'unknown'
+      }
     }, { status: 500 });
   }
 }
@@ -350,16 +401,22 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('[Complete API GET] Error loading complete domains cache:', error);
+    const isServerless = isServerlessEnvironment();
+    console.warn(`[Complete API GET] Error loading domains cache (expected in ${isServerless ? 'serverless' : 'local'} environment):`, error);
 
     // Return empty cache instead of 404 to prevent app from hanging
+    // This is expected behavior in serverless environments
     return NextResponse.json({
       success: true,
       data: {
         domains: [],
         totalCount: 0,
         lastUpdate: null,
-        hasCompleteData: false
+        hasCompleteData: false,
+        serverless: isServerless,
+        message: isServerless
+          ? 'Running in serverless environment - cache will be populated on first POST request'
+          : 'Cache file not found - will be created after first domain refresh'
       }
     });
   }

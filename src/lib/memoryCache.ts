@@ -39,9 +39,10 @@ const NEEDS_PERSISTENCE: Record<string, boolean> = {
 const isServerlessEnvironment = (): boolean => {
   return (
     process.env.VERCEL === '1' ||
+    !!process.env.VERCEL_ENV ||
     !!process.env.LAMBDA_TASK_ROOT ||
     !!process.env.AWS_LAMBDA_FUNCTION_NAME ||
-    !process.env.NODE_ENV ||
+    typeof process.env.VERCEL_URL !== 'undefined' ||
     process.env.NODE_ENV === 'production'
   );
 };
