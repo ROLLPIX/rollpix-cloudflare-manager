@@ -1,5 +1,5 @@
 /**
- * Memory-based cache system for serverless environments (Vercel)
+ * Memory-based cache system for production environments
  * Fallback to file system for local development
  */
 
@@ -34,11 +34,10 @@ const NEEDS_PERSISTENCE: Record<string, boolean> = {
 };
 
 /**
- * Detects if we're running in a serverless environment (Vercel)
+ * Detects if we're running in a production environment
  */
 const isServerlessEnvironment = (): boolean => {
   return (
-    process.env.VERCEL === '1' ||
     !!process.env.LAMBDA_TASK_ROOT ||
     !!process.env.AWS_LAMBDA_FUNCTION_NAME ||
     !process.env.NODE_ENV ||

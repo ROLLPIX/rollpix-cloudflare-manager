@@ -258,10 +258,11 @@ npm run test        # Playwright E2E
 npm run lint       # ESLint check
 ```
 
-### Vercel Deployment
-- **Auto-deploy**: Push a main → Deploy automático
-- **Environment variables**: Configurar en Vercel dashboard
+### VPS Deployment
+- **Server**: Deploy en VPS propio (no Vercel)
+- **Environment variables**: Configurar en `.env.local`
 - **Build command**: `npm run build`
+- **Start command**: `npm start` o PM2
 - **Output directory**: `.next`
 
 ### Monitoreo en Producción
@@ -892,28 +893,6 @@ try {
 - **File**: `src/components/SecurityRulesIndicator.tsx:117-130`
 - **Impact**: ✅ **Pills show immediately** usando datos ya disponibles
 
-#### 🌟 **Vercel Deployment Fixes (v2.4.1)**
-
-##### 🚨 **Problema: Tailwind CSS 4 incompatible con Vercel**
-```
-Error: Cannot find module '../lightningcss.linux-x64-gnu.node'
-```
-
-##### ✅ **Solución: Migración completa a Tailwind CSS 3**
-```bash
-# Cambios realizados:
-npm uninstall tailwindcss @tailwindcss/postcss tw-animate-css
-npm install tailwindcss@^3.4.0 autoprefixer tailwindcss-animate
-```
-
-**Archivos modificados:**
-- `postcss.config.mjs` - Standard Tailwind 3 config
-- `tailwind.config.js` - New TW3 configuration file
-- `src/app/globals.css` - Converted from TW4 syntax to TW3
-- `package.json` - Dependencies migrated to stable versions
-- `eslint.config.mjs` - More permissive rules for production
-- TypeScript fixes en API routes para strict compilation
-
 #### 📊 **Estado Final: TODO FUNCIONANDO ✅**
 
 ##### ✅ **Funcionalidades completamente operativas:**
@@ -921,11 +900,9 @@ npm install tailwindcss@^3.4.0 autoprefixer tailwindcss-animate
 - **✅ Paginación**: Muestra todos los dominios (hasta 200)
 - **✅ Modal de reglas**: Carga sin errores con mejor error handling
 - **✅ Pills inmediatos**: Template rules + custom rules mostrados al lado del escudo
-- **✅ Vercel deployment**: Build exitoso sin errores de Tailwind CSS
 
 ##### 🚀 **Deployment Status:**
 - **Local build**: ✅ `npm run build` passes without errors
-- **Vercel compatible**: ✅ Migrated to Tailwind CSS 3 for stability
 - **TypeScript strict**: ✅ All compilation errors fixed
 - **ESLint production**: ✅ Configured for production builds
 
@@ -937,24 +914,18 @@ npm install tailwindcss@^3.4.0 autoprefixer tailwindcss-animate
 - `src/components/SecurityRulesIndicator.tsx` - Pills inmediatos
 - `src/app/api/domains/rules/[zoneId]/route.ts` - TypeScript scope fix
 
-**Vercel compatibility:**
-- `package.json` - Tailwind CSS 3 dependencies
-- `postcss.config.mjs` - Standard TW3 configuration
-- `tailwind.config.js` - NEW: TW3 config file
-- `src/app/globals.css` - Converted TW4 → TW3 syntax
-- `eslint.config.mjs` - Production-friendly rules
-
 #### 🎯 **Resumen Ejecutivo:**
 **Estado**: ✅ **TODOS LOS PROBLEMAS CRÍTICOS RESUELTOS**
-**Deployment**: ✅ **READY FOR PRODUCTION**
+**Deployment**: ✅ **READY FOR PRODUCTION VPS**
 **Performance**: 🚀 **OPTIMIZADO SIGNIFICATIVAMENTE**
 
 ---
 
-**🎯 Estado Post-Fixes: Aplicación completamente funcional y deployable**
+**🎯 Estado Post-Fixes: Aplicación completamente funcional y deployable en VPS**
 **🚀 Performance: Todos los bottlenecks eliminados**
 **🔒 Security: Arquitectura robusta implementada**
-**✅ Production Ready: Compatible con Vercel y entornos de producción**
-- recordar usar siempre librerias y sintaxis compatible con vercel.
- Cuando te pida actualizar el repo, antes de hacerlo debes comprobar que la compilacion no de errores.
-- no subir los cambios a github si no lo pido explicitamente
+**✅ Production Ready: Listo para deploy en VPS propio**
+
+## Notas de Desarrollo
+- Cuando te pida actualizar el repo, antes de hacerlo debes comprobar que la compilacion no de errores.
+- No subir los cambios a github si no lo pido explicitamente
