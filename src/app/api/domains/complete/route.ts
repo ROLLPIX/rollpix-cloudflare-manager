@@ -59,6 +59,40 @@ async function saveDomainsCache(domains: DomainStatus[]): Promise<void> {
   await safeWriteJsonFile(DOMAIN_CACHE_FILE, cache);
 }
 
+async function mergeDomainsToCache(updatedDomains: DomainStatus[]): Promise<void> {
+  try {
+    // Load existing cache
+    const existingCache = await safeReadJsonFile<DomainsCache>(DOMAIN_CACHE_FILE);
+
+    // Create a map of updated domains by zoneId for fast lookup
+    const updatedMap = new Map(updatedDomains.map(d => [d.zoneId, d]));
+
+    // Merge: replace updated domains, keep others unchanged
+    const mergedDomains = existingCache.domains.map(domain =>
+      updatedMap.get(domain.zoneId) || domain
+    );
+
+    // Add any new domains that weren't in the cache
+    const existingZoneIds = new Set(existingCache.domains.map(d => d.zoneId));
+    const newDomains = updatedDomains.filter(d => !existingZoneIds.has(d.zoneId));
+    const finalDomains = [...mergedDomains, ...newDomains];
+
+    console.log(`[mergeDomainsToCache] Merged ${updatedDomains.length} updated domains into cache of ${existingCache.domains.length} total domains. Final count: ${finalDomains.length}`);
+
+    // Save merged cache
+    const cache: DomainsCache = {
+      domains: finalDomains,
+      lastUpdate: new Date().toISOString(),
+      totalCount: finalDomains.length
+    };
+    await safeWriteJsonFile(DOMAIN_CACHE_FILE, cache);
+  } catch (error) {
+    // If cache doesn't exist, just save the new domains
+    console.log(`[mergeDomainsToCache] No existing cache found, saving ${updatedDomains.length} domains as new cache`);
+    await saveDomainsCache(updatedDomains);
+  }
+}
+
 // POST - Get complete domain information in unified process
 export async function POST(request: NextRequest) {
   try {
@@ -253,8 +287,16 @@ export async function POST(request: NextRequest) {
     });
 
     // Final cache save with all results
-    console.log(`[Complete API] 💾 Saving final cache with ${results.length} complete domains...`);
-    await saveDomainsCache(results);
+    // Use merge when refreshing specific domains, full save when refreshing all
+    const wasSelectiveRefresh = zoneIds && zoneIds.length > 0 && zoneIds.length < targetZoneIds.length;
+
+    if (wasSelectiveRefresh) {
+      console.log(`[Complete API] 💾 Merging ${results.length} updated domains into existing cache...`);
+      await mergeDomainsToCache(results);
+    } else {
+      console.log(`[Complete API] 💾 Saving complete cache with ${results.length} domains...`);
+      await saveDomainsCache(results);
+    }
 
     // Calculate summary statistics
     const totalProcessed = results.length;

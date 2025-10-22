@@ -427,8 +427,9 @@ export function useSecurityRulesManager() {
           zoneIds,
           apiToken,
           (completed, total) => {
-            const progressPercentage = Math.round((completed / total) * 100);
-            console.log(`Progress: ${completed}/${total} (${progressPercentage}%)`);
+            // Phase 1: Apply rules (0% to 50%)
+            const progressPercentage = Math.round((completed / total) * 50);
+            console.log(`[Phase 1] Applying rules: ${completed}/${total} (${progressPercentage}%)`);
             setUpdateProgress(progressPercentage);
 
             // Call the modal's progress callback if available
@@ -450,28 +451,43 @@ export function useSecurityRulesManager() {
           );
         }
 
-        // Refresh ONLY the affected domains instead of invalidating entire cache
+        // PHASE 2: Refresh affected domains to update UI immediately
+        // This ensures the updated versions are visible without manual refresh
         try {
           const { useDomainStore } = await import('@/store/domainStore');
           const store = useDomainStore.getState();
 
-          console.log(`[SecurityRulesManager] Refreshing ${zoneIds.length} specific domains after rule update`);
+          console.log(`[SecurityRulesManager] Refreshing ${zoneIds.length} affected domains after template update`);
 
-          // Refresh only the affected domains
-          for (const zoneId of zoneIds) {
-            try {
-              const affectedDomain = affectedDomains.find(d => d.zoneId === zoneId);
-              if (affectedDomain) {
-                console.log(`[SecurityRulesManager] Refreshing domain: ${affectedDomain.domainName} (${zoneId})`);
-                await store.refreshSingleDomain(zoneId);
-              }
-            } catch (error) {
-              console.warn(`[SecurityRulesManager] Failed to refresh domain ${zoneId}:`, error);
+          // Update progress callback to show refresh phase
+          if (updateProgressCallback) {
+            updateProgressCallback(50); // Show intermediate progress
+          }
+
+          // Refresh each affected domain individually
+          for (let i = 0; i < zoneIds.length; i++) {
+            const zoneId = zoneIds[i];
+            console.log(`[SecurityRulesManager] Refreshing domain ${i + 1}/${zoneIds.length}: ${affectedDomains[i].domainName}`);
+
+            await store.refreshSingleDomain(zoneId);
+
+            // Update progress
+            const refreshProgress = 50 + Math.round(((i + 1) / zoneIds.length) * 50);
+            if (updateProgressCallback) {
+              updateProgressCallback(refreshProgress);
             }
           }
-          console.log(`[SecurityRulesManager] Completed refreshing ${zoneIds.length} domains`);
+
+          console.log(`[SecurityRulesManager] Successfully refreshed ${zoneIds.length} domains`);
+
+          // Final progress update
+          if (updateProgressCallback) {
+            updateProgressCallback(100);
+          }
+
         } catch (error) {
-          console.warn('Failed to refresh affected domains:', error);
+          console.warn('Failed to refresh domains:', error);
+          notifications.warning('Las reglas se aplicaron correctamente, pero hubo un error al actualizar la vista. Haz clic en "Actualizar Todo" para ver los cambios.');
         }
 
       } catch (error) {
@@ -505,6 +521,18 @@ export function useSecurityRulesManager() {
 
   useEffect(() => {
     loadTemplates();
+
+    // Listen for templates-updated event (triggered by domain refresh)
+    const handleTemplatesUpdated = (event: CustomEvent) => {
+      console.log('[useSecurityRulesManager] Templates updated event received:', event.detail);
+      loadTemplates();
+    };
+
+    window.addEventListener('templates-updated', handleTemplatesUpdated as EventListener);
+
+    return () => {
+      window.removeEventListener('templates-updated', handleTemplatesUpdated as EventListener);
+    };
   }, []); // Remove loadTemplates from dependencies to prevent infinite loop
 
   return {

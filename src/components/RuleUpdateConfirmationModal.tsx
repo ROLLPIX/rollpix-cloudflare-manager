@@ -60,6 +60,21 @@ export function RuleUpdateConfirmationModal({
     }
   }, [onUpdateProgress, affectedDomains.length]);
 
+  // Auto-close modal when progress reaches 100%
+  useEffect(() => {
+    if (updateProgress >= 100 && showProgress) {
+      console.log('[RuleUpdateConfirmationModal] Progress reached 100%, closing modal in 2 seconds');
+      const timer = setTimeout(() => {
+        onClose();
+        setIsUpdating(false);
+        setShowProgress(false);
+        setUpdateProgress(0);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [updateProgress, showProgress, onClose]);
+
   const handleConfirm = async (updateDomains: boolean) => {
     if (updateDomains) {
       setIsUpdating(true);
@@ -71,14 +86,14 @@ export function RuleUpdateConfirmationModal({
 
         await onConfirm(true);
 
-        // Progress is now handled by the real callback from the hook
-        // Close after a short delay to show completion
-        setTimeout(() => {
-          onClose();
-          setIsUpdating(false);
-          setShowProgress(false);
-          setUpdateProgress(0);
-        }, 2000);
+        // Wait for progress to reach 100% before closing
+        // This ensures all phases (apply rules + refresh domains) complete
+        console.log('[RuleUpdateConfirmationModal] Operation completed, waiting for progress to reach 100%');
+
+        // The progress callback will update updateProgress state
+        // We'll close the modal after showing completion state briefly
+        // Note: If progress doesn't reach 100%, modal will stay open (user can close manually)
+
       } catch (error) {
         console.error('Error updating domains:', error);
         setDomainStatuses(prev => prev.map(domain => ({

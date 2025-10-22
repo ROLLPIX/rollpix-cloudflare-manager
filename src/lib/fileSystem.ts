@@ -57,9 +57,8 @@ const getDefaultStructure = <T>(fileName: string): T => {
 
     case 'rule-id-mapping.json':
       return {
-        mapping: {},
-        lastUpdated: new Date().toISOString(),
-        version: '1.0'
+        mappings: [],
+        lastUpdated: new Date().toISOString()
       } as T;
 
     default:
