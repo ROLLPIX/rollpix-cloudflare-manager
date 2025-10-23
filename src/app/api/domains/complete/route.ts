@@ -288,7 +288,12 @@ export async function POST(request: NextRequest) {
 
     // Final cache save with all results
     // Use merge when refreshing specific domains, full save when refreshing all
-    const wasSelectiveRefresh = zoneIds && zoneIds.length > 0 && zoneIds.length < targetZoneIds.length;
+    // IMPORTANT: Compare against total available zones (allZonesMap) not targetZoneIds
+    // because targetZoneIds is set to zoneIds when selective refresh
+    const totalAvailableZones = allZonesMap.size;
+    const wasSelectiveRefresh = zoneIds && zoneIds.length > 0 && zoneIds.length < totalAvailableZones;
+
+    console.log(`[Complete API] Cache save decision: zoneIds=${zoneIds?.length || 0}, totalAvailable=${totalAvailableZones}, wasSelectiveRefresh=${wasSelectiveRefresh}`);
 
     if (wasSelectiveRefresh) {
       console.log(`[Complete API] 💾 Merging ${results.length} updated domains into existing cache...`);

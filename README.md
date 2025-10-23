@@ -365,6 +365,14 @@ rollpix-cloudflare-manager/
 
 ## 🆕 Últimas Mejoras (Enero 2025)
 
+### 🔥 **FIX CRÍTICO: Cache Corruption on Individual Refresh** (v2.4.1 - 23/01/2025)
+- **Problema resuelto**: Refresh individual de dominio sobrescribía cache completo, dejando solo 1 dominio visible
+- **Root cause**: Comparación incorrecta `zoneIds.length < targetZoneIds.length` cuando ambos eran iguales
+- **Solución**: Comparar contra total de zonas disponibles `allZonesMap.size` en lugar de `targetZoneIds`
+- **Impacto**: Navegación entre tabs ya no pierde dominios del cache
+- **Archivos modificados**: `src/app/api/domains/complete/route.ts:289-304`
+- **Testing confirmado**: ✅ 110 dominios permanecen en cache después de refresh individual
+
 ### ✅ **Sistema de Sincronización Unificada** (v3.1.0)
 - **Flujo único de reglas**: Refresh individual = refresh global (solo filtrado por dominio)
 - **Versionado inteligente por fecha**: Comparación automática para determinar actualizaciones
@@ -377,7 +385,7 @@ rollpix-cloudflare-manager/
 - **Hooks personalizados**: Lógica de negocio encapsulada en `useDomainTable` y `useSecurityRulesManager`
 - **Performance optimizada**: Mejor manejo de estado y reducción de re-renders
 
-### ✅ Fixes Críticos Implementados
+### ✅ Fixes Críticos Anteriores
 - **Agregar reglas funciona correctamente**: Solucionado usando endpoint directo de Cloudflare API
 - **Paginación corregida**: Ahora muestra hasta 200 dominios en lugar de solo 20
 - **Modal de reglas optimizado**: Carga sin errores con mejor manejo de JSON
