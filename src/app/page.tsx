@@ -21,11 +21,58 @@ export default function Home() {
   const [testingToken, setTestingToken] = useState(false);
   const [showChangeTokenDialog, setShowChangeTokenDialog] = useState(false);
   const [renderKey, setRenderKey] = useState(0); // Used to force re-render on token change
+  const [envTokenInfo, setEnvTokenInfo] = useState<{ hasToken: boolean; maskedToken?: string } | null>(null);
+  const [loadingEnvToken, setLoadingEnvToken] = useState(false);
   const tokenInputRef = useRef<HTMLInputElement>(null);
 
+  // Check for environment token on mount
   useEffect(() => {
-    setLoading(false);
+    const checkEnvToken = async () => {
+      try {
+        // First check if there's already a token in localStorage
+        if (tokenStorage.hasValidToken()) {
+          setLoading(false);
+          return;
+        }
+
+        // Check if there's an environment token available
+        const response = await fetch('/api/env-token');
+        const data = await response.json();
+
+        setEnvTokenInfo(data);
+
+        // If environment token exists and is valid, automatically load it
+        if (data.hasToken) {
+          console.log('[Home] Environment token detected, loading automatically...');
+          await loadEnvToken();
+        }
+      } catch (error) {
+        console.error('[Home] Error checking environment token:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkEnvToken();
   }, []);
+
+  const loadEnvToken = async () => {
+    try {
+      setLoadingEnvToken(true);
+      const response = await fetch('/api/env-token', { method: 'POST' });
+      const data = await response.json();
+
+      if (data.success && data.token) {
+        tokenStorage.setToken(data.token);
+        console.log('[Home] Environment token loaded successfully');
+        forceRerender();
+      }
+    } catch (error) {
+      console.error('[Home] Error loading environment token:', error);
+    } finally {
+      setLoadingEnvToken(false);
+    }
+  };
 
   const forceRerender = () => setRenderKey(prev => prev + 1);
 
@@ -117,12 +164,34 @@ export default function Home() {
           </div>
           <div>
             <p className="text-muted-foreground mt-2">Configura y verifica tu token API de Cloudflare para gestionar dominios y reglas de seguridad</p>
+
+            {/* Environment Token Info */}
+            {envTokenInfo?.hasToken && (
+              <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4 mt-4">
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                  <div className="text-sm">
+                    <p className="font-medium text-green-900 dark:text-green-100">Token de Entorno Detectado</p>
+                    <p className="text-green-700 dark:text-green-300 mt-1">
+                      Se encontró un token configurado en las variables de entorno (<code className="px-1 py-0.5 bg-green-100 dark:bg-green-900 rounded text-xs">{envTokenInfo.maskedToken}</code>).
+                      {loadingEnvToken ? ' Cargando automáticamente...' : ' Se cargará automáticamente al iniciar.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mt-4">
               <div className="flex items-start gap-2">
                 <Shield className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                 <div className="text-sm">
                   <p className="font-medium text-blue-900 dark:text-blue-100">Seguridad del Token</p>
-                  <p className="text-blue-700 dark:text-blue-300 mt-1">Tu token se almacena de forma segura en tu navegador (localStorage) y expira automáticamente después de 7 días. Solo tú tienes acceso a esta información en tu dispositivo.</p>
+                  <p className="text-blue-700 dark:text-blue-300 mt-1">
+                    {envTokenInfo?.hasToken
+                      ? 'El token de entorno se almacenará en tu navegador (localStorage) para un acceso rápido y seguro. Puedes cambiarlo en cualquier momento usando el botón "Cambiar Token API".'
+                      : 'Tu token se almacena de forma segura en tu navegador (localStorage) y expira automáticamente después de 7 días. Solo tú tienes acceso a esta información en tu dispositivo.'
+                    }
+                  </p>
                 </div>
               </div>
             </div>

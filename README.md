@@ -365,6 +365,16 @@ rollpix-cloudflare-manager/
 
 ## 🆕 Últimas Mejoras (Enero 2025)
 
+### 🆕 **NUEVA FUNCIONALIDAD: Environment Token Auto-Load** (v2.4.2 - 23/01/2025)
+- **Nueva característica**: Token de Cloudflare se carga automáticamente desde variables de entorno
+- **Variable**: `CLOUDFLARE_API_TOKEN` en `.env.local` o configuración de deploy
+- **Comportamiento**: Si existe la variable, se detecta y carga automáticamente al iniciar la app
+- **UI mejorada**: Mensaje verde mostrando token enmascarado cuando se detecta desde entorno
+- **Fallback inteligente**: Si no hay variable de entorno, funciona como siempre (solicita token manual)
+- **Archivos nuevos**: `src/app/api/env-token/route.ts` - Endpoint seguro para detectar/cargar token
+- **Archivos modificados**: `src/app/page.tsx` - Auto-detección y carga de environment token
+- **Testing confirmado**: ✅ Deploy en Dokploy con token automático funcionando
+
 ### 🔥 **FIX CRÍTICO: Cache Corruption on Individual Refresh** (v2.4.1 - 23/01/2025)
 - **Problema resuelto**: Refresh individual de dominio sobrescribía cache completo, dejando solo 1 dominio visible
 - **Root cause**: Comparación incorrecta `zoneIds.length < targetZoneIds.length` cuando ambos eran iguales
