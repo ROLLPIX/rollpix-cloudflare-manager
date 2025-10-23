@@ -224,7 +224,7 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
       }
 
       if (unifiedData.success) {
-        const { domains, summary } = unifiedData.data;
+        const { domains, summary, failedDomains } = unifiedData.data;
 
         // Final progress update
         if (showProgress) {
@@ -244,11 +244,51 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         });
 
         // Show success message with unified processing stats
-        const message = `${summary.totalDomains} dominios procesados completamente (${summary.totalTemplateRules} reglas template, ${summary.totalCustomRules} custom)`;
-        if (isBackground) {
-          console.log(`[DomainStore] ${message}`);
+        const hasFailures = failedDomains && failedDomains.length > 0;
+        const hasRateLimitErrors = summary.rateLimitInfo?.hasRateLimitErrors || false;
+
+        if (hasFailures) {
+          const rateLimitFailures = summary.rateLimitInfo?.rateLimitFailures || 0;
+          const otherFailures = summary.rateLimitInfo?.otherFailures || 0;
+
+          // Show detailed error message
+          let errorMessage = `✅ ${summary.totalDomains}/${summary.totalRequested} dominios actualizados`;
+
+          if (hasRateLimitErrors && rateLimitFailures > 0) {
+            errorMessage += `\n\n⚠️ ${rateLimitFailures} dominios no se pudieron actualizar por límite de la API de Cloudflare.`;
+            errorMessage += `\n\nDominios afectados:\n${failedDomains
+              .filter((d: any) => d.isRateLimitError)
+              .map((d: any) => `• ${d.name}`)
+              .join('\n')}`;
+            errorMessage += `\n\n💡 Sugerencia: Espere unos minutos e intente refrescar estos dominios individualmente.`;
+          }
+
+          if (otherFailures > 0) {
+            if (errorMessage.includes('\n')) errorMessage += '\n\n';
+            errorMessage += `⚠️ ${otherFailures} dominios fallaron por otros errores.`;
+          }
+
+          if (isBackground) {
+            console.warn(`[DomainStore] ${errorMessage}`);
+          } else {
+            toast.warning(errorMessage, { duration: 10000 }); // 10 seconds for detailed message
+          }
+
+          // Log failed domains details to console
+          console.warn('[DomainStore] Failed domains:', failedDomains);
         } else {
-          toast.success(message);
+          // No failures - show success message
+          const message = `${summary.totalDomains} dominios procesados completamente (${summary.totalTemplateRules} reglas template, ${summary.totalCustomRules} custom)`;
+          if (isBackground) {
+            console.log(`[DomainStore] ${message}`);
+          } else {
+            toast.success(message);
+          }
+        }
+
+        // Show API warning if present
+        if (unifiedData.warning && !isBackground) {
+          toast.warning(unifiedData.warning, { duration: 8000 });
         }
 
         console.log('[DomainStore] Unified processing stats:', summary);

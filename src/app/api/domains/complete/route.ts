@@ -140,6 +140,7 @@ export async function POST(request: NextRequest) {
 
     const results: DomainStatus[] = [];
     const allSyncResults: SyncResult[] = [];
+    const failedDomains: Array<{ zoneId: string; name: string; error: string; isRateLimitError: boolean }> = [];
     const BATCH_SIZE = 12; // Optimal batch size for parallel processing
     const BATCH_DELAY = 200; // Delay between batches (ms)
 
@@ -194,8 +195,19 @@ export async function POST(request: NextRequest) {
           };
 
         } catch (error) {
-          console.error(`[Complete API] Error collecting data for zone ${zoneId} (${zone.name}):`, error);
-          return null;
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          const isRateLimitError = errorMessage.includes('Rate limit exceeded') || errorMessage.includes('429');
+
+          console.error(`[Complete API] ❌ Error collecting data for zone ${zoneId} (${zone.name}):`, errorMessage);
+
+          return {
+            zoneId,
+            zone,
+            basicDomainInfo: null,
+            rulesData: [],
+            error: errorMessage,
+            isRateLimitError
+          };
         }
       });
 
@@ -203,13 +215,29 @@ export async function POST(request: NextRequest) {
 
       for (const result of batchResults) {
         if (result.status === 'fulfilled' && result.value) {
-          const { zoneId, zone, basicDomainInfo, rulesData } = result.value;
+          const { zoneId, zone, basicDomainInfo, rulesData, error, isRateLimitError } = result.value;
 
-          domainRulesMap.set(zoneId, {
-            rules: rulesData,
-            domainInfo: { zoneId, name: zone.name },
-            basicDomainInfo
-          });
+          // If there was an error, track it
+          if (error) {
+            failedDomains.push({
+              zoneId,
+              name: zone.name,
+              error,
+              isRateLimitError: isRateLimitError || false
+            });
+            console.warn(`[Complete API] ⚠️ Failed to process ${zone.name}: ${error}`);
+          }
+
+          // Only add to domainRulesMap if we got valid data
+          if (basicDomainInfo && rulesData) {
+            domainRulesMap.set(zoneId, {
+              rules: rulesData,
+              domainInfo: { zoneId, name: zone.name },
+              basicDomainInfo
+            });
+          }
+        } else if (result.status === 'rejected') {
+          console.error(`[Complete API] ❌ Promise rejected for batch item:`, result.reason);
         }
       }
 
@@ -221,6 +249,19 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`[Complete API] ✅ Collected data from ${domainRulesMap.size} domains`);
+
+    if (failedDomains.length > 0) {
+      const rateLimitFailures = failedDomains.filter(d => d.isRateLimitError).length;
+      const otherFailures = failedDomains.length - rateLimitFailures;
+
+      console.warn(`[Complete API] ⚠️ ${failedDomains.length} domains failed to process:`);
+      console.warn(`[Complete API]   - Rate limit errors: ${rateLimitFailures}`);
+      console.warn(`[Complete API]   - Other errors: ${otherFailures}`);
+
+      failedDomains.forEach(fd => {
+        console.warn(`[Complete API]   - ${fd.name} (${fd.zoneId}): ${fd.error}`);
+      });
+    }
 
     // FASE 2: Procesamiento global de plantillas
     console.log(`[Complete API] 🔄 PHASE 2: Global template synchronization`);
@@ -342,10 +383,28 @@ export async function POST(request: NextRequest) {
     console.log(`[Complete API] ⚠️ Conflicts: ${domainsWithConflicts} domains with outdated template rules`);
     console.log(`[Complete API] 🔄 Template sync: ${templateImportResult.imported} new, ${templateImportResult.updated} updated, ${templateImportResult.propagatedDomains} propagated`);
 
+    if (failedDomains.length > 0) {
+      console.warn(`[Complete API] ⚠️ Warning: ${failedDomains.length} domains failed to update`);
+    }
+
+    // Prepare rate limit information
+    const rateLimitInfo = {
+      hasRateLimitErrors: failedDomains.some(d => d.isRateLimitError),
+      rateLimitFailures: failedDomains.filter(d => d.isRateLimitError).length,
+      otherFailures: failedDomains.filter(d => !d.isRateLimitError).length,
+      totalFailures: failedDomains.length
+    };
+
     return NextResponse.json({
       success: true,
       data: {
         domains: results,
+        failedDomains: failedDomains.map(fd => ({
+          zoneId: fd.zoneId,
+          name: fd.name,
+          error: fd.error,
+          isRateLimitError: fd.isRateLimitError
+        })),
         summary: {
           totalDomains: totalProcessed,
           totalRequested: totalRequested,
@@ -365,9 +424,14 @@ export async function POST(request: NextRequest) {
             templatesUpdated: batchResult.templatesUpdated,
             propagatedDomains: batchResult.propagatedDomains.length,
             success: batchResult.success
-          }
+          },
+          rateLimitInfo: rateLimitInfo
         }
-      }
+      },
+      // Add a warning message if there were rate limit errors
+      ...(rateLimitInfo.hasRateLimitErrors && {
+        warning: `⚠️ Se alcanzó el límite de la API de Cloudflare. ${rateLimitInfo.rateLimitFailures} dominios no pudieron actualizarse. Por favor, espere unos minutos e intente refrescar los dominios faltantes individualmente.`
+      })
     });
 
   } catch (error) {
