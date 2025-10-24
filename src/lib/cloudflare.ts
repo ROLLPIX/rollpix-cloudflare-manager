@@ -22,39 +22,84 @@ export class CloudflareAPI {
   }
 
   private async makeRequest<T>(endpoint: string, options: RequestInit = {}, throwOnError = true): Promise<any> {
-    const response = await fetch(`${CLOUDFLARE_API_BASE}${endpoint}`, {
-      ...options,
-      headers: {
-        'Authorization': `Bearer ${this.apiToken}`,
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-    });
+    const maxRetries = 5;
+    const baseDelayMs = 1000; // 1 second base delay
 
-    if (!response.ok) {
-      if (throwOnError) {
-        const errorText = await response.text();
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      const response = await fetch(`${CLOUDFLARE_API_BASE}${endpoint}`, {
+        ...options,
+        headers: {
+          'Authorization': `Bearer ${this.apiToken}`,
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      });
 
-        // Don't log 403 errors for individual ruleset access - it's expected when token has limited scope
-        const isRulesetAccess = endpoint.includes('/rulesets/') && response.status === 403;
-        if (!isRulesetAccess) {
-          console.error(`Error en la API de Cloudflare (${response.status}) for endpoint: ${endpoint}`, errorText);
+      if (!response.ok) {
+        // Handle rate limiting (429) with exponential backoff
+        if (response.status === 429) {
+          if (attempt < maxRetries) {
+            const errorText = await response.text();
+            console.warn(`[Rate Limit] ⚠️ Hit rate limit on ${endpoint} (attempt ${attempt + 1}/${maxRetries + 1})`);
+
+            // Check for Retry-After header (Cloudflare may provide this)
+            const retryAfterHeader = response.headers.get('Retry-After');
+            let waitTimeMs = baseDelayMs * Math.pow(2, attempt); // Exponential backoff: 1s, 2s, 4s, 8s, 16s
+
+            if (retryAfterHeader) {
+              const retryAfterSeconds = parseInt(retryAfterHeader);
+              if (!isNaN(retryAfterSeconds)) {
+                waitTimeMs = Math.max(waitTimeMs, retryAfterSeconds * 1000);
+                console.warn(`[Rate Limit] Cloudflare Retry-After header: ${retryAfterSeconds}s`);
+              }
+            }
+
+            console.warn(`[Rate Limit] ⏳ Waiting ${waitTimeMs}ms before retry...`);
+            await new Promise(resolve => setTimeout(resolve, waitTimeMs));
+            continue; // Retry the request
+          } else {
+            // Max retries exceeded
+            const errorText = await response.text();
+            console.error(`[Rate Limit] ❌ Max retries (${maxRetries + 1}) exceeded for ${endpoint}`);
+            console.error(`[Rate Limit] Final error:`, errorText);
+
+            if (throwOnError) {
+              throw new Error(`Rate limit exceeded: ${endpoint} - ${errorText}`);
+            } else {
+              return response;
+            }
+          }
         }
 
-        throw new Error(`Error en la API de Cloudflare: ${response.status} - ${errorText}`);
-      } else {
-        return response; // Return the failed response for manual handling
+        // Handle other errors
+        if (throwOnError) {
+          const errorText = await response.text();
+
+          // Don't log 403 errors for individual ruleset access - it's expected when token has limited scope
+          const isRulesetAccess = endpoint.includes('/rulesets/') && response.status === 403;
+          if (!isRulesetAccess) {
+            console.error(`Error en la API de Cloudflare (${response.status}) for endpoint: ${endpoint}`, errorText);
+          }
+
+          throw new Error(`Error en la API de Cloudflare: ${response.status} - ${errorText}`);
+        } else {
+          return response; // Return the failed response for manual handling
+        }
+      }
+
+      // Success - parse and return JSON
+      try {
+        return await response.json();
+      } catch (error) {
+        console.error(`[CloudflareAPI] JSON parsing error for endpoint ${endpoint}:`, error);
+        console.error(`[CloudflareAPI] Response status: ${response.status} ${response.statusText}`);
+        console.error(`[CloudflareAPI] Response headers:`, Object.fromEntries(response.headers.entries()));
+        throw new Error(`JSON parsing error for ${endpoint}: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     }
 
-    try {
-      return await response.json();
-    } catch (error) {
-      console.error(`[CloudflareAPI] JSON parsing error for endpoint ${endpoint}:`, error);
-      console.error(`[CloudflareAPI] Response status: ${response.status} ${response.statusText}`);
-      console.error(`[CloudflareAPI] Response headers:`, Object.fromEntries(response.headers.entries()));
-      throw new Error(`JSON parsing error for ${endpoint}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
+    // Should never reach here, but TypeScript needs it
+    throw new Error(`Unexpected error: exceeded max retries for ${endpoint}`);
   }
 
   async getZone(zoneId: string): Promise<CloudflareZone> {
