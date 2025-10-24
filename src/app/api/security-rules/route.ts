@@ -25,8 +25,48 @@ async function loadRulesCache(): Promise<RulesCache> {
 }
 
 async function saveRulesCache(cache: RulesCache): Promise<void> {
-  cache.lastUpdated = new Date().toISOString();
-  await fs.writeFile(RULES_CACHE_FILE, JSON.stringify(cache, null, 2));
+  try {
+    cache.lastUpdated = new Date().toISOString();
+    const jsonData = JSON.stringify(cache, null, 2);
+
+    console.log('[Security Rules] 💾 Saving rules cache...');
+    console.log(`[Security Rules] File path: ${RULES_CACHE_FILE}`);
+    console.log(`[Security Rules] Templates count: ${cache.templates.length}`);
+    console.log(`[Security Rules] Data size: ${jsonData.length} bytes`);
+
+    // Check if directory exists
+    const cacheDir = path.dirname(RULES_CACHE_FILE);
+    try {
+      await fs.access(cacheDir);
+      console.log(`[Security Rules] ✅ Cache directory exists: ${cacheDir}`);
+    } catch (error) {
+      console.log(`[Security Rules] ⚠️ Cache directory does not exist, creating: ${cacheDir}`);
+      await fs.mkdir(cacheDir, { recursive: true });
+      console.log(`[Security Rules] ✅ Cache directory created`);
+    }
+
+    // Write file
+    await fs.writeFile(RULES_CACHE_FILE, jsonData, 'utf-8');
+    console.log(`[Security Rules] ✅ Rules cache saved successfully`);
+
+    // Verify write
+    const verifyData = await fs.readFile(RULES_CACHE_FILE, 'utf-8');
+    const verifyParsed = JSON.parse(verifyData);
+    console.log(`[Security Rules] ✅ Verification: ${verifyParsed.templates.length} templates in file`);
+
+    if (verifyParsed.templates.length !== cache.templates.length) {
+      console.error(`[Security Rules] ❌ MISMATCH: Expected ${cache.templates.length}, got ${verifyParsed.templates.length}`);
+      throw new Error('Template count mismatch after save');
+    }
+  } catch (error) {
+    console.error('[Security Rules] ❌ Error saving rules cache:', error);
+    console.error('[Security Rules] Error details:', {
+      message: error instanceof Error ? error.message : String(error),
+      path: RULES_CACHE_FILE,
+      templatesCount: cache.templates.length
+    });
+    throw error;
+  }
 }
 
 // GET - Obtener todas las plantillas de reglas
@@ -92,8 +132,18 @@ export async function POST(request: NextRequest) {
       version: '1.0.0'
     };
 
+    console.log('[Security Rules POST] Creating new template:', {
+      id: newTemplate.id,
+      friendlyId: newTemplate.friendlyId,
+      name: newTemplate.name,
+      version: newTemplate.version
+    });
+
     cache.templates.push(newTemplate);
+    console.log(`[Security Rules POST] Total templates before save: ${cache.templates.length}`);
+
     await saveRulesCache(cache);
+    console.log('[Security Rules POST] ✅ Template created and saved successfully');
 
     return NextResponse.json({
       success: true,
@@ -156,8 +206,19 @@ export async function PUT(request: NextRequest) {
       version: newVersion
     };
 
+    console.log('[Security Rules PUT] Updating template:', {
+      id: updatedTemplate.id,
+      friendlyId: updatedTemplate.friendlyId,
+      name: updatedTemplate.name,
+      oldVersion: existingTemplate.version,
+      newVersion: updatedTemplate.version
+    });
+
     cache.templates[templateIndex] = updatedTemplate;
+    console.log(`[Security Rules PUT] Total templates before save: ${cache.templates.length}`);
+
     await saveRulesCache(cache);
+    console.log('[Security Rules PUT] ✅ Template updated and saved successfully');
 
     return NextResponse.json({
       success: true,
@@ -196,7 +257,15 @@ export async function DELETE(request: NextRequest) {
     }
 
     const deletedTemplate = cache.templates.splice(templateIndex, 1)[0];
+    console.log('[Security Rules DELETE] Deleting template:', {
+      id: deletedTemplate.id,
+      friendlyId: deletedTemplate.friendlyId,
+      name: deletedTemplate.name
+    });
+    console.log(`[Security Rules DELETE] Total templates before save: ${cache.templates.length}`);
+
     await saveRulesCache(cache);
+    console.log('[Security Rules DELETE] ✅ Template deleted and saved successfully');
 
     return NextResponse.json({
       success: true,

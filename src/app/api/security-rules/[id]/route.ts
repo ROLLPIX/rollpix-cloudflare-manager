@@ -23,8 +23,48 @@ async function loadRulesCache(): Promise<RulesCache> {
 }
 
 async function saveRulesCache(cache: RulesCache): Promise<void> {
-  cache.lastUpdated = new Date().toISOString();
-  await fs.writeFile(RULES_CACHE_FILE, JSON.stringify(cache, null, 2));
+  try {
+    cache.lastUpdated = new Date().toISOString();
+    const jsonData = JSON.stringify(cache, null, 2);
+
+    console.log('[Security Rules [id]] 💾 Saving rules cache...');
+    console.log(`[Security Rules [id]] File path: ${RULES_CACHE_FILE}`);
+    console.log(`[Security Rules [id]] Templates count: ${cache.templates.length}`);
+    console.log(`[Security Rules [id]] Data size: ${jsonData.length} bytes`);
+
+    // Check if directory exists
+    const cacheDir = path.dirname(RULES_CACHE_FILE);
+    try {
+      await fs.access(cacheDir);
+      console.log(`[Security Rules [id]] ✅ Cache directory exists: ${cacheDir}`);
+    } catch (error) {
+      console.log(`[Security Rules [id]] ⚠️ Cache directory does not exist, creating: ${cacheDir}`);
+      await fs.mkdir(cacheDir, { recursive: true });
+      console.log(`[Security Rules [id]] ✅ Cache directory created`);
+    }
+
+    // Write file
+    await fs.writeFile(RULES_CACHE_FILE, jsonData, 'utf-8');
+    console.log(`[Security Rules [id]] ✅ Rules cache saved successfully`);
+
+    // Verify write
+    const verifyData = await fs.readFile(RULES_CACHE_FILE, 'utf-8');
+    const verifyParsed = JSON.parse(verifyData);
+    console.log(`[Security Rules [id]] ✅ Verification: ${verifyParsed.templates.length} templates in file`);
+
+    if (verifyParsed.templates.length !== cache.templates.length) {
+      console.error(`[Security Rules [id]] ❌ MISMATCH: Expected ${cache.templates.length}, got ${verifyParsed.templates.length}`);
+      throw new Error('Template count mismatch after save');
+    }
+  } catch (error) {
+    console.error('[Security Rules [id]] ❌ Error saving rules cache:', error);
+    console.error('[Security Rules [id]] Error details:', {
+      message: error instanceof Error ? error.message : String(error),
+      path: RULES_CACHE_FILE,
+      templatesCount: cache.templates.length
+    });
+    throw error;
+  }
 }
 
 // PUT - Actualizar plantilla específica
@@ -84,8 +124,19 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       version: newVersion
     };
 
+    console.log('[Security Rules [id] PUT] Updating template:', {
+      id: updatedTemplate.id,
+      friendlyId: updatedTemplate.friendlyId,
+      name: updatedTemplate.name,
+      oldVersion: existingTemplate.version,
+      newVersion: updatedTemplate.version
+    });
+
     cache.templates[templateIndex] = updatedTemplate;
+    console.log(`[Security Rules [id] PUT] Total templates before save: ${cache.templates.length}`);
+
     await saveRulesCache(cache);
+    console.log('[Security Rules [id] PUT] ✅ Template updated and saved successfully');
 
     // Return version change flag so client can handle cache invalidation
     const versionChanged = newVersion !== existingTemplate.version;
