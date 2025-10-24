@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
+// Use system fonts for better build compatibility in restricted environments
+const systemFont = "font-sans";
 
 export const metadata: Metadata = {
   title: "ROLLPIX Cloudflare Manager",
@@ -23,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body
-        className={`${inter.variable} antialiased`}
+        className={`${systemFont} antialiased`}
       >
         <ThemeProvider
           attribute="class"

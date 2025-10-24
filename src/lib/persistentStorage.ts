@@ -447,13 +447,19 @@ export class PersistentStorage {
     // Could add more maintenance tasks here
     console.log('[PersistentStorage] Maintenance completed');
   }
-}
 
-// Auto-cleanup every 30 minutes if in client environment
-if (typeof window !== 'undefined' && typeof setInterval !== 'undefined') {
-  setInterval(() => {
-    ClientStorage.cleanup();
-  }, 30 * 60 * 1000);
+  /**
+   * Initialize periodic cleanup (should only be called at runtime on client side)
+   */
+  static initPeriodicCleanup(): void {
+    // Only run in client environments with setInterval
+    if (typeof window !== 'undefined' && typeof setInterval !== 'undefined') {
+      setInterval(() => {
+        ClientStorage.cleanup();
+      }, 30 * 60 * 1000);
+      console.log('[PersistentStorage] Periodic client cleanup initialized');
+    }
+  }
 }
 
 export { StorageStrategy, STORAGE_CONFIG };

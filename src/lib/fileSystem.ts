@@ -8,8 +8,7 @@ import { join, normalize, resolve } from 'path';
 import { FileOperationSchema, validateApiRequest } from './validation';
 import { UnifiedCache, isServerlessEnvironment } from './memoryCache';
 
-// Define safe cache directory and allowed files
-const SAFE_CACHE_DIR = resolve(process.cwd(), 'cache');
+// Define allowed files
 const ALLOWED_FILES = [
   'domains-cache.json',
   'security-rules-templates.json',
@@ -17,6 +16,11 @@ const ALLOWED_FILES = [
   'user-preferences.json',
   'rule-id-mapping.json'
 ] as const;
+
+// Get safe cache directory dynamically (lazy evaluation to avoid build-time issues)
+const getSafeCacheDir = (): string => {
+  return resolve(process.cwd(), 'cache');
+};
 
 type AllowedFileName = typeof ALLOWED_FILES[number];
 
@@ -86,12 +90,15 @@ const validateAndGetSafePath = (fileName: string): string => {
     throw new Error(`File not in whitelist: ${fileName}`);
   }
 
+  // Get safe cache directory dynamically
+  const safeCacheDir = getSafeCacheDir();
+
   // Create safe path
-  const safePath = join(SAFE_CACHE_DIR, fileName);
+  const safePath = join(safeCacheDir, fileName);
   const normalizedPath = normalize(safePath);
 
   // Prevent directory traversal
-  if (!normalizedPath.startsWith(SAFE_CACHE_DIR)) {
+  if (!normalizedPath.startsWith(safeCacheDir)) {
     throw new Error(`Path traversal detected: ${fileName}`);
   }
 
@@ -102,11 +109,12 @@ const validateAndGetSafePath = (fileName: string): string => {
  * Ensures the cache directory exists
  */
 const ensureCacheDirectory = async (): Promise<void> => {
+  const safeCacheDir = getSafeCacheDir();
   try {
-    await fs.access(SAFE_CACHE_DIR);
+    await fs.access(safeCacheDir);
   } catch (error) {
     // Directory doesn't exist, create it
-    await fs.mkdir(SAFE_CACHE_DIR, { recursive: true });
+    await fs.mkdir(safeCacheDir, { recursive: true });
   }
 };
 

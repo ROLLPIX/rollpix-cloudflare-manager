@@ -400,9 +400,19 @@ export const runCacheCleanup = (): void => {
   MemoryCache.cleanup();
 };
 
-// Run cleanup every 10 minutes
-if (typeof setInterval !== 'undefined') {
-  setInterval(runCacheCleanup, 10 * 60 * 1000);
-}
+/**
+ * Initialize periodic cache cleanup (should only be called at runtime)
+ */
+let cleanupInterval: NodeJS.Timeout | null = null;
+export const initCacheCleanup = (): void => {
+  // Only initialize once
+  if (cleanupInterval) return;
+
+  // Only run in environments with setInterval
+  if (typeof setInterval !== 'undefined') {
+    cleanupInterval = setInterval(runCacheCleanup, 10 * 60 * 1000);
+    console.log('[Cache] Periodic cleanup initialized');
+  }
+};
 
 export { isServerlessEnvironment };
