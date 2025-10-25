@@ -19,6 +19,7 @@
 
 # production
 /build
+/cache
 
 # misc
 .DS_Store
@@ -35,7 +36,14 @@ yarn-error.log*
 
 # vercel
 .vercel
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.claude/
+.playwright-report/*
+/test-results/*
