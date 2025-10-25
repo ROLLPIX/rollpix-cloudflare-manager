@@ -97,7 +97,7 @@
 
 2. Configura el dominio:
    ```
-   cloudflare.rollpix.com
+   cf.rollpix.com
    ```
    o el subdominio que prefieras.
 
@@ -106,7 +106,7 @@
    - Crea un registro tipo **A** o **CNAME**:
      ```
      Tipo: A (o CNAME)
-     Nombre: cloudflare
+     Nombre: cf
      Valor: IP de vps1.rollpix.com (ej: 123.456.789.10)
      Proxy: Activado (naranja) o Desactivado (gris) según prefieras
      ```
@@ -153,7 +153,7 @@ http://vps1.rollpix.com:PORT_ASIGNADO
 
 1. **Accede a la URL configurada**:
    ```
-   https://cloudflare.rollpix.com
+   https://cf.rollpix.com
    ```
    (o la URL que hayas configurado)
 
@@ -260,7 +260,7 @@ Environment Variables:
   NODE_ENV: production
 
 Domain:
-  Primary: cloudflare.rollpix.com
+  Primary: cf.rollpix.com
   SSL/TLS: Let's Encrypt (auto)
 
 Resources:
@@ -355,7 +355,7 @@ Si encuentras problemas durante el deploy:
 
 ---
 
-**Desarrollado con ❤️ por el equipo de Rollpix**
+**Desarrollado con ❤️ por Nicolás Marquevich con ayuda de Claude Code**
 
 ✅ **Versión actual**: v2.4.1
 🔧 **Último fix**: Cache corruption en refresh individual resuelto
