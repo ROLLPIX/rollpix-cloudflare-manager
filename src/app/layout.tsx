@@ -13,6 +13,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "ROLLPIX Cloudflare Manager",
   description: "Monitor y gestión visual para dominios de Cloudflare",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

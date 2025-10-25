@@ -259,7 +259,7 @@ npm run lint       # ESLint check
 ```
 
 ### VPS Deployment
-- **Server**: Deploy en VPS propio (no Vercel)
+- **Server**: Deploy en VPS propio
 - **Environment variables**: Configurar en `.env.local`
 - **Build command**: `npm run build`
 - **Start command**: `npm start` o PM2

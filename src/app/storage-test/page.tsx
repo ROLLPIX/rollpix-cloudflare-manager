@@ -118,7 +118,7 @@ export default function StorageTest() {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6">Storage Test - Vercel Compatibility</h1>
+      <h1 className="text-3xl font-bold mb-6">Storage Test - Cloudflare Compatibility</h1>
 
       <div className="grid gap-6">
         {/* Storage Info */}

@@ -20,27 +20,27 @@ const STORAGE_CONFIG: Record<string, {
   regenerable: boolean;
 }> = {
   'domains-cache.json': {
-    strategy: StorageStrategy.MEMORY_ONLY,
+    strategy: StorageStrategy.FILE_SYSTEM,  // Changed to FILE_SYSTEM for volume persistence
     critical: false,
     regenerable: true
   },
   'security-rules-templates.json': {
-    strategy: StorageStrategy.CLIENT_STORAGE, // Critical: use client storage
+    strategy: StorageStrategy.FILE_SYSTEM,  // Changed from CLIENT_STORAGE to FILE_SYSTEM for Dokploy
     critical: true,
     regenerable: false
   },
   'domain-rules-status.json': {
-    strategy: StorageStrategy.MEMORY_ONLY,
-    critical: false,
+    strategy: StorageStrategy.FILE_SYSTEM,  // Changed from MEMORY_ONLY to persist in production
+    critical: true,  // Changed to true - this IS critical for domain-rules relationship
     regenerable: true
   },
   'user-preferences.json': {
-    strategy: StorageStrategy.CLIENT_STORAGE, // Critical: use client storage
+    strategy: StorageStrategy.FILE_SYSTEM,  // Changed from CLIENT_STORAGE to FILE_SYSTEM for Dokploy
     critical: true,
     regenerable: false
   },
   'rule-id-mapping.json': {
-    strategy: StorageStrategy.MEMORY_ONLY,
+    strategy: StorageStrategy.FILE_SYSTEM,  // Changed to FILE_SYSTEM for volume persistence
     critical: false,
     regenerable: true
   }
@@ -446,6 +446,27 @@ export class PersistentStorage {
 
     // Could add more maintenance tasks here
     console.log('[PersistentStorage] Maintenance completed');
+  }
+
+  /**
+   * Clear ALL cache files
+   * Use this when changing API tokens to ensure no stale data from previous account
+   */
+  static async clearAll(): Promise<void> {
+    console.log('[PersistentStorage] Clearing ALL cache files...');
+
+    const filesToClear = Object.keys(STORAGE_CONFIG);
+
+    for (const fileName of filesToClear) {
+      try {
+        await this.delete(fileName);
+        console.log(`[PersistentStorage] Cleared ${fileName}`);
+      } catch (error) {
+        console.warn(`[PersistentStorage] Failed to clear ${fileName}:`, error);
+      }
+    }
+
+    console.log('[PersistentStorage] All cache files cleared successfully');
   }
 }
 

@@ -234,21 +234,8 @@ export class UnifiedCache {
       return JSON.parse(content) as T;
 
     } catch (error) {
-      // Try reading from root directory as fallback
-      try {
-        const { promises: fs } = await import('fs');
-        const { resolve } = await import('path');
-
-        const rootPath = resolve(process.cwd(), fileName);
-        const content = await fs.readFile(rootPath, 'utf-8');
-
-        console.log(`[UnifiedCache] Fallback root read successful: ${fileName}`);
-        return JSON.parse(content) as T;
-
-      } catch (rootError) {
-        console.log(`[UnifiedCache] Both cache and root read failed for ${fileName}`);
-        return null;
-      }
+      console.log(`[UnifiedCache] File read failed for ${fileName} in cache/`);
+      return null;
     }
   }
 
@@ -332,17 +319,7 @@ export class UnifiedCache {
         await fs.access(filePath);
         return true;
       } catch {
-        // Try root directory as fallback
-        try {
-          const { promises: fs } = await import('fs');
-          const { resolve } = await import('path');
-
-          const rootPath = resolve(process.cwd(), fileName);
-          await fs.access(rootPath);
-          return true;
-        } catch {
-          return false;
-        }
+        return false;
       }
     }
   }

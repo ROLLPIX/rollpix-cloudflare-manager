@@ -59,8 +59,7 @@ export async function GET(request: NextRequest) {
       storageInfo,
       testResults,
       environment: {
-        isServerless: process.env.VERCEL === '1' || !!process.env.LAMBDA_TASK_ROOT,
-        vercel: process.env.VERCEL,
+        isServerless: !!process.env.LAMBDA_TASK_ROOT,
         nodeEnv: process.env.NODE_ENV,
         hasLocalStorage: typeof window !== 'undefined' && typeof localStorage !== 'undefined'
       },

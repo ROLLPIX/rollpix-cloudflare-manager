@@ -402,7 +402,7 @@ rollpix-cloudflare-manager/
 - **Pills de reglas inmediatos**: Muestra cantidad de reglas de plantilla al lado del escudo
 
 ### 🛠 Mejoras Técnicas
-- **Migración a Tailwind CSS 3**: Mayor estabilidad y compatibilidad con Vercel
+- **Migración a Tailwind CSS 3**: Mayor estabilidad y compatibilidad con plataformas modernas
 - **State Management con Zustand**: Eliminado prop drilling, estado centralizado
 - **Mejor error handling**: Logging detallado y manejo robusto de errores
 - **Validación con Zod**: Sanitización automática de inputs API
@@ -411,7 +411,7 @@ rollpix-cloudflare-manager/
 ### 🚀 Optimizaciones de Performance
 - **Refresh individual restaurado**: Funcionalidad completa con fallbacks múltiples
 - **API calls optimizadas**: Filtrado directo en Cloudflare API
-- **Build limpio**: Compatible con deployment en Vercel sin errores
+- **Build limpio**: Compatible con deployment en múltiples plataformas
 
 ## 🔄 Flujo de Funcionamiento
 
@@ -465,8 +465,8 @@ npm run test:e2e:ui
 
 ## 🚀 Despliegue
 
-### Vercel (Recomendado) ✅
-La aplicación está optimizada para deployment en Vercel con las siguientes características:
+### Plataformas Compatibles ✅
+La aplicación está optimizada para deployment en múltiples plataformas con las siguientes características:
 
 - ✅ **Build estable**: Migrado a Tailwind CSS 3 para compatibilidad total
 - ✅ **Zero configuration**: Deploy directo desde GitHub
@@ -479,15 +479,9 @@ npm run dev
 
 # Build de producción (verifica que compila correctamente)
 npm run build
-
-# Deploy automático
-git push origin master  # Auto-deploy en Vercel
-
-# O deploy manual
-npx vercel --prod
 ```
 
-### Configuración en Vercel Dashboard
+### Configuración de Deploy
 1. **Framework Preset**: Next.js
 2. **Build Command**: `npm run build` (default)
 3. **Output Directory**: `.next` (default)
@@ -498,12 +492,29 @@ npx vercel --prod
 ### Docker
 ```bash
 docker build -t rollpix-cloudflare-manager .
-docker run -p 3000:3000 rollpix-cloudflare-manager
+docker run -p 3000:3000 -v /ruta/cache:/app/cache rollpix-cloudflare-manager
 ```
+
+**IMPORTANTE**: Debes montar un volumen en `/app/cache` para persistencia de datos.
+
+### Dokploy (Recomendado para VPS)
+
+Para deployment en Dokploy con persistencia completa, consulta la guía detallada: **[SETUP-DOKPLOY.md](SETUP-DOKPLOY.md)**
+
+**Pasos básicos**:
+1. Crear carpeta de persistencia en el servidor: `/ruta/persistencia/cloudflare_manager`
+2. Configurar bind mount en Dokploy: `/ruta/persistencia/cloudflare_manager` → `/app/cache`
+3. Deploy del proyecto
+4. Verificar archivos con: `./scripts/verify-cache.sh /ruta/persistencia/cloudflare_manager`
+
+**Archivos críticos que requieren persistencia**:
+- `security-rules-templates.json` - Plantillas de reglas
+- `domain-rules-status.json` - Relación dominio↔reglas ⚠️ **MUY IMPORTANTE**
+- `user-preferences.json` - Preferencias de usuario
 
 ### Variables de Entorno en Producción
 - Configura `CLOUDFLARE_API_TOKEN` si quieres un token predeterminado
-- Asegúrate de que el directorio de trabajo tenga permisos de escritura para cache
+- **OBLIGATORIO**: Montar volumen en `/app/cache` para persistencia entre deploys
 
 ## 🔒 Seguridad
 

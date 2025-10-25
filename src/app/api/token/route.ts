@@ -24,8 +24,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { token } = await request.json();
-    
+    const { token, clearCache = true } = await request.json();
+
     if (!token) {
       return NextResponse.json(
         { error: 'Token is required' },
@@ -33,16 +33,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if token is different from existing token
+    let isTokenChanged = false;
     let envContent = '';
     try {
       envContent = await fs.readFile(ENV_FILE_PATH, 'utf-8');
+      const lines = envContent.split('\n');
+      const existingTokenLine = lines.find(line => line.startsWith('CLOUDFLARE_API_TOKEN='));
+
+      if (existingTokenLine) {
+        const existingToken = existingTokenLine.split('=')[1];
+        isTokenChanged = existingToken !== token;
+      } else {
+        isTokenChanged = true; // First time setting token
+      }
     } catch (error) {
-      // File doesn't exist, create new content
+      // File doesn't exist, this is the first token
+      isTokenChanged = true;
     }
 
     const lines = envContent.split('\n');
     const tokenLineIndex = lines.findIndex(line => line.startsWith('CLOUDFLARE_API_TOKEN='));
-    
+
     if (tokenLineIndex >= 0) {
       lines[tokenLineIndex] = `CLOUDFLARE_API_TOKEN=${token}`;
     } else {
@@ -52,7 +64,24 @@ export async function POST(request: NextRequest) {
     const newContent = lines.filter(line => line.trim() !== '').join('\n') + '\n';
     await fs.writeFile(ENV_FILE_PATH, newContent);
 
-    return NextResponse.json({ success: true });
+    // If token changed and clearCache is true, clear all cache files
+    if (isTokenChanged && clearCache) {
+      console.log('[Token API] Token changed, clearing all cache files...');
+      try {
+        const { PersistentStorage } = await import('@/lib/persistentStorage');
+        await PersistentStorage.clearAll();
+        console.log('[Token API] Cache cleared successfully');
+      } catch (cacheError) {
+        console.warn('[Token API] Failed to clear cache:', cacheError);
+        // Continue anyway, token was saved
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      tokenChanged: isTokenChanged,
+      cacheCleared: isTokenChanged && clearCache
+    });
   } catch (error) {
     console.error('Error saving token:', error);
     return NextResponse.json(
