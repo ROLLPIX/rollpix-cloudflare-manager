@@ -363,6 +363,7 @@ export function DomainTable() {
         currentBatch={unifiedProgress?.currentBatch}
         totalBatches={unifiedProgress?.totalBatches}
         currentDomainName={unifiedProgress?.currentDomainName}
+        isWaitingRateLimit={unifiedProgress?.isWaitingRateLimit}
       />
 
       <TemplateManagementModal

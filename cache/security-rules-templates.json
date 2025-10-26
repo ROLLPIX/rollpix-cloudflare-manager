@@ -1,1 +1,81 @@
-
+{
+  "templates": [
+    {
+      "id": "auto-template-R001-1761445103512",
+      "friendlyId": "R001",
+      "name": "Bloque crawlers malos",
+      "description": "Auto-created from domain: mundofigus.com",
+      "version": "1.0",
+      "expression": "(\n  http.user_agent contains \"Scrapy\" or\n  http.user_agent contains \"seranking\" or\n  http.user_agent contains \"Bytespider\" or\n  http.user_agent contains \"GeedoProductSearch\" or\n  http.user_agent contains \"opensiteexplorer\" or\n  http.user_agent contains \"BLEXBot\" or\n  http.user_agent contains \"Barkrowler\" or\n  http.user_agent contains \"GPTBot\" or\n  http.user_agent contains \"Yandex\" or\n  http.user_agent contains \"AhrefsBot\" or\n  http.user_agent contains \"CCBot\" or\n  http.user_agent contains \"YouBot\" or\n  http.user_agent contains \"Omgilibot\" or\n  http.user_agent contains \"Omgili\" or\n  http.user_agent contains \"Diffbot\" or\n  http.user_agent contains \"ImagesiftBot\" or\n  http.user_agent contains \"cohere-ai\" or\n  http.user_agent contains \"Timpibot\" or\n  http.user_agent contains \"Webzio-Extended\" or\n  http.user_agent contains \"SemrushBot\" or\n  http.user_agent contains \"SEOkicks\" or\n  http.user_agent contains \"Majestic\" or\n  http.user_agent contains \"DotBot\" or\n  http.user_agent contains \"LinkdexBot\" or\n  http.user_agent contains \"SeznamBot\" or\n  http.user_agent contains \"MegaIndex\" or\n  http.user_agent contains \"Nibbler\" or\n  http.user_agent contains \"Screaming Frog\" or\n  http.user_agent contains \"SEOlyticsCrawler\" or\n  http.user_agent contains \"AI2Bot\" or\n  http.user_agent contains \"DataForSeoBot\" or\n  http.user_agent contains \"GigaBot\" or\n  http.user_agent contains \"MeltwaterBot\" or\n  http.user_agent contains \"SeekportBot\" or\n  http.user_agent contains \"Shopify Partner\" or\n  http.user_agent contains \"PriceAPIBot\" or\n  http.user_agent contains \"Datafeedwatch\" or\n  http.user_agent contains \"intelx.io\" or\n  http.user_agent contains \"Livelapbot\" or\n  http.user_agent contains \"SMTBot\" or\n  http.user_agent contains \"Spbot\" or\n  http.user_agent contains \"MJ12bot\" or\n  http.user_agent contains \"Nutch\"\n)\nand not cf.client.bot\n",
+      "action": "block",
+      "actionParameters": {},
+      "enabled": true,
+      "priority": 1,
+      "tags": [
+        "auto-created"
+      ],
+      "applicableTags": [],
+      "excludedDomains": [],
+      "createdAt": "2025-10-26T02:18:23.512Z",
+      "updatedAt": "2025-10-26T02:18:23.512Z"
+    },
+    {
+      "id": "auto-template-R002-1761445103512",
+      "friendlyId": "R002",
+      "name": "Todo los que no viene de ARG pasa por Challenge Interactivo",
+      "description": "Auto-created from domain: multienvasesonline.com.ar",
+      "version": "1.0",
+      "expression": "( not (ip.geoip.country in { \"AR\" \"US\"}) )  and not (ip.src in $whitelist_ip) and not cf.client.bot and not (http.user_agent contains \"letsencrypt\")",
+      "action": "managed_challenge",
+      "actionParameters": {},
+      "enabled": true,
+      "priority": 2,
+      "tags": [
+        "auto-created"
+      ],
+      "applicableTags": [],
+      "excludedDomains": [],
+      "createdAt": "2025-10-26T02:18:23.512Z",
+      "updatedAt": "2025-10-26T02:18:23.512Z"
+    },
+    {
+      "id": "auto-template-R003-1761445103513",
+      "friendlyId": "R003",
+      "name": "Control Crawlers buenos paginas con parametros",
+      "description": "Auto-created from domain: multienvasesonline.com.ar",
+      "version": "1.0",
+      "expression": "(\n  (\n    cf.client.bot or\n    http.user_agent contains \"Googlebot\" or\n    http.user_agent contains \"Google-InspectionTool\" or\n    http.user_agent contains \"GoogleOther\" or\n    http.user_agent contains \"Google-SafetyNet\" or\n    http.user_agent contains \"Google-Extended\" or\n    http.user_agent contains \"AdsBot-Google\" or\n    http.user_agent contains \"Mediapartners-Google\" or\n    http.user_agent contains \"FeedFetcher-Google\" or\n    http.user_agent contains \"bingbot\" or\n    http.user_agent contains \"MSNBot\" or\n    http.user_agent contains \"DuckDuckBot\" or\n    http.user_agent contains \"Baiduspider\" or\n    http.user_agent contains \"facebookexternalhit\" or\n    http.user_agent contains \"Meta-ExternalData\" or\n    http.user_agent contains \"LinkedInBot\" or\n    http.user_agent contains \"Slackbot\" or\n    http.user_agent contains \"TelegramBot\" or\n    http.user_agent contains \"Discordbot\" or\n    http.user_agent contains \"Twitterbot\" or\n    http.user_agent contains \"Pinterestbot\" or\n    http.user_agent contains \"WhatsApp\" or\n    http.user_agent contains \"Applebot\" or\n    http.user_agent contains \"Yahoo! Slurp\"\n  )\n  and\n  (\n    http.request.uri.query contains \"p=\" or\n    http.request.uri.query contains \"dir=\" or\n    http.request.uri.query contains \"order=\" or\n    http.request.uri.query contains \"mode=\" or\n    http.request.uri.query contains \"limit=\" or\n    http.request.uri.query contains \"cat=\" or\n    http.request.uri.query contains \"SID=\" or\n    http.request.uri.query contains \"criterion=\" or\n    http.request.uri.query contains \"color=\" or\n    http.request.uri.query contains \"size=\" or\n    http.request.uri.query contains \"price=\" or\n    http.request.uri.query contains \"brand=\" or\n    http.request.uri.query contains \"utm_\" or\n    http.request.uri.query contains \"sort=\" or\n    http.request.uri.query contains \"filter=\" or\n    http.request.uri.query contains \"ref=\" or\n    http.request.uri.query contains \"page=\" or\n    http.request.uri.query contains \"session\" or\n    http.request.uri.query contains \"nocache\"\n  )\n) \n",
+      "action": "block",
+      "actionParameters": {},
+      "enabled": true,
+      "priority": 3,
+      "tags": [
+        "auto-created"
+      ],
+      "applicableTags": [],
+      "excludedDomains": [],
+      "createdAt": "2025-10-26T02:18:23.513Z",
+      "updatedAt": "2025-10-26T02:18:23.513Z"
+    },
+    {
+      "id": "auto-template-R004-1761445103513",
+      "friendlyId": "R004",
+      "name": "AI Crawl Control - Block AI bots by User Agent",
+      "description": "Auto-created from domain: multienvasesonline.com.ar",
+      "version": "1.0",
+      "expression": "(http.request.uri.path ne \"/robots.txt\") and ((http.user_agent contains \"Bytespider\") or (http.user_agent contains \"CCBot\") or (http.user_agent contains \"MistralAI-User\") or (http.user_agent contains \"Novellum\") or (http.user_agent contains \"ProRataInc\") or (http.user_agent contains \"Timpibot\"))",
+      "action": "block",
+      "actionParameters": {},
+      "enabled": true,
+      "priority": 4,
+      "tags": [
+        "auto-created"
+      ],
+      "applicableTags": [],
+      "excludedDomains": [],
+      "createdAt": "2025-10-26T02:18:23.513Z",
+      "updatedAt": "2025-10-26T02:18:23.513Z"
+    }
+  ],
+  "lastUpdated": "2025-10-26T02:18:47.997Z"
+}

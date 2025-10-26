@@ -40,7 +40,8 @@ export async function GET(
         error: progress.error,
         currentBatch: progress.currentBatch,
         totalBatches: progress.totalBatches,
-        currentDomainName: progress.currentDomainName
+        currentDomainName: progress.currentDomainName,
+        isWaitingRateLimit: progress.isWaitingRateLimit
       }
     });
 

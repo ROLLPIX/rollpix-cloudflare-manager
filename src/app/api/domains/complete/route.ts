@@ -257,7 +257,8 @@ export async function POST(request: NextRequest) {
       }
 
       // Update Phase 2 progress after processing this batch
-      const domainsProcessed = Math.min(i + BATCH_SIZE, targetZoneIds.length);
+      // Use actual count of successfully processed domains, not estimated count
+      const domainsProcessed = domainRulesMap.size;
       progressTracker.updatePhase2(
         requestId,
         domainsProcessed,
@@ -270,7 +271,9 @@ export async function POST(request: NextRequest) {
       // Rate limiting delay between batches
       if (i + BATCH_SIZE < targetZoneIds.length) {
         console.log(`[Complete API] Waiting ${BATCH_DELAY}ms before next batch...`);
+        progressTracker.setRateLimitWait(requestId, true);
         await new Promise(resolve => setTimeout(resolve, BATCH_DELAY));
+        progressTracker.setRateLimitWait(requestId, false);
       }
     }
 

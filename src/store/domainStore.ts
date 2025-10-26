@@ -33,6 +33,7 @@ interface DomainState {
     currentBatch?: number;
     totalBatches?: number;
     currentDomainName?: string;
+    isWaitingRateLimit?: boolean;
   } | null;
   isBackgroundRefreshing: boolean;
   selectedDomains: Set<string>;
@@ -226,7 +227,8 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
                   completed,
                   currentBatch,
                   totalBatches,
-                  currentDomainName
+                  currentDomainName,
+                  isWaitingRateLimit
                 } = progressData.data;
 
                 set({
@@ -238,7 +240,8 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
                     total,
                     currentBatch,
                     totalBatches,
-                    currentDomainName
+                    currentDomainName,
+                    isWaitingRateLimit
                   }
                 });
 
@@ -280,6 +283,45 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
 
       const unifiedData = await unifiedResponse.json();
 
+      // Do one final poll to capture the completed status from server
+      if (showProgress && requestId) {
+        try {
+          const finalProgressResponse = await fetch(`/api/domains/progress/${requestId}`);
+          if (finalProgressResponse.ok) {
+            const finalProgressData = await finalProgressResponse.json();
+            if (finalProgressData.success && finalProgressData.data) {
+              const {
+                percentage,
+                phase,
+                phaseLabel,
+                current,
+                total,
+                currentBatch,
+                totalBatches,
+                currentDomainName,
+                isWaitingRateLimit
+              } = finalProgressData.data;
+
+              set({
+                unifiedProgress: {
+                  percentage,
+                  phase,
+                  phaseLabel,
+                  current,
+                  total,
+                  currentBatch,
+                  totalBatches,
+                  currentDomainName,
+                  isWaitingRateLimit
+                }
+              });
+            }
+          }
+        } catch (error) {
+          console.warn('[DomainStore] Failed to fetch final progress, using default 100%:', error);
+        }
+      }
+
       // Clear progress interval
       if (progressInterval) {
         clearInterval(progressInterval);
@@ -289,8 +331,8 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
       if (unifiedData.success) {
         const { domains, summary } = unifiedData.data;
 
-        // Final progress update
-        if (showProgress) {
+        // If we didn't get final progress from server, show 100% manually
+        if (showProgress && get().unifiedProgress && get().unifiedProgress!.percentage < 100) {
           set({
             unifiedProgress: {
               percentage: 100,
@@ -300,7 +342,10 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
               total: summary.totalDomains
             }
           });
-          // Hide progress after 1 second
+        }
+
+        // Hide progress after 1 second
+        if (showProgress) {
           setTimeout(() => {
             set({ unifiedProgress: null });
           }, 1000);

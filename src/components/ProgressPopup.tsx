@@ -15,6 +15,7 @@ interface ProgressPopupProps {
   currentBatch?: number;
   totalBatches?: number;
   currentDomainName?: string;
+  isWaitingRateLimit?: boolean;
 }
 
 export function ProgressPopup({
@@ -26,7 +27,8 @@ export function ProgressPopup({
   total,
   currentBatch,
   totalBatches,
-  currentDomainName
+  currentDomainName,
+  isWaitingRateLimit
 }: ProgressPopupProps) {
   const [mounted, setMounted] = useState(false);
 
@@ -59,11 +61,12 @@ export function ProgressPopup({
     const domainInfo = current && total ? ` (${current}/${total} dominios)` : '';
     const batchInfo = currentBatch && totalBatches ? `Lote ${currentBatch}/${totalBatches}` : '';
     const domainNameInfo = currentDomainName ? `Procesando: ${currentDomainName}` : '';
+    const rateLimitInfo = isWaitingRateLimit ? '⏳ Esperando por límites de rate...' : '';
 
     return {
       title: `Fase 2: Procesando reglas de seguridad${domainInfo}`,
       subtitle: `${percentage}% completado`,
-      details: batchInfo || domainNameInfo ? { batchInfo, domainNameInfo } : null
+      details: batchInfo || domainNameInfo || rateLimitInfo ? { batchInfo, domainNameInfo, rateLimitInfo } : null
     };
   };
 
@@ -89,6 +92,9 @@ export function ProgressPopup({
                   )}
                   {info.details.domainNameInfo && (
                     <div className="truncate">{info.details.domainNameInfo}</div>
+                  )}
+                  {info.details.rateLimitInfo && (
+                    <div className="font-medium text-orange-600">{info.details.rateLimitInfo}</div>
                   )}
                 </div>
               )}

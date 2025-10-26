@@ -16,6 +16,7 @@ export interface ProgressUpdate {
   currentBatch?: number;
   totalBatches?: number;
   currentDomainName?: string;
+  isWaitingRateLimit?: boolean; // Indicates if waiting for rate limit delay
 }
 
 class ProgressTracker {
@@ -73,7 +74,7 @@ class ProgressTracker {
 
     progress.phase = 1;
     progress.phaseLabel = 'Obteniendo lista de dominios';
-    progress.percentage = Math.min(100, Math.max(0, percentage));
+    progress.percentage = Math.round(Math.min(100, Math.max(0, percentage)));
     progress.timestamp = Date.now();
 
     this.progressMap.set(requestId, progress);
@@ -114,6 +115,24 @@ class ProgressTracker {
     const batchInfo = currentBatch && totalBatches ? ` [Lote ${currentBatch}/${totalBatches}]` : '';
     const domainInfo = currentDomainName ? ` - ${currentDomainName}` : '';
     console.log(`[ProgressTracker] ${requestId}: Phase 2 - ${current}/${total} domains (${phase2Percentage}%)${batchInfo}${domainInfo}`);
+  }
+
+  /**
+   * Set rate limit waiting status
+   */
+  setRateLimitWait(requestId: string, isWaiting: boolean): void {
+    const progress = this.progressMap.get(requestId);
+    if (!progress) {
+      console.warn(`[ProgressTracker] No progress found for ${requestId}`);
+      return;
+    }
+
+    progress.isWaitingRateLimit = isWaiting;
+    this.progressMap.set(requestId, progress);
+
+    if (isWaiting) {
+      console.log(`[ProgressTracker] ${requestId}: Waiting for rate limit delay...`);
+    }
   }
 
   /**
