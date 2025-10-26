@@ -82,6 +82,9 @@ export interface DomainStatus {
       version: string;
       isOutdated: boolean;
       name: string;
+      action?: string;
+      expression?: string;
+      description?: string;
     }>;
   };
 }

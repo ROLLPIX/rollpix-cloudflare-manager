@@ -517,6 +517,9 @@ export class CloudflareAPI {
         cloudflareRuleId: r.cloudflareRuleId
       })));
 
+      // Create a map of cloudflareRuleId -> rule data for efficient lookup
+      const rulesDataMap = new Map(rulesData.map(rule => [rule.id, rule]));
+
       // Build complete domain status
       const domainStatus: DomainStatus = {
         domain: zoneName,
@@ -533,12 +536,19 @@ export class CloudflareAPI {
           customRules: 0, // No more custom rules
           hasConflicts: appliedRules.some(rule => rule.status === 'outdated'),
           lastAnalyzed: new Date().toISOString(),
-          templateRules: appliedRules.map(rule => ({
-            friendlyId: rule.friendlyId,
-            version: rule.version,
-            isOutdated: rule.status === 'outdated',
-            name: rule.ruleName
-          }))
+          templateRules: appliedRules.map(rule => {
+            // Get the actual Cloudflare rule data
+            const cloudflareRule = rulesDataMap.get(rule.cloudflareRuleId);
+            return {
+              friendlyId: rule.friendlyId,
+              version: rule.version,
+              isOutdated: rule.status === 'outdated',
+              name: cloudflareRule?.description || rule.ruleName,
+              action: cloudflareRule?.action,
+              expression: cloudflareRule?.expression,
+              description: cloudflareRule?.description
+            };
+          })
         }
       };
 

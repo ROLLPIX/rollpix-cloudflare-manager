@@ -4,6 +4,7 @@ import { DomainStatus, RuleTemplate, CloudflareRule } from '@/types/cloudflare';
 import { safeReadJsonFile, safeWriteJsonFile } from '@/lib/fileSystem';
 import { TemplateSynchronizer, SyncResult } from '@/lib/templateSync';
 import { BatchCacheWriter, PendingChanges } from '@/lib/batchCacheWriter';
+import { progressTracker } from '@/lib/progressTracker';
 
 const DOMAIN_CACHE_FILE = 'domains-cache.json';
 const RULES_TEMPLATES_FILE = 'security-rules-templates.json';
@@ -95,9 +96,22 @@ async function mergeDomainsToCache(updatedDomains: DomainStatus[]): Promise<void
 
 // POST - Get complete domain information in unified process
 export async function POST(request: NextRequest) {
+  let requestId = ''; // Declare outside try block for error handler access
+
   try {
     const body = await request.json();
-    const { apiToken, zoneIds, forceRefresh = false } = body;
+    const {
+      apiToken,
+      zoneIds,
+      forceRefresh = false,
+      batchSize: customBatchSize,
+      batchDelay: customBatchDelay,
+      requestId: clientRequestId
+    } = body;
+
+    // Use client-provided requestId or generate one
+    requestId = clientRequestId || progressTracker.generateRequestId();
+    console.log(`[Complete API] Starting request ${requestId}`);
 
     console.log('[Complete API] Token received:', apiToken ? `${apiToken.substring(0, 8)}...` : 'null');
     if (!apiToken) {
@@ -120,6 +134,10 @@ export async function POST(request: NextRequest) {
     // Get zones to process
     let targetZoneIds = zoneIds;
     if (!targetZoneIds || targetZoneIds.length === 0) {
+      // Phase 1: Getting zone list - update progress from 0% to 100%
+      progressTracker.initProgress(requestId, 0); // Will update total later
+      progressTracker.updatePhase1(requestId, 10);
+
       // Get all zones with pagination
       const allZones = [];
       let page = 1;
@@ -129,19 +147,39 @@ export async function POST(request: NextRequest) {
         const zonesResponse = await cloudflareAPI.getZones(page, 50);
         allZones.push(...zonesResponse.zones);
         hasMore = page < zonesResponse.totalPages;
+
+        // Update Phase 1 progress based on pagination
+        const phase1Progress = 10 + Math.min(70, (page / Math.max(1, zonesResponse.totalPages)) * 70);
+        progressTracker.updatePhase1(requestId, phase1Progress);
+
         page++;
       }
 
       targetZoneIds = allZones.map(zone => zone.id);
       console.log(`[Complete API] Will process ${targetZoneIds.length} total zones`);
+
+      // Complete Phase 1
+      progressTracker.updatePhase1(requestId, 100);
     }
 
     console.log(`[Complete API] Processing ${targetZoneIds.length} zones with batch synchronization`);
 
+    // Update total for Phase 2 (don't re-init, just update the total)
+    const progress = progressTracker.getProgress(requestId);
+    if (progress) {
+      progressTracker.updateTotal(requestId, targetZoneIds.length);
+    } else {
+      // If progress doesn't exist yet (direct zone IDs provided), initialize it
+      progressTracker.initProgress(requestId, targetZoneIds.length);
+    }
+
     const results: DomainStatus[] = [];
     const allSyncResults: SyncResult[] = [];
-    const BATCH_SIZE = 12; // Optimal batch size for parallel processing
-    const BATCH_DELAY = 200; // Delay between batches (ms)
+    // Use custom values from settings if provided, otherwise use defaults
+    const BATCH_SIZE = customBatchSize || 4; // Optimized for Cloudflare's 1200 req/5min limit (~7 API calls/domain)
+    const BATCH_DELAY = customBatchDelay || 6000; // 6 seconds between batches to stay under rate limits
+
+    console.log(`[Complete API] Rate limiting config: BATCH_SIZE=${BATCH_SIZE}, BATCH_DELAY=${BATCH_DELAY}ms`);
 
     // Get all zones info once
     const allZonesMap = new Map();
@@ -165,12 +203,17 @@ export async function POST(request: NextRequest) {
       basicDomainInfo?: DomainStatus;
     }>();
 
+    const totalBatches = Math.ceil(targetZoneIds.length / BATCH_SIZE);
+
     for (let i = 0; i < targetZoneIds.length; i += BATCH_SIZE) {
       const batch = targetZoneIds.slice(i, i + BATCH_SIZE);
       const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
-      const totalBatches = Math.ceil(targetZoneIds.length / BATCH_SIZE);
 
       console.log(`[Complete API] 📥 Collecting batch ${batchNumber}/${totalBatches} (${batch.length} zones)`);
+
+      // Get first domain name for this batch for progress display
+      const firstZone = allZonesMap.get(batch[0]);
+      const firstDomainName = firstZone?.name || 'Procesando...';
 
       const batchPromises = batch.map(async (zoneId: string) => {
         const zone = allZonesMap.get(zoneId);
@@ -213,6 +256,17 @@ export async function POST(request: NextRequest) {
         }
       }
 
+      // Update Phase 2 progress after processing this batch
+      const domainsProcessed = Math.min(i + BATCH_SIZE, targetZoneIds.length);
+      progressTracker.updatePhase2(
+        requestId,
+        domainsProcessed,
+        targetZoneIds.length,
+        batchNumber,
+        totalBatches,
+        firstDomainName
+      );
+
       // Rate limiting delay between batches
       if (i + BATCH_SIZE < targetZoneIds.length) {
         console.log(`[Complete API] Waiting ${BATCH_DELAY}ms before next batch...`);
@@ -249,6 +303,9 @@ export async function POST(request: NextRequest) {
         continue;
       }
 
+      // Create a map of cloudflareRuleId -> CloudflareRule for efficient lookup
+      const rulesDataMap = new Map(data.rules.map(rule => [rule.id, rule]));
+
       // Combine basic domain info with sync results
       const completeDomainInfo: DomainStatus = {
         ...basicDomainInfo,
@@ -258,12 +315,19 @@ export async function POST(request: NextRequest) {
           customRules: 0, // Removed custom rules tracking
           hasConflicts: syncResult.processedRules.some(r => r.isOutdated),
           lastAnalyzed: new Date().toISOString(),
-          templateRules: syncResult.processedRules.map(r => ({
-            friendlyId: r.friendlyId,
-            version: r.version,
-            isOutdated: r.isOutdated,
-            name: r.friendlyId // Use friendlyId as name for now
-          }))
+          templateRules: syncResult.processedRules.map(r => {
+            // Get the actual Cloudflare rule data
+            const cloudflareRule = rulesDataMap.get(r.ruleId);
+            return {
+              friendlyId: r.friendlyId,
+              version: r.version,
+              isOutdated: r.isOutdated,
+              name: cloudflareRule?.description || r.friendlyId,
+              action: cloudflareRule?.action,
+              expression: cloudflareRule?.expression,
+              description: cloudflareRule?.description
+            };
+          })
         }
       };
 
@@ -342,8 +406,12 @@ export async function POST(request: NextRequest) {
     console.log(`[Complete API] ⚠️ Conflicts: ${domainsWithConflicts} domains with outdated template rules`);
     console.log(`[Complete API] 🔄 Template sync: ${templateImportResult.imported} new, ${templateImportResult.updated} updated, ${templateImportResult.propagatedDomains} propagated`);
 
+    // Mark progress as completed
+    progressTracker.markCompleted(requestId);
+
     return NextResponse.json({
       success: true,
+      requestId: requestId, // Include requestId for progress polling
       data: {
         domains: results,
         summary: {
@@ -372,8 +440,12 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error in batch domain processing:', error);
+    if (requestId) {
+      progressTracker.markFailed(requestId, error instanceof Error ? error.message : 'Unknown error');
+    }
     return NextResponse.json({
       success: false,
+      requestId: requestId || undefined,
       error: 'Failed to process domains with batch synchronization'
     }, { status: 500 });
   }

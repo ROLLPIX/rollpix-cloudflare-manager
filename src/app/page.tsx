@@ -10,9 +10,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Key, Shield, Globe, CheckCircle, XCircle, Clock, AlertTriangle, LogOut } from 'lucide-react';
+import { Key, Shield, Globe, CheckCircle, XCircle, Clock, AlertTriangle, LogOut, Settings as SettingsIcon } from 'lucide-react';
 import { tokenStorage } from '@/lib/tokenStorage';
 import { SimpleThemeToggle } from '@/components/SimpleThemeToggle';
+import { Settings } from '@/components/Settings';
 import Image from 'next/image';
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
   const [testResults, setTestResults] = useState<any>(null);
   const [testingToken, setTestingToken] = useState(false);
   const [showChangeTokenDialog, setShowChangeTokenDialog] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [renderKey, setRenderKey] = useState(0); // Used to force re-render on token change
   const [envTokenInfo, setEnvTokenInfo] = useState<{ hasToken: boolean; maskedToken?: string } | null>(null);
   const [loadingEnvToken, setLoadingEnvToken] = useState(false);
@@ -300,13 +302,14 @@ export default function Home() {
 
             </div>
             <div className="flex items-center gap-2">
-              <SimpleThemeToggle />
               <div className="text-xs text-muted-foreground mr-2">
                 <div>Token: ***{storedToken?.slice(-8)}</div>
                 {tokenAge !== null && <div>Guardado: {tokenAge === 0 ? 'Ahora' : `hace ${tokenAge}h`}</div>}
               </div>
-              <Button onClick={() => setShowChangeTokenDialog(true)} variant="outline" size="sm"><Key className="h-3 w-3 mr-1" />Cambiar Token</Button>
-              <Button onClick={confirmResetToken} variant="destructive" size="sm"><LogOut className="h-3 w-3 mr-1" />Cerrar Sesión</Button>
+              <Button onClick={() => setShowSettings(true)} variant="outline" size="sm">
+                <SettingsIcon className="h-4 w-4 mr-1" />
+                Configuración
+              </Button>
             </div>
           </div>
 
@@ -320,30 +323,14 @@ export default function Home() {
           </Tabs>
         </div>
       )}
-      
-      <Dialog open={showChangeTokenDialog} onOpenChange={setShowChangeTokenDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Cambiar Token API</DialogTitle>
-            <DialogDescription>¿Estás seguro que deseas cambiar tu token API? Esto te llevará de vuelta a la pantalla de configuración.</DialogDescription>
-          </DialogHeader>
-          <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-4 my-4">
-            <div className="flex items-start gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
-              <div className="text-sm">
-                <p className="font-medium text-amber-900 dark:text-amber-100">Se borrará toda la caché</p>
-                <p className="text-amber-700 dark:text-amber-300 mt-1">
-                  Al cambiar el token API, se eliminarán automáticamente todos los datos almacenados (dominios, reglas, preferencias) ya que pueden pertenecer a otra cuenta de Cloudflare.
-                </p>
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowChangeTokenDialog(false)}>Cancelar</Button>
-            <Button onClick={confirmResetToken} variant="destructive">Cambiar Token</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+
+      {/* Settings Modal */}
+      <Settings
+        open={showSettings}
+        onOpenChange={setShowSettings}
+        onTokenChange={forceRerender}
+        onLogout={confirmResetToken}
+      />
     </div>
   );
 }

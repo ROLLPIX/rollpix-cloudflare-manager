@@ -36,6 +36,7 @@ export function DomainTableFilters({
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
               className="pl-10"
+              autoComplete="off"
             />
           </div>
         </div>

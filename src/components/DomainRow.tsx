@@ -43,18 +43,27 @@ export const DomainRow = React.memo<DomainRowProps>(({
 
     // Convert from securityRules.templateRules to RulePillData format
     if (domain.securityRules?.templateRules) {
-      return domain.securityRules.templateRules.map(rule => ({
-        id: rule.friendlyId,
-        name: rule.name,
-        version: rule.version,
-        domainVersion: rule.version,
-        isUpdated: !rule.isOutdated,
-        action: 'js_challenge', // Default action for template rules
-        type: 'firewall_custom',
-        expression: 'Template rule', // Placeholder
-        lastUpdated: new Date(domain.securityRules?.lastAnalyzed || Date.now()),
-        templateId: rule.friendlyId
-      }));
+      return domain.securityRules.templateRules.map(rule => {
+        // Truncate expression to first 30 characters
+        const truncatedExpression = rule.expression
+          ? (rule.expression.length > 30
+              ? rule.expression.substring(0, 30) + '...'
+              : rule.expression)
+          : 'Template rule';
+
+        return {
+          id: rule.friendlyId,
+          name: rule.name,
+          version: rule.version,
+          domainVersion: rule.version,
+          isUpdated: !rule.isOutdated,
+          action: rule.action || 'unknown',
+          type: 'firewall_custom',
+          expression: truncatedExpression,
+          lastUpdated: new Date(domain.securityRules?.lastAnalyzed || Date.now()),
+          templateId: rule.friendlyId
+        };
+      });
     }
 
     return [];

@@ -51,7 +51,13 @@ async function loadRulesTemplates(): Promise<RulesTemplatesCache> {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { apiToken, zoneIds, forceRefresh = false } = body;
+    const {
+      apiToken,
+      zoneIds,
+      forceRefresh = false,
+      batchSize: customBatchSize,
+      batchDelay: customBatchDelay
+    } = body;
 
     console.log('[Analyze API] Token received:', apiToken ? `${apiToken.substring(0, 8)}...` : 'null');
     if (!apiToken) {
@@ -255,9 +261,11 @@ export async function POST(request: NextRequest) {
     };
 
     // Process zones in parallel batches for better performance
-    const BATCH_SIZE = 12; // Optimal batch size for Cloudflare API rate limits
-    const BATCH_DELAY = 250; // Delay between batches (ms)
+    // Use custom values from settings if provided, otherwise use defaults
+    const BATCH_SIZE = customBatchSize || 4; // Optimized for Cloudflare's 1200 req/5min limit (~7 API calls/domain)
+    const BATCH_DELAY = customBatchDelay || 6000; // 6 seconds between batches to stay under rate limits
 
+    console.log(`[Analyze API] Rate limiting config: BATCH_SIZE=${BATCH_SIZE}, BATCH_DELAY=${BATCH_DELAY}ms`);
     console.log(`[Analyze API] Processing in batches of ${BATCH_SIZE} zones with ${BATCH_DELAY}ms delay between batches`);
 
     for (let i = 0; i < targetZoneIds.length; i += BATCH_SIZE) {

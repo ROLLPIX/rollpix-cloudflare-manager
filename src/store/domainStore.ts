@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { DomainStatus } from '@/types/cloudflare';
 import { tokenStorage } from '@/lib/tokenStorage';
+import { settingsStorage } from '@/lib/settingsStorage';
 import { toast } from 'sonner';
 
 export type FilterType = 'all' | 'proxied' | 'not-proxied';
@@ -23,7 +24,16 @@ interface DomainState {
   allDomains: DomainStatus[];
   loading: boolean;
   loadingProgress: { completed: number; total: number } | null;
-  unifiedProgress: { percentage: number } | null;
+  unifiedProgress: {
+    percentage: number;
+    phase?: 1 | 2;
+    phaseLabel?: string;
+    current?: number;
+    total?: number;
+    currentBatch?: number;
+    totalBatches?: number;
+    currentDomainName?: string;
+  } | null;
   isBackgroundRefreshing: boolean;
   selectedDomains: Set<string>;
   updatingRecords: Set<string>;
@@ -185,30 +195,82 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
       return;
     }
 
-    // Start simple percentage progress tracking
+    // Get rate limiting settings
+    const rateLimiting = settingsStorage.getRateLimiting();
+
+    // Generate requestId on client side for progress tracking
+    const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    console.log(`[DomainStore] Generated requestId: ${requestId}`);
+
+    // Progress polling
     let progressInterval: NodeJS.Timeout | null = null;
-    let currentPercentage = 0;
 
     try {
       console.log(`[DomainStore] Starting unified fetch - forceRefresh: ${forceRefresh}`);
 
+      // Start polling for progress if showProgress is enabled
       if (showProgress) {
-        // Simple percentage-based progress simulation
-        progressInterval = setInterval(() => {
-          currentPercentage += Math.random() * 15; // Random increments up to 15%
-          currentPercentage = Math.min(currentPercentage, 85); // Don't go above 85% until complete
-          set({ unifiedProgress: { percentage: Math.round(currentPercentage) } });
-        }, 500); // Update every 500ms
+        // Poll progress endpoint every 500ms
+        progressInterval = setInterval(async () => {
+          try {
+            const progressResponse = await fetch(`/api/domains/progress/${requestId}`);
+            if (progressResponse.ok) {
+              const progressData = await progressResponse.json();
+              if (progressData.success && progressData.data) {
+                const {
+                  phase,
+                  phaseLabel,
+                  percentage,
+                  current,
+                  total,
+                  completed,
+                  currentBatch,
+                  totalBatches,
+                  currentDomainName
+                } = progressData.data;
+
+                set({
+                  unifiedProgress: {
+                    percentage,
+                    phase,
+                    phaseLabel,
+                    current,
+                    total,
+                    currentBatch,
+                    totalBatches,
+                    currentDomainName
+                  }
+                });
+
+                console.log(`[DomainStore] Progress: Phase ${phase} - ${percentage}% (${current}/${total})`);
+
+                // Stop polling if completed
+                if (completed && progressInterval) {
+                  clearInterval(progressInterval);
+                  progressInterval = null;
+                }
+              }
+            } else if (progressResponse.status === 404) {
+              // Progress not yet initialized, keep polling
+              console.log('[DomainStore] Progress not yet available, waiting...');
+            }
+          } catch (error) {
+            console.error('[DomainStore] Error polling progress:', error);
+          }
+        }, 500);
       }
 
-      // Use unified endpoint for complete domain processing
+      // Start the unified fetch with requestId
       const unifiedResponse = await fetch('/api/domains/complete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           apiToken,
           zoneIds: [], // Empty means process all zones
-          forceRefresh
+          forceRefresh,
+          batchSize: rateLimiting.batchSize,
+          batchDelay: rateLimiting.batchDelay,
+          requestId: requestId // Send requestId to API
         })
       });
 
@@ -221,6 +283,7 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
       // Clear progress interval
       if (progressInterval) {
         clearInterval(progressInterval);
+        progressInterval = null;
       }
 
       if (unifiedData.success) {
@@ -228,7 +291,15 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
 
         // Final progress update
         if (showProgress) {
-          set({ unifiedProgress: { percentage: 100 } });
+          set({
+            unifiedProgress: {
+              percentage: 100,
+              phase: 2,
+              phaseLabel: 'Completado',
+              current: summary.totalDomains,
+              total: summary.totalDomains
+            }
+          });
           // Hide progress after 1 second
           setTimeout(() => {
             set({ unifiedProgress: null });
@@ -607,6 +678,9 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     try {
       console.log(`[DomainStore] Using unified sync logic for domain ${zoneId}`);
 
+      // Get rate limiting settings
+      const rateLimiting = settingsStorage.getRateLimiting();
+
       // NEW v3.1.0: Use unified sync logic via /api/domains/complete
       const unifiedResponse = await fetch('/api/domains/complete', {
         method: 'POST',
@@ -617,7 +691,9 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         body: JSON.stringify({
           apiToken,
           zoneIds: [zoneId], // Refresh only this specific domain
-          forceRefresh: true
+          forceRefresh: true,
+          batchSize: rateLimiting.batchSize,
+          batchDelay: rateLimiting.batchDelay
         })
       });
 
@@ -729,6 +805,9 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
     try {
       console.log(`[DomainStore] Using unified global sync for ALL domains (not filtering by zoneIds)`);
 
+      // Get rate limiting settings
+      const rateLimiting = settingsStorage.getRateLimiting();
+
       // Use global sync for ALL domains to avoid showing only selected ones
       // We'll filter locally which domains to update, but fetch all data
       const unifiedResponse = await fetch('/api/domains/complete', {
@@ -740,7 +819,9 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         body: JSON.stringify({
           apiToken,
           // DON'T pass zoneIds - fetch ALL domains
-          forceRefresh: true
+          forceRefresh: true,
+          batchSize: rateLimiting.batchSize,
+          batchDelay: rateLimiting.batchDelay
         })
       });
 

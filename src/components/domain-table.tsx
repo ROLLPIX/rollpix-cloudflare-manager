@@ -356,6 +356,13 @@ export function DomainTable() {
       <ProgressPopup
         isVisible={!!unifiedProgress}
         percentage={unifiedProgress?.percentage || 0}
+        phase={unifiedProgress?.phase}
+        phaseLabel={unifiedProgress?.phaseLabel}
+        current={unifiedProgress?.current}
+        total={unifiedProgress?.total}
+        currentBatch={unifiedProgress?.currentBatch}
+        totalBatches={unifiedProgress?.totalBatches}
+        currentDomainName={unifiedProgress?.currentDomainName}
       />
 
       <TemplateManagementModal
