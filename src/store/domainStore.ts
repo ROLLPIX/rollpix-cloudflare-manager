@@ -605,21 +605,16 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         }
       }
 
-      console.log('[DomainStore] No valid cache available. Checking for API token...');
+      console.log('[DomainStore] No valid cache available.');
 
-      // Check if we have a token for auto-fetch
+      // No auto-fetch - let user decide when to refresh
       const apiToken = tokenStorage.getToken();
       if (apiToken) {
-        console.log('[DomainStore] Token available, starting auto-fetch...');
-        try {
-          await get().fetchFromCloudflareUnified(false, false); // Fast unified fetch
-        } catch (fetchError) {
-          console.error('[DomainStore] Auto-fetch failed:', fetchError);
-          toast.error('Error al cargar dominios automáticamente. Usa "Actualizar Todo" manualmente.');
-        }
+        console.log('[DomainStore] No hay datos en caché. Usa "Actualizar Todo" para obtener dominios de Cloudflare.');
+        toast.info('No hay datos en caché. Usa "Actualizar Todo" para cargar dominios desde Cloudflare.');
       } else {
         console.log('[DomainStore] No API token available');
-        toast.info('Introduce tu token de Cloudflare para cargar los dominios.');
+        toast.info('Introduce tu token de Cloudflare para comenzar.');
       }
 
     } catch (error) {
