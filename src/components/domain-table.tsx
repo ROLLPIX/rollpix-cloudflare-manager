@@ -116,11 +116,34 @@ export function DomainTable() {
     loadAvailableTemplates();
   }, [selectedDomains, allDomains]);
 
-  const handleCancelProgress = () => {
-    // Nota: El proceso en el backend continuará, pero ocultamos el progreso
-    // para que el usuario pueda continuar usando la aplicación
-    toast.info('Ocultando progreso. El proceso continuará en segundo plano.');
-    // La próxima recarga mostrará los resultados cuando el proceso termine
+  const handleCancelProgress = async () => {
+    if (!unifiedProgress?.requestId) {
+      toast.error('No se pudo cancelar: ID de proceso no encontrado');
+      return;
+    }
+
+    try {
+      // Call cancellation endpoint
+      const response = await fetch('/api/domains/cancel', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          requestId: unifiedProgress.requestId
+        })
+      });
+
+      if (response.ok) {
+        toast.success('Actualización cancelada. El proceso se detendrá en el siguiente lote.');
+      } else {
+        const data = await response.json();
+        toast.error(`Error al cancelar: ${data.error || 'Error desconocido'}`);
+      }
+    } catch (error) {
+      console.error('Error cancelling process:', error);
+      toast.error('Error al cancelar el proceso');
+    }
   };
 
   const handleApplyRules = async (ruleIds: string[]) => {

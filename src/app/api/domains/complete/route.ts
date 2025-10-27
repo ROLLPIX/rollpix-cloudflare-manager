@@ -5,6 +5,7 @@ import { safeReadJsonFile, safeWriteJsonFile } from '@/lib/fileSystem';
 import { TemplateSynchronizer, SyncResult } from '@/lib/templateSync';
 import { BatchCacheWriter, PendingChanges } from '@/lib/batchCacheWriter';
 import { progressTracker } from '@/lib/progressTracker';
+import { CancellationTracker } from '@/lib/cancellationTracker';
 
 const DOMAIN_CACHE_FILE = 'domains-cache.json';
 const RULES_TEMPLATES_FILE = 'security-rules-templates.json';
@@ -193,6 +194,14 @@ export async function POST(request: NextRequest) {
       page++;
     }
 
+    // Check for cancellation before starting
+    if (CancellationTracker.isCancelled(requestId)) {
+      console.log(`[Complete API] ❌ Request ${requestId} was cancelled before starting`);
+      await progressTracker.markFailed(requestId);
+      CancellationTracker.clear(requestId);
+      return;
+    }
+
     // NUEVA LÓGICA GLOBAL: Recopilar todas las reglas primero, procesar globalmente después
     console.log(`[Complete API] 🔄 PHASE 1: Collecting all rules from ${targetZoneIds.length} zones`);
 
@@ -206,6 +215,13 @@ export async function POST(request: NextRequest) {
     const totalBatches = Math.ceil(targetZoneIds.length / BATCH_SIZE);
 
     for (let i = 0; i < targetZoneIds.length; i += BATCH_SIZE) {
+      // Check for cancellation before each batch
+      if (CancellationTracker.isCancelled(requestId)) {
+        console.log(`[Complete API] ❌ Request ${requestId} cancelled at batch ${Math.floor(i / BATCH_SIZE) + 1}/${totalBatches}`);
+        await progressTracker.markFailed(requestId);
+        CancellationTracker.clear(requestId);
+        return;
+      }
       const batch = targetZoneIds.slice(i, i + BATCH_SIZE);
       const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
 
@@ -278,6 +294,14 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`[Complete API] ✅ Collected data from ${domainRulesMap.size} domains`);
+
+    // Check for cancellation before Phase 2
+    if (CancellationTracker.isCancelled(requestId)) {
+      console.log(`[Complete API] ❌ Request ${requestId} cancelled before Phase 2`);
+      await progressTracker.markFailed(requestId);
+      CancellationTracker.clear(requestId);
+      return;
+    }
 
     // FASE 2: Procesamiento global de plantillas
     console.log(`[Complete API] 🔄 PHASE 2: Global template synchronization`);
@@ -421,6 +445,9 @@ export async function POST(request: NextRequest) {
 
     // Mark progress as completed
     await progressTracker.markCompleted(requestId);
+
+    // Clear any cancellation mark (in case it was set but not checked yet)
+    CancellationTracker.clear(requestId);
 
     return NextResponse.json({
       success: true,

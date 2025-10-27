@@ -25,6 +25,7 @@ interface DomainState {
   loading: boolean;
   loadingProgress: { completed: number; total: number } | null;
   unifiedProgress: {
+    requestId?: string;
     percentage: number;
     phase?: 1 | 2;
     phaseLabel?: string;
@@ -233,6 +234,7 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
 
                 set({
                   unifiedProgress: {
+                    requestId,
                     percentage,
                     phase,
                     phaseLabel,
