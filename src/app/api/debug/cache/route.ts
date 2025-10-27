@@ -1,13 +1,25 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { readdir, stat, readFile } from 'fs/promises';
 import path from 'path';
 
 /**
  * Debug endpoint to check cache directory status in production
- * GET /api/debug/cache
+ * GET /api/debug/cache?debug_key=your_secret_key
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    // Simple auth using query parameter
+    const searchParams = request.nextUrl.searchParams;
+    const debugKey = searchParams.get('debug_key');
+
+    // Check for debug key (use a simple secret)
+    if (debugKey !== 'rollpix_debug_2025') {
+      return NextResponse.json({
+        success: false,
+        error: 'Invalid debug key'
+      }, { status: 403 });
+    }
+
     const cacheDir = path.join(process.cwd(), 'cache');
 
     console.log('[Debug] Cache directory path:', cacheDir);
