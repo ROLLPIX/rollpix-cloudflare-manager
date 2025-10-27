@@ -34,14 +34,17 @@ const NEEDS_PERSISTENCE: Record<string, boolean> = {
 };
 
 /**
- * Detects if we're running in a production environment
+ * Detects if we're running in a TRUE serverless environment (AWS Lambda, Vercel, etc.)
+ * Docker/Dokploy is NOT serverless - it has persistent file storage
  */
 const isServerlessEnvironment = (): boolean => {
+  // Only true serverless platforms (AWS Lambda, Vercel Functions, etc.)
+  // Docker/Dokploy containers have persistent volumes, so they should use file storage
   return (
     !!process.env.LAMBDA_TASK_ROOT ||
     !!process.env.AWS_LAMBDA_FUNCTION_NAME ||
-    !process.env.NODE_ENV ||
-    process.env.NODE_ENV === 'production'
+    !!process.env.VERCEL ||
+    !!process.env.VERCEL_ENV
   );
 };
 
