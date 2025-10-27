@@ -116,13 +116,17 @@ export class BatchCacheWriter {
     const updatesMap = new Map<string, RuleTemplate>();
 
     for (const changes of allChanges) {
+      console.log(`[BatchCacheWriter] Processing change set: ${changes.templates.length} new templates, ${changes.templateUpdates.length} updated templates`);
+
       // Process new templates
       for (const template of changes.templates) {
+        console.log(`[BatchCacheWriter] Adding new template: ${template.id}`);
         templatesMap.set(template.id, template);
       }
 
       // Process template updates
       for (const template of changes.templateUpdates) {
+        console.log(`[BatchCacheWriter] Updating template: ${template.id}`);
         updatesMap.set(template.id, template);
       }
     }
@@ -136,6 +140,10 @@ export class BatchCacheWriter {
       newTemplates: consolidated.templates.length,
       updatedTemplates: consolidated.templateUpdates.length
     });
+
+    if (consolidated.templates.length === 0 && consolidated.templateUpdates.length === 0) {
+      console.warn(`[BatchCacheWriter] ⚠️ WARNING: No templates to save! Received ${allChanges.length} change sets.`);
+    }
 
     return consolidated;
   }
@@ -178,21 +186,28 @@ export class BatchCacheWriter {
    */
   private async applyTemplatesChanges(changes: PendingChanges): Promise<{ count: number }> {
     try {
+      console.log(`[BatchCacheWriter] applyTemplatesChanges called with ${changes.templates.length} new, ${changes.templateUpdates.length} updates`);
+
       // Load current cache
       const currentCache = await this.loadTemplatesCache();
+      console.log(`[BatchCacheWriter] Loaded current cache: ${currentCache.templates.length} existing templates`);
 
       let templates = [...currentCache.templates];
 
       // Add new templates
+      console.log(`[BatchCacheWriter] Adding ${changes.templates.length} new templates`);
       templates.push(...changes.templates);
 
       // Update existing templates
+      console.log(`[BatchCacheWriter] Applying ${changes.templateUpdates.length} template updates`);
       for (const updatedTemplate of changes.templateUpdates) {
         const index = templates.findIndex(t => t.id === updatedTemplate.id);
         if (index !== -1) {
+          console.log(`[BatchCacheWriter] Updating existing template ${updatedTemplate.id} at index ${index}`);
           templates[index] = updatedTemplate;
         } else {
           // If not found, add as new template
+          console.log(`[BatchCacheWriter] Template ${updatedTemplate.id} not found, adding as new`);
           templates.push(updatedTemplate);
         }
       }
@@ -204,6 +219,9 @@ export class BatchCacheWriter {
       }
       templates = Array.from(templatesMap.values());
 
+      console.log(`[BatchCacheWriter] Final template count before save: ${templates.length}`);
+      console.log(`[BatchCacheWriter] Templates to save: ${templates.map(t => t.id).join(', ')}`);
+
       // Save updated cache
       const updatedCache: TemplatesCache = {
         templates,
@@ -211,6 +229,7 @@ export class BatchCacheWriter {
       };
 
       await safeWriteJsonFile('security-rules-templates.json', updatedCache);
+      console.log(`[BatchCacheWriter] ✅ Successfully saved ${templates.length} templates to file`);
 
       return { count: changes.templates.length + changes.templateUpdates.length };
 
