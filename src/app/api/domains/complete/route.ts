@@ -135,8 +135,8 @@ export async function POST(request: NextRequest) {
     let targetZoneIds = zoneIds;
     if (!targetZoneIds || targetZoneIds.length === 0) {
       // Phase 1: Getting zone list - update progress from 0% to 100%
-      progressTracker.initProgress(requestId, 0); // Will update total later
-      progressTracker.updatePhase1(requestId, 10);
+      await progressTracker.initProgress(requestId, 0); // Will update total later
+      await progressTracker.updatePhase1(requestId, 10);
 
       // Get all zones with pagination
       const allZones = [];
@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
 
         // Update Phase 1 progress based on pagination
         const phase1Progress = 10 + Math.min(70, (page / Math.max(1, zonesResponse.totalPages)) * 70);
-        progressTracker.updatePhase1(requestId, phase1Progress);
+        await progressTracker.updatePhase1(requestId, phase1Progress);
 
         page++;
       }
@@ -159,18 +159,18 @@ export async function POST(request: NextRequest) {
       console.log(`[Complete API] Will process ${targetZoneIds.length} total zones`);
 
       // Complete Phase 1
-      progressTracker.updatePhase1(requestId, 100);
+      await progressTracker.updatePhase1(requestId, 100);
     }
 
     console.log(`[Complete API] Processing ${targetZoneIds.length} zones with batch synchronization`);
 
     // Update total for Phase 2 (don't re-init, just update the total)
-    const progress = progressTracker.getProgress(requestId);
+    const progress = await progressTracker.getProgress(requestId);
     if (progress) {
-      progressTracker.updateTotal(requestId, targetZoneIds.length);
+      await progressTracker.updateTotal(requestId, targetZoneIds.length);
     } else {
       // If progress doesn't exist yet (direct zone IDs provided), initialize it
-      progressTracker.initProgress(requestId, targetZoneIds.length);
+      await progressTracker.initProgress(requestId, targetZoneIds.length);
     }
 
     const results: DomainStatus[] = [];
@@ -259,7 +259,7 @@ export async function POST(request: NextRequest) {
       // Update Phase 2 progress after processing this batch
       // Use actual count of successfully processed domains, not estimated count
       const domainsProcessed = domainRulesMap.size;
-      progressTracker.updatePhase2(
+      await progressTracker.updatePhase2(
         requestId,
         domainsProcessed,
         targetZoneIds.length,
@@ -271,9 +271,9 @@ export async function POST(request: NextRequest) {
       // Rate limiting delay between batches
       if (i + BATCH_SIZE < targetZoneIds.length) {
         console.log(`[Complete API] Waiting ${BATCH_DELAY}ms before next batch...`);
-        progressTracker.setRateLimitWait(requestId, true);
+        await progressTracker.setRateLimitWait(requestId, true);
         await new Promise(resolve => setTimeout(resolve, BATCH_DELAY));
-        progressTracker.setRateLimitWait(requestId, false);
+        await progressTracker.setRateLimitWait(requestId, false);
       }
     }
 
@@ -410,7 +410,7 @@ export async function POST(request: NextRequest) {
     console.log(`[Complete API] 🔄 Template sync: ${templateImportResult.imported} new, ${templateImportResult.updated} updated, ${templateImportResult.propagatedDomains} propagated`);
 
     // Mark progress as completed
-    progressTracker.markCompleted(requestId);
+    await progressTracker.markCompleted(requestId);
 
     return NextResponse.json({
       success: true,
@@ -444,7 +444,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error in batch domain processing:', error);
     if (requestId) {
-      progressTracker.markFailed(requestId, error instanceof Error ? error.message : 'Unknown error');
+      await progressTracker.markFailed(requestId, error instanceof Error ? error.message : 'Unknown error');
     }
     return NextResponse.json({
       success: false,

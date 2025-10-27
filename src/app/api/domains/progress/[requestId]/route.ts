@@ -19,7 +19,7 @@ export async function GET(
       }, { status: 400 });
     }
 
-    const progress = progressTracker.getProgress(requestId);
+    const progress = await progressTracker.getProgress(requestId);
 
     if (!progress) {
       return NextResponse.json({

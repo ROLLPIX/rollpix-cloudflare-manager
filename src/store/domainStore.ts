@@ -247,10 +247,61 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
 
                 console.log(`[DomainStore] Progress: Phase ${phase} - ${percentage}% (${current}/${total})`);
 
-                // Stop polling if completed
+                // Stop polling if completed and load final data
                 if (completed && progressInterval) {
                   clearInterval(progressInterval);
                   progressInterval = null;
+
+                  console.log('[DomainStore] Processing completed, loading final data from cache...');
+
+                  // Wait a bit for cache to be written
+                  setTimeout(async () => {
+                    try {
+                      const cacheResponse = await fetch('/api/domains/complete');
+                      if (cacheResponse.ok) {
+                        const cacheData = await cacheResponse.json();
+                        if (cacheData.success && cacheData.data) {
+                          const { domains, totalCount, lastUpdate } = cacheData.data;
+
+                          // Show 100% progress briefly
+                          set({
+                            unifiedProgress: {
+                              percentage: 100,
+                              phase: 2,
+                              phaseLabel: 'Completado',
+                              current: totalCount,
+                              total: totalCount
+                            }
+                          });
+
+                          // Hide progress after 1 second
+                          setTimeout(() => {
+                            set({ unifiedProgress: null });
+                          }, 1000);
+
+                          // Update domains
+                          set({
+                            allDomains: domains,
+                            totalCount: totalCount,
+                            lastUpdate: new Date(lastUpdate),
+                            loading: false,
+                            isBackgroundRefreshing: false
+                          });
+
+                          // Show success message
+                          const templateRules = domains.reduce((sum: number, d: any) => sum + (d.securityRules?.corporateRules || 0), 0);
+                          const message = `${totalCount} dominios procesados completamente (${templateRules} reglas template)`;
+                          if (!isBackground) {
+                            toast.success(message);
+                          }
+                          console.log(`[DomainStore] ${message}`);
+                        }
+                      }
+                    } catch (error) {
+                      console.error('[DomainStore] Error loading final data:', error);
+                      toast.error('Procesamiento completado pero falló al cargar datos');
+                    }
+                  }, 500);
                 }
               }
             } else if (progressResponse.status === 404) {
@@ -263,8 +314,8 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         }, 500);
       }
 
-      // Start the unified fetch with requestId
-      const unifiedResponse = await fetch('/api/domains/complete', {
+      // Start the unified fetch with requestId (fire and forget - don't wait for response)
+      const unifiedPromise = fetch('/api/domains/complete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -277,135 +328,40 @@ export const useDomainStore = create<DomainState & DomainActions>((set, get) => 
         })
       });
 
-      if (!unifiedResponse.ok) {
-        throw new Error('Error en procesamiento unificado de dominios');
-      }
+      // Polling handles everything - we don't need to wait for POST response
+      // The POST runs in background and polling tracks progress
+      console.log('[DomainStore] POST request initiated, polling will track progress...');
 
-      const unifiedData = await unifiedResponse.json();
-
-      // Do one final poll to capture the completed status from server
-      if (showProgress && requestId) {
-        try {
-          const finalProgressResponse = await fetch(`/api/domains/progress/${requestId}`);
-          if (finalProgressResponse.ok) {
-            const finalProgressData = await finalProgressResponse.json();
-            if (finalProgressData.success && finalProgressData.data) {
-              const {
-                percentage,
-                phase,
-                phaseLabel,
-                current,
-                total,
-                currentBatch,
-                totalBatches,
-                currentDomainName,
-                isWaitingRateLimit
-              } = finalProgressData.data;
-
-              set({
-                unifiedProgress: {
-                  percentage,
-                  phase,
-                  phaseLabel,
-                  current,
-                  total,
-                  currentBatch,
-                  totalBatches,
-                  currentDomainName,
-                  isWaitingRateLimit
-                }
-              });
-            }
-          }
-        } catch (error) {
-          console.warn('[DomainStore] Failed to fetch final progress, using default 100%:', error);
-        }
-      }
-
-      // Clear progress interval
-      if (progressInterval) {
-        clearInterval(progressInterval);
-        progressInterval = null;
-      }
-
-      if (unifiedData.success) {
-        const { domains, summary } = unifiedData.data;
-
-        // If we didn't get final progress from server, show 100% manually
-        if (showProgress && get().unifiedProgress && get().unifiedProgress!.percentage < 100) {
-          set({
-            unifiedProgress: {
-              percentage: 100,
-              phase: 2,
-              phaseLabel: 'Completado',
-              current: summary.totalDomains,
-              total: summary.totalDomains
-            }
-          });
-        }
-
-        // Hide progress after 1 second
-        if (showProgress) {
-          setTimeout(() => {
-            set({ unifiedProgress: null });
-          }, 1000);
-        }
-
-        set({
-          allDomains: domains,
-          totalCount: summary.totalDomains,
-          lastUpdate: new Date(),
-          loading: false,
-          isBackgroundRefreshing: false
-        });
-
-        // Show success message with unified processing stats
-        const message = `${summary.totalDomains} dominios procesados completamente (${summary.totalTemplateRules} reglas template, ${summary.totalCustomRules} custom)`;
-        if (isBackground) {
-          console.log(`[DomainStore] ${message}`);
+      // Handle POST completion/errors in background (optional logging)
+      unifiedPromise.then(async response => {
+        if (!response.ok) {
+          console.error('[DomainStore] POST request failed with status:', response.status);
         } else {
-          toast.success(message);
+          const data = await response.json();
+          console.log('[DomainStore] POST request completed:', data.success ? 'success' : 'with errors');
         }
-
-        console.log('[DomainStore] Unified processing stats:', summary);
-
-      } else {
-        throw new Error(unifiedData.error || 'Error en procesamiento unificado');
-      }
+      }).catch(error => {
+        console.error('[DomainStore] POST request error:', error);
+        // Don't stop polling - let it continue until server marks as completed or times out
+      });
 
     } catch (error) {
-      console.error('[DomainStore] Unified fetch error:', error);
+      console.error('[DomainStore] Error starting unified fetch:', error);
 
-      // Clear progress interval on error
+      // Clear progress interval on initialization error only
       if (progressInterval) {
         clearInterval(progressInterval);
       }
 
-      // Hide progress popup
-      if (showProgress) {
-        set({ unifiedProgress: null });
-      }
+      set({
+        loading: false,
+        isBackgroundRefreshing: false,
+        unifiedProgress: null
+      });
 
-      // Fallback to cached data if available
-      try {
-        const cacheResponse = await fetch('/api/domains/complete');
-        if (cacheResponse.ok) {
-          const cacheData = await cacheResponse.json();
-          if (cacheData.success) {
-            set({
-              allDomains: cacheData.data.domains,
-              totalCount: cacheData.data.totalCount,
-              lastUpdate: new Date(cacheData.data.lastUpdate)
-            });
-            toast.warning('Usando datos en caché. La actualización falló.');
-          }
-        }
-      } catch (cacheError) {
-        console.warn('[DomainStore] Cache fallback failed:', cacheError);
+      if (!isBackground) {
+        toast.error('Error al iniciar actualización de dominios');
       }
-
-      set({ loading: false, isBackgroundRefreshing: false });
-      toast.error(error instanceof Error ? error.message : 'Error al actualizar dominios');
     }
   },
 
