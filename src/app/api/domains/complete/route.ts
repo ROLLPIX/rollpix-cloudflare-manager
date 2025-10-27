@@ -344,11 +344,11 @@ export async function POST(request: NextRequest) {
     console.log(`[Complete API] 🔄 Applying batch changes from ${allSyncResults.length} sync operations...`);
 
     // Debug: Check how many templates each sync result has
-    const totalNewTemplates = allSyncResults.reduce((sum, sr) => sum + sr.pendingChanges.templates.length, 0);
-    const totalUpdatedTemplates = allSyncResults.reduce((sum, sr) => sum + sr.pendingChanges.templateUpdates.length, 0);
-    console.log(`[Complete API] Total templates to process: ${totalNewTemplates} new, ${totalUpdatedTemplates} updates`);
+    const debugNewTemplates = allSyncResults.reduce((sum, sr) => sum + sr.pendingChanges.templates.length, 0);
+    const debugUpdatedTemplates = allSyncResults.reduce((sum, sr) => sum + sr.pendingChanges.templateUpdates.length, 0);
+    console.log(`[Complete API] Total templates to process: ${debugNewTemplates} new, ${debugUpdatedTemplates} updates`);
 
-    if (totalNewTemplates === 0 && totalUpdatedTemplates === 0) {
+    if (debugNewTemplates === 0 && debugUpdatedTemplates === 0) {
       console.warn(`[Complete API] ⚠️ WARNING: No templates accumulated from ${allSyncResults.length} domains!`);
     }
 
