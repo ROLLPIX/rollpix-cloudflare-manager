@@ -272,16 +272,16 @@ export default function Home() {
                 <Image
                   src="/logo-rollpix-blanco.png"
                   alt="Rollpix"
-                  width={180}
-                  height={60}
-                  className="h-12 w-auto dark:block hidden"
+                  width={90}
+                  height={30}
+                  className="h-6 w-auto dark:block hidden"
                 />
                 <Image
                   src="/logo-rollpix.png"
                   alt="Rollpix"
-                  width={180}
-                  height={60}
-                  className="h-12 w-auto dark:hidden block"
+                  width={90}
+                  height={30}
+                  className="h-6 w-auto dark:hidden block"
                 />
 
                 {/* Cloudflare logo - switch between dark and light mode */}

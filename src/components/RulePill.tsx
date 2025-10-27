@@ -72,9 +72,9 @@ export function RulePill({ rule, domainId }: RulePillProps) {
             {rule.id}
           </Badge>
         </TooltipTrigger>
-        <TooltipContent side="bottom" className="max-w-md p-4 text-sm">
+        <TooltipContent side="bottom" className="max-w-lg p-4 text-sm">
           <div className="space-y-2">
-            <div className="font-semibold text-base border-b pb-2">
+            <div className="font-semibold text-base border-b pb-2 break-words">
               📋 Regla {rule.id} - {rule.name}
             </div>
 

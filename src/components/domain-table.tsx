@@ -116,6 +116,13 @@ export function DomainTable() {
     loadAvailableTemplates();
   }, [selectedDomains, allDomains]);
 
+  const handleCancelProgress = () => {
+    // Nota: El proceso en el backend continuará, pero ocultamos el progreso
+    // para que el usuario pueda continuar usando la aplicación
+    toast.info('Ocultando progreso. El proceso continuará en segundo plano.');
+    // La próxima recarga mostrará los resultados cuando el proceso termine
+  };
+
   const handleApplyRules = async (ruleIds: string[]) => {
     const apiToken = tokenStorage.getToken();
     if (!apiToken) {
@@ -364,6 +371,7 @@ export function DomainTable() {
         totalBatches={unifiedProgress?.totalBatches}
         currentDomainName={unifiedProgress?.currentDomainName}
         isWaitingRateLimit={unifiedProgress?.isWaitingRateLimit}
+        onCancel={handleCancelProgress}
       />
 
       <TemplateManagementModal

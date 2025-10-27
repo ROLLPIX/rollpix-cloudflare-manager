@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Loader2, X } from 'lucide-react';
 
 interface ProgressPopupProps {
   isVisible: boolean;
@@ -16,6 +17,7 @@ interface ProgressPopupProps {
   totalBatches?: number;
   currentDomainName?: string;
   isWaitingRateLimit?: boolean;
+  onCancel?: () => void;
 }
 
 export function ProgressPopup({
@@ -28,7 +30,8 @@ export function ProgressPopup({
   currentBatch,
   totalBatches,
   currentDomainName,
-  isWaitingRateLimit
+  isWaitingRateLimit,
+  onCancel
 }: ProgressPopupProps) {
   const [mounted, setMounted] = useState(false);
 
@@ -58,13 +61,13 @@ export function ProgressPopup({
     }
 
     // Fase 2 - Mostrar información detallada
-    const domainInfo = current && total ? ` (${current}/${total} dominios)` : '';
+    const domainInfo = current && total ? ` (${current}/${total})` : '';
     const batchInfo = currentBatch && totalBatches ? `Lote ${currentBatch}/${totalBatches}` : '';
     const domainNameInfo = currentDomainName ? `Procesando: ${currentDomainName}` : '';
     const rateLimitInfo = isWaitingRateLimit ? '⏳ Esperando por límites de rate...' : '';
 
     return {
-      title: `Fase 2: Procesando reglas de seguridad${domainInfo}`,
+      title: `Fase 2: Procesando reglas de seguridad ${domainInfo}`,
       subtitle: `${percentage}% completado`,
       details: batchInfo || domainNameInfo || rateLimitInfo ? { batchInfo, domainNameInfo, rateLimitInfo } : null
     };
@@ -74,10 +77,10 @@ export function ProgressPopup({
 
   return (
     <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-2">
-      <Card className="w-96 shadow-lg border-2">
+      <Card className="w-[28rem] shadow-lg border-2">
         <CardContent className="p-4">
-          <div className="flex items-center gap-3 mb-3">
-            <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+          <div className="flex items-start gap-3 mb-3">
+            <Loader2 className="h-5 w-5 animate-spin text-blue-600 mt-0.5" />
             <div className="flex-1">
               <div className="text-sm font-medium">
                 {info.title}
@@ -99,6 +102,17 @@ export function ProgressPopup({
                 </div>
               )}
             </div>
+            {onCancel && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-gray-500 hover:text-red-600 hover:bg-red-50"
+                onClick={onCancel}
+                title="Cancelar actualización"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
           </div>
 
           <Progress value={percentage} />
