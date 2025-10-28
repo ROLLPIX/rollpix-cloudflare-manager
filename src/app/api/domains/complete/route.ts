@@ -197,7 +197,7 @@ export async function POST(request: NextRequest) {
     // Check for cancellation before starting
     if (CancellationTracker.isCancelled(requestId)) {
       console.log(`[Complete API] ❌ Request ${requestId} was cancelled before starting`);
-      await progressTracker.markFailed(requestId);
+      await progressTracker.markFailed(requestId, 'Cancelado por el usuario');
       CancellationTracker.clear(requestId);
       return;
     }
@@ -218,7 +218,7 @@ export async function POST(request: NextRequest) {
       // Check for cancellation before each batch
       if (CancellationTracker.isCancelled(requestId)) {
         console.log(`[Complete API] ❌ Request ${requestId} cancelled at batch ${Math.floor(i / BATCH_SIZE) + 1}/${totalBatches}`);
-        await progressTracker.markFailed(requestId);
+        await progressTracker.markFailed(requestId, 'Cancelado por el usuario');
         CancellationTracker.clear(requestId);
         return;
       }
@@ -298,7 +298,7 @@ export async function POST(request: NextRequest) {
     // Check for cancellation before Phase 2
     if (CancellationTracker.isCancelled(requestId)) {
       console.log(`[Complete API] ❌ Request ${requestId} cancelled before Phase 2`);
-      await progressTracker.markFailed(requestId);
+      await progressTracker.markFailed(requestId, 'Cancelado por el usuario');
       CancellationTracker.clear(requestId);
       return;
     }
